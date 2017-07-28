@@ -6,7 +6,9 @@ Had been trying to CSDN blog into their website, but because of the blog is more
 
 #only use  
 直接下载CSDNBlogExport.7z解压使用即可。   
-Direct download CSDNBlogExport.7z decompression can be used.  
+不用配置环境  
+Direct download CSDNBlogExport.7z decompression can be used.   
+Don't need to configure the environment  
 ![](http://i.imgur.com/H5mMN3E.png)  
 
 ![](http://i.imgur.com/MBLoPTU.png)  
@@ -33,7 +35,8 @@ CSDNBlogExport目录下是完整的程序代码
 
 此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。
 
-也欢迎朋友加入进来与我一起完善本程序。
+也欢迎朋友加入进来与我一起完善本程序。  
+以后的更新会一直在本项目中维护，如果有需要，可以star本项目哦  
 
 本小程序可导出任意CSDN用户的博客，但是仅供学习使用。
 免责声明:如果导出博客侵犯他人权益，引起纠纷的，一概与本人无关。

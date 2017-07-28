@@ -22,12 +22,16 @@ Software running directory/blog/year-month/year-month-day blog title name.markdo
 ![](http://i.imgur.com/tWkpxob.png)  
 
 #开发
-CSDNBlogExport目录下使完整的程序代码  
+CSDNBlogExport目录下是完整的程序代码  
+使用了WebMagic爬虫框架，本来自己写HttpURLConnection工具类也能实现的，只是比较耗时，偷个小懒，既然别人有更好的工具，为什么不用呢  
+技术含量呢，可以说基本没有什么，但是也是花了大半天时间做的。  
+中间还遇到部分玩家无法导出博客的情况，因为CSDN对于用户的链接命名分了2种情况，当时写的时候没有发现，是测试别人博客的时候发现的，经过半小时解决了这个问题。  
+
 虽然很想把这个程序完善，但是由于时间限制还是不能做太多事。  
-如果某天本程序不能使用了，请留言或者联系我QQ:619699629或者邮箱:uifuture@uifuture.com  
+不保证本版本一直能使用下去，如果某天本程序不能使用了(肯定是CSDN对返回的数据进行了处理或者进行了权限控制)，请留言或者联系我QQ:619699629或者邮箱:uifuture@uifuture.com  
 我会利用空闲时间跟上csdn对博客的升级，以保证能继续使用  
 
-此版本为1.0版本，希望用的朋友帮忙找bug，在这里留言或联系我，我会及时修复。
+此版本为1.0版本，希望用的朋友遇到bug，在这里留言或联系我，我会及时修复。
 
 也欢迎朋友加入进来与我一起完善本程序。
 
@@ -35,12 +39,18 @@ CSDNBlogExport目录下使完整的程序代码
 免责声明:如果导出博客侵犯他人权益，引起纠纷的，一概与本人无关。
 
 
-# development
-CSDNBlogExport directory make complete program code  
-Although very want to send this application is perfect, but due to time constraints or can't do too many things. 
-If one day can't use this program, please leave a message or contact me QQ: 619699629 or email: uifuture@uifuture.com
-I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use
-This version is 1.0 version, hope friends to help find a bug, leave a message or contact me here, I'll repair in time.
-Also welcome friends to join in with me in perfect this procedure.
-This small program can export any CSDN user's blog, but only for the use of learning.
-Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.
+#development  
+CSDNBlogExport directory is a complete program code
+Used WebMagic crawler frame, original, write their own HttpURLConnection tools can be achieved only takes time, steal a little lazy, now that people have a better tools, why not
+Technical content, it was basically have no what, but also spent most of time to do.   
+And in case of some players cannot export blog because CSDN links named points to the user for two kinds of circumstances, then write not found, is to test others while on a blog, solved the problem after half an hour.
+   
+Although very want to send this application is perfect, but due to time constraints or can't do too many things.   
+Does not guarantee that this version has been able to use, if one day can't use this program (must be CSDN on the returned data processing or access control), please leave a message or contact me QQ: 619699629 or email: uifuture@uifuture.com  
+
+I will use free time keep up with the CSDN on updating the blog, to ensure that can continue to use  
+
+This version is 1.0 version, hope to meet with friends bug, leave a message or contact me here, I'll repair in time.  
+Also welcome friends to join in with me in perfect this procedure.  
+This small program can export any CSDN user's blog, but only for the use of learning.  
+Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.  

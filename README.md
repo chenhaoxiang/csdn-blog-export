@@ -1,8 +1,10 @@
-#CSDN博客导出工具
+#CSDNBlogExport  
+CSDN博客导出工具
 
-之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。
+之前一直想把CSDN的博客导入到自己的网站中，可是由于博客比较多，后面受朋友老郭启发，就找了个时间用Java开发了这款小工具。  
+Had been trying to CSDN blog into their website, but because of the blog is more, inspired by my friend guo behind, will find a time this kind of small tools with Java development.  
 
-#使用 use
+#only use  
 直接下载CSDNBlogExport.7z解压使用即可。   
 Direct download CSDNBlogExport.7z decompression can be used.  
 ![](http://i.imgur.com/H5mMN3E.png)  

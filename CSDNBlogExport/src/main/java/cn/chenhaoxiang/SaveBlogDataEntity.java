@@ -57,7 +57,8 @@ public class SaveBlogDataEntity implements PageProcessor {
 			if (blogDataEntity.getMarkdowncontent() != null) {
 				FileUtils.saveStringToFile(blogDataEntity.getMarkdowncontent(), fileName, "utf-8");
 			} else {
-				FileUtils.saveStringToFile(blogDataEntity.getDescription(), fileName, "utf-8");
+				//修复原来的一个BUG，也是自己没有考虑全面出现的
+				FileUtils.saveStringToFile(blogDataEntity.getContent(), fileName, "utf-8");
 			}
 
 			logger.info("存储博客《" + blogDataEntity.getTitle() + "》成功");
@@ -78,10 +79,14 @@ public class SaveBlogDataEntity implements PageProcessor {
 
 	public static void main(String[] args) {
 		site = Site.me().setRetryTimes(3).setSleepTime(3000).setCharset("utf-8").setDomain("write.blog.csdn.net")
-				.addCookie("userName", "BLACKMOON88");
+				//.addCookie("userName", "u012017783");
+				.addCookie("userName", "qq_26525215");
 		Spider.create(new SaveBlogDataEntity())
-				.addUrl("http://write.blog.csdn.net/mdeditor/getArticle?id=41657169")
+				// 从"https://github.com/code4craft"开始抓
+				.addUrl("http://write.blog.csdn.net/mdeditor/getArticle?id=76254851")
+				// 开启5个线程抓取
 				.thread(1)
+				// 启动爬虫
 				.start();
 		try {
 			Thread.sleep(500);

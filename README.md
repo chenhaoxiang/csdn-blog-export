@@ -57,3 +57,8 @@ This version is 1.0 version, hope to meet with friends bug, leave a message or c
 Also welcome friends to join in with me in perfect this procedure.  
 This small program can export any CSDN user's blog, but only for the use of learning.  
 Disclaimer: if the export blog infringement of rights and interests of others, cause disputes, all has nothing to do with himself.  
+
+#Bug修复记录
+2017.7.31：
+修复html编辑器写完博客后导出博客不全的bug  
+现在版本 v1.1  

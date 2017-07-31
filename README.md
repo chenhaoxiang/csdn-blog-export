@@ -62,3 +62,4 @@ Disclaimer: if the export blog infringement of rights and interests of others, c
 2017.7.31：
 修复html编辑器写完博客后导出博客不全的bug  
 现在版本 v1.1  
+感谢CSDN博主<a href="http://blog.csdn.net/zuochao_2013" target='_blank'>[三名狂客]</a>提出的Bug  

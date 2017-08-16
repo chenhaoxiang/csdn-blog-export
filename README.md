@@ -63,3 +63,9 @@ Disclaimer: if the export blog infringement of rights and interests of others, c
 修复html编辑器写完博客后导出博客不全的bug  
 现在版本 v1.1  
 感谢CSDN博主<a href="http://blog.csdn.net/zuochao_2013" target='_blank'>[三名狂客]</a>提出的Bug  
+
+2017.8.16：
+进行版本升级，因为CSDN把一个分页的bug给堵上了，原来的版本不能使用，请下载最新版本2.0
+现在版本 v2.0  
+感谢CSDN博主<a href="http://blog.csdn.net/u011637069" target='_blank'>[龙腾四海365]</a>提出的Bug  
+

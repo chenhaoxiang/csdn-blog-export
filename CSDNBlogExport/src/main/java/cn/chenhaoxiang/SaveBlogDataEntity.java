@@ -53,7 +53,7 @@ public class SaveBlogDataEntity implements PageProcessor {
 				+ blogDataEntity.getTitle() + ".markdown";
 		logger.info(fileName);
 		try {
-			// logger.debug(blogDataEntity.getMarkdowncontent());
+			// logger.info(blogDataEntity.getMarkdowncontent());
 			if (blogDataEntity.getMarkdowncontent() != null) {
 				FileUtils.saveStringToFile(blogDataEntity.getMarkdowncontent(), fileName, "utf-8");
 			} else {
@@ -112,7 +112,7 @@ public class SaveBlogDataEntity implements PageProcessor {
 			if(frist){
 				frist=false;
 				id = iterator.next();
-				logger.debug("此次存储的文章ID:" + id);
+				logger.info("此次存储的文章ID:" + id);
 			}else{
 				String idString = iterator.next();
 				blogIdList.add("http://write.blog.csdn.net/mdeditor/getArticle?id="+idString);

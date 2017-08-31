@@ -1,0 +1,332 @@
+---
+layout: post
+title: "Java---设计模块(装饰模式)"
+date: 2016-04-04 12:58:41 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块
+tags: [字符流,设计,对象]
+keyword: 陈浩翔, 谙忆
+description: ★ 场景和问题在不对原有对象类进行修改的基础上，如何给一个或多个已有的类对象提供增强额外的功能？★ 引例 
+写一个MyBufferedReader类，使它能够对字符流(如FileReader、InputStreamReader和PipedReader等)进行功能增强： 
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速； 
+(2)提供一个能够每次读取一行字符的myReadL 
+---
+
+
+★ 场景和问题在不对原有对象类进行修改的基础上，如何给一个或多个已有的类对象提供增强额外的功能？★ 引例 
+写一个MyBufferedReader类，使它能够对字符流(如FileReader、InputStreamReader和PipedReader等)进行功能增强： 
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速； 
+(2)提供一个能够每次读取一行字符的myReadL
+<!-- more -->
+----------
+
+**★ 场景和问题**
+
+在不对原有对象类进行修改的基础上，如何给一个或多个已有的类对象提供增强额外的功能？
+
+**★ 引例**
+写一个MyBufferedReader类，使它能够对字符流(如FileReader、InputStreamReader和PipedReader等)进行功能增强：
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速；
+(2)提供一个能够每次读取一行字符的myReadLine()方法。
+
+实现对FileReader的功能加强：
+
+```
+package cn.hncu.pattern.decorator.v1;
+
+import java.io.FileReader;
+import java.io.IOException;
+
+public class MyBufferedReader {
+	private FileReader fr;//封装
+	private char buf[] = new char[1024];
+	private int count = 0;// 记录当前缓冲区中的字符个数
+	private int pos = 0;// 游标，数组下标，当前读取的是数组中的哪个元素
+	
+	
+	public MyBufferedReader(FileReader fr){
+		this.fr=fr;
+	}
+	
+	public int MyRead() throws IOException{
+		// 当缓冲区为空时，用fr对象到文件中去读取一组数据到缓冲区中
+		if(count==0){
+			count = fr.read(buf);
+			if(count==-1){
+				return -1;
+			}
+			pos=0;;
+		}
+		
+		// 从缓冲区中取一个字符出去
+		char ch = buf[pos];
+		pos++;
+		count--;
+		//返回那个字符
+		return ch;
+	}
+	
+	public String MyReadLine() throws IOException{
+		StringBuffer strBuffer = new StringBuffer();
+		int ch=0;
+		while(((ch=MyRead())!=-1)){
+			if(ch=='\r'){
+				continue;
+			}
+			if(ch=='\n'){
+				return strBuffer.toString();
+			}
+			
+			strBuffer.append(ch);
+		}
+		
+		if(strBuffer.length()!=0){
+			return strBuffer.toString();
+		}
+		return null;
+	}
+	
+	public void MyClose() throws IOException{
+		fr.close();
+	}
+	
+}
+
+```
+测试类：
+
+```
+package cn.hncu.pattern.decorator;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+
+import cn.hncu.pattern.decorator.v1.MyBufferedReader;
+
+public class TestMyBufferReader {
+
+	public static void main(String[] args) throws IOException {
+		//testMyBufferedReader();//测试自己写的缓存流
+		
+		testBufferedReader();//看看系统的缓存流读取的是不是和自己读取的相同
+	}
+	
+	//测试JavaAPI中的BufferedReader类
+	private static void testBufferedReader() throws IOException {
+		FileReader in = new FileReader("chx.txt");
+		BufferedReader bf = new BufferedReader(in);
+		int ch=0;
+		while((ch=bf.read())!=-1){
+			System.out.print((char)ch);
+		}
+		bf.close();
+		
+	}
+	
+	//测试自己写的MyBufferedReader类
+	private static void testMyBufferedReader() throws IOException {
+		FileReader fr = new FileReader("chx.txt");
+		MyBufferedReader mbf = new MyBufferedReader(fr);
+		int ch=0;
+		while((ch=mbf.MyRead())!=-1){
+			System.out.print((char)ch);
+		}
+		
+		mbf.MyClose();
+	}
+	
+	
+
+}
+
+```
+文件chx.txt:
+
+```
+写一个MyBufferedReader类，使它能够对字符流
+(如FileReader、InputStreamReader和PipedReader等)进行功能增强：
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速；
+(2)提供一个能够每次读取一行字符的myReadLine()方法。
+chx!!!
+OK.
+```
+测试类中testMyBufferedReader()方法的输出结果:
+
+```
+写一个MyBufferedReader类，使它能够对字符流
+(如FileReader、InputStreamReader和PipedReader等)进行功能增强：
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速；
+(2)提供一个能够每次读取一行字符的myReadLine()方法。
+chx!!!
+OK.
+```
+测试类中testBufferReader()方法的输出结果:
+
+```
+写一个MyBufferedReader类，使它能够对字符流
+(如FileReader、InputStreamReader和PipedReader等)进行功能增强：
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速；
+(2)提供一个能够每次读取一行字符的myReadLine()方法。
+chx!!!
+OK.
+```
+可以看到，输出的结果是一样的！
+
+下面实现对多个类的缓存增强支持：
+
+```
+package cn.hncu.pattern.decorator.v3;
+
+import java.io.IOException;
+import java.io.Reader;
+
+public class MyReader extends Reader{
+	//如果不写继承，就没有融入体系中去，所以要继承Reader类
+	private Reader r;
+	private char[] buf = new char[1024];
+	private int count = 0;// 记录当前缓冲区中的字符个数
+	private int pos = 0;// 游标，数组下标，当前读取的是数组中的哪个元素
+	
+	public  MyReader(Reader r){
+		this.r=r;
+	}
+	
+	public int MyReader() throws IOException{
+		// 当缓冲区为空时，用r对象到文件中去读取一组数据到缓冲区中
+		if(count<=0){
+			count=0;
+		}
+		if(count==0){
+			count=r.read(buf);
+			if(count==-1){
+				return -1;
+			}
+			pos=0;
+		}
+		
+		
+		// 从缓冲区中取一个字符出去
+		int ch = buf[pos];
+		pos++;
+		count--;
+		
+		
+		return ch;
+	}
+	
+	public String MyReaderLine() throws IOException{
+		StringBuffer strBuffer = new StringBuffer();
+		int ch=0;
+		while((ch=MyReader())!=-1){
+			if(ch=='\r'){//回车
+				continue;
+			}
+			if(ch=='\n'){//换行
+				return strBuffer.toString();
+			}
+			char s = (char)ch;
+			strBuffer.append(s);
+		}
+		
+		if(strBuffer.length()!=0){
+			return strBuffer.toString();
+		}
+		return null;
+	}
+	
+	public void MyClose() throws IOException {
+		r.close();
+	}
+
+	@Override
+	public int read(char[] cbuf, int off, int len) throws IOException {
+		return read(cbuf, off, len);
+	}
+
+	@Override
+	public void close() throws IOException {
+		r.close();
+	}
+
+}
+
+```
+测试类：
+
+```
+package cn.hncu.pattern.decorator;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import cn.hncu.pattern.decorator.v3.MyReader;
+
+public class TestMyReader {
+
+	public static void main(String[] args) throws IOException {
+		testMyReaderLine();//测试自己写的缓存流
+		System.out.println("-------------");
+		testMyReader();
+	}
+	
+	//测试自己写的MyReader类的MyReader()
+	private static void testMyReader() throws IOException {
+		InputStreamReader in = new FileReader("chx.txt");
+		MyReader mr = new MyReader(in);
+		int ch=0;
+		while((ch=mr.MyReader())!=-1){
+			System.out.print((char)ch);
+		}
+		mr.close();
+		
+	}
+	
+	//测试自己写的MyReader类的MyReaderLine()
+	private static void testMyReaderLine() throws IOException {
+		FileReader fr = new FileReader("chx.txt");
+		MyReader mbf = new MyReader(fr);
+		String ch=null;
+		while((ch=mbf.MyReaderLine())!=null){
+			System.out.print(ch);
+			System.out.println();
+		}
+		
+		mbf.MyClose();
+	}
+	
+	
+
+}
+
+```
+文件和上面的文件是一样的，下面看输出结果：
+
+```
+写一个MyBufferedReader类，使它能够对字符流
+(如FileReader、InputStreamReader和PipedReader等)进行功能增强：
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速；
+(2)提供一个能够每次读取一行字符的myReadLine()方法。
+chx!!!
+OK.
+-------------
+写一个MyBufferedReader类，使它能够对字符流
+(如FileReader、InputStreamReader和PipedReader等)进行功能增强：
+(1) 提供带缓冲的myRead()方法，对原有的read()方法进行增速；
+(2)提供一个能够每次读取一行字符的myReadLine()方法。
+chx!!!
+OK.
+```
+
+**装饰比继承更灵活，避免了继承造成的体系臃肿问题。**
+![](http://img.blog.csdn.net/20160404005810699)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

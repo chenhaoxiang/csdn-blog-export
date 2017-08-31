@@ -1,0 +1,135 @@
+---
+layout: post
+title: "HDOJ 1033 Edge"
+date: 2016-02-28 05:01:01 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 模拟/推导/打表
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+For products that are wrapped in small packings it is necessary that the sheet of paper containing the directions for use is folded until its size becomes small enough. We assume t 
+---
+
+
+Problem Description 
+For products that are wrapped in small packings it is necessary that the sheet of paper containing the directions for use is folded until its size becomes small enough. We assume t
+<!-- more -->
+----------
+
+Problem Description
+For products that are wrapped in small packings it is necessary that the sheet of paper containing the directions for use is folded until its size becomes small enough. We assume that a sheet of paper is rectangular and only folded along lines parallel to its initially shorter edge. The act of folding along such a line, however, can be performed in two directions: either the surface on the top of the sheet is brought together, or the surface on its bottom. In both cases the two parts of the rectangle that are separated by the folding line are laid together neatly and we ignore any differences in thickness of the resulting folded sheet. 
+After several such folding steps have been performed we may unfold the sheet again and take a look at its longer edge holding the sheet so that it appears as a one-dimensional curve, actually a concatenation of line segments. If we move along this curve in a fixed direction we can classify every place where the sheet was folded as either type A meaning a clockwise turn or type V meaning a counter-clockwise turn. Given such a sequence of classifications, produce a drawing of the longer edge of the sheet assuming 90 degree turns at equidistant places.
+
+ 
+
+Input
+The input contains several test cases, each on a separate line. Each line contains a nonempty string of characters A and V describing the longer edge of the sheet. You may assume that the length of the string is less than 200. The input file terminates immediately after the last test case.
+
+ 
+
+Output
+For each test case generate a PostScript drawing of the edge with commands placed on separate lines. Start every drawing at the coordinates (300, 420) with the command "300 420 moveto". The first turn occurs at (310, 420) using the command "310 420 lineto". Continue with clockwise or counter-clockwise turns according to the input string, using a sequence of "x y lineto" commands with the appropriate coordinates. The turning points are separated at a distance of 10 units. Do not forget the end point of the edge and finish each test case by the commands stroke and showpage. 
+
+You may display such drawings with the gv PostScript interpreter, optionally after a conversion using the ps2ps utility.
+
+![](http://img.blog.csdn.net/20160228165905004)
+
+
+
+
+Sample Input
+V
+AVV
+ 
+
+Sample Output
+300 420 moveto
+310 420 lineto
+310 430 lineto
+stroke
+showpage
+300 420 moveto
+310 420 lineto
+310 410 lineto
+320 410 lineto
+320 420 lineto
+stroke
+showpage
+
+
+问题描述：
+      对于放入小的包裹的产品来说，将使用说明（sheet）折叠到合适大小是很有必要的。我们假定sheet是矩形的，并且只沿着平行于新形成的较短的边的线进行折叠。但是沿着这条线折叠的做法，有两个方向可以完成：可以是sheet的上表面折叠到一起，或者是sheet的下表面折叠到一起。这两种方式中，被折痕分割的矩形的两部分会恰好铺放在一起。我们忽略纸张的厚度。等完成几步折叠后，我们可以打开sheet查看形成的长边（即折痕），结果呈现出的实际上是一系列连续的线段，我们也按一定的方向沿着曲线（折痕连起来的折线）可以把每处折痕分为顺时针（用A表示）、逆时针（用V表示）两类。根据给定的这样分类的序列，画出sheet的长边（折痕）的图像，假设在等距离的地方折角为90°。
+ 
+输入：
+    输入包含几例测试数据，每例测试数据单独占一行。每行包含不为空的描述sheet的长边的字符A和V组成的字符串。你可以假定字符串少于200个字符。最后一例测试完成后立即结束
+ 
+输出：
+   每例产生一个PostScript，绘画edge的命令行占单独一行。每例绘画使用命令"300 420 moveto"在点（300，420）开始 ，第一个转折使用命令"310 420 lineto"发生在折点(310, 420)。随后按照输入的字符串顺时针或逆时针的绘画，使用命令 "x y lineto"在合适的点。折点以10个单位划分。完成最后一点并且以命令"stroke"和"showpage"结束。
+
+说了这么多，没什么卵用，其实就是理解A是向顺时针转，V是向逆时针。。。。初始坐标是300，420，每次走10。。。。。。找好初始的1的位置，模拟就可以了，四个走向。
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while(sc.hasNext()){
+			String str = sc.nextLine();
+			int x=310,y=420;
+			System.out.println(300+" "+420+" "+"moveto");
+			System.out.println(310+" "+420+" "+"lineto");
+			int fx = 1;
+			for(int i=0;i<str.length();i++){
+				if(str.charAt(i)=='A'){
+					if(fx==1){
+						y-=10;
+						fx=2;
+					}else if(fx==2){
+						x-=10;
+						fx=3;
+					}else if(fx==3){
+						y+=10;
+						fx=4;
+					}else if(fx==4){
+						x+=10;
+						fx=1;
+					}
+					System.out.println(x+" "+y+" lineto");
+					
+				}else{
+					if(fx==1){
+						y+=10;
+						fx=4;
+					}else if(fx==2){
+						x+=10;
+						fx=1;
+					}else if(fx==3){
+						y-=10;
+						fx=2;
+					}else if(fx==4){
+						x-=10;
+						fx=3;
+					}
+					System.out.println(x+" "+y+" lineto");
+					
+				}
+			}
+			System.out.println("stroke");
+			System.out.println("showpage");
+			
+			
+			
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

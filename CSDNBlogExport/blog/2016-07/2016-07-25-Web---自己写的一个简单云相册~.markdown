@@ -1,0 +1,945 @@
+---
+layout: post
+title: "Web---自己写的一个简单云相册~"
+date: 2016-07-25 01:21:25 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅
+tags: [设计模式,源代码,技术,图片]
+keyword: 陈浩翔, 谙忆
+description: 实现的功能是： 
+用户可以一次上传一个至多个文件。 
+用户可以下载其他人上传的图片。 
+用户可以查看其他所有人的图片。 
+用户只能删除通过自己IP上传的图片。用到的技术： 
+文件上传下载、设计模式、Dom4j、xPath等。先看下2个页面：源代码：web.xml:<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+    xm 
+---
+
+
+实现的功能是： 
+用户可以一次上传一个至多个文件。 
+用户可以下载其他人上传的图片。 
+用户可以查看其他所有人的图片。 
+用户只能删除通过自己IP上传的图片。用到的技术： 
+文件上传下载、设计模式、Dom4j、xPath等。先看下2个页面：源代码：web.xml:<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+    xm
+<!-- more -->
+----------
+
+实现的功能是：
+用户可以一次上传一个至多个文件。
+用户可以下载其他人上传的图片。
+用户可以查看其他所有人的图片。
+用户只能删除通过自己IP上传的图片。
+
+用到的技术：
+文件上传下载、设计模式、Dom4j、xPath等。
+
+先看下2个页面：
+
+![](http://img.blog.csdn.net/20160725010054809)
+
+![](http://img.blog.csdn.net/20160725010105778)
+
+
+源代码：
+====
+
+web.xml:
+--------
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <display-name></display-name>
+  <servlet>
+    <servlet-name>UploadServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.UploadServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>cloudPhotoServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.cloudPhotoServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DownServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.DownServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DelServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.DelServlet</servlet-class>
+  </servlet>
+
+
+
+
+  <servlet-mapping>
+    <servlet-name>UploadServlet</servlet-name>
+    <url-pattern>/upload</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>cloudPhotoServlet</servlet-name>
+    <url-pattern>/cloudPhoto</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DownServlet</servlet-name>
+    <url-pattern>/servlet/DownServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DelServlet</servlet-name>
+    <url-pattern>/servlet/DelServlet</url-pattern>
+  </servlet-mapping>	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
+
+```
+
+
+index.jsp:
+----------
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  	<title>chx云相册</title>
+  	<script type="text/javascript">
+  		function delFile(input){
+  			table = input.parentElement.parentElement.parentElement;//table.nodeName  TBODY
+  			
+  			table.removeChild(input.parentElement.parentElement);
+  		}
+  		var t=1;
+  		function addFile(input){
+			tr = input.parentElement.parentElement;
+			//alert(tr.nodeName);
+			var str = "<td>选择文件：</td>"+
+				"<td> <input type='file' name='file"+t+"'> </td> "+
+				"<td>文件说明：</td>"+
+				"<td> <input type='text' name='text"+t+"'> </td> "+
+				"<td> <input type='button' value='删除文件' onclick='delFile(this)'> </td>";
+			tr.insertAdjacentHTML("beforeBegin",str);
+  		}
+  		
+  		function move(){
+  			window.location.href="/myPhoto/cloudPhoto";
+  		}
+  	</script>
+  	
+  	<style type="text/css">
+  		#font{
+  			color:red;
+  		}
+  	
+  	</style>
+  </head>
+  
+  <body>
+  	<h1><font id="font">相册上传：</font></h1>
+  	<form action="/myPhoto/upload" method="post" enctype="multipart/form-data">
+  		<table border="1px" bordercolor="red">
+			<tr>
+				<td>选择文件：</td>
+				<td> <input type="file" name="file1"> </td> 
+				<td>文件说明：</td>
+				<td> <input type="text" name="text1"> </td> 
+				<td> <input type="button" value="删 除 文 件" onclick="delFile(this)"> </td>
+			</tr>
+			<tr>
+				<td colspan=2> <input type="submit" value="上 传 文 件"> </td>
+				<td colspan=3> <input type="button" value="添 加 文 件" onclick="addFile(this)"> </td>
+			</tr>
+  		</table>
+  	</form>
+  	<form action="/myPhoto/cloudPhoto" method="post" enctype="multipart/form-data">
+  		<table border="1px;double;#ff0000">
+			<tr>
+				<td colspan=5><input type="submit" value="进 入 云 相 册" onclick="move()"></td>
+			</tr>
+  		</table>
+  	</form>
+  </body>
+</html>
+
+```
+
+photo.xml:
+-----------
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<photos>
+
+</photos>
+
+```
+
+MyUtils.java:
+-------------
+
+```
+package cn.hncu.utils;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.UUID;
+
+public class MyUtils {
+	
+	/**
+	 * @return 获取UUID
+	 */
+	public static String getUUID(){
+		return UUID.randomUUID().toString().replace("-", "");
+	}
+	
+	/**
+	 * @param uuid
+	 * @return 通过uuid，获得打散后的路径
+	 */
+	public static String getDir(String uuid){
+		String dir1 = Integer.toHexString( uuid.hashCode() & 0xf );
+		String dir2 = Integer.toHexString( (uuid.hashCode() & 0xf0)>>4 );
+		return "/"+dir1+"/"+dir2;
+	}
+	
+	//日期时间格式
+	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+	/**
+	 * @return 返回的是上传的时候的日期时间
+	 */
+	public static String getCurrentDateTime(){
+		return sdf.format(new Date());
+	}
+	
+}
+
+```
+
+Dom4jFactory.java:
+------------------
+
+```
+package cn.hncu.utils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.Node;
+import org.dom4j.io.SAXReader;
+import org.dom4j.io.XMLWriter;
+
+public class Dom4jFactory {
+	private static Document dom=null;
+	private static String path;
+	//静态块！只会运行一次！特点是在类加载的时候就执行
+	static{
+		try {
+			SAXReader sax = new SAXReader();
+			//因为我们的资源已经从myelipse中发布到tomcat服务器中了，所以跟原来的纯Java项目不一样了。
+			//利用当前类找到它的类加载器，然后通过该类加载器再去获得资源路径
+			path = Dom4jFactory.class.getClassLoader().getResource("photo.xml").getPath();
+			//getClassLoader()返回：加载此对象所表示的类或接口的类加载器
+			//public URL getResource(String name)返回：读取资源的 URL 对象；如果找不到该资源，或者调用者没有足够的权限获取该资源，则返回 null。
+			//此方法首先搜索资源的父类加载器；如果父类加载器为 null，则搜索的路径就是虚拟机的内置类加载器的路径。
+			//public String getPath()获取此 URL 的路径部分。 
+			System.out.println(path);
+			dom = sax.read(new FileInputStream(path));
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException(e);
+		} catch (DocumentException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * @return 获取相册的Document
+	 */
+	public static Document getDocument(){
+		return dom;
+	}
+	
+	/**
+	 * 进行photo.xml的保存，保存到本地
+	 */
+	public static boolean save(){
+		try {
+			XMLWriter w = new XMLWriter(new FileOutputStream(path));
+			w.write(dom);
+			w.close();
+			return true;
+		} catch (UnsupportedEncodingException e) {
+			return false;
+		} catch (FileNotFoundException e) {
+			return false;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+	
+	public static boolean del(String uuid){
+		Node node = dom.selectSingleNode("[@uuid='"+uuid+"']");
+		if(node==null){
+			return false;
+		}
+		node.getParent().remove(node);
+		return true;
+	}
+	
+	
+	/**
+	 * 测试用
+	 * @param args
+	 */
+	public static void main(String[] args){
+		System.out.println( getDocument() );
+	}
+}
+
+```
+
+
+PhotoModel.java-值对象
+-------------------
+
+```
+package cn.hncu.domain;
+/**
+ * 值对象封装
+ * @author 陈浩翔
+ * 2016-7-24
+ */
+public class PhotoModel {
+	
+	private String uuid;//uuid
+	private String realName="";//图片真实文件名(上传时的文件名)
+	private String ext;//后缀名
+	private String dir;//打散后的路径
+	private String dateTime;//上传文件的时间
+	private String ip;//上传者的IP
+	private String desc;//文件的说明
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getRealName() {
+		return realName;
+	}
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+	public String getExt() {
+		return ext;
+	}
+	public void setExt(String ext) {
+		this.ext = ext;
+	}
+	public String getDir() {
+		return dir;
+	}
+	public void setDir(String dir) {
+		this.dir = dir;
+	}
+	public String getDateTime() {
+		return dateTime;
+	}
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
+	}
+	public String getIp() {
+		return ip;
+	}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
+	public String getDesc() {
+		return desc;
+	}
+	public void setDesc(String desc) {
+		this.desc = desc;
+	}
+	@Override
+	public String toString() {
+		return "PhotoModel [uuid=" + uuid + ", realName=" + realName + ", ext="
+				+ ext + ", dir=" + dir + ", dateTime=" + dateTime + ", ip="
+				+ ip + ", desc=" + desc + "]";
+	}
+	
+}
+
+```
+
+PhotoDao.java:
+--------------
+
+
+```
+package cn.hncu.photoDao.Dao;
+
+import java.util.List;
+
+import cn.hncu.domain.PhotoModel;
+
+public interface PhotoDao {
+	/**
+	 * @param photo
+	 * @return 数据的保存
+	 */
+	public boolean save(PhotoModel photo);
+	
+	/**
+	 * @return 返回所所有的图片信息
+	 */
+	public List<PhotoModel> getAll();
+	
+	/**
+	 * @param uuid
+	 * @return 通过uuid 查找那个被封装的值对象
+	 */
+	public PhotoModel getSingleByUuid(String uuid);
+	
+	
+	/**
+	 * @param uuid
+	 * @return 通过uuid删除photos.xml中该图片的信息
+	 */
+	public boolean deleteXml(String uuid);
+	
+	/**
+	 * @param dir
+	 * @return 通过路径删除服务器磁盘中该图片的信息
+	 */
+	public boolean deleteFile(String pathFileName);
+}
+
+```
+
+PhotoSerImpl.java:
+------------------
+
+
+```
+package cn.hncu.photoDao.impl;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import org.dom4j.Document;
+import org.dom4j.Element;
+import org.dom4j.Node;
+
+import cn.hncu.domain.PhotoModel;
+import cn.hncu.photoDao.Dao.PhotoDao;
+import cn.hncu.utils.Dom4jFactory;
+
+public class PhotoSerImpl implements PhotoDao{
+
+	@Override
+	public boolean save(PhotoModel photo) {
+		Document dom = Dom4jFactory.getDocument();
+		
+		Element root = dom.getRootElement();
+		//添加属性
+		Element p = root.addElement("photo");
+		p.addAttribute("uuid", photo.getUuid());
+		p.addAttribute("realName", photo.getRealName());
+		p.addAttribute("dateTime", photo.getDateTime());
+		p.addAttribute("ip", photo.getIp());
+		p.addAttribute("ext", photo.getExt());
+		p.addAttribute("dir", photo.getDir());
+		p.addAttribute("desc", photo.getDesc());
+		return Dom4jFactory.save();
+	}
+
+	@Override
+	public List<PhotoModel> getAll() {
+		List<PhotoModel> list = new ArrayList<PhotoModel>();
+		Document dom = Dom4jFactory.getDocument();
+		Element root = dom.getRootElement();
+		Iterator<Element> it = root.elementIterator("photo");
+		//通过DOM4J获得photo元素的迭代器,也可以通过xPath来找到所有的 photo
+		//List<Node> lists = dom.selectNodes("//photo[@uuid]");
+		//Iterator<Node> it = lists.iterator();
+		while(it.hasNext()){
+			Element e = it.next();
+			PhotoModel photo = new PhotoModel();
+			photo.setUuid(e.attributeValue("uuid"));
+			photo.setRealName(e.attributeValue("realName"));
+			photo.setDateTime(e.attributeValue("dateTime"));
+			photo.setExt(e.attributeValue("ext"));
+			photo.setIp(e.attributeValue("ip"));
+			photo.setDir(e.attributeValue("dir"));
+			photo.setDesc(e.attributeValue("desc"));
+			list.add(photo);
+		}
+		return list;
+	}
+
+	@Override
+	public PhotoModel getSingleByUuid(String uuid) {
+		List<PhotoModel> photos=getAll();
+		for(PhotoModel photo:photos){
+			if(photo.getUuid().equals(uuid)){
+				return photo;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean deleteXml(String uuid) {
+		Document dom = Dom4jFactory.getDocument();
+		Element e = (Element) dom.selectSingleNode("//photo[@uuid='"+uuid.trim()+"']");
+		return e.getParent().remove(e);
+	}
+
+	@Override
+	public boolean deleteFile(String pathFileName) {
+		try {
+			File file = new File(pathFileName);
+			if(file.exists()){
+				file.delete();
+			}
+			return true;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+}
+
+```
+
+PhotoDaoFactory.java:
+---------------------
+
+
+```
+package cn.hncu.photoDao.factory;
+
+import cn.hncu.photoDao.impl.PhotoSerImpl;
+
+/**
+ * 工厂方法
+ * @author 陈浩翔
+ * 2016-7-24
+ */
+public class PhotoDaoFactory {
+	public static PhotoSerImpl getPhotoDao(){
+		return new PhotoSerImpl();
+	}
+}
+
+```
+
+上传-UploadServlet.java:
+-------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
+import cn.hncu.domain.PhotoModel;
+import cn.hncu.photoDao.Dao.PhotoDao;
+import cn.hncu.photoDao.factory.PhotoDaoFactory;
+import cn.hncu.utils.Dom4jFactory;
+import cn.hncu.utils.MyUtils;
+
+public class UploadServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		response.getWriter().print("<h1>很抱歉，本页面不支持GET方式访问！！！</h1>");
+		response.getWriter().print("<a href='javascript:history.go(-1)'>返回上一页</a> ");
+	}
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		final PrintWriter out = response.getWriter();
+		
+		//防黑-非multipart表单提交
+		//使用上传工具的方式
+		boolean boo = ServletFileUpload.isMultipartContent(request);
+		if(!boo){
+			out.print("<h1>不支持普通表单的提交方式！</h1>");
+			return;
+		}
+		
+		File file = new File("d:/photoCache");
+		if(!file.exists()){
+			file.mkdir();
+		}
+		
+		DiskFileItemFactory fiFactory = new DiskFileItemFactory(1024*10,file);
+		
+		ServletFileUpload upload = new ServletFileUpload(fiFactory);
+		upload.setHeaderEncoding("utf-8");//设置文件名编码
+		String path = getServletContext().getRealPath("/photos");
+		
+		
+		FileItem fi = null;
+		try {
+			List<FileItem> list = upload.parseRequest(request);
+			PhotoModel photo = new PhotoModel();//数据封装---需要7个属性
+			photo.setRealName("");
+			int cont=0;
+			for(FileItem f:list){
+				if(cont!=0 && cont%2==0 && !photo.getRealName().equals("")){
+					photo = new PhotoModel();//重新数据封装
+				}
+				fi=f;
+				if(fi.isFormField()){//普通表单组件
+					//得到文件说明
+					String desc = fi.getString("utf-8");
+					photo.setDesc(desc);//#1
+				}else{
+					
+					//防黑3-如果在file组件中不选择文件
+					if(fi.getSize()==0){
+						photo.setRealName("");
+						cont++;
+						continue;
+					}
+					String fileName = fi.getName();
+					fileName = fileName.substring( fileName.lastIndexOf("\\")+1);//真实文件名
+					photo.setRealName(fileName);//#2
+					String ext = fileName.substring(fileName.lastIndexOf("."));//扩展名
+					photo.setExt(ext);//#3
+					photo.setDateTime(MyUtils.getCurrentDateTime());//#4
+					photo.setIp( request.getRemoteAddr() );//#5
+					String uuid = MyUtils.getUUID();
+					photo.setUuid(uuid);//#6
+					photo.setDir( MyUtils.getDir(uuid) );//#7
+					
+					//打散目录
+					File dFile = new File(path+photo.getDir());
+					if(!dFile.exists()){
+						dFile.mkdirs();
+					}
+					
+					fi.write(new File(path+photo.getDir()+"/"+photo.getUuid()+photo.getExt()));
+					
+					
+				}
+				
+				cont++;
+				
+				if(cont%2==0 && !photo.getRealName().equals("")){
+					PhotoDao dao = PhotoDaoFactory.getPhotoDao();
+					boo = dao.save(photo);
+					//存入磁盘-法二：FileUtils.copyInputStreamToFile(in, new File(fileName2));//※2※ 把图片文件存储到服务器硬盘
+					photo = new PhotoModel();//重新数据封装
+				}
+			}
+		} catch (FileUploadException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally{
+			if(fi!=null){
+				fi.delete();
+			}
+			if(Dom4jFactory.save()){
+				out.print("<h1>上传成功！</h1>");
+				out.print("<a href='javascript:history.go(-1)'>返回上一页</a> ");
+			}else{
+				out.print("<h1>上传失败！</h1>");
+				out.print("<a href='javascript:history.go(-1)'>返回上一页</a> ");
+			}
+		}
+	}
+}
+
+
+```
+
+显示所有文件-cloudPhotoServlet.java
+-----------------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cn.hncu.domain.PhotoModel;
+import cn.hncu.photoDao.Dao.PhotoDao;
+import cn.hncu.photoDao.factory.PhotoDaoFactory;
+
+public class cloudPhotoServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String pwd = (String) request.getParameter("pwd");
+		if ("chx".equals(pwd)) {
+			doPost(request, response);
+		} else {
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().print("<h1>很抱歉，你没有权限访问！！！</h1>");
+		}
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>CHX云相册</TITLE></HEAD>");
+		out.println("  <BODY>");
+
+		out.println("<table border='1px' bordercolor='red'>");
+		out.println("<tr>");
+		out.println("<td>文件名</td>");
+		out.println("<td>上传时间");
+		out.println("<td>文件</td>");
+		out.println("<td>文件说明</td>");
+		out.println("<td>操作</td> ");
+		out.println("</tr>");
+
+		String tdWH = "style='width:200px; height:200px;'";
+
+		// 显示所有图片
+		PhotoDao dao = PhotoDaoFactory.getPhotoDao();
+		List<PhotoModel> photos = dao.getAll();
+		for (PhotoModel photo : photos) {
+			String fileName = photo.getRealName();
+			String time = photo.getDateTime();
+
+			// 输出图片
+			String path = request.getContextPath() + "/photos/"
+					+ photo.getDir() + "/" + photo.getUuid() + photo.getExt();
+			// System.out.println(path);
+			// /myPhoto/photos//7/c/a1237a48a6aa451cb22fa78b15bafcea.jpg
+			String img = "<a href='" + path + "'><img src='" + path + "'/></a>";
+			String desc = photo.getDesc();
+
+			String delStr = "<a href='/myPhoto/servlet/DelServlet?uuid="
+					+ photo.getUuid() + "'>删除</a>";
+			String downStr = "<a href='/myPhoto/servlet/DownServlet?uuid="
+					+ photo.getUuid() + "'>下载</a>";
+
+			out.println("<tr>");
+			out.println("<td " + tdWH + "> " + fileName + " </td>");
+			out.println("<td " + tdWH + ">" + time + "</td>");
+			out.println("<td " + tdWH + ">" + img + "</td>");
+			out.println("<td " + tdWH + ">" + desc + "</td>");
+			out.println("<td " + tdWH + ">" + delStr + "&nbsp;" + downStr
+					+ "</td>");
+			out.println("</tr>");
+		}
+
+		out.println("<tr>");
+		out.println("</tr>");
+
+		out.println("</table>");
+
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+}
+
+```
+
+
+删除文件-DelServlet.java
+--------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cn.hncu.domain.PhotoModel;
+import cn.hncu.photoDao.Dao.PhotoDao;
+import cn.hncu.photoDao.factory.PhotoDaoFactory;
+
+public class DelServlet extends HttpServlet {
+
+	//注入
+	private PhotoDao dao = PhotoDaoFactory.getPhotoDao();
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String uuid = request.getParameter("uuid");
+		String ip = request.getRemoteAddr();
+		response.setContentType("text/html;charset=utf-8");
+		
+		PrintWriter out = response.getWriter();
+		
+		PhotoModel photo = dao.getSingleByUuid(uuid);
+		
+		if(photo!=null){
+			if(!photo.getIp().equals(ip)){
+				out.print("<h1>你没有权限删除这个文件！！！</h1>");
+				out.print("<a href='javascript:history.go(-1)'>返回上一页</a> ");
+				return ;
+			}
+			
+			//1.删除数据库中的信息
+			boolean boo = dao.deleteXml(uuid);
+			
+			if(boo){
+				String fileName = "photos/"+photo.getDir()+"/"+photo.getUuid()+photo.getExt();
+				String pathFileName = getServletContext().getRealPath(fileName);
+				if(dao.deleteFile(pathFileName)){
+					//重定向到相册页面
+					response.sendRedirect("/myPhoto/cloudPhoto?pwd=chx");
+				}else{
+					out.print("<h1>无法从服务器中删除，文件正在被占用！！！</h1>");
+					out.print("<a href='javascript:history.go(-1)'>返回上一页</a> ");
+				}
+			}else{
+				out.print("<h1>该文件已经不存在！！！</h1>");
+				out.print("<a href='javascript:history.go(-1)'>返回上一页</a> ");
+			}
+		}
+	}
+}
+
+```
+
+下载文件-DownServlet.java
+---------------------
+
+
+
+```
+package cn.hncu.servlets;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cn.hncu.domain.PhotoModel;
+import cn.hncu.photoDao.Dao.PhotoDao;
+import cn.hncu.photoDao.factory.PhotoDaoFactory;
+
+public class DownServlet extends HttpServlet {
+	private PhotoDao dao = PhotoDaoFactory.getPhotoDao();
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		String uuid = request.getParameter("uuid");
+		System.out.println(uuid);
+		PhotoModel photo = dao.getSingleByUuid(uuid);
+		System.out.println(photo);
+		if(photo!=null){
+			//设置响应头--内容接收程序--浏览器看到这个响应头，就会把它认为的下载程序打开
+	        //(如果识别迅雷那么就会自动打开迅雷，如果没有则会打开一个“文件另存为”的对话框)
+			response.setContentType("application/force-download");
+			
+			String realName = photo.getRealName();
+			
+			String agent = request.getHeader("User-Agent");
+	        System.out.println(agent);
+	        if(agent.indexOf("Mozilla")!=-1){//火狐浏览器
+	            response.setHeader("Content-Disposition", "attachment;filename="+ new String(realName.getBytes("GB2312"),"ISO-8859-1"));
+	        }else{
+	            //解决中文乱码问题（只要用下面一句对文件名进行编码就行了）
+	        	realName = URLEncoder.encode(realName, "utf-8");//使用指定的编码机制将字符串转换为 application/x-www-form-urlencoded 格式。
+	            response.setHeader("Content-Disposition", "attachment;filename=\""+realName+"\"");
+	            //注意：“cttachment;”不能少，否则浏览器会直接在新窗口中打开
+	        }
+	        
+	        String fileName = "photos/" + photo.getDir()+"/"+photo.getUuid()+photo.getExt();
+	        String pathFileName = getServletContext().getRealPath(fileName);
+	        
+	        InputStream in = new FileInputStream(pathFileName);
+	        OutputStream out = response.getOutputStream();
+	        
+	        byte buf[] = new byte[2048];
+	        int len=0;
+	        while( (len=in.read(buf))!=-1 ){
+	        	out.write(buf, 0, len);
+	        }
+	        out.close();
+	        in.close();
+		}else{
+			response.setContentType("text/html;charset=utf-8");
+			response.getWriter().println("<h1>该文件已经被删除了</h1>");
+		}
+	}
+
+}
+
+```
+
+
+演示结果
+====
+
+这个我就不演示啦，图片在前面也有，所有的源码我都给了。有兴趣的可以自己取改进一下咯。
+其实这个还能上传其他任意类型文件哦，因为我们没有防护后缀名的，而且我们是用字符流传输，全都不会失真(可以当云盘来处理了~~)！！
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

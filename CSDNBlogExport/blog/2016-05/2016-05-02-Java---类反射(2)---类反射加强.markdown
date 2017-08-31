@@ -1,0 +1,1004 @@
+---
+layout: post
+title: "Java---类反射(2)---类反射加强"
+date: 2016-05-02 04:13:10 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java类反射
+tags: [对象,java,class,博客]
+keyword: 陈浩翔, 谙忆
+description: 经过前面的一篇博客，Java—类反射(1)，相信大家对类反射有了一定的了解了。 
+下面来进行对类反射的加强，了解一下怎么通过类反射去new一个对象， 
+怎么通过类反射去访问其他类的方法。 
+怎么通过类反射去访问其他类的成员变量。大家也许认为一个类的私有方法，私有的成员变量是其他类访问不到。但是，类反射是可以通过暴力访问去访问的。还有：最后要模拟Java内省的功能类的调用（调用类中的成员）★ 构造类对 
+---
+
+
+经过前面的一篇博客，Java—类反射(1)，相信大家对类反射有了一定的了解了。 
+下面来进行对类反射的加强，了解一下怎么通过类反射去new一个对象， 
+怎么通过类反射去访问其他类的方法。 
+怎么通过类反射去访问其他类的成员变量。大家也许认为一个类的私有方法，私有的成员变量是其他类访问不到。但是，类反射是可以通过暴力访问去访问的。还有：最后要模拟Java内省的功能类的调用（调用类中的成员）★ 构造类对
+<!-- more -->
+----------
+
+经过前面的一篇博客，Java---类反射(1)，相信大家对类反射有了一定的了解了。
+下面来进行对类反射的加强，了解一下怎么通过类反射去new一个对象，
+怎么通过类反射去访问其他类的方法。
+怎么通过类反射去访问其他类的成员变量。
+
+大家也许认为一个类的私有方法，私有的成员变量是其他类访问不到。但是，类反射是可以通过暴力访问去访问的。
+
+还有：最后要模拟Java内省的功能
+
+
+类的调用（调用类中的成员）
+=============
+
+★ 构造类对象
+-------
+
+使用构造器新建对象。根据指定的参数类型找到相应的构造函数，传入相应参数调用执行，以创建一个新的对象实例。
+
+代码示例
+Person类代码：
+
+```
+package cn.hncu.reflect;
+
+import java.io.IOException;
+
+/**
+ * @author 陈浩翔
+ * 
+ * @version 1.0 2016-5-2
+ */
+public class Person extends Parent {
+	String name;
+	private int age;
+	public int num;
+	public static String schoolName;
+
+	public Person() {
+		this("naName", 0);
+	}
+
+	public Person(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+
+	public Person(int age) throws IOException, NumberFormatException {
+		this("naName", age);
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	protected void setAge(int age) {
+		this.age = age;
+	}
+
+	private int sum(int a) {
+		return 0;
+	}
+
+	private int sum() {
+		return 0;
+	}
+
+	int aa(String a, int b) throws IOException, NumberFormatException {
+
+		return 0;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", age=" + age + ", num=" + num + "]";
+	}
+	
+}
+
+class Parent{
+	public static final int N=100;
+}
+
+```
+
+构造类对象：
+
+```
+package cn.hncu.reflect;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+
+/**
+ * 类反射的演示
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class ReflectOperateObj {
+	private static final String CLASS_FILE_NAME="cn.hncu.reflect.Person";
+	public static void main(String[] args) {
+		try {
+			operateConstructor(CLASS_FILE_NAME);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 一、演示：使用构造器来新建对象
+	 * @param classFileName
+	 * @throws ReflectiveOperationException
+	 */
+	private static void operateConstructor(String classFileName) throws ReflectiveOperationException   {
+		Class cls = Class.forName(CLASS_FILE_NAME);
+		
+		//1 无参构造方法的使用----简单且以后用得最多的
+		//Object obj = cls.newInstance();
+				
+		//2 有参构造方法的使用
+		//用类反射的方式来执行 Object obj = new Person("Jack",20);
+		//2.1获取指定"参数列表类型"的构造器---Constructor对象
+		Class parameterTypes[] = new Class[2];
+		parameterTypes[0] = String.class;
+		parameterTypes[1] = int.class;
+		Constructor con= cls.getConstructor(parameterTypes);//※1※
+		//2.2调用构造器来new对象
+		Object initargs[] = new Object[2];
+		initargs[0] = new String("Jack");
+		initargs[1] = new Integer(20);
+		Object resultObj = con.newInstance(initargs);//※2※
+		
+		System.out.println(resultObj);
+	}
+}
+
+```
+
+输出结果：
+
+```
+Person [name=Jack, age=20, num=0]
+```
+
+
+
+
+
+
+★ 调用方法
+------
+
+根据方法名称执行方法。根据方法名与参数类型匹配指定的方法，传入相应参数与对象进行调用执行。若是静态方法，则不需传入具体对象。
+
+代码示例：
+
+Person还是之前的Person类...
+
+**演示：调用无参普通方法：**
+
+```
+package cn.hncu.reflect;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+/**
+ * 类反射的演示
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class ReflectOperateObj {
+	private static final String CLASS_FILE_NAME="cn.hncu.reflect.Person";
+	public static void main(String[] args) {
+		try {
+			callMethod(CLASS_FILE_NAME);
+			
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 二、演示：调用无参普通方法
+	 * @param classFileName
+	 * @throws ReflectiveOperationException
+	 */
+	private static void callMethod(String classFileName) throws ReflectiveOperationException{
+		Class cls = Class.forName(CLASS_FILE_NAME);
+		//需求：调用空参方法 p.toString()
+		
+		//1.1必须要用一个类对象
+		Object obj = cls.newInstance();
+		//1.2用对象来调方法
+		   //1.2.1先拿到对应方法的Method对象
+			Method m = cls.getMethod("toString", null);
+			//1.2.2用obj和method来调用该方法
+			Object returnValue = m.invoke(obj, null);
+			System.out.println(returnValue);
+	}
+}
+
+```
+
+输出结果：
+
+```
+Person [name=naName, age=0, num=0]
+
+```
+
+
+**演示：调用有参普通方法**
+
+Person相比之前，加了一个double sum(int , double)方法。
+
+```
+public double sum( int n, double d){
+		double sum =0;
+		for(int i=1;i<=n;i++){
+			sum +=d;
+		}
+		return sum;
+	}
+```
+演示类：
+
+
+```
+package cn.hncu.reflect;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+
+/**
+ * 类反射的演示
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class ReflectOperateObj {
+	private static final String CLASS_FILE_NAME="cn.hncu.reflect.Person";
+	public static void main(String[] args) {
+		try {
+			callMethod2(CLASS_FILE_NAME);
+			
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 三、演示：调用有参普通方法
+	 * @param classFileName
+	 * @throws ReflectiveOperationException
+	 */
+	private static void callMethod2(String classFileName) throws ReflectiveOperationException{
+		Class cls = Class.forName(CLASS_FILE_NAME);
+		//需求：调用有参方法 p.sum(10,2.34)
+		
+		//1.1必须要用一个类对象
+		Object obj = cls.newInstance();
+		//**1.2用对象来调方法
+			//***1.2.1先拿到对应方法的Method对象
+		 	Class parameterTypes[] = new Class[2];//形参列表---类型列表---Class数组
+		    //paramTypes[0]=int.class;//OK
+		 	parameterTypes[0]=Integer.TYPE;//OK
+		   //paramTypes[0]=Integer.class;//ERROR: 因为Integer.class对应的是Integer类型，不是int类型。而Integer.TYPE是指int类型
+		 	parameterTypes[1]=double.class;
+			Method method = cls.getMethod("sum", parameterTypes);
+		
+		   //***1.2.2用obj和method来调用该方法
+			Object[] args = new Object[2];
+			args[0] = 10;
+			args[1] = 2.34;
+			Object returnObj = method.invoke(obj, args);
+			
+			System.out.println(returnObj);
+	}
+}
+
+```
+
+输出结果：
+
+```
+23.4
+
+```
+
+**演示：调用静态方法**
+
+Person类加了一个静态方法show();
+
+```
+public static void show(){
+		System.out.println("show.........");
+	}
+	
+```
+
+演示类：
+
+```
+package cn.hncu.reflect;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
+/**
+ * 类反射的演示
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class ReflectOperateObj {
+	private static final String CLASS_FILE_NAME="cn.hncu.reflect.Person";
+	public static void main(String[] args) {
+		try {
+			callMethod3(CLASS_FILE_NAME);	
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * 四、演示：调用静态方法---不需要对象就可以调，其它的跟普通方法一样
+	 * @param classFileName
+	 * @throws ReflectiveOperationException
+	 */
+	private static void callMethod3(String classFileName) throws ReflectiveOperationException{
+		Class cls = Class.forName(CLASS_FILE_NAME);
+		//调用static show();
+		Method methed = cls.getMethod("show", null);
+		methed.invoke(null, null);
+	}
+}
+
+```
+
+输出结果：
+
+```
+show.........
+
+```
+
+
+
+★ 获取与设置属性值
+----------
+
+
+根据属性名称读取与修改属性的值，访问非静态属性需传入对象为参数。
+
+
+代码示例：
+
+Person还是之前的类；
+
+现在看演示类：
+
+```
+package cn.hncu.reflect;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+/**
+ * 类反射的演示
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class ReflectOperateObj {
+	private static final String CLASS_FILE_NAME="cn.hncu.reflect.Person";
+	public static void main(String[] args) {
+		try {
+			changeFieldValue(CLASS_FILE_NAME);			
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 五、演示根据属性名称读取和修改属性的值
+	 * @param classFileName
+	 * @throws ReflectiveOperationException
+	 */
+	private static void changeFieldValue(String classFileName) throws ReflectiveOperationException{
+		Class cls = Class.forName(CLASS_FILE_NAME);
+		//需求：给一个对象的某属性设置值，如： p.num=123
+				//1.1必须要用一个类对象
+		Object obj = cls.newInstance();
+		//1.2设置该对象的指定属性
+		   //1.2.1先拿到对应的Field对象
+			Field field  =	cls.getField("num");//获取属性“num”对应的Field对象
+			//设置属性值
+			
+				field.set(obj, 1234);
+				
+			//读取属性值
+				System.out.println(field.getInt(obj));//1234----返回的是int类型，如果明确数据类型，用这种更好
+				System.out.println(field.get(obj));//1234----返回的是Object类型,是通用的
+		
+		Person p = new Person();
+		p.num=999;
+		System.out.println(field.getInt(p));//999,new 谁调谁
+		
+	}
+}
+
+```
+
+**暴力访问其他类的私有方法，私有成员变量，私有构造方法：**
+---------------------------
+Person类加了一个私有方法：abc();
+
+```
+	private int abc(){
+		System.out.println("abc....");
+		return 10;
+	}
+	
+```
+
+
+演示暴力访问：
+
+
+```
+package cn.hncu.reflect;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+
+/**
+ * 类反射暴力访问其他类的演示
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class ReflectOperateObj {
+	private static final String CLASS_FILE_NAME="cn.hncu.reflect.Person";
+	public static void main(String[] args) {
+		try {
+			brokeAccess(CLASS_FILE_NAME);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 六、演示：暴力访问
+	 * @param classFileName
+	 */
+	private static void brokeAccess(String classFileName) throws ReflectiveOperationException{
+		Class cls = Class.forName(CLASS_FILE_NAME);
+		
+		Object obj = cls.newInstance();
+		//访问Person中私有的方法abc()
+		Method m = cls.getDeclaredMethod("abc",null);
+		//只要打开访问权限的开关，就可以暴力访问了
+		m.setAccessible(true);
+		Object returnObj = m.invoke(obj, null);
+		
+		System.out.println("returnObj= "+returnObj);
+		//*************
+		//有关暴力访问的知识点
+		//其实中要在访问之前调用一下AccessibleObject类中的setAccessible()方法且传入boolean型变量就可以
+		//而AccessibleObject类是Constructor、Field和Method三个类的父类，因此这三者都能进行暴力访问! 
+	}
+}
+
+```
+
+输出结果：
+
+
+```
+abc....
+returnObj= 10
+
+```
+
+看，访问到了吧。就算你的类设为私有的，一样能访问，是不是很神奇啊，
+O(∩_∩)O哈哈~。
+
+
+
+
+
+**练习（模拟Java内省的功能）**
+===============
+
+
+**★ 准备工作** 
+定义一个Model类，里面所有的属性都是private的，然后为每个属性提供getter和setter方法；
+再准备一个Map，map的key值都是类里面的属性字段的字符串表示，值任意。 
+
+**Model类：**
+UserModel ：
+```
+package cn.hncu.reflect.myBeanUtils;
+
+/**
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class UserModel {
+	private String uuid;
+	private String name;
+	private int age;
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserModel other = (UserModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "UserModel [uuid=" + uuid + ", name=" + name + ", age=" + age
+				+ "]";
+	}
+	
+}
+
+```
+
+**bookModel:**
+
+```
+package cn.hncu.reflect.myBeanUtils;
+
+public class bookModel {
+	private String uuid;
+	private String name;
+	private double inPrice;
+	private double outPrice;
+	private int num;
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public double getInPrice() {
+		return inPrice;
+	}
+	public void setInPrice(double inPrice) {
+		this.inPrice = inPrice;
+	}
+	public double getOutPrice() {
+		return outPrice;
+	}
+	public void setOutPrice(double outPrice) {
+		this.outPrice = outPrice;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		bookModel other = (bookModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "bookModel [uuid=" + uuid + ", name=" + name + ", inPrice="
+				+ inPrice + ", outPrice=" + outPrice + ", num=" + num + "]";
+	}
+	
+}
+
+```
+
+
+
+★ 真正的工作 
+设计一个方法Object getModel(Map map,Class cls)，传入一个包含所有值的Map，然后再传入Model类的class，那么返回Model类的实例，这个实例里面已经包含好了所有相关的数据。也就是把Map中的数据通过反射，设置回到Model类实例中。 
+
+**没有用泛型的（一）：**
+**MyBeanUtils** 
+```
+package cn.hncu.reflect.myBeanUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class MyBeanUtils {
+	public static Object populate(Class cls,Map map) throws ReflectiveOperationException{
+		Object obj =null;
+		//1 用类反射new出对象
+		obj = (Object) cls.newInstance();
+		//2 再用类反射对新new的对象设置属性值(必须遵守Java设置规范)--即通过setter方法设置
+		   	//2.1遍历出所有该类声明的属性
+		Field fields[] = cls.getDeclaredFields();
+		for(Field fld : fields){
+			
+			//获取该fld对象所代表的属性名
+			String fldName = fld.getName();
+			
+			//根据属性名，到map中去读取数据，只有数据非空才需要给该属性设置值 
+			Object mapValue = map.get(fldName);
+			if(mapValue==null){
+				
+				//如果map中不存在对应的属性数据，我们在这里给出提示信息
+				System.out.println(fldName+"的数据为空！");
+			}else{
+				//如果map中存在对应的属性数据，则由属性名得出它的setter方法的名字
+				String setName = "set"+fldName.substring(0, 1).toUpperCase()+fldName.substring(1);
+				
+				//根据方法名和参数的数据类型(其实就是属性的类型)，获得Method对象
+				Class parameterTypes[] =new Class[1];
+				parameterTypes[0] = fld.getType();
+				Method method = cls.getDeclaredMethod(setName, parameterTypes);//最好不要用getMethod，因为这样可能会用到父类的方法
+				//这里不用担心会访问到私有的，因为权限没放开。
+				
+				//调用该method对象所代表的方法
+				Object args[] = new Object[1];
+				args[0] = mapValue;
+				method.invoke(obj, args);
+			}
+		}
+		return obj;
+	}
+}
+```
+
+**测试类：**
+
+```
+package cn.hncu.reflect.myBeanUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class Client {
+	public static void main(String[] args) {
+		test1();
+	}
+	private static void test1() {
+		Map map = new HashMap();
+		
+		map.put("uuid", "X001");
+		map.put("name", "阿敏");
+		map.put("age", 123);
+
+		try {
+			Object userModel = MyBeanUtils.populate(UserModel.class, map);
+			System.out.println(userModel);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+
+//这个测试全部都设置了值。
+输出结果：
+
+```
+UserModel [uuid=X001, name=阿敏, age=123]
+
+```
+
+还有可能测试的数据不全。
+我们在这里是写了一个输出的（为了看清楚），实际中，是不需要输出的。
+
+
+```
+package cn.hncu.reflect.myBeanUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class Client {
+	public static void main(String[] args) {
+		test2();
+	}
+	private static void test2() {
+		Map map = new HashMap();
+		map.put("uuid", "X001");
+		map.put("name", "阿敏");
+		
+		try {
+			Object userModel = MyBeanUtils.populate(UserModel.class, map);
+			System.out.println(userModel);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+输出结果：
+
+```
+age的数据为空！
+UserModel [uuid=X001, name=阿敏, age=0]
+
+```
+
+
+为了让那个类通用，我们还测试了bookModel类：
+
+```
+package cn.hncu.reflect.myBeanUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class Client {
+	public static void main(String[] args) {
+		test3();
+	}
+	
+	private static void test3() {
+		Map map = new HashMap();
+		map.put("uuid", "001");
+		map.put("name", "红楼梦");
+		map.put("inPrice", 20.5);
+		map.put("num", 123);
+		
+		try {
+			Object bookModel = MyBeanUtils.populate(bookModel.class, map);
+			System.out.println(bookModel);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+
+同样，有一个数据是不全的，
+输出结果：
+
+```
+outPrice的数据为空！
+bookModel [uuid=001, name=红楼梦, inPrice=20.5, outPrice=0.0, num=123]
+
+```
+
+如果把数据改全：
+
+```
+private static void test3() {
+		Map map = new HashMap();
+		map.put("uuid", "001");
+		map.put("name", "红楼梦");
+		map.put("inPrice", 20.5);
+		//之前没有的数据---outPrice，现在补上
+		map.put("outPrice", 50.5);
+		map.put("num", 123);
+		
+		try {
+			Object bookModel = MyBeanUtils.populate(bookModel.class, map);
+			System.out.println(bookModel);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+```
+
+输出结果：
+
+```
+bookModel [uuid=001, name=红楼梦, inPrice=20.5, outPrice=50.5, num=123]
+
+```
+
+好了，测试完全通过。
+只是那个工具类有强转，好像不太好，怎么办呢。
+这个时候，就可以用泛型了。
+
+
+下面是用泛型的版本，至于测试，我就只测试一次了。
+
+```
+package cn.hncu.reflect.myBeanUtils;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Map;
+
+public class MyBeanUtils2 {
+	public static <T>T populate(Class<T> cls,Map<String, Object> map) throws ReflectiveOperationException{
+		T t = null;
+		 //1 用类反射new出对象
+		t = cls.newInstance();
+		 //2 再用类反射对新new的对象设置属性值(必须遵守Java设置规范)--即通过setter方法设置
+		   //2.1遍历出所有该类声明的属性
+		Field flds[] = cls.getDeclaredFields();
+		for(Field fld:flds){
+			//获取该fld对象所代表的属性名
+			String fldName = fld.getName();
+			
+			Object mapV = map.get(fldName);
+			 //根据属性名，到map中去读取数据，只有数据非空才需要给该属性设置值 
+			if(mapV==null){
+				//如果map中不存在对应的属性数据，我们在这里给出提示信息
+				System.out.println(fldName+"数据为空！");
+			}else{
+				
+				 //如果map中存在对应的属性数据，则由属性名得出它的setter方法的名字
+				String setName = "set"+fldName.substring(0,1).toUpperCase()+fldName.substring(1);
+				
+				 //根据方法名和参数的数据类型(其实就是属性的类型)，获得Method对象
+				Class parameterTypes[] = new Class[1];
+				parameterTypes[0] = fld.getType();
+				Method m = cls.getDeclaredMethod(setName, parameterTypes);
+				
+				 //调用该method对象所代表的方法
+				Object args[] = new Object[1];
+				args[0]=mapV;
+				m.invoke(t, args);
+			}
+		}
+		return t;
+	}
+}
+
+```
+
+测试类：
+
+```
+package cn.hncu.reflect.myBeanUtils;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-2
+ */
+public class Client {
+	public static void main(String[] args) {
+		test4();
+	}
+	
+	private static void test4() {
+		Map map = new HashMap();
+		map.put("uuid", "001");
+		map.put("name", "红楼梦");
+		map.put("inPrice", 20.5);
+		//map.put("outPrice", 50.5);
+		map.put("num", 123);
+		
+		try {
+			Object bookModel = MyBeanUtils2.populate(bookModel.class, map);
+			System.out.println(bookModel);
+		} catch (ReflectiveOperationException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+输出结果为：
+
+```
+outPrice数据为空！
+bookModel [uuid=001, name=红楼梦, inPrice=20.5, outPrice=0.0, num=123]
+
+```
+
+好了，类反射也就这些内容了。结束啦。
+其实类反射也挺容易的，就是通过完整的类名，再调用newInstance方法new一个对象。再通过这个对象来进行操作方法Method，构造方法（调用构造器来new对象
+		Object initargs[] = new Object[2];
+		initargs[0] = new String("Jack");
+		initargs[1] = new Integer(20);
+		Object resultObj = con.newInstance(initargs);），
+成员变量Field。
+要访问私有的，只要打开访问权限的开关，就可以暴力访问了
+也就是.setAccessible(true);方法，设置为true。
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

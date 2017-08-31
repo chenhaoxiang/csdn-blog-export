@@ -1,0 +1,216 @@
+---
+layout: post
+title: "C C++常用算法【C语言顺序查找（顺序表）】【2】"
+date: 2015-12-11 06:21:46 +0800
+comments: true
+categories:❸ C/C++语言基础,----- 数据结构
+tags: [c语言,顺序表]
+keyword: 陈浩翔, 谙忆
+description: 直接上代码，代码中有详细注释，请自己领悟#include <stdio.h>
+#include <stdlib.h>#define MAXLEN 100 //定义顺序表的最大长度typedef struct {
+    char key[10]; //结点的关键字
+    char name[20];
+    int age;
+} DATA;
+                  //定义结点类型ty 
+---
+
+
+直接上代码，代码中有详细注释，请自己领悟#include <stdio.h>
+#include <stdlib.h>#define MAXLEN 100 //定义顺序表的最大长度typedef struct {
+    char key[10]; //结点的关键字
+    char name[20];
+    int age;
+} DATA;
+                  //定义结点类型ty
+<!-- more -->
+----------
+
+顺序表结构的存储方式非常容易理解，操作也十分方便。但是顺序表结构有如下一些缺点：
+1.在插入或者删除结点时，往往需要移动大量的数据。
+2.如果表比较大，有时难以分配足够的连续存储空间，往往导致内存分配失败，而无法存储。
+后面会有链表结构的章节。
+
+
+直接上代码，代码中有详细注释，请自己领悟
+```
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAXLEN 100 //定义顺序表的最大长度
+
+typedef struct {
+    char key[10]; //结点的关键字
+    char name[20];
+    int age;
+} DATA;
+                  //定义结点类型
+
+typedef struct{  //定义顺序表结构
+    DATA ListData[MAXLEN+1]; //保存顺序表的结构数组
+    int ListLen;  //顺序表已存结点的数量
+} SLType;
+/**定义了顺序表的最大长度MAXLEN，顺序表数据元素的类型DATA及顺序表的数据结构SLType。
+    在数据结构SLType中，ListLen为顺序表已存结点的数量，也就是当前顺序表的长度，
+    ListData是一个结构数组，用来存放各个数据结点。
+    在这里可以认为该顺序表是一个班级学生的记录。其中，key为学号，
+    name为学生的姓名，age为年龄。
+    这里为了便于大家理解，从下标1开始记录数据结点，下标0不用。
+
+**/
+
+//初始化顺序表
+void SLInit(SLType *SL){
+    SL->ListLen=0;   //初始化为空表
+}
+/**这里并没有清空一个顺序表，你们可以采用相应的程序代码来清空。
+    这里我们只需要简单的将结点数量ListLen设置为0即可，这样如果
+    顺序表中原来已有数据，也将会被覆盖，并不影响操作，反而提高
+    了处理的速度。
+**/
+
+//计算顺序表的长度
+int SLLength(SLType *SL){
+    return (SL->ListLen);   //返回顺序表的元素数量
+}
+
+//插入结点
+int SLInsert(SLType *SL,int n,DATA data){
+    int i;
+    if(SL->ListLen>=MAXLEN){                 //顺序表结点数量已超过最大数量
+        printf("顺序表已满，不能插入结点！\n");
+        return 0;                       //返回0，表示插入不成功
+    }
+    if(n<1||n>SL->ListLen-1){  //插入结点序号不对
+        printf("插入元素序列错误，不能插入元素！\n");
+        return 0;                  //返回0，表示插入不成功
+    }
+    for(i=SL->ListLen;i>=n;i--){//将顺序表中的数据向后移
+        SL->ListData[i+1]=SL->ListData[i];
+    }
+    SL->ListData[n]=data; //插入结点
+    SL->ListLen++;         //顺序表结点数量加1
+    return 1;          //成功插入，返回1
+}
+/**在这里，该程序中首先判断顺序表结点数量是否已超过最大数量，
+    以及插入结点序号是否正确。当所有条件都满足后，便将顺序表中n
+    之后的元素向后移动，同时插入结点，并更新结点数量ListLen。
+**/
+
+//追加结点
+int SLAdd(SLType *SL,DATA data){//增加元素到顺序表尾部
+    if(SL->ListLen>=MAXLEN){        //顺序表已满
+        printf("顺序表已满，不能再添加结点了！\n");
+        return 0;
+    }
+    (SL->ListData[++SL->ListLen])=data; //先自加一
+    return 1;
+}
+/**简单的判断这个顺序表是否已经满了，然后再追加结点，并更新结点数量就可以了。
+**/
+
+//删除结点
+int SLDeletd(SLType *SL,int n){//删除顺序表中的数据元素
+    int i;
+    if(n<1||n>SL->ListLen){   //删除结点序号不正确
+        printf("删除结点序号错误，不能删除结点！\n");
+        return 0;
+    }
+    for(i=n;i<SL->ListLen;i++){
+        SL->ListData[i]=SL->ListData[i+1];
+    }
+    SL->ListLen--;  //顺序表元素减1
+    return 1;
+}
+//先判断，然后移动结点，最后更新ListLen。
+
+//按照序号查找结点
+DATA *SLFindByNum(SLType *SL,int n){
+    if(n<1||n>SL->ListLen+1){   //元素序号不正确
+        printf("结点序号错误，不能返回结点！\n");
+        return NULL;   //不成功，返回0；
+    }
+    return &(SL->ListData[n]);
+}
+
+//按照关键字查找结点(这里用key作为关键字)
+int SLFindByCont(SLType *SL,char *key){
+    int i;
+    for(i=1;i<=SL->ListLen;i++){
+        if(strcmp(SL->ListData[i].key,key)==0){//函数返回0，说明这2个字符数组相等
+            //如果找到所需结点
+            return i;
+        }
+    }
+    return 0;
+}
+
+//显示所有的结点
+int SLAll(SLType *SL){
+    int i;
+    for(i=1;i<=SL->ListLen;i++){
+        printf("(%s,%s,%d)\n",SL->ListData[i].key,SL->ListData[i].name,SL->ListData[i].age);
+    }
+    return 0;
+}
+
+int main(){
+    int i;
+    SLType SL; //定义顺序表变量
+    DATA data; //定义结点保存数据类型变量
+    DATA *pdata;  //定义结点保存指针变量
+    char key[10];  //保存关键字
+
+
+    printf("顺序表操作演示！\n");
+    SLInit(&SL);    //初始化顺序表
+    printf("...\n");
+    printf("初始化顺序表完成！\n");
+
+    do{    //循环添加结点数据
+        printf("请输入添加的结点（学号 姓名 年龄）：  ");
+        fflush(stdin);                              ///清空输入缓存区
+        scanf("%s%s%d",&(data.key),&data.name,&data.age);
+        if(data.age){  //若年龄不为0,也就是年龄为0时退出循环
+            if(!SLAdd(&SL,data)){ //若添加结点失败
+                break;
+            }
+        }else{  //如果年龄为0
+            break;  //退出死循环
+        }
+    }while(1);
+
+    printf("\n顺序表中结点顺序为：\n");
+    SLAll(&SL);   //显示所有结点
+
+    fflush(stdin);   //清空缓冲区
+    printf("\n请输入要取出的结点的序号： ");
+    scanf("%d",&i);
+    pdata = SLFindByNum(&SL,i);
+    if(pdata){//若返回的结点指针不为NULL
+        printf("第%d个结点为：(%s,%s,%d)",i,pdata->key,pdata->name,pdata->age);
+    }
+
+    fflush(stdin);
+    printf("\n请输入要查找结点的关键字： ");
+    scanf("%s",key);
+    i=SLFindByCont(&SL,key);
+    pdata=SLFindByNum(&SL,i);
+    if(pdata){//若返回的结点指针不为NULL
+        printf("第%d个结点为：(%s,%s,%d)",i,pdata->key,pdata->name,pdata->age);
+    }
+    getch();
+
+    return 0;
+}
+
+```
+
+![](http://img.blog.csdn.net/20151211182106328)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

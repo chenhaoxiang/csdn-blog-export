@@ -1,0 +1,170 @@
+---
+layout: post
+title: "HDOJ 2036  改革春风吹满地(多边形的面积)"
+date: 2016-01-23 06:54:35 +0800
+comments: true
+categories:----- HDOJ-JAVA,❶ ACM,----- 模拟/推导/打表,❺ 算法及基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+“ 改革春风吹满地, 
+不会AC没关系; 
+实在不行回老家， 
+还有一亩三分地。 
+谢谢!（乐队奏乐）”话说部分学生心态极好，每天就知道游戏，这次考试如此简单的题目，也是云里雾里，而且，还竟然来这么几句打油诗。 
+好呀，老师的责任就是帮你解决问题，既然想种田，那就分你一块。 
+这块田位于浙江省温州市苍南县灵溪镇林家铺子村，多边形形状的一块地，原本是linle 
+---
+
+
+Problem Description 
+“ 改革春风吹满地, 
+不会AC没关系; 
+实在不行回老家， 
+还有一亩三分地。 
+谢谢!（乐队奏乐）”话说部分学生心态极好，每天就知道游戏，这次考试如此简单的题目，也是云里雾里，而且，还竟然来这么几句打油诗。 
+好呀，老师的责任就是帮你解决问题，既然想种田，那就分你一块。 
+这块田位于浙江省温州市苍南县灵溪镇林家铺子村，多边形形状的一块地，原本是linle
+<!-- more -->
+----------
+
+Problem Description
+“ 改革春风吹满地,
+不会AC没关系;
+实在不行回老家，
+还有一亩三分地。
+谢谢!（乐队奏乐）”
+
+话说部分学生心态极好，每天就知道游戏，这次考试如此简单的题目，也是云里雾里，而且，还竟然来这么几句打油诗。
+好呀，老师的责任就是帮你解决问题，既然想种田，那就分你一块。
+这块田位于浙江省温州市苍南县灵溪镇林家铺子村，多边形形状的一块地，原本是linle 的，现在就准备送给你了。不过，任何事情都没有那么简单，你必须首先告诉我这块地到底有多少面积，如果回答正确才能真正得到这块地。
+发愁了吧？就是要让你知道，种地也是需要AC知识的！以后还是好好练吧...
+
+ 
+
+Input
+输入数据包含多个测试实例，每个测试实例占一行，每行的开始是一个整数n(3<=n<=100)，它表示多边形的边数（当然也是顶点数），然后是按照逆时针顺序给出的n个顶点的坐标（x1, y1, x2, y2... xn, yn）,为了简化问题，这里的所有坐标都用整数表示。
+输入数据中所有的整数都在32位整数范围内，n=0表示数据的结束，不做处理。
+
+ 
+
+Output
+对于每个测试实例，请输出对应的多边形面积，结果精确到小数点后一位小数。
+每个实例的输出占一行。
+
+ 
+
+Sample Input
+3 0 0 1 0 0 1
+4 1 0 0 1 -1 0 0 -1
+0
+ 
+
+Sample Output
+0.5
+2.0
+
+ //计算多边形面积的思路：
+        //1、把一个多边形按一个方向(如逆时针)划分成若干个三角形
+        //2、累加所有三角形的面积
+        //3、计算单个任意三角形的面积：画一个外接矩形，用矩形面积减去补充的直角三角形(边长就是相邻顶点的坐标差)
+        //公式： area = area + (x[i]*y[j]-x[j]*y[i])/2
+        // 顶点i 和 顶点j
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            int n = sc.nextInt();
+            if(n==0){
+                return ;
+            }
+            pont[] m= new pont[n];
+            
+            for(int i=0;i<n;i++){
+                m[i] = new pont();
+                m[i].x=sc.nextInt();
+                m[i].y=sc.nextInt();
+            }
+            double area = 0.0;
+            for(int i=0;i<n;i++){
+                //System.out.println(m[i].x+"  "+m[i].y);
+                int j =(i+1)%n;
+                area = area+(m[i].x*m[j].y-m[j].x*m[i].y)/2.0;
+//                    System.out.println("m["+i+"].x="+m[i].x);
+//                    System.out.println("m["+i+"].y="+m[i].y);
+//                    System.out.println("m["+j+"].x="+m[j].x);
+//                    System.out.println("m["+j+"].y="+m[j].y);
+                    
+                    
+                //错误。。。。。将i写成了j
+               // System.out.println("(m[i].x*m[j].y-m[j].x*m[j].y)/2.0=" + (m[i].x*m[j].y-m[j].x*m[j].y)/2.0);
+                //System.out.println("area=" + area);
+            }
+            
+            System.out.println(abs(area));
+            
+        }
+    }
+        
+//        while(sc.hasNext()){
+//            int n= sc.nextInt();
+//            if(n==0){
+//                return;
+//            }
+//            //输入
+//            int x[] = new int[n];
+//            int y[] = new int[n];
+//            for(int i=0;i<n;i++){
+//                x[i] = sc.nextInt();
+//                y[i] = sc.nextInt();
+//            }
+//            
+//            double area = 0;
+//            for(int i=0;i<n;i++){
+//                int j =(i+1)%n;
+//                area = area + (x[i]*y[j]-x[j]*y[i])/2.0;
+//                System.out.println("x["+i+"]"+x[i]);
+//                System.out.println("y["+i+"]"+y[i]);
+//                System.out.println("x["+j+"]"+x[j]);
+//                System.out.println("y["+j+"]"+y[j]);
+//                
+//                
+//                
+//                    System.out.println("area="+area);
+//                    System.out.println("(x[i]*y[j]-x[j]*y[i])/2.0="+(x[i]*y[j]-x[j]*y[i])/2.0);
+//            }
+//            if(area<0){
+//                area = -area;
+//            }
+//            System.out.println( area );
+//        }
+//    }
+
+    
+    public static double abs(double n){
+        if(n<0){
+            return -n;
+        }
+        return n;
+    }
+    
+}
+class pont{
+    public int x;
+    public int y;
+}
+
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

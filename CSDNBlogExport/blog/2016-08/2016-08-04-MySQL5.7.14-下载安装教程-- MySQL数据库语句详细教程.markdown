@@ -1,0 +1,266 @@
+---
+layout: post
+title: "MySQL5.7.14-下载安装教程-- MySQL数据库语句详细教程"
+date: 2016-08-04 05:33:49 +0800
+comments: true
+categories:----- ⑤、数据库,❷ Java大学之行
+tags: [数据库,mysql,server,界面]
+keyword: 陈浩翔, 谙忆
+description: 如何下载：我先去MySQL首页下载最新版本的MySQL-链接：https://www.mysql.com/downloads/进入此界面下载：Downloads–>MySQL Community Edition (GPL)(这是免费版的，当然，有钱的可以用收费的，功能更强大)–>MySQL Community Server (GPL) 
+–>选择对应的系统和电脑版本(在这里，我选择的是Window系 
+---
+
+
+如何下载：我先去MySQL首页下载最新版本的MySQL-链接：https://www.mysql.com/downloads/进入此界面下载：Downloads–>MySQL Community Edition (GPL)(这是免费版的，当然，有钱的可以用收费的，功能更强大)–>MySQL Community Server (GPL) 
+–>选择对应的系统和电脑版本(在这里，我选择的是Window系
+<!-- more -->
+----------
+
+如何下载：
+=====
+
+我先去MySQL首页下载最新版本的MySQL-链接：https://www.mysql.com/downloads/
+ 
+进入此界面下载：
+
+Downloads-->MySQL Community Edition (GPL)(这是免费版的，当然，有钱的可以用收费的，功能更强大)-->MySQL Community Server (GPL)
+![](http://img.blog.csdn.net/20160804112801353)
+
+-->选择对应的系统和电脑版本(在这里，我选择的是Window系统64位的下载)
+![](http://img.blog.csdn.net/20160804113138050)
+
+![](http://img.blog.csdn.net/20160804113103050)
+
+-->No thanks, just start my download.
+
+![](http://img.blog.csdn.net/20160804113258395)
+
+如何安装：
+=====
+
+因为是免安装的，我们下载好压缩包，直接解压到我们想安装的目录下就可以了。
+
+新建my.ini文件，粘贴以下代码（注意：basedir和datadir 修改成自己的安装路径）：
+
+```
+[mysql]
+# 设置mysql客户端默认字符
+default-character-set=utf8
+#设置3306端port = 3306
+# 设置mysql的安装目
+basedir=D:\\mysql-5.7.14-winx64
+# 设置mysql数据库的数据的存放目
+datadir=D:\\mysql-5.7.14-winx64\\data
+# 允许最大连接
+max_connections=200
+# 服务端使用的字符集默认为8比特编码的latin1字符character-set-server=utf8
+# 创建新表时将使用的默认存储引
+default-storage-engine=INNODB
+```
+
+![](http://img.blog.csdn.net/20160804153428079)
+
+
+打开cmd命令窗口(用管理员权限运行)，进入到安装目录bin目录，执行命令：
+mysqld --initialize-insecure --user=mysql  回车后，此时mysql安装目录下已经自动创建了data文件夹。
+
+
+命令行安装mysql:
+注册服务(注意以管理员身份操作：在我的电脑中打开“C:\Windows\System32”，找到文件“cmd.exe”，右键点击，选择“以管理员身份运行(A),进到目录“D:\mysql-5.7.14-winx64”，然后运行以下代码)
+    bin\mysqld --install mysql-5.7.14-winx64 --defaults-file=d:\mysql-5.7.14-winx64\my.ini
+
+![](http://img.blog.csdn.net/20160804153836753)
+
+
+启动服务(以管理员身份运行)
+    net start mysql-5.7.14-winx64
+     --也可右键点击“我的电脑”|“管理”|“服务和应用程序”|“服务”|找到“mysql-5.7.14-winx64”，右键点开，选择启动
+
+![](http://img.blog.csdn.net/20160804153920925)
+![](http://img.blog.csdn.net/20160804154003550)
+
+命令行登录（把bin目录设到path环境变量中，则可省略“bin\”，后面同理）
+   bin\mysql -u root -p
+   --密码为空就直接再按回车
+
+![](http://img.blog.csdn.net/20160804161518113)
+
+为root设密码(原密码为空时)：mysqladmin -u root password "1234"
+5.7.14版本(用root用户登录mysql后)修改密码为1234  : set password for 'root'@localhost = password ('1234');
+修改root密码：mysqladmin -u root password oldpassword "newpass"
+
+停止服务(以管理员身份运行)
+   net stop mysql-5.7.14-winx64
+
+--必须先停止服务才能够删除！
+
+ 删除服务(以管理员身份运行)
+    bin\mysqld --remove mysql-5.7.14-winx64
+
+
+
+
+MySQL语句入门：
+==========
+
+DCL– 数据控制语言
+-----------
+
+这个一般都是DBA(专门的数据库管理人员)做的，我们是程序员，了解了解就行。
+
+create user hncu identified by '1234';  //创建一个用户hncu 密码：1234
+grant all on *.* to 'hncu'@'%' with grant option; //把所有资源授权给用户hncu，并允许他在任何机器上登录使用
+
+![](http://img.blog.csdn.net/20160804161830083)
+
+grant all on *.* to 'hncu'@'192.168.1.165' with grant option; //限制该用户只能在IP为：192.168.1.1685的这台机器上登录
+
+演示下用这个hncu登录：
+
+![](http://img.blog.csdn.net/20160804162105224)
+
+
+这个就只讲这个了。
+
+
+DDL – 数据定义语言Data Definition Language
+------------------------------------
+
+建库、建表、设置约束等：
+create\drop\alter
+
+里面有一个需要注意的地方：就是char和vaechar的区别；
+数据类型的知识点： char和varchar都可以用来定义字符类型的字段，区别：
+char(15) ---固定长度15，如果赋值时只赋一个字符'a'，那么里面数据是：1个字符'a' 加 14个空格。---比较类似Java当中的字符数组。
+varchar(15)----可变长的char数组,如果赋值时只赋一个字符'a'，那么里面数据就只有一个字符'a'。---比较类似Java当中的String
+如果有些情况，我们确定了某个参数的值肯定是那么长的，就可以用char。
+
+
+create database hncu character set utf8;
+//创建一个数据库hncu，并设置编码为utf-8.这样设置编码的好处就是不用依赖配置文件里面的默认编码。
+
+如果这样写：
+create database [if not exists] hncu character set utf8;
+ [if not exists]--判断hncu是否存在，不存在才创建。
+
+![](http://img.blog.csdn.net/20160804163540481)
+我们刚刚创建的数据库：
+![](http://img.blog.csdn.net/20160804163755904)
+
+use hncu;
+//进入hncu这个数据库。
+![](http://img.blog.csdn.net/20160804164237141)
+
+create table stud(
+sno varchar(15) not null primary key,
+sname varchar(15) not null,
+age int
+);
+//创建一个表格stud，包含3列：sno,sname,age.
+not null ---表示非null。
+primary key ---设置主键，也就是sno名字必须唯一！
+
+![](http://img.blog.csdn.net/20160804164327368)
+
+
+desc stud;
+显示stud表格的结构。
+![](http://img.blog.csdn.net/20160804164641783)
+
+
+(这里是属于DDL的)
+insert into stud values('1000','Jack',20);
+insert into stud values('1002','Tom',24);
+insert into stud values('1003','Rose');//这句是错误的，不能少！(后面有指定插入哪几列的方法)
+insert into stud values('1003','Rose',30);
+为stud表格增加一行并赋值
+sno可以为""，但是只会有一个！
+![](http://img.blog.csdn.net/20160804165057082)
+
+
+alter table stud add column tel int;
+为stud表格增加一名为tel，类型为int 的列。
+(因为没有赋值，值都是NULL)
+![](http://img.blog.csdn.net/20160804165704481)
+![](http://img.blog.csdn.net/20160804170252535)
+
+alter table stud drop column tel;
+删除stud表格下的tel列
+![](http://img.blog.csdn.net/20160804170511431)
+![](http://img.blog.csdn.net/20160804170552103)
+
+drop table stud;
+删除表格stud、
+drop database hncu;
+删除数据库hncu、
+
+
+
+DML－数据操纵语言Data Manipulation Language
+------------------------------------
+主要指数据的增删查改
+Select\delete\update\insert\call
+
+
+show databases;  //显示所有数据名
+
+![](http://img.blog.csdn.net/20160804170817479)
+
+
+use hncu;  //打开“hncu”这个数据库
+
+show tables; //显示当前数据库的所有表名
+
+![](http://img.blog.csdn.net/20160804170903917)
+
+select * from stud;
+显示stud表中的所有记录
+
+![](http://img.blog.csdn.net/20160804171410357)
+
+
+select * from stud where sname='Tom';
+显示(查询)sname='Tom'的所有记录
+
+![](http://img.blog.csdn.net/20160804171620489)
+
+
+select sname,age from stud;
+显示stud表中的指定字段(列)
+
+![](http://img.blog.csdn.net/20160804171811188)
+
+
+insert into stud values('1004','张三',30);
+//向stud 表插入一条记录
+![](http://img.blog.csdn.net/20160804172122153)
+![](http://img.blog.csdn.net/20160804172200669)
+
+
+delete from stud where sname='Tom';
+删除指定行-这里为sname为Tom的行。
+![](http://img.blog.csdn.net/20160804172318187)
+![](http://img.blog.csdn.net/20160804172353940)
+
+update stud set sname='李四' where sno='1003';
+将sno为'1003'的行的sname修改为'李四'
+![](http://img.blog.csdn.net/20160804172617551)
+![](http://img.blog.csdn.net/20160804172630645)
+
+insert into stud (sno,sname) values ('1005','Ronse');
+只插入指定的列。(设置为not null 的必须要设置，可以设置为'')
+![](http://img.blog.csdn.net/20160804173047708)
+
+![](http://img.blog.csdn.net/20160804173121168)
+
+
+基本上学会这些简单的语句，慢慢的来，就已经入门了！
+
+加油↖(^ω^)↗
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

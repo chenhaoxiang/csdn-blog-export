@@ -1,0 +1,81 @@
+---
+layout: post
+title: "HDOJ 1056 HangOver（水题）"
+date: 2016-03-28 09:19:53 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+How far can you make a stack of cards overhang a table? If you have one card, you can create a maximum overhang of half a card length. (We’re assuming that the cards must be perpen 
+---
+
+
+Problem Description 
+How far can you make a stack of cards overhang a table? If you have one card, you can create a maximum overhang of half a card length. (We’re assuming that the cards must be perpen
+<!-- more -->
+----------
+
+Problem Description
+How far can you make a stack of cards overhang a table? If you have one card, you can create a maximum overhang of half a card length. (We're assuming that the cards must be perpendicular to the table.) With two cards you can make the top card overhang the bottom one by half a card length, and the bottom one overhang the table by a third of a card length, for a total maximum overhang of 1/2 + 1/3 = 5/6 card lengths. In general you can make n cards overhang by 1/2 + 1/3 + 1/4 + ... + 1/(n + 1) card lengths, where the top card overhangs the second by 1/2, the second overhangs tha third by 1/3, the third overhangs the fourth by 1/4, etc., and the bottom card overhangs the table by 1/(n + 1). This is illustrated in the figure below.
+![](http://img.blog.csdn.net/20160328211743525)
+ 
+
+The input consists of one or more test cases, followed by a line containing the number 0.00 that signals the end of the input. Each test case is a single line containing a positive floating-point number c whose value is at least 0.01 and at most 5.20; c will contain exactly three digits.
+
+For each test case, output the minimum number of cards necessary to achieve an overhang of at least c card lengths. Use the exact output format shown in the examples.
+
+ 
+
+Sample Input
+1.00
+3.71
+0.04
+5.19
+0.00
+ 
+
+Sample Output
+3 card(s)
+61 card(s)
+1 card(s)
+273 card(s)
+
+
+英语不好真心看不懂（表示看不懂）。。。说了这么多，其实就是一个大水题。
+公式题目给出了，就是求公式的和正好大于输入的n的时候的最小的整数。
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			double n = sc.nextDouble();
+			if(n==0){
+				return ;
+			}
+			int a=0;
+			int t = 2;
+			double sum=0;
+			do{
+				sum = sum+(1.0/t*1.0);
+				a++;
+				t++;
+			}while(sum<n);
+			System.out.println(a+" card(s)");
+		}
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

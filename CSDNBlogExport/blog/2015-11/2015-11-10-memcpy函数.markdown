@@ -1,0 +1,107 @@
+---
+layout: post
+title: "memcpy函数"
+date: 2015-11-10 12:28:03 +0800
+comments: true
+categories:❸ C/C++语言基础,----- C/C++函数应用
+tags: []
+keyword: 陈浩翔, 谙忆
+description: c和c++使用的内存拷贝函数，memcpy函数的功能是从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中。 
+（可以复制其他任意数据类型）strcpy(a,b); 
+只能将b字符串复制给a字符串函数原型  
+void *memcpy(void *dest, const void *src, size_t n);功能  
+从源src所指的内存地址的起始位置开始拷 
+---
+
+
+c和c++使用的内存拷贝函数，memcpy函数的功能是从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中。 
+（可以复制其他任意数据类型）strcpy(a,b); 
+只能将b字符串复制给a字符串函数原型  
+void *memcpy(void *dest, const void *src, size_t n);功能  
+从源src所指的内存地址的起始位置开始拷
+<!-- more -->
+----------
+
+c和c++使用的内存拷贝函数，memcpy函数的功能是从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中。
+（可以复制其他任意数据类型）
+
+strcpy(a,b);
+只能将b字符串复制给a字符串
+
+函数原型 
+void *memcpy(void *dest, const void *src, size_t n);
+
+功能 
+从源src所指的内存地址的起始位置开始拷贝n个字节到目标dest所指的内存地址的起始位置中。
+
+先讲复制字符串：
+
+```
+#include <iostream>
+#include <cstring>
+int main()
+{
+    char *a="123456789";
+    char b[20];
+    memcpy(b,a,strlen(a)+1);
+ //为什么要加一呢，这是因为字符串最后还有一个‘\0’结束符
+ //输出是根据读到‘\0’就结束输出的，所以需要把'\0'一起复制过来
+    std::cout<<b<<std::endl;
+    return 0;
+}
+
+```
+这样输出的b=“123456789”；
+
+再看另外一种复制字符串的方式：
+
+```
+#include <iostream>
+#include <cstring>
+int main()
+{
+    char *a="123456789";
+    char b[20];
+    memcpy(b,a+2,6);
+ //从a的第二个字符开始复制6个字符，“345678”
+    b[6]='\0';//必须有这个，结束符
+    std::cout<<b<<std::endl;
+    return 0;
+}
+
+```
+
+最后还将一个int型的数组复制：
+
+```
+#include <iostream>
+#include <algorithm>
+#include <cstring>
+int main()
+{
+    int a[9]={1,2,3,4,5,6,7,8,9};
+    int b[20];
+    memcpy(b,a,sizeof(int)*9);
+    //第三个数为字节，复制a地址开始往后的sizeof(int)*9个字节给b地址开始
+    //那个9就是复制的元素个数
+    for(int i=0;i<9;i++)
+    std::cout<<b[i]<<std::endl;
+    return 0;
+}
+
+```
+
+最后：说下strcpy和memcpy的区别：
+strcpy和memcpy主要有以下3方面的区别。
+1、复制的内容不同。strcpy只能复制字符串，而memcpy可以复制任意内容，例如字符数组、整型、结构体、类等。
+2、复制的方法不同。strcpy不需要指定长度，它遇到被复制字符的串结束符"\0"才结束，所以容易溢出。memcpy则是根据其第3个参数决定复制的长度。
+3、用途不同。通常在复制字符串时用strcpy，而需要复制其他类型数据时则一般用memcpy
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,220 @@
+---
+layout: post
+title: "实验一 线性表的基本操作"
+date: 2015-11-02 09:20:54 +0800
+comments: true
+categories:❸ C/C++语言基础,----- 数据结构
+tags: [函数,c语言,线性表,单链表]
+keyword: 陈浩翔, 谙忆
+description: 一、线性结构的顺序表基本操作 
+实验目的 
+1.学会定义单链表的结点类型、线性表的顺序存储类型，实现C程序的基本结构，对线性表的一些基本操作和具体的函数定义。 
+2.掌握顺序表的基本操作，实现顺序表的插入、删除、查找以及求并集等运算。 
+3.掌握对多函数程序的输入、编辑、调试和运行过程。 
+实验要求 
+1．预习C语言中结构体的定义与基本操作方法。 
+2．对顺序表的每个基本操作用单独的函数实现。 
+3 
+---
+
+
+一、线性结构的顺序表基本操作 
+实验目的 
+1.学会定义单链表的结点类型、线性表的顺序存储类型，实现C程序的基本结构，对线性表的一些基本操作和具体的函数定义。 
+2.掌握顺序表的基本操作，实现顺序表的插入、删除、查找以及求并集等运算。 
+3.掌握对多函数程序的输入、编辑、调试和运行过程。 
+实验要求 
+1．预习C语言中结构体的定义与基本操作方法。 
+2．对顺序表的每个基本操作用单独的函数实现。 
+3
+<!-- more -->
+----------
+
+一、线性结构的顺序表基本操作
+实验目的
+1.学会定义单链表的结点类型、线性表的顺序存储类型，实现C程序的基本结构，对线性表的一些基本操作和具体的函数定义。
+2.掌握顺序表的基本操作，实现顺序表的插入、删除、查找以及求并集等运算。
+3.掌握对多函数程序的输入、编辑、调试和运行过程。
+实验要求
+1．预习C语言中结构体的定义与基本操作方法。
+2．对顺序表的每个基本操作用单独的函数实现。
+3．编写完整程序完成下面的实验内容并上机运行。
+实验内容
+1．编写程序实现顺序表的下列基本操作：
+ (1)初始化顺序表La。
+ (2)将La置为空表。
+ (3)销毁La。
+ (4)在La中插入一个新的元素。
+ (5)删除La中的某一元素。
+ (6)在La中查找某元素，若找到，则返回它在La中第一次出现的位置，否则返回0。
+ (7)打印输出La中的元素值。
+2．（选做）编写程序完成下面的操作：
+(1)构造两个顺序线性表La和Lb，其元素都按值非递减顺序排列。
+(2)实现归并La和Lb得到新的顺序表Lc，Lc的元素也按值非递减顺序排列。
+(3)假设两个顺序线性表La和Lb分别表示两个集合A和B，利用union_Sq操作实现A=A∪B。
+二、单链表基本操作(选做)
+实验目的
+1. 学会定义单链表的结点类型、线性表的链式存储类型，实现对单链表的一些基本操作和具体的函数定义，了解并掌握单链表的类定义以及成员函数的定义与调用。
+2. 掌握单链表基本操作及两个有序表归并、单链表逆置等操作的实现。
+实验要求
+1．预习C语言中结构体的定义与基本操作方法。
+2．对单链表的每个基本操作用单独的函数实现。
+3．编写完整程序完成下面的实验内容并上机运行。
+实验内容
+1．编写程序完成单链表的下列基本操作：
+  (1)初始化单链表La。
+  (2)在La中插入一个新结点。
+  (3)删除La中的某一个结点。
+  (4)在La中查找某结点并返回其位置。
+  (5)打印输出La中的结点元素值。
+2．构造一个单链表L，其头结点指针为head，编写程序实现将L逆置。（即最后一个结点变成第一个结点，原来倒数第二个结点变成第二个结点，如此等等。）
+******************************************************************************
+附：代码
+c++下运行：
+```
+#include<stdio.h>
+#include<stdlib.h>
+
+//顺序表的定义：
+#define ListSize 100//表空间大小可根据实际需要而定，这里假设为100
+typedef int DataType;//DataType可以是任何相应的数据类型如int ,float,char.
+typedef struct SeqList
+{
+	DataType data[ListSize];  //向量data 用于存放表节点
+	int length;              // 当前的表达长度
+}SeqList;
+
+int main()
+{
+	struct SeqList L;
+	int i,k,x,n;
+//函数声明
+	struct SeqList DeleteList(SeqList L,int i);
+	struct SeqList InitList(struct SeqList L);
+	struct SeqList CreateList(struct SeqList L,int n);
+	struct SeqList InsertList(SeqList L,DataType x,int k);
+	void PrintList(SeqList L);
+	int LocateList(SeqList L,DataType x);
+	//初始化表
+	L=InitList(L);
+//建立顺序表
+	printf("输入表中元素数量n\n");
+	scanf("%d",&n);
+	L=CreateList(L,n);
+	printf("输入的元素为：\n");
+	PrintList(L);
+//查找数据
+	printf("输入需要查找的数据：\n");
+	scanf("%d",&x);
+	if(LocateList(L,x)==0)
+		printf("该元素不存在。。。\n");
+	  else{
+        printf("该元素的位置为：\n");
+         printf("%d",LocateList(L,x));
+	  }
+
+	printf("\n");
+	//插入数据
+	printf("输入插入的数据 x=");
+	scanf("%d",&x);
+	printf("输入插入的位置 k=");
+	scanf("%d",&k);
+	printf("\n插入 数据前的表：\n");//表插入前后对比性输出
+	PrintList(L);
+	L=InsertList(L,x,k);
+	printf("\n插入 数据后的表：\n");//表插入前后对比性输出
+	PrintList(L);
+	//删除数据
+		printf("输入删除的位置 k=");
+	scanf("%d",&k);
+	printf("\n删除 数据前的表：\n");//表删除前后对比性输出
+	PrintList(L);
+	L=DeleteList(L,k);
+	printf("\n删除 数据后的表：\n");//表删除前后对比性输出
+	PrintList(L);
+    return 0;
+
+}
+//初始化顺序表
+struct SeqList InitList(struct SeqList L)
+{
+	L.length=0;
+	return L;
+}
+//顺序表的建立
+struct SeqList CreateList(struct SeqList L,int n)
+{
+	int i;
+	printf("请输入%d个元素：\n",n);
+	for(i=0;i<n;i++)
+	{
+		scanf("%d",&L.data[i]);
+		L.length++;
+	}
+	return L;
+}
+
+void PrintList(SeqList L)
+{
+	int i;
+	if(L.length==0)
+	{
+		printf("此表为空...\n");
+	    return ;
+	}
+	for(i=0;i<L.length-1;i++)
+	{
+		printf("%d ",L.data[i]);
+	}
+	printf("%d\n",L.data[i]);
+}
+
+int LocateList(SeqList L,DataType x)
+{
+	int i;
+	if(L.length==0)
+		printf("该顺序表为空。。。\n");
+	for(i=0;i<L.length;i++)
+	{	if(x==L.data[i])
+			return i+1;
+	//printf("**\n");
+	}
+	return 0;
+}
+struct SeqList InsertList(SeqList L,DataType x,int k)
+{
+	int i;
+	if(k<0||k>L.length)
+	{
+		printf("输入位置非法。。");
+		return L;
+	}
+	if(L.length==ListSize)
+	{
+		printf("表上溢，不能插入\n");
+		return L;
+	}
+	for(i=L.length;i>=k;i--)
+		L.data[i]=L.data[i-1];
+	L.data[k-1]=x;
+	L.length++;
+	return L;
+}
+
+struct SeqList DeleteList(SeqList L,int i)
+{
+    int j;
+    for(j=i-1;j<L.length;j++)
+        L.data[j]=L.data[j+1];
+    L.length--;
+    return L;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

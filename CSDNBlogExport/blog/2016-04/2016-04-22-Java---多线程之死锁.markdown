@@ -1,0 +1,355 @@
+---
+layout: post
+title: "Java---多线程之死锁"
+date: 2016-04-22 11:16:49 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java多线程
+tags: [多线程,java,软件,cpu]
+keyword: 陈浩翔, 谙忆
+description: ★ 死锁的两种情况：简单的说下单块cpu运行多线程的情况：大家可能平时玩电脑，可以同时挂QQ啊，玩游戏啊，打开文本啊，等等。这里，我们假设是单块cpu。也就是俗称的单核cpu。 
+大家可能会觉得这些软件，这些线程是同时运行的， 
+其实不然，其实在任何一种情况下，电脑都只运行一个线程！ 
+只是因为这个单块的cpu内部为我们划分了很多很多的时间块， 
+而这个时间的划分是以纳秒为单位的，也就是说，这个10 
+---
+
+
+★ 死锁的两种情况：简单的说下单块cpu运行多线程的情况：大家可能平时玩电脑，可以同时挂QQ啊，玩游戏啊，打开文本啊，等等。这里，我们假设是单块cpu。也就是俗称的单核cpu。 
+大家可能会觉得这些软件，这些线程是同时运行的， 
+其实不然，其实在任何一种情况下，电脑都只运行一个线程！ 
+只是因为这个单块的cpu内部为我们划分了很多很多的时间块， 
+而这个时间的划分是以纳秒为单位的，也就是说，这个10
+<!-- more -->
+----------
+
+★ 死锁的两种情况：
+==========
+
+简单的说下单块cpu运行多线程的情况：
+-------------------
+
+大家可能平时玩电脑，可以同时挂QQ啊，玩游戏啊，打开文本啊，等等。这里，我们假设是单块cpu。也就是俗称的单核cpu。
+大家可能会觉得这些软件，这些线程是同时运行的，
+其实不然，其实在任何一种情况下，电脑都只运行一个线程！
+只是因为这个单块的cpu内部为我们划分了很多很多的时间块，
+而这个时间的划分是以纳秒为单位的，也就是说，这个10纳秒我运行这个线程，下个10纳秒运行另外一个线程（或者又被上一个线程抢到了（只是被上一个线程抢到的概率小，这是cpu调度器的算法决定了的），它会慢慢平衡的，不可能一直让某一个线程一直抢占cpu调度器资源），所以说，它运行并不是连续的，只是间隔时间太短，我们感觉不出来而已！！！
+
+
+第一种情况：
+------
+1）多个线程共用同一个对象锁，互相等待。
+两个线程共用一个锁，一个线程拿着锁来调用另外一个线程，于是出现了死锁情况！
+
+
+```
+package thread.deadLock.lock1;
+/**
+ * 简单的类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class S {
+	public int a = 0 ;
+}
+
+```
+
+```
+package thread.deadLock.lock1;
+/**
+ * 含有main方法的类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class DeadLock1 {
+	public static void main(String[] args) {
+		S s = new S();
+		Thread b = new Thread(new ThreadB(s));
+		Thread a = new Thread(new ThreadA(s,b));
+		a.start();
+		b.start();
+	}
+	
+	
+}
+
+```
+
+```
+package thread.deadLock.lock1;
+/**
+ * ThreadB类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class ThreadB implements Runnable{
+	private S s = null;
+	
+	
+	public ThreadB(S s) {
+		this.s = s;
+	}
+
+
+	@Override
+	public  void run() {
+		System.out.println("线程B在等待锁s！");
+		synchronized (s) {
+			System.out.println("线程B拿到锁s！");
+			s.a=100;
+			System.out.println("线程B  s.a = " + s.a);
+		}
+	}
+	
+}
+
+```
+
+```
+package thread.deadLock.lock1;
+/**
+ * ThreadA类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class ThreadA implements Runnable{
+	private S s = null;
+	private Thread b = null;
+	
+	public ThreadA(S s,Thread b) {
+		this.b = b;
+		this.s = s;
+	}
+
+
+	@Override
+	public  void run() {
+		System.out.println("线程A在等待锁s！");
+		synchronized (s) {
+			System.out.println("线程A拿到锁s！");
+			try {
+				//调用b线程的运行代码。
+				//但是此时的锁在a线程手里，b拿不到锁。
+				//所以出现了，b等待a给锁，a就拿着锁等待b运行，所以出现了死锁！
+				b.join();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("s.a = " + s.a);
+		}
+	}
+	
+}
+
+```
+运行结果只有一种情况，一定锁死！
+![](http://img.blog.csdn.net/20160422110207544)
+
+
+
+
+
+第二种情况：
+------
+
+2）互相持有对方所需的资源（即每个线程都需要同时拿到多个资源才能继续执行，而多个线程都处于：各持有一部分，在等待另一部分。）
+
+
+
+```
+package thread.deadLock.lock2;
+/**
+ * 资源类1
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class S1 {
+	public int a =0;
+}
+
+```
+
+```
+package thread.deadLock.lock2;
+/**
+ * 资源类2
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class S2 {
+	public int a =1;
+}
+
+```
+
+```
+package thread.deadLock.lock2;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class DeadLock2 {
+
+	public static void main(String[] args) {
+		//如果要解决这种多资源出现的死锁，可以把多个资源打包成一个综合资源，
+		//把综合资源变成一个对象锁,哪个线程一拿到锁就有全部资源了
+		//在设计阶段就应该考虑到----把多线程中的每个线程所用的互斥资源图画出来
+		//--从图中看出哪些线程存在共享互斥资源，然后分析是否可能存在死锁
+		//这个死锁存在随机性！！！
+		
+		S1 s1 = new S1();
+		S2 s2 = new S2();
+		
+		Thread a = new Thread(new ThreadA(s1,s2));
+		Thread b = new Thread(new ThreadB(s1,s2));
+		
+		a.start();
+		b.start();
+		
+	}
+
+}
+
+```
+
+```
+package thread.deadLock.lock2;
+/**
+ * ThreadA---a线程运行代码类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class ThreadA implements Runnable{
+	private S1 s1 = null;
+	private S2 s2 = null;
+	
+	
+	public ThreadA(S1 s1, S2 s2) {
+		this.s1 = s1;
+		this.s2 = s2;
+	}
+
+
+	@Override
+	public void run() {
+		System.out.println("线程a在等待锁s1!");
+		synchronized (s1) {//拿到了锁s1
+			System.out.println("s1.a=" + s1.a);
+			System.out.println("线程a拿到了锁s1");
+			System.out.println("线程a在等待锁s2");
+			synchronized (s2) {//拿到锁s2
+				System.out.println("线程a拿到了锁s2");
+				System.out.println("s2.a=" + s2.a);
+			}//释放锁s2
+			System.out.println("线程a释放了锁s2");
+		}//释放锁s1
+		
+		
+	}
+	
+}
+
+```
+
+```
+package thread.deadLock.lock2;
+/**
+ * ThreadB---b线程运行代码类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class ThreadB implements Runnable{
+	private S1 s1 = null;
+	private S2 s2 = null;
+	
+	
+	
+	public ThreadB(S1 s1, S2 s2) {
+		this.s1 = s1;
+		this.s2 = s2;
+	}
+
+
+
+	@Override
+	public void run() {
+		System.out.println("线程b在等待锁s2!");
+		synchronized (s2) {//拿到了锁s2
+			System.out.println("s2.a=" + s2.a);
+			System.out.println("线程b拿到了锁s2");
+			System.out.println("线程b在等待锁s1");
+			synchronized (s1) {//拿到锁s1
+				System.out.println("线程b拿到了锁s1");
+				System.out.println("s1.a=" + s1.a);
+			}//释放锁s1
+			System.out.println("线程b释放了锁s1");
+		}//释放锁s2
+		
+		
+	}
+	
+}
+
+```
+
+这个情况下的死锁会出现2中情况：：
+
+第一种：没有死锁：
+这种情况的出现是因为可能a线程或者b线程抢到了cpu资源，一次就全部运行完了，这样，就不会出现死锁！
+
+![](http://img.blog.csdn.net/20160422110405621)
+
+第二种：出现了死锁：
+假如a线程拿到了s1的锁，还没有拿到s2的锁，
+这个时候s2的锁被b线程拿到了，b线程就开始等待s1锁，而s1锁在a线程手上，a线程就等s2锁啊，b线程就等s1锁，，，于是，出现了死锁！
+
+![](http://img.blog.csdn.net/20160422111335142)
+大家可以看到，这个死锁的情况下，程序并没有停止运行的，那个程序运行的红方块标志还亮着呢！
+前面那图没有出现死锁的情况下，程序运行一下就输出完了，红方块是暗的！
+
+总结：
+---
+
+
+★ 死锁的解决
+(死锁并没有解决的方案，只能从源头上去避免！)
+要从设计方面去解决避免，即在设计时就考虑不能出现死锁。
+罗列出所有临界资源，画分布图，从图中观察其中的死锁情况，改变其中线程的(临界)资源的获取方式。
+设计原则：尽量让程序中少出现临界资源。
+
+
+★ wait/notify 和 sleep方法
+
+wait和notify只能在它们被调用的实例的同步块内使用，而sleep()到处都可以用。
+wait()和sleep()最大的区别：sleep()不释放对象锁，而wait()会释放，因此从效率方面考虑wait()方法更好。
+
+
+★ 同步设计的基本原则
+ ◎ 同步块中(synchronized修饰)的代码越小越好！
+ ◎ 同步块中不要写阻塞性代码(如，InputStream.read() )！
+ ◎ 在持有锁的时候，不要对其它对象调用方法。（如果做到，可以消除最常见的死锁源头。）
+
+
+★ 同步概述
+◎同步的原理：将需要同步的代码进行封装，并在该代码上加了一个锁。
+◎同步的好处：解决多线程的安全问题。
+◎同步的弊端：会降低性能。
+◎同步的前提：必须要保证有多个线程且它们在同步中使用的是同一个锁。
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

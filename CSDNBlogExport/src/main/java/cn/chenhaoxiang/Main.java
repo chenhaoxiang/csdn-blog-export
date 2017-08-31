@@ -14,6 +14,8 @@ public class Main extends JFrame {
 	private JTextArea textArea;
 	private JButton btnNewButton;
 	private JTextField textField_1;
+
+	public static int blogs =0;
 	/**
 	 * 程序入口
 	 */
@@ -80,6 +82,7 @@ public class Main extends JFrame {
 
 				SaveBlogDataEntity.startGetBlogandSave(begin,btnNewButton,textArea,blogIdSet,threadNum);
 
+				textArea.append("本次线程获取-------共"+Main.blogs+"篇\n");
 			}
 		});
 

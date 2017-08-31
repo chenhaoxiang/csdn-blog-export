@@ -1,0 +1,115 @@
+---
+layout: post
+title: "HDOJ(HDU) 1570 A C"
+date: 2016-04-19 04:54:33 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Are you excited when you see the title “AC” ? If the answer is YES , AC it ; 
+You must learn these two combination formulas in the school . If you have forgotten it , see the pictu 
+---
+
+
+Problem Description 
+Are you excited when you see the title “AC” ? If the answer is YES , AC it ; 
+You must learn these two combination formulas in the school . If you have forgotten it , see the pictu
+<!-- more -->
+----------
+
+Problem Description
+Are you excited when you see the title "AC" ? If the answer is YES , AC it ;
+![](http://img.blog.csdn.net/20160419165310405)
+
+You must learn these two combination formulas in the school . If you have forgotten it , see the picture.
+
+
+
+
+Now I will give you n and m , and your task is to calculate the answer .
+ 
+
+Input
+In the first line , there is a integer T indicates the number of test cases.
+Then T cases follows in the T lines.
+Each case contains a character 'A' or 'C', two integers represent n and m. (1<=n,m<=10)
+ 
+
+Output
+For each case , if the character is 'A' , calculate A(m,n),and if the character is 'C' , calculate C(m,n).
+And print the answer in a single line.
+ 
+
+Sample Input
+2
+A 10 10
+C 4 2
+ 
+
+Sample Output
+3628800
+6
+
+
+题意：很简单，看图片就能理解了。
+水题一个！就不多解释了。
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			String str = sc.next();
+			int n = sc.nextInt();
+			int m =sc.nextInt();
+			
+			if(str.charAt(0)=='A'){
+				System.out.println(a(n,m));
+			}else{
+				System.out.println(c(n,m));
+			}
+			
+		}
+		
+	}
+
+	private static int c(int n, int m) {
+		int num =1;
+		if(n-m>m){
+			m=n-m;
+		}
+		int cnum=1;
+		for(int i=1;i<=n-m;i++){
+			cnum=cnum*i;
+		}
+		for(int i=m+1;i<=n;i++){
+			num=num*i;
+		}
+		return num/cnum;
+	}
+
+	private static int a(int n, int m) {
+		int num=1;
+		for(int i=n-m+1;i<=n;i++){
+			num=num*i;
+		}
+		return num;
+	}
+}
+
+```
+
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

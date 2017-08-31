@@ -1,0 +1,91 @@
+---
+layout: post
+title: "HDOJ 2016 数据的交换输出"
+date: 2015-11-20 08:21:44 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [数据,测试,实例]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入n(n<100)个数，找出其中最小的数，将它与最前面的数交换后输出这些数。Input 
+输入数据有多组，每组占一行，每行的开始是一个整数n，表示这个测试实例的数值的个数，跟着就是n个整数。n=0表示输入的结束，不做处理。Output 
+对于每组输入数据，输出交换后的数列，每组输出占一行。Sample Input 
+4 2 1 3 4 
+5 5 4 3 2 
+---
+
+
+Problem Description 
+输入n(n<100)个数，找出其中最小的数，将它与最前面的数交换后输出这些数。Input 
+输入数据有多组，每组占一行，每行的开始是一个整数n，表示这个测试实例的数值的个数，跟着就是n个整数。n=0表示输入的结束，不做处理。Output 
+对于每组输入数据，输出交换后的数列，每组输出占一行。Sample Input 
+4 2 1 3 4 
+5 5 4 3 2
+<!-- more -->
+----------
+
+Problem Description
+输入n(n<100)个数，找出其中最小的数，将它与最前面的数交换后输出这些数。
+
+ 
+
+Input
+输入数据有多组，每组占一行，每行的开始是一个整数n，表示这个测试实例的数值的个数，跟着就是n个整数。n=0表示输入的结束，不做处理。
+ 
+
+Output
+对于每组输入数据，输出交换后的数列，每组输出占一行。
+ 
+
+Sample Input
+4 2 1 3 4
+5 5 4 3 2 1
+0
+ 
+
+Sample Output
+1 2 3 4
+1 4 3 2 5
+
+
+```
+import java.util.Scanner; 
+class Main{ 
+    public static void main(String args[]){ 
+     Scanner sc = new Scanner(System.in);  
+       while(sc.hasNext()){ 
+       int n = sc.nextInt(); 
+       if(n==0)  return ; 
+       int a[] = new int[n]; 
+       int min,k=0; 
+                a[0]=sc.nextInt(); 
+                min = a[0]; 
+                for(int i=1;i<n;i++){ 
+                    a[i]=sc.nextInt(); 
+                    if(a[i]<min){ 
+                        min=a[i]; 
+                        k=i; 
+                    } 
+                } 
+                if(k!=0){
+                a[0]=a[k]^a[0]; 
+                a[k]=a[k]^a[0]; 
+                 a[0]=a[k]^a[0]; 
+            }
+            System.out.print(a[0]); 
+            for(int j=1;j<n;j++){ 
+                System.out.print(" "+a[j]); 
+            } 
+            System.out.println(); 
+    } 
+} 
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

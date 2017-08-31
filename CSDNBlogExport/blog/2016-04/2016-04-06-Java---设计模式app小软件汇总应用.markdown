@@ -1,0 +1,649 @@
+---
+layout: post
+title: "Java---设计模式app小软件汇总应用"
+date: 2016-04-06 02:21:35 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块,----- ----- Java地址App
+tags: [设计模式,java,应用,结构]
+keyword: 陈浩翔, 谙忆
+description: 写了一个app小软件，重点不在于软件，软件bug挺多，也没去修改。 
+这个小软件只是为了更好的说明和了解设计模块而做的。 
+Java 程序设计–包结构 
+Java程序设计的系统体系结构很大一部分都体现在包结构上 
+大家看看我的这个小软件的分层： 
+结构还是挺清楚的。 
+一种典型的Java应用程序的包结构： 
+前缀.应用或项目的名称.模块组合.模块内部的技术实现 
+说明：  
+1、前缀：是网站域名的倒 
+---
+
+
+写了一个app小软件，重点不在于软件，软件bug挺多，也没去修改。 
+这个小软件只是为了更好的说明和了解设计模块而做的。 
+Java 程序设计–包结构 
+Java程序设计的系统体系结构很大一部分都体现在包结构上 
+大家看看我的这个小软件的分层： 
+结构还是挺清楚的。 
+一种典型的Java应用程序的包结构： 
+前缀.应用或项目的名称.模块组合.模块内部的技术实现 
+说明：  
+1、前缀：是网站域名的倒
+<!-- more -->
+----------
+
+写了一个app小软件，重点不在于软件，软件bug挺多，也没去修改。
+这个小软件只是为了更好的说明和了解设计模块而做的。
+**Java 程序设计--包结构**
+Java程序设计的系统体系结构很大一部分都体现在包结构上
+大家看看我的这个小软件的分层：
+![](http://img.blog.csdn.net/20160406020440722)
+
+结构还是挺清楚的。
+**一种典型的Java应用程序的包结构：**
+前缀.应用或项目的名称.模块组合.模块内部的技术实现
+**说明：** 
+1、前缀：是网站域名的倒写，去掉www（如，Sun公司（非JDK级别）的东西：com.sun.* ）。
+2、其中模块组合又由系统、子系统、模块、组件等构成（具体情况根据项目的大小而定，如果项目很大，那么就多分几层。
+3、模块内部的技术实现一般由：表现层、逻辑层、数据层等构成。 
+对于许多类都要使用的公共模块或公共类，可以再独立建立一个包，取名common或base，把这些公共类都放在其中。
+对于功能上的公用模块或公共类可建立util或tool包，放入其中。
+如本例的util包。
+
+设计与实现的常用方式、DAO的基本功能
+**★ 设计的时候：从大到小**
+先把一个大问题分解成一系列的小问题。或者说是把一个大系统分解成多个小系统，小系统再继续进行往下分解，直到分解到自己能够掌控时，再进行动手实现。
+
+
+**★ 实现的时候：从小到大**
+先实现组件，进行测试通过了，再把几个组件实现合成模块，进行测试通过，然后继续往上扩大。
+
+
+**★ 最典型的DAO接口通常具有的功能**
+新增功能、修改功能、删除功能、按照主要的键值进行查询、获取所有值的功能、按照条件进行查询的功能。
+![](http://img.blog.csdn.net/20160406020832098)
+
+
+**★ 一个通用DAO接口模板**
+
+**★ UserVO 和 UserQueryVO的区别**
+UserVO封装数据记录，而UserQueryVO用于封装查询条件。
+
+![](http://img.blog.csdn.net/20160406020916567)
+
+
+下面的为那个小软件实现这些设计模式的简单汇总：
+（含分层思想，值对象，工厂方法，Dao组件，面向接口编程）
+
+main方法类：
+UserClient ：
+```
+package cn.hncu.app;
+
+import cn.hncu.app.ui.UserAddPanel;
+
+
+public class UserClient extends javax.swing.JFrame {
+	
+	
+	public UserClient(){
+		super("chx");
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setBounds(100, 100, 800, 600);
+		this.setContentPane(new UserAddPanel(this));
+		
+		this.setVisible(true);
+		
+	}
+
+	public static void main(String[] args) {
+		new UserClient();
+	}
+	
+}
+```
+公用模块类  utils类：
+FileIO ：
+```
+package cn.hncu.app.utils;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+public class FileIO {
+	public static Object[] read(String fileName){
+		List<Object> list = new ArrayList<Object>();
+		ObjectInputStream objIn=null;
+		try {
+			objIn = new ObjectInputStream(new FileInputStream(fileName));
+			Object obj;
+			//※※对象流的读不能用available()来判断，而应该用异常来确定是否读到结束
+			while(true){
+				obj=objIn.readObject();
+				list.add(obj);	
+			}
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			//读到文件末尾，就是出异常，通过这来判断是否读到结束。
+			//因此，本程序中，这里是正常的文件读取结束，不是我们之前认为的出异常--所以不输出异常信息
+		} catch (ClassNotFoundException e) {
+			//读到文件末尾，就是出异常，通过这来判断是否读到结束。
+			//因此，本程序中，这里是正常的文件读取结束，不是我们之前认为的出异常--所以不输出异常信息
+		}finally{
+			if(objIn!=null){
+				try {
+					objIn.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		}
+		
+		Object[] objs = list.toArray();
+		if(objs==null){
+			objs=new Object[0];
+		}
+		return objs;
+	}
+	
+	
+	public static boolean write(String fileName,Object obj){
+		ObjectOutputStream objOut =null;
+		try {
+			objOut=new ObjectOutputStream(new FileOutputStream(fileName,true));
+			//new FileOutputStream(fileName,true),有true的存在代表是添加而不是覆盖
+			objOut.writeObject(obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}finally{
+			if(objOut!=null){
+				try {
+					objOut.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		return true;
+	}
+	
+	
+}
+
+```
+
+**值对象：**
+**封装数据记录**:
+User：
+```
+package cn.hncu.app.vo;
+
+import java.io.Serializable;
+
+public class User implements Serializable{//一定要实现这个接口啊！！！
+	private String name;
+	private int age;
+	
+	public User(String name, int age) {
+		this.name = name;
+		this.age = age;
+	}
+
+	public User() {
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + age;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (age != other.age)
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return  name + "," + age;
+	}
+}
+
+```
+
+**封装查询条件:**
+
+UserQueryVO ：
+```
+package cn.hncu.app.vo;
+
+public class UserQueryVO extends User{
+	private String age2;//年龄段查找
+
+	public String getAge2() {
+		return age2;
+	}
+
+	public void setAge2(String age2) {
+		this.age2 = age2;
+	}
+	
+	
+	
+}
+
+```
+
+
+
+
+
+
+**Dao类（数据层）：**
+
+接口UserDAO ：
+```
+package cn.hncu.app.dao.dao;
+
+import java.util.Collection;
+
+import cn.hncu.app.vo.User;
+import cn.hncu.app.vo.UserQueryVO;
+
+
+public interface UserDAO {
+	public Object[] getAllUsers();
+	
+	//增删改
+	public boolean addUser(User user);
+	
+	public boolean delete(User user);//有时参数也可以用：id
+	public boolean update(User user);
+	
+	
+	//3个查询
+	public User getByUserId(String uuid);//查单个
+	public Collection<User> getAll();//查全
+	public Collection<User> geByCondition(UserQueryVO qvo);
+	//只写了接口，并没有具体去应用。。。。这里主要学方法
+}
+
+```
+工厂方法UserDaoFactory ：
+
+```
+package cn.hncu.app.dao.factory;
+
+import cn.hncu.app.dao.dao.UserDAO;
+import cn.hncu.app.dao.impl.UserDaoFileIO;
+
+public class UserDaoFactory {
+	public static UserDAO getUserDAO(){
+		return new UserDaoFileIO();
+	}
+	
+	
+}
+
+```
+
+实现类 UserDaoFileIO ：
+
+```
+package cn.hncu.app.dao.impl;
+
+import java.util.Collection;
+
+import cn.hncu.app.dao.dao.UserDAO;
+import cn.hncu.app.utils.FileIO;
+import cn.hncu.app.vo.User;
+import cn.hncu.app.vo.UserQueryVO;
+
+public class UserDaoFileIO implements UserDAO{
+	private static final String FILE_NAME = "user.txt";
+	@Override
+	public Object[] getAllUsers() {
+		return FileIO.read(FILE_NAME);
+	}
+
+	@Override
+	public boolean addUser(User user) {
+		return FileIO.write(FILE_NAME, user);
+	}
+
+	@Override
+	public boolean delete(User user) {
+		return false;
+	}
+
+	@Override
+	public boolean update(User user) {
+		return false;
+	}
+
+	@Override
+	public User getByUserId(String uuid) {
+		return null;
+	}
+
+	@Override
+	public Collection<User> getAll() {
+		return null;
+	}
+
+	@Override
+	public Collection<User> geByCondition(UserQueryVO qvo) {
+		return null;
+	}
+	
+}
+
+```
+
+**逻辑层：**
+接口UserEbi ：
+
+```
+package cn.hncu.app.business.ebi;
+
+import cn.hncu.app.vo.User;
+
+public interface UserEbi {
+	public boolean addUser(User user);
+	public Object[] getAllUser();
+}
+
+```
+工厂类UserEbiFactory ：
+
+```
+package cn.hncu.app.business.factory;
+
+import cn.hncu.app.business.ebi.UserEbi;
+import cn.hncu.app.business.impl.UserEbo;
+public class UserEbiFactory {
+	public static UserEbi getUserEbi(){
+		return new UserEbo();
+	}
+}
+
+```
+实现类UserEbo ：
+
+```
+package cn.hncu.app.business.impl;
+
+import cn.hncu.app.business.ebi.UserEbi;
+import cn.hncu.app.dao.dao.UserDAO;
+import cn.hncu.app.dao.factory.UserDaoFactory;
+import cn.hncu.app.vo.User;
+
+public class UserEbo implements UserEbi{
+
+	@Override
+	public boolean addUser(User user) {
+		UserDAO userDao = UserDaoFactory.getUserDAO();
+		return userDao.addUser(user);
+	}
+
+	@Override
+	public Object[] getAllUser() {
+		UserDAO userDao = UserDaoFactory.getUserDAO();
+		return userDao.getAllUsers();
+	}
+	
+}
+
+```
+
+
+**表现层：**
+
+**UserAddPanel 类：**
+```
+/*
+ * UserAddPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.app.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.app.business.ebi.UserEbi;
+import cn.hncu.app.business.factory.UserEbiFactory;
+import cn.hncu.app.vo.User;
+
+/**
+ *
+ * @author  __USER__
+ */
+public class UserAddPanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+
+	/** Creates new form UserAddPanel */
+	public UserAddPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		jButton1 = new javax.swing.JButton();
+		tfdAge = new javax.swing.JTextField();
+		tfdName = new javax.swing.JTextField();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setText("\u5e74\u9f84\uff1a");
+		add(jLabel1);
+		jLabel1.setBounds(170, 200, 50, 40);
+
+		jLabel2.setText("\u59d3\u540d\uff1a");
+		add(jLabel2);
+		jLabel2.setBounds(170, 120, 50, 40);
+
+		jButton1.setText("\u6dfb\u52a0");
+		jButton1.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jButton1ActionPerformed(evt);
+			}
+		});
+		add(jButton1);
+		jButton1.setBounds(240, 330, 170, 60);
+		add(tfdAge);
+		tfdAge.setBounds(210, 210, 170, 30);
+		add(tfdName);
+		tfdName.setBounds(210, 130, 170, 30);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+		//1收集参数 
+		String name = tfdName.getText();
+		String strAge = tfdAge.getText();
+		int age = Integer.parseInt(strAge);//简单的转换成一个整型数了。
+		
+		//2组织参数
+		//User user = new User(name, age);
+		User user = new User();
+		user.setAge(age);
+		user.setName(name);
+		
+		
+		//3调用逻辑层---通过接口
+		UserEbi userEbi = UserEbiFactory.getUserEbi();
+		boolean isSuccess=userEbi.addUser(user);
+		
+		//4导向不同页面
+		if(isSuccess){
+			JOptionPane.showMessageDialog(this, "恭喜，添加成功!");
+			this.mainFrame.setContentPane(new UserListPanel(mainFrame));
+			this.mainFrame.validate();
+		}else{
+			JOptionPane.showMessageDialog(this, "祝贺，添加失败!");
+		}
+		
+		
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton jButton1;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JTextField tfdAge;
+	private javax.swing.JTextField tfdName;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+
+**UserListPanel 类：**
+
+```
+/*
+ * UserListPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.app.ui;
+
+import javax.swing.JFrame;
+
+import cn.hncu.app.business.ebi.UserEbi;
+import cn.hncu.app.business.factory.UserEbiFactory;
+
+/**
+ *
+ * @author  __USER__
+ */
+public class UserListPanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+
+	/** Creates new form UserListPanel */
+	public UserListPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitDatas();
+
+	}
+
+	private void myInitDatas() {
+		UserEbi userEbi = UserEbiFactory.getUserEbi();
+		Object[] objs = userEbi.getAllUser();
+		this.listUsers.setListData(objs);
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jScrollPane1 = new javax.swing.JScrollPane();
+		listUsers = new javax.swing.JList();
+		jLabel1 = new javax.swing.JLabel();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		listUsers.setModel(new javax.swing.AbstractListModel() {
+			String[] strings = { "" };
+
+			public int getSize() {
+				return strings.length;
+			}
+
+			public Object getElementAt(int i) {
+				return strings[i];
+			}
+		});
+		jScrollPane1.setViewportView(listUsers);
+
+		add(jScrollPane1);
+		jScrollPane1.setBounds(170, 170, 410, 210);
+
+		jLabel1.setText("\u4fe1\u606f");
+		add(jLabel1);
+		jLabel1.setBounds(350, 90, 70, 50);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JScrollPane jScrollPane1;
+	private javax.swing.JList listUsers;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

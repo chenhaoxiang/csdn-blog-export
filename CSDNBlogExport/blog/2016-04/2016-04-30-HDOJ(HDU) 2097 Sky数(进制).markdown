@@ -1,0 +1,119 @@
+---
+layout: post
+title: "HDOJ(HDU) 2097 Sky数(进制)"
+date: 2016-04-30 03:21:04 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 进制相关
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Sky从小喜欢奇特的东西，而且天生对数字特别敏感，一次偶然的机会，他发现了一个有趣的四位数2992，这个数，它的十进制数表示，其四位数字之和为2+9+9+2=22，它的十六进制数BB0，其四位数字之和也为22，同时它的十二进制数表示1894，其四位数字之和也为22，啊哈，真是巧啊。Sky非常喜欢这种四位数，由于他的发现，所以这里我们命名其为Sky数。但是要判 
+---
+
+
+Problem Description 
+Sky从小喜欢奇特的东西，而且天生对数字特别敏感，一次偶然的机会，他发现了一个有趣的四位数2992，这个数，它的十进制数表示，其四位数字之和为2+9+9+2=22，它的十六进制数BB0，其四位数字之和也为22，同时它的十二进制数表示1894，其四位数字之和也为22，啊哈，真是巧啊。Sky非常喜欢这种四位数，由于他的发现，所以这里我们命名其为Sky数。但是要判
+<!-- more -->
+----------
+
+Problem Description
+Sky从小喜欢奇特的东西，而且天生对数字特别敏感，一次偶然的机会，他发现了一个有趣的四位数2992，这个数，它的十进制数表示，其四位数字之和为2+9+9+2=22，它的十六进制数BB0，其四位数字之和也为22，同时它的十二进制数表示1894，其四位数字之和也为22，啊哈，真是巧啊。Sky非常喜欢这种四位数，由于他的发现，所以这里我们命名其为Sky数。但是要判断这样的数还是有点麻烦啊，那么现在请你帮忙来判断任何一个十进制的四位数，是不是Sky数吧。
+
+ 
+
+Input
+输入含有一些四位正整数，如果为0，则输入结束。
+
+ 
+
+Output
+若n为Sky数，则输出“#n is a Sky Number.”，否则输出“#n is not a Sky Number.”。每个结果占一行。注意：#n表示所读入的n值。
+
+ 
+
+Sample Input
+2992
+1234
+0
+ 
+
+Sample Output
+2992 is a Sky Number.
+1234 is not a Sky Number.
+
+
+用java的Integer类中的toString方法，很容易将一个10进制的数转换为其他进制的数。
+慢慢的体验Java方法的强大吧。。。
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		char hex[] = {'a','b','c','d','e','f'};
+		while(sc.hasNext()){
+			int n10 = sc.nextInt();
+			if(n10==0){
+				return;
+			}
+			int a=0;
+			int b=0;
+			int c=0;
+			String strn16 = Integer.toString(n10, 16);
+			String strn12 = Integer.toString(n10, 12);
+			int k=n10;
+			while(k!=0){
+				a=a+k%10;
+				k=k/10;
+			}
+			//System.out.println(a);
+			boolean isNum = true;
+			for(int i=0;i<strn16.length();i++){
+				isNum = true;
+				for(int j=0;j<hex.length;j++){
+					if(strn16.charAt(i)==hex[j]){
+						b+=10+j;
+						isNum=false;
+						break;
+					}
+				}
+				if(isNum){
+					b+=Integer.parseInt(""+strn16.charAt(i));
+				}
+			}
+			if(a!=b){
+				System.out.println(n10+" is not a Sky Number.");
+				continue;
+			}
+			for(int i=0;i<strn12.length();i++){
+				isNum = true;
+				for(int j=0;j<hex.length;j++){
+					if(strn12.charAt(i)==hex[j]){
+						c+=10+j;
+						isNum=false;
+						break;
+					}
+				}
+				if(isNum){
+					c+=Integer.parseInt(""+strn12.charAt(i));
+				}
+			}
+			if(a!=c){
+				System.out.println(n10+" is not a Sky Number.");
+				continue;
+			}
+			System.out.println(n10+" is a Sky Number.");
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

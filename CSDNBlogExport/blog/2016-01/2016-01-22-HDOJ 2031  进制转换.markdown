@@ -1,0 +1,95 @@
+---
+layout: post
+title: "HDOJ 2031  进制转换"
+date: 2016-01-22 06:06:52 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 进制相关
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入一个十进制数N，将它转换成R进制数输出。Input 
+输入数据包含多个测试实例，每个测试实例包含两个整数N(32位整数)和R（2<=R<=16, R<>10）。Output 
+为每个测试实例输出转换后的数，每个输出占一行。如果R大于10，则对应的数字规则参考16进制（比如，10用A表示，等等）。Sample Input 
+7 2 
+23 12 
+-4 3 
+---
+
+
+Problem Description 
+输入一个十进制数N，将它转换成R进制数输出。Input 
+输入数据包含多个测试实例，每个测试实例包含两个整数N(32位整数)和R（2<=R<=16, R<>10）。Output 
+为每个测试实例输出转换后的数，每个输出占一行。如果R大于10，则对应的数字规则参考16进制（比如，10用A表示，等等）。Sample Input 
+7 2 
+23 12 
+-4 3
+<!-- more -->
+----------
+
+Problem Description
+输入一个十进制数N，将它转换成R进制数输出。
+ 
+
+Input
+输入数据包含多个测试实例，每个测试实例包含两个整数N(32位整数)和R（2<=R<=16, R<>10）。
+
+ 
+
+Output
+为每个测试实例输出转换后的数，每个输出占一行。如果R大于10，则对应的数字规则参考16进制（比如，10用A表示，等等）。
+ 
+
+Sample Input
+7 2
+23 12
+-4 3
+ 
+
+Sample Output
+111
+1B
+-11
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        char[] numbers = {'0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'};
+        while(sc.hasNext()){
+            int n = sc.nextInt();
+            int r = sc.nextInt();
+            int m=n;
+            if(n<0){
+                n=-n;
+            }
+            String number = "";
+            int a=n/r;
+            n=n%r;
+            number=numbers[n]+number;
+            while(a>0){
+                n=a%r;
+                a=a/r;
+                number=numbers[n]+number;
+            }
+            if(m>0)
+            System.out.println(number);
+            else{
+                System.out.println('-'+number);
+                
+            }
+        }
+        
+    }
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

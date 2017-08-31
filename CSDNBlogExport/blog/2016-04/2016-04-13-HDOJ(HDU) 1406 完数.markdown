@@ -1,0 +1,111 @@
+---
+layout: post
+title: "HDOJ(HDU) 1406 完数"
+date: 2016-04-13 11:10:21 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+完数的定义：如果一个大于1的正整数的所有因子之和等于它的本身，则称这个数是完数，比如6，28都是完数：6=1+2+3；28=1+2+4+7+14。本题的任务是判断两个正整数之间完数的个数。Input 
+输入数据包含多行，第一行是一个正整数n，表示测试实例的个数，然后就是n个测试实例，每个实例占一行，由两个正整数num1和num2组成,(1import jav 
+---
+
+
+Problem Description 
+完数的定义：如果一个大于1的正整数的所有因子之和等于它的本身，则称这个数是完数，比如6，28都是完数：6=1+2+3；28=1+2+4+7+14。本题的任务是判断两个正整数之间完数的个数。Input 
+输入数据包含多行，第一行是一个正整数n，表示测试实例的个数，然后就是n个测试实例，每个实例占一行，由两个正整数num1和num2组成,(1import jav
+<!-- more -->
+----------
+
+Problem Description
+完数的定义：如果一个大于1的正整数的所有因子之和等于它的本身，则称这个数是完数，比如6，28都是完数：6=1+2+3；28=1+2+4+7+14。
+
+本题的任务是判断两个正整数之间完数的个数。
+
+ 
+
+Input
+输入数据包含多行，第一行是一个正整数n，表示测试实例的个数，然后就是n个测试实例，每个实例占一行，由两个正整数num1和num2组成,(1<num1,num2<10000) 。
+
+ 
+
+Output
+对于每组测试数据，请输出num1和num2之间（包括num1和num2）存在的完数个数。
+
+ 
+
+Sample Input
+2
+2 5
+5 7
+ 
+
+Sample Output
+0
+1
+
+
+很简单的基础题。。。。
+有一个很简单的方法：因为[2-9999]内的完数就只有4个
+：6  28  496  8128
+所以，直接判断就可以了。我就不写那个方法了；
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int a = sc.nextInt();
+			int b = sc.nextInt();
+			if(a>b){
+				a=a^b;
+				b=a^b;
+				a=a^b;
+			}
+			
+			int num = numm(a,b);
+			System.out.println(num);
+		}
+		
+	}
+
+	private static int numm(int a, int b) {
+		int num =0;
+		for(int i=a;i<=b;i++){
+			if(is(i)){
+				num++;
+			}
+		}
+		return num;
+	}
+
+	private static boolean is(int a) {
+		int num=1;
+		for(int i=2;i*i<=a;i++){
+			if(a%i==0){
+				num=num+i;
+				num=num+a/i;
+			}
+		}
+		if(a==num){
+			//System.out.println(a);
+			return true;
+		}
+		return false;
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

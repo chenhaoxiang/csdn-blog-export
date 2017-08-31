@@ -1,0 +1,84 @@
+---
+layout: post
+title: "HDOJ 2096 小明A+B"
+date: 2016-02-02 05:47:20 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+小明今年3岁了, 现在他已经能够认识100以内的非负整数, 并且能够进行100以内的非负整数的加法计算. 
+对于大于等于100的整数, 小明仅保留该数的最后两位进行计算, 如果计算结果大于等于100, 那么小明也仅保留计算结果的最后两位.例如, 对于小明来说: 
+1) 1234和34是相等的 
+2) 35+80=15给定非负整数A和B, 你的任务是代表小明计 
+---
+
+
+Problem Description 
+小明今年3岁了, 现在他已经能够认识100以内的非负整数, 并且能够进行100以内的非负整数的加法计算. 
+对于大于等于100的整数, 小明仅保留该数的最后两位进行计算, 如果计算结果大于等于100, 那么小明也仅保留计算结果的最后两位.例如, 对于小明来说: 
+1) 1234和34是相等的 
+2) 35+80=15给定非负整数A和B, 你的任务是代表小明计
+<!-- more -->
+----------
+
+Problem Description
+小明今年3岁了, 现在他已经能够认识100以内的非负整数, 并且能够进行100以内的非负整数的加法计算.
+对于大于等于100的整数, 小明仅保留该数的最后两位进行计算, 如果计算结果大于等于100, 那么小明也仅保留计算结果的最后两位.
+
+例如, 对于小明来说:
+1) 1234和34是相等的
+2) 35+80=15
+
+给定非负整数A和B, 你的任务是代表小明计算出A+B的值.
+
+ 
+
+Input
+输入数据的第一行为一个正整数T, 表示测试数据的组数. 然后是T组测试数据. 每组测试数据包含两个非负整数A和B(A和B均在int型可表示的范围内).
+
+ 
+
+Output
+对于每组测试数据, 输出小明A+B的结果.
+
+ 
+
+Sample Input
+2
+35 80
+15 1152
+ 
+
+Sample Output
+15
+67
+
+只有一个要注意的地方，那就是用int会wa！
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		long t = sc.nextLong();
+		
+		while(t-->0){
+			long a = sc.nextLong();
+			long b = sc.nextLong();
+			long c  =a+b;
+			System.out.println((c%100));
+		}
+	}
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

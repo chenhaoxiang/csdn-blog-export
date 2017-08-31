@@ -1,0 +1,306 @@
+---
+layout: post
+title: "Java---设计模块(单例的变形)(多例)"
+date: 2016-04-02 07:21:56 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块
+tags: [设计模式,设计,应用,对象,缓存]
+keyword: 陈浩翔, 谙忆
+description: 设计模式1——单例变形(多例) 
+★ 缓存在单例中的使用 
+缓存在编程中使用很频繁，有着非常重要的作用，它能够帮助程序实现以空间换取时间，通常被设计成整个应用程序所共享的一个空间，现要求实现一个用缓存存放单例对象的类。 
+说明：该缓存中可以存放多个该类对象，每个对象以一个key值标识，key值相同时所访问的是同一个单例对象。给一个key值标识：package cn.hncu.pattern.muli 
+---
+
+
+设计模式1——单例变形(多例) 
+★ 缓存在单例中的使用 
+缓存在编程中使用很频繁，有着非常重要的作用，它能够帮助程序实现以空间换取时间，通常被设计成整个应用程序所共享的一个空间，现要求实现一个用缓存存放单例对象的类。 
+说明：该缓存中可以存放多个该类对象，每个对象以一个key值标识，key值相同时所访问的是同一个单例对象。给一个key值标识：package cn.hncu.pattern.muli
+<!-- more -->
+----------
+
+**设计模式1——单例变形(多例)**
+**★ 缓存在单例中的使用**
+缓存在编程中使用很频繁，有着非常重要的作用，它能够帮助程序实现以空间换取时间，通常被设计成整个应用程序所共享的一个空间，现要求实现一个用缓存存放单例对象的类。
+说明：该缓存中可以存放多个该类对象，每个对象以一个key值标识，key值相同时所访问的是同一个单例对象。
+
+给一个key值标识：
+```
+package cn.hncu.pattern.mulitition;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class A {
+	private static final Map<String, A> map = new HashMap<String, A>();
+	public A() {
+	}//private也是可以的，这不是关键，关键是map是私有的，这个是集合的单例
+	public static A getInstance(String key){
+		A a = map.get(key);
+		if(a==null){
+			a = new A();
+			map.put(key, a);
+		}
+		return a;
+	}
+}
+
+```
+测试：
+
+```
+package cn.hncu.pattern.mulitition;
+
+public class Test {
+	public static void main(String[] args) {
+		Atest();
+		
+	}
+
+	private static void Atest() {
+		A a1 = A.getInstance("hncu1");
+		System.out.println(a1);
+		
+		A a2 = A.getInstance("hncu2");
+		System.out.println(a2);
+		
+		A a3 = A.getInstance("hncu1");
+		System.out.println(a3);
+		
+		A a4 = A.getInstance("hncu2");
+		System.out.println(a4);
+		
+		A a5 = A.getInstance("hncu1");
+		System.out.println(a5);
+		
+	}
+
+}
+
+```
+测试输出结果;
+
+```
+cn.hncu.pattern.mulitition.A@11dba45
+cn.hncu.pattern.mulitition.A@b03be0
+cn.hncu.pattern.mulitition.A@11dba45
+cn.hncu.pattern.mulitition.A@b03be0
+cn.hncu.pattern.mulitition.A@11dba45
+
+```
+可以发现：a1,a3,a5的地址的值是相等的，a2,a4是相等的。
+
+
+**通过Buffer类调用Book类的单例：**
+Book类：
+```
+package cn.hncu.pattern.mulitition;
+
+public class Book {
+	private String name;
+	private int id;
+	private double price;
+	private String details;
+	private static int cont=0;
+	
+	
+	public Book() {
+		id=cont++;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public double getPrice() {
+		return price;
+	}
+	public void setPrice(double price) {
+		this.price = price;
+	}
+	public String getDetails() {
+		return details;
+	}
+	public void setDetails(String details) {
+		this.details = details;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + id;
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Book other = (Book) obj;
+		if (id != other.id)
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "Book [id=" + id + "]";
+	}
+	
+	
+}
+```
+Buffer类：
+
+```
+package cn.hncu.pattern.mulitition;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class Buffer {
+	private static final Map<String, Book> map = new HashMap<String, Book>();
+	public Buffer() {
+	}//private也是可以的，这不是关键，关键是map是私有的，这个是集合的单例
+	public static Book getInstance(String key){
+		Book a = map.get(key);
+		if(a==null){
+			a = new Book();
+			map.put(key, a);
+		}
+		return a;
+	}
+}	
+
+```
+测试类;
+
+```
+package cn.hncu.pattern.mulitition;
+
+public class Test {
+	public static void main(String[] args) {
+		Buffertest();
+	}
+
+	private static void Buffertest() {
+		Book bk1 = Buffer.getInstance("hncu1");
+		System.out.println(bk1);
+		
+		Book bk2 = Buffer.getInstance("hncu2");
+		System.out.println(bk2);
+		
+		Book bk3 = Buffer.getInstance("hncu3");
+		System.out.println(bk3);
+		
+		Book bk4 = Buffer.getInstance("hncu2");
+		System.out.println(bk4);
+		
+		Book bk5= Buffer.getInstance("hncu1");
+		System.out.println(bk5);
+	}
+}
+```
+输出结果：
+
+```
+Book [id=0]
+Book [id=1]
+Book [id=2]
+Book [id=1]
+Book [id=0]
+
+```
+
+
+
+**★ 单例变形——多例模式**
+把上面缓存的单例实现，做成一个能够控制对象个数的共享空间，供整个应用程序使用。在缓存中维护指定个数的对象，每个对象的key值由该类内部指定，有外部请求时直接返回其中一个对象出去。
+说明：相当于维护一个指定数量的对象池，当请求个数超过控制的总数时，开始循环重复使用 。
+
+```
+package cn.hncu.pattern.mulitition.multi;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class A {
+	private static final Map<Integer, A> map= new HashMap<Integer, A>();
+	private static final int MAX=3;//控制容器中所能使用对象的总个数
+	private static int cont = 1;//代表池中目前将要被使用的对象的序号
+	
+	public static A getInstance(){
+		A a = map.get(cont);
+		if(a==null){
+			a=new A();
+			map.put(cont, a);
+		}
+		cont++;
+		if(cont>MAX){
+			cont=1;
+		}
+		return a;
+	}
+	
+	
+}
+
+```
+测试的类：
+
+```
+package cn.hncu.pattern.mulitition;
+
+public class Test {
+	public static void main(String[] args) {
+		Atest2();
+	}
+
+	private static void Atest2() {
+		System.out.println(cn.hncu.pattern.mulitition.multi.A.getInstance());
+		System.out.println(cn.hncu.pattern.mulitition.multi.A.getInstance());
+		System.out.println(cn.hncu.pattern.mulitition.multi.A.getInstance());
+		System.out.println(cn.hncu.pattern.mulitition.multi.A.getInstance());
+		System.out.println(cn.hncu.pattern.mulitition.multi.A.getInstance());
+		System.out.println(cn.hncu.pattern.mulitition.multi.A.getInstance());
+	}
+
+
+}
+
+```
+输出结果：
+
+```
+cn.hncu.pattern.mulitition.multi.A@18a49e0
+cn.hncu.pattern.mulitition.multi.A@1f82982
+cn.hncu.pattern.mulitition.multi.A@16d2633
+cn.hncu.pattern.mulitition.multi.A@18a49e0
+cn.hncu.pattern.mulitition.multi.A@1f82982
+cn.hncu.pattern.mulitition.multi.A@16d2633
+
+```
+可以看到：  123行的输出个不相同，
+			第4行的地址和第一行的相同，
+			第5行的地址和第二行的相同，
+			第6行的地址和第三行的相同。
+			依次类推，循环节点为3.
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

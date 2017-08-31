@@ -1,0 +1,133 @@
+---
+layout: post
+title: "HDOJ 1302(UVa 573) The Snail(蜗牛爬井)"
+date: 2016-04-08 12:02:41 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,----- UVa-ACM,❺ 算法及基础题,----- 基础题
+tags: [java]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+A snail is at the bottom of a 6-foot well and wants to climb to the top. The snail can climb 3 feet while the sun is up, but slides down 1 foot at night while sleeping. The snail h 
+---
+
+
+Problem Description 
+A snail is at the bottom of a 6-foot well and wants to climb to the top. The snail can climb 3 feet while the sun is up, but slides down 1 foot at night while sleeping. The snail h
+<!-- more -->
+----------
+
+Problem Description
+A snail is at the bottom of a 6-foot well and wants to climb to the top. The snail can climb 3 feet while the sun is up, but slides down 1 foot at night while sleeping. The snail has a fatigue factor of 10%, which means that on each successive day the snail climbs 10% * 3 = 0.3 feet less than it did the previous day. (The distance lost to fatigue is always 10% of the first day's climbing distance.) On what day does the snail leave the well, i.e., what is the first day during which the snail's height exceeds 6 feet? (A day consists of a period of sunlight followed by a period of darkness.) As you can see from the following table, the snail leaves the well during the third day. 
+
+Day Initial Height Distance Climbed Height After Climbing Height After Sliding 
+1 0 3 3 2 
+2 2 2.7 4.7 3.7 
+3 3.7 2.4 6.1 - 
+
+Your job is to solve this problem in general. Depending on the parameters of the problem, the snail will eventually either leave the well or slide back to the bottom of the well. (In other words, the snail's height will exceed the height of the well or become negative.) You must find out which happens first and on what day.
+
+ 
+
+Input
+The input file contains one or more test cases, each on a line by itself. Each line contains four integers H, U, D, and F, separated by a single space. If H = 0 it signals the end of the input; otherwise, all four numbers will be between 1 and 100, inclusive. H is the height of the well in feet, U is the distance in feet that the snail can climb during the day, D is the distance in feet that the snail slides down during the night, and F is the fatigue factor expressed as a percentage. The snail never climbs a negative distance. If the fatigue factor drops the snail's climbing distance below zero, the snail does not climb at all that day. Regardless of how far the snail climbed, it always slides D feet at night.
+
+ 
+
+Output
+For each test case, output a line indicating whether the snail succeeded (left the well) or failed (slid back to the bottom) and on what day. Format the output exactly as shown in the example.
+
+ 
+
+Sample Input
+6 3 1 10
+10 2 1 50
+50 5 3 14
+50 6 4 1
+50 6 3 1
+1 1 1 1
+0 0 0 0
+ 
+
+Sample Output
+success on day 3
+failure on day 4
+failure on day 7
+failure on day 68
+success on day 20
+failure on day 2
+
+
+题意：
+输入：H G D F，
+H：井的高度。
+U：白天蜗牛能爬的高度
+D：晚上蜗牛下滑的高度
+F：蜗牛的疲劳系数。
+请注意：蜗牛根据疲劳系数每天下降的U的值是固定的。
+也就是：(每天上爬的速度都下降这么多)reduce=(U*(F/100.0));
+ 这里的U是第一次输入的U，只需要计算一次。
+ 以后每次减，只要直接用U减去reduce就行了。
+还有，这里的数据全部用double型！
+根据白天能爬的高度判断：
+如果蜗牛还没有爬出去，这个时候蜗牛的白天爬行速度如果小于0了，就可以判断这个蜗牛不可能爬出去了，输出就为：failure on day *
+*为正好能判断蜗牛爬不出的时候的蜗牛爬行了的总天数。
+
+如果能爬出去，也就是蜗牛一共爬行的高度要大于井的高度，蜗牛就可以爬出去了。
+输出为：success on day *
+*为蜗牛正好爬出去的之后的总天数。
+也就是说：
+下滑后的高度小于0就失败
+爬升后的高度大于总高度就成功
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			double h = sc.nextDouble();
+			double u = sc.nextDouble();
+			double d = sc.nextDouble();
+			double f = sc.nextDouble();
+			if(h==0&&u==0&&d==0&&f==0){
+				return ;
+			}
+			
+			double reduce=u*(f/100.0);//固定每天减少这么多
+			int day = 0;
+			String str = "success on day ";
+			double high=0;//代表走的高度
+			while(high<=h){
+				day++;
+				high=high+u;//u表示白天走的路程
+				if(high>h){
+					break;
+				}
+				high=high-d;//晚上下滑
+				
+				if(high<0){//从这天起一直会在井底，走不出
+					str="failure on day ";
+					break;
+				}
+				
+				u=u-(reduce);//第二天白天能走的路程
+
+				
+			}
+			System.out.println(str+day);
+			
+		}
+	}
+
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

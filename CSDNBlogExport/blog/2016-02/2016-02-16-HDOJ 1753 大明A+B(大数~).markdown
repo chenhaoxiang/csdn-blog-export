@@ -1,0 +1,89 @@
+---
+layout: post
+title: "HDOJ 1753 大明A+B(大数~)"
+date: 2016-02-16 02:49:43 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 大数问题
+tags: [java,acm,大数]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+话说，经过了漫长的一个多月，小明已经成长了许多，所以他改了一个名字叫“大明”。 
+这时他已经不是那个只会做100以内加法的那个“小明”了，现在他甚至会任意长度的正小数的加法。现在，给你两个正的小数A和B，你的任务是代表大明计算出A+B的值。Input 
+本题目包含多组测试数据，请处理到文件结束。 
+每一组测试数据在一行里面包含两个长度不大于400的正小数A和 
+---
+
+
+Problem Description 
+话说，经过了漫长的一个多月，小明已经成长了许多，所以他改了一个名字叫“大明”。 
+这时他已经不是那个只会做100以内加法的那个“小明”了，现在他甚至会任意长度的正小数的加法。现在，给你两个正的小数A和B，你的任务是代表大明计算出A+B的值。Input 
+本题目包含多组测试数据，请处理到文件结束。 
+每一组测试数据在一行里面包含两个长度不大于400的正小数A和
+<!-- more -->
+----------
+
+Problem Description
+话说，经过了漫长的一个多月，小明已经成长了许多，所以他改了一个名字叫“大明”。
+这时他已经不是那个只会做100以内加法的那个“小明”了，现在他甚至会任意长度的正小数的加法。
+
+现在，给你两个正的小数A和B，你的任务是代表大明计算出A+B的值。
+
+ 
+
+Input
+本题目包含多组测试数据，请处理到文件结束。
+每一组测试数据在一行里面包含两个长度不大于400的正小数A和B。
+ 
+
+Output
+请在一行里面输出输出A+B的值，请输出最简形式。详细要求请见Sample Output。
+
+ 
+
+Sample Input
+1.1 2.9
+1.1111111111 2.3444323343
+1 1.1
+ 
+
+Sample Output
+4
+3.4555434454
+2.1
+
+
+Java大数~~~
+
+
+```
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			BigDecimal a = sc.nextBigDecimal();
+			BigDecimal b = sc.nextBigDecimal();
+			
+			a = a.add(b);
+			a = a.stripTrailingZeros();
+			//返回数值上等于此小数，但从该表示形式移除所有尾部零的 BigDecimal。
+			System.out.println(a.toPlainString());
+			//a.toPlainString()返回不带指数字段的此 BigDecimal 的字符串表示形式。
+			
+		}
+		
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

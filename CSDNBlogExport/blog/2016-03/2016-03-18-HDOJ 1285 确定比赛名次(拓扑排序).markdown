@@ -1,0 +1,147 @@
+---
+layout: post
+title: "HDOJ 1285 确定比赛名次(拓扑排序)"
+date: 2016-03-18 04:58:42 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 排序相关
+tags: [acm,拓扑排序]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+有N个比赛队（1<=N<=500），编号依次为1，2，3，。。。。，N进行比赛，比赛结束后，裁判委员会要将所有参赛队伍从前往后依次排名，但现在裁判委员会不能直接获得每个队的比赛成绩，只知道每场比赛的结果，即P1赢P2，用P1，P2表示，排名时P1在P2之前。现在请你编程序确定排名。Input 
+输入有若干组，每组中的第一行为二个数N（1<=N<=500），M 
+---
+
+
+Problem Description 
+有N个比赛队（1<=N<=500），编号依次为1，2，3，。。。。，N进行比赛，比赛结束后，裁判委员会要将所有参赛队伍从前往后依次排名，但现在裁判委员会不能直接获得每个队的比赛成绩，只知道每场比赛的结果，即P1赢P2，用P1，P2表示，排名时P1在P2之前。现在请你编程序确定排名。Input 
+输入有若干组，每组中的第一行为二个数N（1<=N<=500），M
+<!-- more -->
+----------
+
+**Problem Description**
+有N个比赛队（1<=N<=500），编号依次为1，2，3，。。。。，N进行比赛，比赛结束后，裁判委员会要将所有参赛队伍从前往后依次排名，但现在裁判委员会不能直接获得每个队的比赛成绩，只知道每场比赛的结果，即P1赢P2，用P1，P2表示，排名时P1在P2之前。现在请你编程序确定排名。
+
+ 
+
+**Input**
+输入有若干组，每组中的第一行为二个数N（1<=N<=500），M；其中N表示队伍的个数，M表示接着有M行的输入数据。接下来的M行数据中，每行也有两个整数P1，P2表示即P1队赢了P2队。
+
+ 
+
+**Output**
+给出一个符合要求的排名。输出时队伍号之间有空格，最后一名后面没有空格。
+
+其他说明：符合条件的排名可能不是唯一的，此时要求输出时编号小的队伍在前；输入数据保证是正确的，即输入数据确保一定能有一个符合要求的排名。
+
+ 
+
+**Sample Input**
+4 3
+1 2
+2 3
+4 3
+ 
+
+**Sample Output**
+1 2 4 3
+
+
+**拓扑排序介绍：**
+拓扑排序(Topological Order)是指，将一个有向无环图(Directed Acyclic Graph简称DAG)进行排序进而得到一个有序的线性序列。
+
+这样说，可能理解起来比较抽象。下面通过简单的例子进行说明！ 
+例如，一个项目包括A、B、C、D四个子部分来完成，并且A依赖于B和D，C依赖于D。现在要制定一个计划，写出A、B、C、D的执行顺序。这时，就可以利用到拓扑排序，它就是用来确定事物发生的顺序的。
+
+在拓扑排序中，如果存在一条从顶点A到顶点B的路径，那么在排序结果中B出现在A的后面。
+
+**拓扑排序（适用于有向无环图）：**
+1）选一个入度为0的点p输出；
+2）从图中删除p点
+3）将p全部后继点的入度-1
+4）重复1-3，直到全部点都输出
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			int m = sc.nextInt();
+			//n个队伍，m行数据
+			int map[][] = new int[505][505];
+			int times[] = new int[505];
+			
+			//初始化
+			for(int i=0;i<n;i++)
+				times[i]=0;
+			for(int i=0;i<m;i++){
+				for(int j=0;j<m;j++){
+					map[i][j]=0;
+				}
+			}
+				
+			int a;
+			int b;
+			for(int i=0;i<m;i++){
+				a = sc.nextInt();
+				b = sc.nextInt();
+				if(map[a-1][b-1]==0){//避免重复边多次加1
+					map[a-1][b-1]=1;
+					times[b-1]++;
+				}
+				
+			}
+			
+//			for(int i=0;i<n;i++){
+//				for(int j=0;j<n;j++){
+//					System.out.print(map[i][j]+" ");
+//				}
+//				System.out.println("----------");
+//			}
+//			
+//			for(int i=0;i<n;i++){
+//				System.out.print(times[i]+" ");
+//			}
+			
+			//拓扑排序
+			int count =0;
+			int x=0;
+			while(count<n){//表示入栈的n个元素全部排完了
+				
+				//找一个入度为0的点  x
+				x=0;
+				while(times[x]!=0){
+					x++;
+				}
+				times[x]=-1;
+					//避免再次统计，改0为-1
+					//System.out.print(x+" ");
+				
+				//将x的后继节点入度减1
+				for(int i=0;i<n;i++){
+					if(map[x][i]==1){
+						times[i]--;
+					}
+				}
+				count++;
+				if(count<n){
+					System.out.print((x+1)+" ");
+				}else{//最后一个输出后面没有空格
+					System.out.print(x+1);
+				}
+			}
+			System.out.println();
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

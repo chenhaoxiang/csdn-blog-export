@@ -1,0 +1,88 @@
+---
+layout: post
+title: "HDOJ 2026  首字母变大写"
+date: 2015-12-11 02:23:58 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入一个英文句子，将每个单词的第一个字母改成大写字母。Input 
+输入数据包含多个测试实例，每个测试实例是一个长度不超过100的英文句子，占一行。Output 
+请输出按照要求改写后的英文句子。很简单的一个题，在这里就不多说了，只是要注意空格就行。Sample Input 
+i like acm 
+i want to get an acceptedSamp 
+---
+
+
+Problem Description 
+输入一个英文句子，将每个单词的第一个字母改成大写字母。Input 
+输入数据包含多个测试实例，每个测试实例是一个长度不超过100的英文句子，占一行。Output 
+请输出按照要求改写后的英文句子。很简单的一个题，在这里就不多说了，只是要注意空格就行。Sample Input 
+i like acm 
+i want to get an acceptedSamp
+<!-- more -->
+----------
+
+Problem Description
+输入一个英文句子，将每个单词的第一个字母改成大写字母。
+
+ 
+
+Input
+输入数据包含多个测试实例，每个测试实例是一个长度不超过100的英文句子，占一行。
+
+ 
+
+Output
+请输出按照要求改写后的英文句子。
+
+很简单的一个题，在这里就不多说了，只是要注意空格就行。
+ 
+
+Sample Input
+i like acm
+i want to get an accepted
+ 
+
+Sample Output
+I Like Acm
+I Want To Get An Accepted
+
+
+```
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            String Strs = sc.nextLine();
+            if(Strs.charAt(0)!=' '){
+                System.out.print((char)(Strs.charAt(0)-32));
+            }else{
+                System.out.print(Strs.charAt(0));
+            }
+            
+            for(int i=1;i<Strs.length();i++){
+                if(Strs.charAt(i-1)==' '&&(Strs.charAt(i)>=97&&Strs.charAt(i)<=122)){
+                    System.out.print((char)(Strs.charAt(i)-32));
+                }
+                else{
+                    System.out.print(Strs.charAt(i));
+                }
+            }
+            System.out.println();
+        }
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

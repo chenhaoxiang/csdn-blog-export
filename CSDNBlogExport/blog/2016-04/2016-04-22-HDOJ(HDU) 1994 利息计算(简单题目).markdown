@@ -1,0 +1,120 @@
+---
+layout: post
+title: "HDOJ(HDU) 1994 利息计算(简单题目)"
+date: 2016-04-22 11:13:02 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+为自行解决学费，chx勤工俭学收入10000元以1年定期存入银行，年利率为3.7% 。利率 
+按年计算，表示100元存1年的利息为3.7元.实际上有时提前有时推迟取，因此实际利息按天 
+计算，1年按365天计算，因此Q天的利息是 
+本金*3.7/100 *Q/365 
+存了100天后1年定期年利息提高到3.9%。如将存款提前全取出，再存1年定期。那么前面的 
+---
+
+
+Problem Description 
+为自行解决学费，chx勤工俭学收入10000元以1年定期存入银行，年利率为3.7% 。利率 
+按年计算，表示100元存1年的利息为3.7元.实际上有时提前有时推迟取，因此实际利息按天 
+计算，1年按365天计算，因此Q天的利息是 
+本金*3.7/100 *Q/365 
+存了100天后1年定期年利息提高到3.9%。如将存款提前全取出，再存1年定期。那么前面的
+<!-- more -->
+----------
+
+Problem Description
+为自行解决学费，chx勤工俭学收入10000元以1年定期存入银行，年利率为3.7% 。利率
+按年计算，表示100元存1年的利息为3.7元.实际上有时提前有时推迟取，因此实际利息按天
+计算，1年按365天计算，因此Q天的利息是
+本金*3.7/100 *Q/365
+存了100天后1年定期年利息提高到3.9%。如将存款提前全取出，再存1年定期。那么前面的
+100天只能按活期利息1.7%计算。
+100天的利息和本金：10000（1+1.7/100*100/365)=10046.6 
+再存1年定期 ：10046.6(1+3.9/100)=10438.4 
+得到的利息加本金为10438.4 
+如果无视利息的提高，再存1年。得到的利息加本金为（定期推迟取，利率不变） 
+10000（1+3.7/100*（100+365）/365)=10471.4
+
+ 
+
+Input
+输入数据有多组，第1行为整数T,是数据的组数.每组占一行5个数，Y-存入的本金<=100000,
+Q-已存天数<=365,e-活期利率,f-定期利率,g-提高后的定期利率.
+
+ 
+
+Output
+每组数据输出2行.
+第1行,提前支取后再存1年所得本金和利息.
+第2行,继续存1年,Q+365天后所得本金和利息.
+
+ 
+
+Sample Input
+4 
+10000 100 2.3 3.7 3.9
+10000 100 1.7 3.7 3.9 
+10000 200 1.7 3.7 3.9 
+10000 300 1.7 3.7 3.9 
+ 
+
+Sample Output
+10455.5
+10471.4
+10438.4
+10471.4
+10486.8
+10572.7
+10535.2
+10674.1
+
+
+简单题。。。就不解释了。。。
+理解第一行输出和第二行输出的区别就行了！
+
+
+```
+import java.util.Scanner;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			int y = sc.nextInt();
+			int q = sc.nextInt();
+			double e = sc.nextDouble();
+			double f = sc.nextDouble();
+			double g = sc.nextDouble();
+			
+			double money = y*(1+e/100.0*q/365.0);
+			money = money*(1+g/100.0);
+			System.out.printf("%.1f",money);
+			System.out.println();
+			money = y*(1+f/100.0*(q+365)/365.0);
+			System.out.printf("%.1f",money);
+			System.out.println();
+		}
+		
+	}
+
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

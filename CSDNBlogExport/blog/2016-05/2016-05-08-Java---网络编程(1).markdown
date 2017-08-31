@@ -1,0 +1,277 @@
+---
+layout: post
+title: "Java---网络编程(1)"
+date: 2016-05-08 12:13:14 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java网络编程
+tags: [网络编程,url,计算机,网络]
+keyword: 陈浩翔, 谙忆
+description: 网络编程相关基础概念1、计算机网络与Internet 
+2、TCP/IP协议  
+3、Internet地址 
+- - -IP地址，形如xxx.xxx.xxx.xxx  
+- - -域名系统。例如www.edu.cn  
+*URL（统一资源定位符）  
+    协议 :// 主机 [: 端口] [/ 文件] [# 引用] 
+*客户-服务器（Client-Server）模式 网络模型与通讯要素1、网络模 
+---
+
+
+网络编程相关基础概念1、计算机网络与Internet 
+2、TCP/IP协议  
+3、Internet地址 
+- - -IP地址，形如xxx.xxx.xxx.xxx  
+- - -域名系统。例如www.edu.cn  
+*URL（统一资源定位符）  
+    协议 :// 主机 [: 端口] [/ 文件] [# 引用] 
+*客户-服务器（Client-Server）模式 网络模型与通讯要素1、网络模
+<!-- more -->
+----------
+
+网络编程
+====
+
+相关基础概念
+------
+
+1、计算机网络与Internet
+2、TCP/IP协议 
+3、Internet地址
+- - -IP地址，形如xxx.xxx.xxx.xxx 
+- - -域名系统。例如www.edu.cn 
+*URL（统一资源定位符） 
+    协议 :// 主机 [: 端口] [/ 文件] [# 引用]
+*客户-服务器（Client-Server）模式 
+
+网络模型与通讯要素
+---------
+
+1、网络模型
+- - -OSI参考模型
+- - -TCP/IP参考模型
+2、网络通讯要素
+- - -IP地址
+- - -端口号
+- - -传输协议
+
+☆网络模型
+-----
+
+![](http://img.blog.csdn.net/20160507230819191)
+
+
+☆七层简述
+-----
+
+1.物理层：
+主要定义物理设备标准，如网线的接口类型、光纤的接口类型、各种传输介质的传输速率等。它的主要作用是传输比特流（就是由1、0转化为电流强弱来进行传输，到达目的地后再转化为1、0，也就是我们常说的数模转换与模数转换）。这一层的数据叫做比特
+
+2.数据链路层：
+主要将从物理层接收的数据进行MAC地址（网卡的地址）的封装与解封装。常把这一层的数据叫做帧。在这一层工作的设备是交换机，数据通过交换机来传输
+
+3.网络层：
+主要将下层接收到的数据进行IP地址（例192.168.0.1）的封装与解封装。在这一层工作的设备是路由器，常把这一层的数据叫做数据包。
+
+4.传输层：
+定义了一些传输数据的协议和端口号（WWW端口号80等），如：TCP（传输控制协议，传输效率低，可靠性强，用于传输可靠性要求高，数据量大的数据），UDP（用户数据报协议，与TCP特性恰恰相反，用于传输可靠性要求不高，数据量小的数据，如QQ聊天数据就是通过这种方式传输的）。主要是将从下层接收的数据进行分段和传输，到达目的地址后再进行重组。常常把这一层叫做段。
+
+5.会话层：
+通过传输层（端口号：传输端口与接收端口）建立数据传输的通路。主要在你的系统之间发起会话或者接收会话请求（设备之间需要互相认识可以是IP也可以是MAC或者是主机名）
+
+6.表示层：
+主要是进行对接收的数据进行解释，加密与解密、压缩与解压缩等（也就是把计算机能够识别的东西转换成人能够识别的东西（如图片、声音等）。
+
+7.应用层：
+主要是一些终端的应用，比如说FTP（各种文件下载）、WEB（IE浏览）、QQ之类的（可以把它理解成我们在电脑屏幕上可以看到的东西，就是终端应用）。
+
+
+☆网络通讯要素
+-------
+
+*IP地址:InetAddress
+- - -网络中设备的标识
+- - -不易记忆，可用主机名
+- - -本地回环地址：127.0.0.1  主机名：localhost
+*端口号
+- - -用于标识进程的逻辑地址，不同进程的标识
+- - -有效端口：0~65535，其中0~1024系统使用或保留端口。
+*传输协议
+- - -通讯的规则
+- - -常见协议：TCP，UDP
+
+
+☆网络资源定位指针——URL类
+---------------
+
+```
+public final class URL implements Serializable{
+  public URL(String protocol, String host, int port, String file) 
+                                            throws MalformedURLException
+  public String toString()  //返回完整URL地址字符串
+  public String getProtocol() //返回协议名
+  public int getPort()        //返回端口
+  public int getDefaultPort() //返回默认端口
+  public String getHost()     //返回主机名
+  public String getFile()     //返回完整文件名
+  //使用流获得URL资源内容
+  public final InputStream openStream() throws IOException
+}
+```
+
+测试实例：
+创建：  URL url2 = new URL("http://www.edu.cn");
+
+
+```
+package cn.hncu.url;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+import org.junit.Test;
+
+/**
+ * URL简单演示
+ * @author 陈浩翔
+ * 2016-5-7
+ */
+public class URLDemo {
+
+	@Test
+	public void urlDemo1(){
+		try {
+			URL url = new URL("https://chenhaoxiang.github.io");
+			
+			InputStream in = url.openStream();
+			//字节流要转换成字符流输出----编码是utf-8
+			BufferedReader br = new BufferedReader(new InputStreamReader(in,"utf-8"));
+			String line="";
+			while((line=br.readLine())!=null){
+				System.out.println(line);
+			}
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Test
+	public void urlDemo2(){
+		try {
+			URL url = new URL("http://www.sina.com:80");
+			System.out.println(url.getProtocol());//网络协议
+			System.out.println(url.getPath());//获取此 URL 的路径部分(需要对方服务器权限才能访问到)
+			System.out.println(url.getPort());//获得端口
+			
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+
+}
+
+```
+
+
+
+☆URL的通信链接——URLConnection类
+-------------------------
+
+```
+
+public abstract class URLConnection{
+  public URL getURL()            //返回当前连接的URL对象
+  public int getContentLength()  //返回资源文件的长度
+  public String getContentType() //返回资源文件的类型
+  public long getLastModified()  //返回资源文件的最后修改日期
+}
+
+```
+
+URL类的openConnection()方法可创建一个URLConnection对象
+public URLConnection openConnection()  throws IOException
+
+```
+@Test
+	public void urlConnection(){
+		try {
+			URL url = new URL("http://blog.csdn.net/qq_26525215?viewmode=contents");
+			
+			URLConnection urlc = url.openConnection();
+			
+			System.out.println(urlc.getURL());//返回当前连接的URL对象
+			System.out.println(urlc.getContentLength());//返回资源文件的长度
+			System.out.println(urlc.getContentType());//返回资源文件类型
+			System.out.println(urlc.getLastModified());//返回资源文件的最后修改日期
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+```
+
+☆互联网协议(IP)地址——InetAddress类
+--------------------------
+
+```
+public class InetAddress implements Serializable{
+  public static InetAddress getByName(String host)
+  public static InetAddress getByAddress(String host, byte[] addr)
+  public static InetAddress getLocalHost() //返回本地主机
+  public String getHostAddress()   //返回IP地址字符串
+  public String getHostName()     //返回主机名
+}
+
+```
+
+
+
+```
+@Test
+	public void inetAddressDemo(){
+		try {
+			InetAddress ip = InetAddress.getByName("www.sina.com");
+			//InetAddress ip = InetAddress.getByName("111.13.129.32");
+			
+			System.out.println(ip.getLocalHost());//返回本地主机
+			System.out.println(ip.getHostAddress());//返回IP地址字符串
+			System.out.println(ip.getHostName()); //返回主机名   www.sina.com/111.13.129.32
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
+	}
+```
+
+```
+@Test
+	public void inetAddressDemo2(){
+		try {
+			URL url = new URL("http://www.hncu.net:80");
+			InetAddress ip = InetAddress.getByName(url.getHost());
+			System.out.println(ip.getHostAddress());
+			System.out.println(ip.getHostName());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

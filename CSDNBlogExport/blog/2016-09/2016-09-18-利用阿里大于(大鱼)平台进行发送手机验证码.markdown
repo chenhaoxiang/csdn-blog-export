@@ -1,0 +1,204 @@
+---
+layout: post
+title: "利用阿里大于(大鱼)平台进行发送手机验证码"
+date: 2016-09-18 05:39:06 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑥、框架/第三方工具
+tags: [阿里,手机,验证码,密码]
+keyword: 陈浩翔, 谙忆
+description: 短信验证(注册或改密码等)
+首先去登录阿里大于: http://www.alidayu.com/
+没有号的就注册一个！用淘宝就可以登录了，相信一般人都是不需要注册的。
+阿里大于搭建环境几步曲:
+1、创建应用:
+AppKEY—设置发送参数的时候需要用到 
+---
+
+
+短信验证(注册或改密码等)
+首先去登录阿里大于: http://www.alidayu.com/
+没有号的就注册一个！用淘宝就可以登录了，相信一般人都是不需要注册的。
+阿里大于搭建环境几步曲:
+1、创建应用:
+AppKEY—设置发送参数的时候需要用到
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+#短信验证(注册或改密码等)
+
+首先去登录阿里大于: http://www.alidayu.com/
+
+没有号的就注册一个！用淘宝就可以登录了，相信一般人都是不需要注册的。
+
+
+##阿里大于搭建环境几步曲:
+
+##1、创建应用:
+
+![](http://img.blog.csdn.net/20160915193100698)
+
+**AppKEY---设置发送参数的时候需要用到**
+
+![](http://img.blog.csdn.net/20160915193403609)
+
+**App Secret---设置发送参数的时候需要用到**
+
+![](http://img.blog.csdn.net/20160915194810627)
+
+##2、添加签名/模板:
+
+![](http://img.blog.csdn.net/20160915193113917)
+
+**签名名称---设置发送参数的时候需要用到**
+
+![](http://img.blog.csdn.net/20160915193558815)
+
+**模板ID---设置发送参数的时候需要用到**
+
+![](http://img.blog.csdn.net/20160915193748067)
+
+
+##3、查看API:
+
+查看阿里大鱼的API文档 http://open.taobao.com/docs/api.htm?spm=a219a.7395905.0.0.AT1UnC&apiId=25450
+
+![](http://img.blog.csdn.net/20160915193158506)
+
+里面给了几种编程语言的模板。选择自己合适的。
+在这里，我只是演示一下Java的。
+
+##4、测试或SDK下载:
+
+测试的话，可不用、
+
+![](http://img.blog.csdn.net/20160915193205724)
+
+SDK下载:
+
+其实相当于JAR包！
+
+![](http://img.blog.csdn.net/20160915194020882)
+
+#开始开发(Java)
+
+##发送手机验证码实现模板
+
+```
+import java.util.Date;
+import java.util.Random;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.log4j.Logger;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.taobao.api.ApiException;
+import com.taobao.api.DefaultTaobaoClient;
+import com.taobao.api.TaobaoClient;
+import com.taobao.api.request.AlibabaAliqinFcSmsNumSendRequest;
+import com.taobao.api.response.AlibabaAliqinFcSmsNumSendResponse;
+
+/**
+ * 短信验证---阿里大于工具
+ */
+@Controller
+@RequestMapping("/message")
+public class MessageController {
+	private final Integer NUM=6; 
+	private Logger log = Logger.getLogger(MessageController.class);
+	
+	@RequestMapping(value = { "/send" })
+	public void sendMessage2(String mobile,HttpServletRequest request) {
+		//官网的URL---必须是这个
+		String url="http://gw.api.taobao.com/router/rest"; 
+		 
+		//成为开发者，创建应用后系统会自动生成--前面图片中有说明
+		String appkey="23****68"; 
+		
+		//创建应用后系统会自动生成--前面图片中有说明
+		String secret="93805f7f0dde6f66c8c216996815112e";
+		
+		//随机生成 num 位验证码
+		String code="";
+		Random r = new Random(new Date().getTime());
+		for(int i=0;i<NUM;i++){
+			code = code+r.nextInt(10);
+		}
+		//需要log4j的Jar包--日志-可删
+		log.info("手机号为:"+mobile+",验证码为:"+code);
+		
+		//将验证码加入容器中---用户输入验证码之后验证
+		request.getSession().setAttribute("messageCode", code);
+		
+		//短信模板的内容
+		String json="{\"code\":\""+code+"\",\"sitename\":\"**网\"}";
+		
+		TaobaoClient client = new DefaultTaobaoClient(url, appkey, secret);
+		
+		AlibabaAliqinFcSmsNumSendRequest req = new AlibabaAliqinFcSmsNumSendRequest();
+		//公共回传参数，在“消息返回”中会透传回该参数；
+		//举例：用户可以传入自己下级的会员ID，在消息返回时，该会员ID会包含在内，用户可以根据该会员ID识别是哪位会员使用了你的应用
+		
+		req.setExtend("");  
+		//短信类型，传入值请填写normal
+		req.setSmsType("normal");
+		
+		//签名名称
+		req.setSmsFreeSignName("***");
+		
+		//短信模板变量，传参规则{"key":"value"}，key的名字须和申请模板中的变量名一致，多个变量之间以逗号隔开。
+		req.setSmsParamString(json);
+		
+		//短信接收号码
+		req.setRecNum(mobile);
+		
+		//短信模板ID
+		req.setSmsTemplateCode("SMS_14970456");
+		AlibabaAliqinFcSmsNumSendResponse rsp = null;
+		try {
+			rsp = client.execute(req);
+		} catch (ApiException e) {
+			e.printStackTrace();
+		}
+		
+		log.debug(rsp.getBody());
+		
+	}
+
+}
+
+```
+如果出错，请自己根据大于返回的错误信息调试代码。
+错误信息可以进入下面链接查看错误码解释:
+http://open.taobao.com/docs/api.htm?spm=a219a.7395905.0.0.AT1UnC&apiId=25450
+
+
+本例，我已通过浏览器输入地址访问本Controller/Servlet的这个方法，成功给自己的手机号码发送短信。
+
+
+注意哦，不是免费的，价格如下:
+
+![](http://img.blog.csdn.net/20160915200043705)
+
+
+
+
+本文章由<a href="https://chenhaoxiang.github.io/">[谙忆]</a>编写， 所有权利保留。 
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,98 @@
+---
+layout: post
+title: "HDOJ 1303 Doubles(简单题)"
+date: 2016-04-08 12:36:41 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+As part of an arithmetic competency program, your students will be given randomly generated lists of from 2 to 15 unique positive integers and asked to determine how many items in 
+---
+
+
+Problem Description 
+As part of an arithmetic competency program, your students will be given randomly generated lists of from 2 to 15 unique positive integers and asked to determine how many items in
+<!-- more -->
+----------
+
+**Problem Description**
+As part of an arithmetic competency program, your students will be given randomly generated lists of from 2 to 15 unique positive integers and asked to determine how many items in each list are twice some other item in the same list. You will need a program to help you with the grading. This program should be able to scan the lists and output the correct answer for each one. For example, given the list 
+1 4 3 2 9 7 18 22
+
+your program should answer 3, as 2 is twice 1, 4 is twice 2, and 18 is twice 9. 
+
+ 
+
+**Input**
+The input file will consist of one or more lists of numbers. There will be one list of numbers per line. Each list will contain from 2 to 15 unique positive integers. No integer will be larger than 99. Each line will be terminated with the integer 0, which is not considered part of the list. A line with the single number -1 will mark the end of the file. The example input below shows 3 separate lists. Some lists may not contain any doubles.
+
+ 
+
+**Output**
+The output will consist of one line per input list, containing a count of the items that are double some other item.
+
+ 
+
+**Sample Input**
+1 4 3 2 9 7 18 22 0
+2 4 8 10 0
+7 5 11 13 1 3 0
+-1 
+ 
+
+**Sample Output**
+3
+2
+0
+
+
+题意：就是判断输入的一行数中，有多少对数字相差2倍。
+输入的数据不会有重复的。
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			String strNum = sc.nextLine();
+			String[] strsNum = strNum.split(" ");
+			int[] num = new int[strsNum.length];
+			for(int i=0;i<strsNum.length;i++){
+				num[i] = Integer.parseInt(strsNum[i]);
+			}
+			if(num[0]==-1){
+				return ;
+			}
+			
+			int t=0;
+			for(int i=0;i<num.length;i++){
+				for(int j=0;j<num.length;j++){
+					if(i!=j){
+						//注意除数不能为0！
+						if(num[j]!=0){
+							double two = (num[i]*1.0)/(1.0*num[j]);
+							if(two==2){
+							    t++;
+						    	break;
+						    }
+						}
+					}
+				}
+			}
+			System.out.println(t);
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

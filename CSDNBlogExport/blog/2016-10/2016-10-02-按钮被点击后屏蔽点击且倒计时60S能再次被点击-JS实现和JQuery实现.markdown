@@ -1,0 +1,128 @@
+---
+layout: post
+title: "按钮被点击后屏蔽点击且倒计时60S能再次被点击-JS实现和JQuery实现"
+date: 2016-10-02 11:57:17 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑥、框架/第三方工具
+tags: [jquery,验证码,手机,博客]
+keyword: 陈浩翔, 谙忆
+description: 转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+
+
+这个主要是用在手机验证码注册的时候用的多， 
+比如:
+
+
+
+正如上图所示那样-60S后还会还原、 
+直接上代码:
+
+type="button" id='codeBtn' value="免费获取验证码">
+"js/reg.js">
+//(我是分开写的--后面的代码我是导入的)
+va 
+---
+
+
+转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+
+
+这个主要是用在手机验证码注册的时候用的多， 
+比如:
+
+
+
+正如上图所示那样-60S后还会还原、 
+直接上代码:
+
+type="button" id='codeBtn' value="免费获取验证码">
+"js/reg.js">
+//(我是分开写的--后面的代码我是导入的)
+va
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+这个主要是用在手机验证码注册的时候用的多，
+比如:
+
+![](http://img.blog.csdn.net/20160916170309222)
+
+正如上图所示那样-60S后还会还原、
+直接上代码:
+
+
+```
+<input type="button" id='codeBtn' value="免费获取验证码"></input>
+<script src="js/reg.js"></script>
+//(我是分开写的--后面的代码我是导入的)
+var wait = 60;
+function time(btn) {
+	if(wait == 0) {
+		btn.removeAttribute("disabled");
+		btn.value = "免费获取验证码";
+		wait = 60;
+	} else {
+		btn.setAttribute("disabled", true);
+		btn.value = "重新发送(" + wait + ")";
+		wait--;
+		setTimeout(function() {
+				time(btn)
+			},
+			1000)
+	}
+}
+document.getElementById("codeBtn").onclick = function() {
+	time(this);
+}
+```
+
+
+JQuery代码实现:
+
+```
+<input type="button" id="btn" value="免费获取验证码" />
+
+//(我是分开写的--后面的代码我是导入的)
+
+$(function() {
+    $(function() {
+        $("#btn").click(settime);
+    });
+});
+var countdown = 60;
+function settime() {
+    if(countdown == 0) {
+        $("#btn").attr("disabled", false);
+        $("#btn").attr("value", "免费获取验证码");
+        countdown = 60;
+    } else {
+        $("#btn").attr("disabled", true);
+        $("#btn").attr("value", "重新发送(" + countdown + ")");
+        countdown--;
+	    setTimeout(settime, 1000)
+    }
+}
+
+```
+
+
+本文章由<a href="https://chenhaoxiang.github.io/">[谙忆]</a>编写， 所有权利保留。 
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

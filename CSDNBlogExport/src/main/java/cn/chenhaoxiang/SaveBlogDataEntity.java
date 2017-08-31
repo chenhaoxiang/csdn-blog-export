@@ -49,16 +49,20 @@ public class SaveBlogDataEntity implements PageProcessor {
 		String title = blogDataEntity.getTitle();
 		title = title.replaceAll("[/,\\\\,:,*,?,|,<,>]", " ");
 		blogDataEntity.setTitle(title);
-		String fileName = FileUtils.basePath + "\\" + file + "\\" + blogDataEntity.getCreate().substring(0, 10) + "-"
+		String fileName =FileUtils.basePath + "\\" + file + "\\" + blogDataEntity.getCreate().substring(0, 10) + "-"
 				+ blogDataEntity.getTitle() + ".markdown";
 		logger.info(fileName);
 		try {
+			String firstStr="---\nlayout: post\ntitle: \""+blogDataEntity.getTitle()+"\"\ndate: "+blogDataEntity.getCreate()+" +0800\ncomments: true\ncategories:"+blogDataEntity.getCategories()+"\ntags: ["+blogDataEntity.getTags()+"]\nkeyword: 陈浩翔, 谙忆\ndescription: "+blogDataEntity.getDescription()+" \n---\n";
+			String description = "\n\n"+blogDataEntity.getDescription()+"\n<!-- more -->\n----------\n\n";
+			String endStr ="\n\n本文章由<a href=\"http://chenhaoxiang.cn/\">[谙忆]</a>编写， 所有权利保留。 \n欢迎转载，分享是进步的源泉。\n<blockquote cite='陈浩翔'>\n<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color=\"green\">http://chenhaoxiang.cn</font></a><br><br>\n本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>\n</blockquote>\n";
+
 			// logger.info(blogDataEntity.getMarkdowncontent());
 			if (blogDataEntity.getMarkdowncontent() != null) {
-				FileUtils.saveStringToFile(blogDataEntity.getMarkdowncontent(), fileName, "utf-8");
+				FileUtils.saveStringToFile(firstStr+description+blogDataEntity.getMarkdowncontent()+endStr, fileName, "utf-8");
 			} else {
 				//修复原来的一个BUG，也是自己没有考虑全面出现的
-				FileUtils.saveStringToFile(blogDataEntity.getContent(), fileName, "utf-8");
+				FileUtils.saveStringToFile(firstStr+description+blogDataEntity.getContent()+endStr, fileName, "utf-8");
 			}
 
 			logger.info("存储博客《" + blogDataEntity.getTitle() + "》成功");
@@ -103,7 +107,7 @@ public class SaveBlogDataEntity implements PageProcessor {
 			blogIdList.clear();
 		blogIdList=null;
 		blogIdList = new ArrayList<String>();
-		site = Site.me().setRetryTimes(3).setSleepTime(3000).setCharset("utf-8").setDomain("write.blog.csdn.net")
+		site = Site.me().setRetryTimes(10).setSleepTime(5000).setCharset("utf-8").setDomain("write.blog.csdn.net")
 				.addCookie("userName", CSDNBlogExport.name);
 		Iterator<String> iterator = blogIdSet.iterator();
 		Boolean frist =true;

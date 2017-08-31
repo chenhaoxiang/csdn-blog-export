@@ -1,0 +1,99 @@
+---
+layout: post
+title: "HDOJ 2024  C语言合法标识符"
+date: 2015-12-11 02:14:42 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [数据,实例]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入一个字符串，判断其是否是C的合法标识符。Input 
+输入数据包含多个测试实例，数据的第一行是一个整数n,表示测试实例的个数，然后是n行输入数据，每行是一个长度不超过50的字符串。Output 
+对于每组输入数据，输出一行。如果输入数据是C的合法标识符，则输出”yes”，否则，输出“no”。Sample Input 
+3 
+12ajf 
+fi8x_a 
+---
+
+
+Problem Description 
+输入一个字符串，判断其是否是C的合法标识符。Input 
+输入数据包含多个测试实例，数据的第一行是一个整数n,表示测试实例的个数，然后是n行输入数据，每行是一个长度不超过50的字符串。Output 
+对于每组输入数据，输出一行。如果输入数据是C的合法标识符，则输出”yes”，否则，输出“no”。Sample Input 
+3 
+12ajf 
+fi8x_a
+<!-- more -->
+----------
+
+Problem Description
+输入一个字符串，判断其是否是C的合法标识符。
+
+ 
+
+Input
+输入数据包含多个测试实例，数据的第一行是一个整数n,表示测试实例的个数，然后是n行输入数据，每行是一个长度不超过50的字符串。
+
+ 
+
+Output
+对于每组输入数据，输出一行。如果输入数据是C的合法标识符，则输出"yes"，否则，输出“no”。
+
+ 
+
+Sample Input
+3
+12ajf
+fi8x_a
+ff  ai_2
+ 
+
+Sample Output
+no
+yes
+no
+
+首先大家要明白一点，什么是c语言合法标识符。
+：标识符由字母、下划线、数字这三个方面组成，但开头必须是字母或
+下划线。另外，关键字不能是标识符，如main等
+
+```
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t = sc.nextInt();
+        sc.nextLine();
+        while(t-->0){
+            String Strs = sc.nextLine();
+            char c = Strs.charAt(0);
+            if(!(c>=60&&c<=90||c>=97&&c<=122||c=='_')){
+                System.out.println("no");
+                continue;
+            }
+            boolean isFirst = true;
+            for(int i=1;i<Strs.length();i++){
+                c=Strs.charAt(i);
+                if(!(c>=60&&c<=90||c>=97&&c<=122||c=='_'||c>=48&&c<=57)){
+                    System.out.println("no");
+                    isFirst = false;
+                    break;
+                }
+            }
+            if(isFirst)
+            System.out.println("yes");
+        }
+        
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

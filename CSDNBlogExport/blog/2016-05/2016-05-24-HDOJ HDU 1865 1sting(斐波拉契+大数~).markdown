@@ -1,0 +1,100 @@
+---
+layout: post
+title: "HDOJ HDU 1865 1sting(斐波拉契+大数~)"
+date: 2016-05-24 04:17:59 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 大数问题,----- 模拟/推导/打表
+tags: [string,合并]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+You will be given a string which only contains ‘1’; You can merge two adjacent ‘1’ to be ‘2’, or leave the ‘1’ there. Surly, you may get many different results. For example, given 
+---
+
+
+Problem Description 
+You will be given a string which only contains ‘1’; You can merge two adjacent ‘1’ to be ‘2’, or leave the ‘1’ there. Surly, you may get many different results. For example, given
+<!-- more -->
+----------
+
+Problem Description
+You will be given a string which only contains ‘1’; You can merge two adjacent ‘1’ to be ‘2’, or leave the ‘1’ there. Surly, you may get many different results. For example, given 1111 , you can get 1111, 121, 112,211,22. Now, your work is to find the total number of result you can get.
+
+ 
+
+Input
+The first line is a number n refers to the number of test cases. Then n lines follows, each line has a string made up of ‘1’ . The maximum length of the sequence is 200.
+
+ 
+
+Output
+The output contain n lines, each line output the number of result you can get .
+
+ 
+
+Sample Input
+3
+1
+11
+11111
+ 
+
+Sample Output
+1
+2
+8
+
+
+题意：
+若干个1，可以选择相邻两个合并成2。问有多少种可能的结果。
+
+分析：递推加大数~
+
+递推公式为db[i] = db[i-1] + db[i-2]，斐波那契数列。
+怎么推导出来的呢~~~我能说我是看出来的麽~
+
+设有n个1，可以构成f(n)种。则加一个1的时候，前面n种仍然成立 f(n+1)=f(n)+*;
+第n+1个1和第n个1相加构成2，前面n-1个1可以组合的个数。  f(n+1)=f(n)+f(n-1);
+
+
+大数~用java很好过的~c的话，只能用数组模拟了。
+
+
+
+```
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main{
+	
+	static BigInteger db[] = new BigInteger[201];
+	public static void main(String[] args) {
+		dabiao();
+		Scanner sc = new Scanner(System.in);
+		int t=sc.nextInt();
+		while(t-->0){
+			String str =sc.next();
+			int n =str.length();
+			System.out.println(db[n]);
+		}
+	}
+	private static void dabiao() {
+		db[1]=new BigInteger("1");
+		db[2]=new BigInteger("2");
+		for(int i=3;i<db.length;i++){
+			db[i]=db[i-1].add(db[i-2]);
+		}
+	}
+}
+
+```
+
+
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

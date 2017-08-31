@@ -1,0 +1,116 @@
+---
+layout: post
+title: "HDOJ 2023 求平均成绩"
+date: 2015-12-10 02:07:55 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [测试,实例,数据]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+假设一个班有n(n<=50)个学生，每人考m(m<=5)门课，求每个学生的平均成绩和每门课的平均成绩，并输出各科成绩均大于等于平均成绩的学生数量。Input 
+输入数据有多个测试实例，每个测试实例的第一行包括两个整数n和m，分别表示学生数和课程数。然后是n行数据，每行包括m个整数（即：考试分数）。Output 
+对于每个测试实例，输出3行数据，第一行包含n个 
+---
+
+
+Problem Description 
+假设一个班有n(n<=50)个学生，每人考m(m<=5)门课，求每个学生的平均成绩和每门课的平均成绩，并输出各科成绩均大于等于平均成绩的学生数量。Input 
+输入数据有多个测试实例，每个测试实例的第一行包括两个整数n和m，分别表示学生数和课程数。然后是n行数据，每行包括m个整数（即：考试分数）。Output 
+对于每个测试实例，输出3行数据，第一行包含n个
+<!-- more -->
+----------
+
+Problem Description
+假设一个班有n(n<=50)个学生，每人考m(m<=5)门课，求每个学生的平均成绩和每门课的平均成绩，并输出各科成绩均大于等于平均成绩的学生数量。
+
+ 
+
+Input
+输入数据有多个测试实例，每个测试实例的第一行包括两个整数n和m，分别表示学生数和课程数。然后是n行数据，每行包括m个整数（即：考试分数）。
+
+ 
+
+Output
+对于每个测试实例，输出3行数据，第一行包含n个数据，表示n个学生的平均成绩，结果保留两位小数；第二行包含m个数据，表示m门课的平均成绩，结果保留两位小数；第三行是一个整数，表示该班级中各科成绩均大于等于平均成绩的学生数量。
+每个测试实例后面跟一个空行。
+
+ 
+
+Sample Input
+2 2
+5 10
+10 20
+ 
+
+Sample Output
+7.50 15.00
+7.50 15.00
+1
+ 
+ 
+在此，我利用的方法是，如果是n*m的大小，我就开（n+1）*（m+1）
+大小的空间，最后一行的数据用来存放当前一行的数据和，最后一列的数据用来
+存放当前一列的数据之和。
+```
+import java.util.Scanner;
+class Main{
+    public static void main(String args[]){
+        Scanner sc =new  Scanner(System.in);
+        while(sc.hasNext()){
+            int n =sc.nextInt();
+            int m =sc.nextInt();
+            int stuStr[][] = new int[n+1][m+1];
+            for(int i=0;i<n;i++){
+                for(int j=0;j<m;j++){
+                    stuStr[i][j] = sc.nextInt();
+                    stuStr[i][m] = stuStr[i][j]+stuStr[i][m];//一门课的n个学生的平均成绩
+                    stuStr[n][j] = stuStr[i][j]+stuStr[n][j];//一个学生m门课的平均成绩
+                }                
+            }
+            double nStr[] = new double[n];
+            double mStr[] = new double[m];
+            
+            nStr[0] =(double)stuStr[0][m]/m;
+            System.out.printf("%.2f",nStr[0]);
+            for(int i=1;i<n;i++){
+                nStr[i] = (double)stuStr[i][m]/m;
+                System.out.printf(" %.2f",nStr[i]);
+            }
+            System.out.println();
+            
+            mStr[0]=(double)stuStr[n][0]/n;
+            System.out.printf("%.2f",mStr[0]);
+            for(int i=1;i<m;i++){
+                mStr[i] = (double)stuStr[n][i]/n;
+                System.out.printf(" %.2f",mStr[i]);
+            }
+            System.out.println();
+            
+            int sum=0;
+            for(int i=0;i<n;i++){
+                int sum_s = 0;
+                for(int j=0;j<m;j++){
+                    if(mStr[j]<=stuStr[i][j]){
+                      sum_s++;
+                    }
+                }
+                if(sum_s==m){
+                     sum++;
+                    }
+            }
+            System.out.println(sum);
+            System.out.println();
+
+        }
+    }
+}
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

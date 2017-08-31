@@ -1,0 +1,87 @@
+---
+layout: post
+title: "HDOJ(HDU) 2520 我是菜鸟，我怕谁(等差数列)"
+date: 2016-05-09 04:23:29 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+lin2144是一只小菜鸟，都是笨鸟先飞，lin2144想来个菜鸟先飞，他从0点出发 
+一开始的飞行速度为1m/s，每过一个单位时间lin2144的飞行速度比上一个单位时间的飞行速度快2m/s，问n (0 < n < 10^5)个单位时间之后lin2144飞了多远?Input 
+输入一个T表示为有几组数据 
+每组数据输入一个n，表示lin2144飞行的时间. 
+---
+
+
+Problem Description 
+lin2144是一只小菜鸟，都是笨鸟先飞，lin2144想来个菜鸟先飞，他从0点出发 
+一开始的飞行速度为1m/s，每过一个单位时间lin2144的飞行速度比上一个单位时间的飞行速度快2m/s，问n (0 < n < 10^5)个单位时间之后lin2144飞了多远?Input 
+输入一个T表示为有几组数据 
+每组数据输入一个n，表示lin2144飞行的时间.
+<!-- more -->
+----------
+
+Problem Description
+lin2144是一只小菜鸟，都是笨鸟先飞，lin2144想来个菜鸟先飞，他从0点出发
+一开始的飞行速度为1m/s，每过一个单位时间lin2144的飞行速度比上一个单位时间的飞行速度快2m/s，问n (0 < n < 10^5)个单位时间之后lin2144飞了多远?
+
+ 
+
+Input
+输入一个T表示为有几组数据
+每组数据输入一个n，表示lin2144飞行的时间.
+
+ 
+
+Output
+输出lin2144飞行了多远，因为数字很大，所以对10000取模.
+
+ 
+
+Sample Input
+2
+1
+2
+ 
+
+Sample Output
+1
+4
+
+
+很简单，可以利用数列求和，也可以打表过。
+注意对10000取模；
+
+```
+import java.util.Scanner;
+
+public class Main{
+	static int db[] = new int[100005];
+	public static void main(String[] args) {
+		dabiao();
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			System.out.println(db[n]);
+		}
+	}
+	private static void dabiao() {
+		db[1]=1;
+		int sum=1;
+		for(int i=2;i<=100000;i++){
+			sum=(sum+2)%10000;
+			db[i]=(db[i-1]+sum)%10000;
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

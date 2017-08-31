@@ -1,0 +1,103 @@
+---
+layout: post
+title: "Java---练习：文件切割与合并(1)"
+date: 2016-04-27 11:32:25 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- JavaIO流
+tags: [合并,文件]
+keyword: 陈浩翔, 谙忆
+description: 实现对大文件的切割与合并。 
+按指定个数切（如把一个文件切成10份）或按指定大小切（如每份最大不超过10M），这两种方式都可以。示例程序说明： 
+文件切割：把一个文件切割成多个碎片，每个碎片的大小不超过1M。自己可把功能进一步扩展:切割前的文件名、长度，切割后的碎片个数、文件名等信息可写到第一个碎片中或另外用properties把这些写到配置文件中。 
+文件合并：这里简单假设已知被合并目录的File 
+---
+
+
+实现对大文件的切割与合并。 
+按指定个数切（如把一个文件切成10份）或按指定大小切（如每份最大不超过10M），这两种方式都可以。示例程序说明： 
+文件切割：把一个文件切割成多个碎片，每个碎片的大小不超过1M。自己可把功能进一步扩展:切割前的文件名、长度，切割后的碎片个数、文件名等信息可写到第一个碎片中或另外用properties把这些写到配置文件中。 
+文件合并：这里简单假设已知被合并目录的File
+<!-- more -->
+----------
+
+实现对大文件的切割与合并。
+按指定个数切（如把一个文件切成10份）或按指定大小切（如每份最大不超过10M），这两种方式都可以。
+
+
+示例程序说明：
+文件切割：把一个文件切割成多个碎片，每个碎片的大小不超过1M。自己可把功能进一步扩展:切割前的文件名、长度，切割后的碎片个数、文件名等信息可写到第一个碎片中或另外用properties把这些写到配置文件中。
+文件合并：这里简单假设已知被合并目录的File对象和原文件的名字。其实这些完全可以做成活的,如把这些信息保存在碎片文件或配置文件，也可以同样用文件选择对话框来读取用户的选择。
+
+
+实现代码：
+
+```
+package io.string;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.SequenceInputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Enumeration;
+import java.util.Scanner;
+
+public class SequenceInputStreamDemo {
+	static final String FILE = "e:\\fenge\\";
+	public static void main(String[] args) throws IOException {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("请输入fenge文件下需要分割的文件名（需要后缀）：");
+		String str = sc.next();
+		InputStream in  =new BufferedInputStream(new FileInputStream(FILE+str));
+		
+		OutputStream out = null;
+		long t = 0;
+		String c = "chx";
+		int le;
+		byte bt[] = new byte[10240];
+		while((le=in.read(bt))!=-1){
+			out = new BufferedOutputStream(new FileOutputStream(FILE+c+t+"_"+str));
+			out.write(bt, 0, le);
+			t++;
+		}
+		in.close();
+		out.close();
+		System.out.println("文件合并开始：：：");
+		ArrayList<FileInputStream> v = new ArrayList<FileInputStream>();
+		for(int i=0;i<t;i++){
+			FileInputStream f = new FileInputStream(FILE+c+i+"_"+str);
+			v.add(f);
+		}
+		Enumeration<FileInputStream> e = Collections.enumeration(v);
+		SequenceInputStream sin = new SequenceInputStream(e);
+		
+		FileOutputStream fout = new FileOutputStream(FILE+c+str);
+		int len=0;
+		byte bf[] = new byte[1024];
+		while((len=sin.read(bf))!=-1){
+			fout.write(bf, 0, len);
+		}
+		fout.close();
+		System.out.println("文件合并结束：：：");
+	}
+}
+
+```![](http://img.blog.csdn.net/20160427113008679)
+
+文件目录：
+
+![](http://img.blog.csdn.net/20160427113120633)
+
+目前只实现了切割合并那一个文件夹下的文件！！！！
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

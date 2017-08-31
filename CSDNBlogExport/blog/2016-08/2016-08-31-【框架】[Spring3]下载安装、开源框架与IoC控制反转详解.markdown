@@ -1,0 +1,720 @@
+---
+layout: post
+title: "【框架】[Spring3]下载安装、开源框架与IoC控制反转详解"
+date: 2016-08-31 03:55:22 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑥、框架/第三方工具,----- ----- Spring
+tags: [spring,java,xml,开源框架,框架]
+keyword: 陈浩翔, 谙忆
+description: 转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+
+
+昨天刚刚初学Spring3,也许Spring3有点老了哈，不过还是先把3学了再去学习4吧，首先先介绍一下如何去下载Spring的必须包吧。 
+(本篇博客适用于初学Spring的朋友)
+
+java spring4现在不推荐使用xml配置文件… 
+当然啦，这些知识点在Spring4还 
+---
+
+
+转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+
+
+昨天刚刚初学Spring3,也许Spring3有点老了哈，不过还是先把3学了再去学习4吧，首先先介绍一下如何去下载Spring的必须包吧。 
+(本篇博客适用于初学Spring的朋友)
+
+java spring4现在不推荐使用xml配置文件… 
+当然啦，这些知识点在Spring4还
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+昨天刚刚初学Spring3,也许Spring3有点老了哈，不过还是先把3学了再去学习4吧，首先先介绍一下如何去下载Spring的必须包吧。
+(本篇博客适用于初学Spring的朋友)
+
+java spring4现在不推荐使用xml配置文件...
+当然啦，这些知识点在Spring4还是可以用的。
+
+不过我在这里详解的还是Spring3哈，见谅~
+
+#下载SpringJAR包/文档:
+
+Spring官网:http://spring.io/
+
+Spring3.2版本以后(JAR/文档)的下载地址：http://repo.springsource.org/libs-release-local/org/springframework/spring/
+（如果无法访问，请准备梯子）
+
+![](http://img.blog.csdn.net/20160831110935470)
+
+选择一个需要下载的版本进去:
+我选择的是最新的4.3.2版本.
+
+![](http://img.blog.csdn.net/20160831111033702)
+
+spring-framework-***(版本号).RELEASE-dist.zip 包含了Spring必须的JAR包、DOC文档以及源代码等。
+
+下载完之后解压我们就可以在spring-framework-4.3.2.RELEASE\libs找到需要包和DOC文档以及源代码了。
+
+![](http://img.blog.csdn.net/20160831111405737)
+
+
+由于最新版本的已经提倡基于Java Config和注解的配置，不采用xml配置了，所以，我在这里准备的是Spring3.1.1版本的:
+下载链接:
+https://github.com/chenhaoxiang/Java/blob/master/Spring/spring-framework-3.1.1.RELEASE.zip
+
+
+#Spring开源框架
+
+##Spring框架的起始:
+Spring在英语中含义就是"春天".
+对于Java EE开发者来说，Spring框架出现确实带来了一股全新的春天的气息。
+早在2002年，Rod Johson在其编著的《Expert one to one J2EE design and development》书中，对Java EE框架臃肿、低效、脱离现实的种种现状提出了很多质疑，并积极寻求探索革新之道。
+由他主导编写了interface21框架，从实际需求出发，着眼于轻便、灵巧，易于开发、测试和部署的轻量级开发框架。以interface21框架为基础，并集成了其它许多开源成果，于2004年3月24日，发布了1.0正式版取名为Spring。
+
+##Spring框架模块：
+
+Spring的核心是个轻量级容器，实现了IoC（控制翻转）模式的容器，基于此核心容器所建立的应用程序，可以达到程序组件的松散耦合。这些特性都使得整个应用程序维护简化。 Spring框架核心由下图所示的七个模块组成。
+
+![](http://img.blog.csdn.net/20160831112835165)
+
+现在来分别介绍一下这七个模块:
+
+###1、核心容器(Core)
+
+这是Spring框架最基础的部分，它提供了依赖注入（Dependency Injection）特征来实现容器对Bean的管理。这里最基本的概念是BeanFactory，它是任何Spring应用的核心。BeanFactory是工厂模式的一个实现，它使用IoC将应用配置和依赖说明从实际的应用代码中分离出来。
+
+
+###2、AOP模块
+
+AOP即面向切面编程技术，Spring在它的AOP模块中提供了对面向切面编程的丰富支持。AOP允许通过分离应用的业务逻辑与系统级服务（例如安全和事务管理）进行内聚性的开发。应用对象只实现它们应该做的——完成业务逻辑——仅此而已。它们并不负责其它的系统级关注点，例如日志或事务支持。
+
+
+###3、对象/关系映射集成模块ORM
+
+Hibernate是成熟的ORM产品，Spring并没有自己实现ORM框架而是集成了几个流行的ORM产品如Hibernate、JDO和iBATIS等。可以利用Spring对这些模块提供事务支持等。
+
+
+###4、JDBC抽象和DAO模块 
+
+Spring虽然集成了几个ORM产品，但也可以不选择这几款产品，因为Spring提供了JDBC和DAO模块。该模块对现有的JDBC技术进行了优化。你可以保持你的数据库访问代码干净简洁，并且可以防止因关闭数据库资源失败而引起的问题。
+
+[JDBC DAO 抽象层提供了有意义的异常层次结构，可用该结构管管理异常处理和不同数据库供应商抛出的错误消息。异常层次结构简化了错误处理，并且极大地降低了需要编写的异常代码数量（例如打开和关闭连接）。SpringDAO的面向JDBC的异常遵从从通用的DAO异常层次结构]
+
+
+###5、Spring的Web模块
+
+Web上下文模块建立于应用上下文模块之上，提供了一个适合于Web应用的上下文。另外，这个模块还提供了一些面向服务支持。例如：实现文件上传的multipart请求，它也提供了Spring和其它Web框架的集成，比如Struts、WebWork。
+
+
+###6、应用上下文（Context）模块
+
+核心模块的BeanFactory使Spring成为一个容器，而上下文模块使它成为一个框架。Web上下文模块建立于应用上下文模块之上，提供了一个适合于Web应用的上下文。该模块还提供了一些面向服务支持这个模块扩展了BeanFactory的概念，增加了对国际化（I18N）消息、事件传播以及验证的支持。 
+
+另外，这个模块还提供了许多企业服务，例如电子邮件、JNDI访问、EJB集成、远程以及时序调度（scheduling）服务。也包括对模版框架例如Velocity和FreeMarker集成的支持。
+
+###7、Spring的MVC框架 
+
+Spring为构建Web应用提供了一个功能全面的MVC框架。虽然Spring可以很容易地与其它MVC框架集成，例如Struts2，但Spring的MVC框架使用IoC对控制逻辑和业务对象提供了完全的分离。
+
+
+
+#Spring入门示例
+将需要的Jar包导入项目、
+
+再准备一个xml配置文件:
+applicationContext.xml
+名字不一定要这个，自己可以随意改的，但建议使用这个名字。
+
+##准备的模板:
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+</beans>
+
+```
+
+将Spring的压缩包解压后：你可以在spring-framework-3.1.1.RELEASE\projects\org.springframework.web.portlet\src\test\java\org\springframework\web\portlet\context\WEB-INF目录下找到applicationContext.xml。我们只需要这个部分就可以了。
+将文件建立在src目录下(建在另外的路径也可以)。
+
+![](http://img.blog.csdn.net/20160831133754660)
+
+导入必须的包，和建好applicationContext.xml文件。
+
+1、编写一个普通的Java类（JavaBean）
+
+```
+package cn.hncu.demo1.domain;
+
+public class Person {
+	private String name;
+	private int age;
+
+	public Person() {
+		System.out.println("执行Person的构造方法....");
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [name=" + name + ", age=" + age + "]";
+	}
+}
+
+```
+
+ 2、在Spring配置文件applicationContext.xml。将JavaBean由Spring容器来管理。
+
+```
+<beans ...>
+<!--scope属性值设为:prototype(每次获取都是一个新对象), request(同一个request中获取到的是同一个), session ,不设置，默认是单例 -->
+	<bean id="p" class="cn.hncu.demo1.domain.Person" scope="prototype">
+	</bean>
+</beans>
+```
+
+测试方法:
+
+```
+	@Test
+	public void demo1(){
+		//此方法已在3.0版本中过时，不建议使用
+		//BeanFactory factory = new XmlBeanFactory(new ClassPathResource("applicationContext.xml"));
+		
+		//Spring3.0建议采用下面这种方式使用容器
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		Person p = (Person) ctx.getBean("p");//通过配置的id获得，需要强转
+		System.out.println(p);
+		
+		Person p2 = ctx.getBean(Person.class);//通过Person的Class对象去获得，不需要强转
+		System.out.println(p2);
+	}
+```
+
+输出结果:
+
+![](http://img.blog.csdn.net/20160831141440521)
+
+显然，Person只构造了一次。
+由于我们没给初值，所以name是null，age因为是int型，所以是0.
+
+
+现在我们在applicationContext.xml中来给它配置好初值，然后看:
+
+```
+	<!--scope属性值设为:prototype(每次获取都是一个新对象), request(同一个request中获取到的是同一个), session ,不设置，默认是单例 -->
+	<bean id="p" class="cn.hncu.demo1.domain.Person">
+		<!-- 配置好初始值 -->
+		<property name="name" value="张三"></property>
+		<property name="age" value="23"></property>
+	</bean>
+```
+
+再一次的运行结果:
+
+![](http://img.blog.csdn.net/20160831141823257)
+
+
+##演示依赖(XML)注入
+在servlet注入servicce，Person，
+在servicce注入dao，
+###LoginDAO
+
+```
+package cn.hncu.demo1.login.dao;
+
+import cn.hncu.demo1.domain.Person;
+
+public interface LoginDAO {
+	public void login(Person p);
+}
+
+```
+###LoginDaoJdbc
+
+```
+package cn.hncu.demo1.login.dao;
+
+import cn.hncu.demo1.domain.Person;
+
+public class LoginDaoJdbc implements LoginDAO{
+
+	@Override
+	public void login(Person p) {
+		System.out.println("dao,到数据库中读取用户信息以进行登录....");		
+		System.out.println("dao中获取的用户输入信息:"+p);		
+	}
+
+}
+
+```
+
+###ILoginService
+
+```
+package cn.hncu.demo1.login.service;
+
+import cn.hncu.demo1.domain.Person;
+
+public interface ILoginService {
+
+	public void login(Person p);
+   
+}
+
+```
+
+###LoginServiceImpl
+
+```
+package cn.hncu.demo1.login.service;
+
+import cn.hncu.demo1.domain.Person;
+import cn.hncu.demo1.login.dao.LoginDAO;
+
+
+public class LoginServiceImpl implements ILoginService{
+	private LoginDAO dao = null;
+	//如果要注入，需要注入的成员变量，必须写好set-get方法！
+	
+	public LoginDAO getDao() {
+		return dao;
+	}
+	public void setDao(LoginDAO dao) {
+		this.dao = dao;
+	}
+
+	@Override
+	public void login(Person p) {
+		dao.login(p);
+	}
+
+}
+
+```
+
+###LoginAction
+
+```
+package cn.hncu.demo1.login;
+
+import cn.hncu.demo1.domain.Person;
+import cn.hncu.demo1.login.service.ILoginService;
+
+public class LoginAction {
+	private ILoginService service = null;
+	private Person p = null;
+	//如果要注入，需要注入的成员变量，必须写好set-get方法！
+	public ILoginService getService() {
+		return service;
+	}
+	public void setService(ILoginService service) {
+		this.service = service;
+	}
+	public Person getP() {
+		return p;
+	}
+	public void setP(Person p) {
+		this.p = p;
+	}
+	
+	public void execute(){
+		service.login(p);
+	}
+	
+}
+
+```
+
+需要依赖注入的变量一定要写好setter-getter 方法哦！！！
+
+###测试方法:
+
+```
+@Test//演示依赖(XML)注入
+	public void demo2(){
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext.xml");
+		LoginAction action = ctx.getBean(LoginAction.class);
+		//LoginAction action = ctx.getBean("login",LoginAction.class);
+		action.execute();
+	}
+	
+```
+
+###配置文件:
+
+```
+<beans ...>
+<!--scope属性值设为:prototype(每次获取都是一个新对象), request(同一个request中获取到的是同一个), session ,不设置，默认是单例 -->
+	<bean id="p" class="cn.hncu.demo1.domain.Person">
+		<!-- 配置好初始值 -->
+		<property name="name" value="张三"></property>
+		<property name="age" value="23"></property>
+	</bean>
+	
+	<!-- 注意这里的class是实现类，而不是接口哦 -->
+	<bean id="dao" class="cn.hncu.demo1.login.dao.LoginDaoJdbc">
+	</bean>
+	
+	<!-- 注意这里的class也是实现类，而不是接口哦 -->
+	<!-- 如果换实现类了，只需把这里的class变了就可以了 -->
+	<bean id="s" class="cn.hncu.demo1.login.service.LoginServiceImpl">
+		<!-- 实现类中还有变量，ref是另外的bean的id-引用 -->
+		<property name="dao" ref="dao"></property>		
+	</bean>
+		
+	<bean id="login" class="cn.hncu.demo1.login.LoginAction">
+		<property name="service" ref="s"></property>
+		<property name="person" ref="p"></property>
+	</bean>
+</beans>
+```
+
+
+###结构图：
+![](http://img.blog.csdn.net/20160831143341070)
+
+
+###运行测试方法后的输出结果:
+
+![](http://img.blog.csdn.net/20160831150029058)
+
+
+现在增加一个DAO的实现类，可以在程序中无需代码改变，就可以注入不同实例.
+我们只需要改applicationContext.xml：
+```
+<!-- 注意这里的class是实现类，而不是接口哦 -->
+	<!-- 如果换实现类了，只需把这里的class变了就可以了,或者不动这里，增加一个bean -->
+	<bean id="dao" class="cn.hncu.demo1.login.dao.LoginDaoJdbc2">
+	</bean>
+```
+
+###增加的DAO实现类：
+
+```
+package cn.hncu.demo1.login.dao;
+
+import cn.hncu.demo1.domain.Person;
+
+public class LoginDaoJdbc2 implements LoginDAO{
+
+	@Override
+	public void login(Person p) {
+		System.out.println("dao2,到数据库中读取用户信息以进行登录....");		
+		System.out.println("dao2中获取的用户输入信息:"+p);		
+	}
+
+}
+
+```
+
+###改动后的演示结果:
+
+![](http://img.blog.csdn.net/20160831151340749)
+
+
+#Spring IOC 控制反转
+IoC(Inversion of Control)中文译为控制反转也可以叫做DI（Dependency Injection，依赖注入）。
+
+控制反转模式的基本概念是：不直接创建对象，但是在xml配置文件中描述创建它们的方式。
+在工程中使用该Bean时由Spring容器创建Bean的实例。在代码中不直接与对象和服务连接，但在配置文件中描述哪一个组件需要哪一项服务。
+
+##1、Spring注入(又称依赖注入DI):
+其目的是为其中bean的属性赋值
+
+通过Setter方法。（一般属性赋值即基本类型赋值示例）
+
+第1步：编写JavaBean-必须写set方法
+
+```
+package cn.hncu.demo2.domain;
+
+public class Cat {
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	@Override
+	public String toString() {
+		return "Cat [name=" + name + "]";
+	}
+
+}
+
+```
+
+第2步: 在配置文件中注入属性的初始值
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<bean id="cat" class="cn.hncu.demo2.domain.Cat">
+	<!-- 初始化name -->
+		<property name="name" value="黑猫"></property>
+	</bean>
+	
+</beans>
+
+```
+这样拿到的Cat对象就有初始值了，name的初始值为"黑猫"。
+
+
+##复杂数据类型的初始化：
+
+例如，含有List，Map，Set，或者其他对象的数据，这样的bean对象如何初始化值呢。
+
+结构如下:
+
+![](http://img.blog.csdn.net/20160831154053105)
+
+Cat类就是前面那个。
+
+###User
+
+```
+package cn.hncu.demo2.domain;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+public class User {
+	private String name;
+	private Integer age;
+	private List<Object> pets;
+	private Map<String, Object> map;
+	private Set<Object> set;
+	private Object objs[];
+	private Cat cat;
+	
+	
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	
+	public List<Object> getPets() {
+		return pets;
+	}
+
+	public void setPets(List<Object> pets) {
+		this.pets = pets;
+	}
+
+	
+	public Map<String, Object> getMap() {
+		return map;
+	}
+
+	public void setMap(Map<String, Object> map) {
+		this.map = map;
+	}
+
+	
+	
+	public Set<Object> getSet() {
+		return set;
+	}
+
+	public void setSet(Set<Object> set) {
+		this.set = set;
+	}
+
+	
+	
+	public Object[] getObjs() {
+		return objs;
+	}
+
+	public void setObjs(Object[] objs) {
+		this.objs = objs;
+	}
+
+	public Cat getCat() {
+		return cat;
+	}
+
+	public void setCat(Cat cat) {
+		this.cat = cat;
+	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", age=" + age + ", pets=" + pets
+				+ "\r\n map=" + map + "\r\n set=" + set + "\r\n objs="
+				+ Arrays.toString(objs) + ", cat=" + cat + "]";
+	}
+
+}
+
+```
+
+###配置文件
+在这里我取名为：applicationContext2.xml了。
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	
+	<bean id="cat" class="cn.hncu.demo2.domain.Cat">
+	<!-- 初始化name -->
+		<property name="name" value="黑猫"></property>
+	</bean>
+	
+	<bean id="user" class="cn.hncu.demo2.domain.User">
+		<property name="name" value="Jack"></property>
+		<property name="age" value="25"></property>
+		
+		<property name="pets">
+			<list>
+				<value>cat</value>
+				<value>dog</value>
+	         	<value>tiger</value>
+			</list>
+		</property>
+		
+		<property name="map">
+			<map>
+				<entry key="name" value="中国"></entry>
+				<entry key="age" value="67"></entry>
+				<!-- ref是引用 -->
+				<entry key="cat" value-ref="cat"></entry>
+			</map>
+		</property>
+		<property name="set">
+	     <set>
+	     	<!-- 引用 -->
+	     	 <ref bean="cat"/>
+		     <value>aaa</value>
+		     <value>bbb</value>
+	     </set>
+	   </property>
+		<property name="objs">
+			<!-- 数组 -->
+			<array>
+				<value>hrllo</value>
+				<ref bean="cat"/>
+				<list>
+					<value>obj1</value>
+					<value>obj2</value>
+				</list>
+				<bean class="cn.hncu.demo2.domain.Cat">
+					<property name="name" value="白猫"></property>
+				</bean>
+			</array>
+		</property>
+	</bean>
+</beans>
+
+```
+
+
+###测试类:
+
+```
+package cn.hncu.demo2;
+
+import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+import cn.hncu.demo2.domain.User;
+
+public class Demo2 {
+    
+	//演示spring中<bean>属性注入的一些细节
+	@Test
+	public void demo(){
+		ApplicationContext ctx = new ClassPathXmlApplicationContext("applicationContext2.xml");
+		User user = ctx.getBean("user",User.class);
+		System.out.println(user);
+	}
+	
+	
+}
+
+```
+
+###测试结果:
+
+![](http://img.blog.csdn.net/20160831154330481)
+
+如果对于这个User的类的赋值搞懂了，我想应该在这块就会很熟练了。
+
+
+#完整的项目源码:
+https://github.com/chenhaoxiang/Java/blob/master/Spring/mySpring3Demo/mySpring3Demo.zip
+
+
+本文章由[谙忆]编写， 所有权利保留。 
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

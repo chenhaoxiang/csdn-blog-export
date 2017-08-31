@@ -1,0 +1,105 @@
+---
+layout: post
+title: "HDOJ 2000 ASCII码排序"
+date: 2016-01-25 04:36:51 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA
+tags: [ascii,数据]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入三个字符后，按各字符的ASCII码从小到大的顺序输出这三个字符。Input 
+输入数据有多组，每组占一行，有三个字符组成，之间无空格。Output 
+对于每组输入数据，输出一行，字符中间用一个空格分开。Sample Input 
+qwe 
+asd 
+zxcSample Output 
+e q w 
+a d s 
+c x zimport java.util 
+---
+
+
+Problem Description 
+输入三个字符后，按各字符的ASCII码从小到大的顺序输出这三个字符。Input 
+输入数据有多组，每组占一行，有三个字符组成，之间无空格。Output 
+对于每组输入数据，输出一行，字符中间用一个空格分开。Sample Input 
+qwe 
+asd 
+zxcSample Output 
+e q w 
+a d s 
+c x zimport java.util
+<!-- more -->
+----------
+
+Problem Description
+输入三个字符后，按各字符的ASCII码从小到大的顺序输出这三个字符。
+ 
+
+Input
+输入数据有多组，每组占一行，有三个字符组成，之间无空格。
+ 
+
+Output
+对于每组输入数据，输出一行，字符中间用一个空格分开。
+ 
+
+Sample Input
+qwe
+asd
+zxc
+ 
+
+Sample Output
+e q w
+a d s
+c x z
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            String str = sc.next();
+        //    System.out.println("str="+str);
+            
+            char[] a = str.toCharArray();
+            
+            for(int i=0;i<str.length()-1;i++){
+                for(int j=i+1;j<str.length();j++){
+                    if(a[j]<a[i]){
+                        char temp=a[i];
+                        a[i]=a[j];
+                        a[j] = temp;
+                    }
+                    
+                }
+                
+            }
+            
+            System.out.print(a[0]);
+            for(int i=1;i<a.length;i++){
+                System.out.print(" "+a[i]);
+            }
+            System.out.println();
+            
+            
+        }
+        
+        
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

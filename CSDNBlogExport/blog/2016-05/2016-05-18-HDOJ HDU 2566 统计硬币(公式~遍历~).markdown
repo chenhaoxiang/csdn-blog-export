@@ -1,0 +1,102 @@
+---
+layout: post
+title: "HDOJ HDU 2566 统计硬币(公式~遍历~)"
+date: 2016-05-18 05:03:01 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [遍历,数据]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+假设一堆由1分、2分、5分组成的n个硬币总面值为m分，求一共有多少种可能的组合方式（某种面值的硬币可以数量可以为0）。 Input 
+输入数据第一行有一个正整数T，表示有T组测试数据； 
+接下来的T行，每行有两个数n,m，n和m的含义同上。Output 
+对于每组测试数据，请输出可能的组合方式数； 
+每组输出占一行。Sample Input 
+2 
+3 5 
+---
+
+
+Problem Description 
+假设一堆由1分、2分、5分组成的n个硬币总面值为m分，求一共有多少种可能的组合方式（某种面值的硬币可以数量可以为0）。 Input 
+输入数据第一行有一个正整数T，表示有T组测试数据； 
+接下来的T行，每行有两个数n,m，n和m的含义同上。Output 
+对于每组测试数据，请输出可能的组合方式数； 
+每组输出占一行。Sample Input 
+2 
+3 5
+<!-- more -->
+----------
+
+Problem Description
+假设一堆由1分、2分、5分组成的n个硬币总面值为m分，求一共有多少种可能的组合方式（某种面值的硬币可以数量可以为0）。 
+ 
+
+Input
+输入数据第一行有一个正整数T，表示有T组测试数据；
+接下来的T行，每行有两个数n,m，n和m的含义同上。
+
+ 
+
+Output
+对于每组测试数据，请输出可能的组合方式数；
+每组输出占一行。
+
+ 
+
+Sample Input
+2
+3 5
+4 8
+ 
+
+Sample Output
+1
+2
+
+
+这个问题和鸡兔同笼有点类似~
+
+根据条件，可以列出3个未知数，和2和方程；
+
+假设1分硬币数量为x，2分硬币数量为y，5分硬币数量为z.
+x+2y+5z=m,x+y+z=n;
+所以:m-n=4z+y,(x>=0,y>=0,z>=0)
+n-z-y>=0(这个条件不要忘了)
+
+```
+import java.util.Scanner;
+
+/**
+ * @author 陈浩翔
+ * 2016-5-18
+ */
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			int m =sc.nextInt();
+			int count=0;
+			for(int y=0;y<=m/2;y++){
+				for(int z=0;z<=m/5;z++){
+					if(4*z+y==m-n&&(n-z-y)>=0){
+						count++;
+					}
+				}
+			}
+			System.out.println(count);
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

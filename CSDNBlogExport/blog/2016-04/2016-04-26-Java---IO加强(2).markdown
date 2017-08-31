@@ -1,0 +1,402 @@
+---
+layout: post
+title: "Java---IO加强(2)"
+date: 2016-04-26 12:38:11 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- JavaIO流
+tags: [字符流,设计,流,控制台]
+keyword: 陈浩翔, 谙忆
+description: 转换流★转换流功能1：充当字节流与字符流之间的桥梁需求：模拟英文聊天程序，要求： 
+     (1) 从键盘录入英文字符，每录一行就把它转成大写输出到控制台； 
+     (2) 保存聊天记录到字节流文件。要求1的设计分析：1）需要从键盘接收录入，得用System.in，它是字节输入流InputStream； 
+2）需要处理字符，可以自己把字节强转成字符，也可以用字符流； 
+3）需要类似readLi 
+---
+
+
+转换流★转换流功能1：充当字节流与字符流之间的桥梁需求：模拟英文聊天程序，要求： 
+     (1) 从键盘录入英文字符，每录一行就把它转成大写输出到控制台； 
+     (2) 保存聊天记录到字节流文件。要求1的设计分析：1）需要从键盘接收录入，得用System.in，它是字节输入流InputStream； 
+2）需要处理字符，可以自己把字节强转成字符，也可以用字符流； 
+3）需要类似readLi
+<!-- more -->
+----------
+
+转换流
+===
+
+★转换流功能1：充当字节流与字符流之间的桥梁
+----------------------
+
+需求：模拟英文聊天程序，要求：
+     (1) 从键盘录入英文字符，每录一行就把它转成大写输出到控制台；
+     (2) 保存聊天记录到字节流文件。
+
+要求1的设计分析：
+---------
+
+1）需要从键盘接收录入，得用System.in，它是字节输入流InputStream；
+2）需要处理字符，可以自己把字节强转成字符，也可以用字符流；
+3）需要类似readLine的功能，而这个方法在字符流BufferedReader中有（而且该类有缓冲增速）。
+综上，采用转换流把字节流转成字符流处理比较合理，即使用InputStreamReader
+
+
+ 要求2的设计分析：
+
+
+1）需要把字符数据按行保存到字节流文件 ；
+2）字符流采用BufferedWriter比较合适，因为它有newLine方法且能实现高效；
+3）字节流文件，得采用FileOutputStream。
+综上，采用转换流把字符流转成字节流处理比较合理，即使用OutputStreamWriter
+
+
+代码实现：
+
+```
+package io.transfer;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+
+public class TranStreamDemo {
+
+	public static void main(String[] args) throws IOException {
+		//输入
+		InputStream in = System.in;
+		InputStreamReader isr = new InputStreamReader(in);
+		BufferedReader br = new BufferedReader(isr);
+		
+		//输出
+		OutputStream out = new FileOutputStream("chat.txt");
+		OutputStreamWriter osw = new OutputStreamWriter(out);
+		BufferedWriter bw = new BufferedWriter(osw);
+		
+		String line = null;
+		while( (line=br.readLine())!=null){
+			if("over".equals(line)){
+				//养成好的代码习惯：调用String中的方法时，把常量字符串放在前面，防止变量为null而导致异常
+				break;
+			}
+			System.out.println( line.toUpperCase() );
+			bw.write(line);
+			bw.newLine();
+			bw.flush();//字符流是带缓冲的，必须刷缓冲
+		}
+	}
+
+}
+
+```
+
+转换流
+===
+
+
+（InputStreamReader和OutputStreamWriter）
+
+★转换流功能2：字符编码转换
+--------------
+
+采用FileWriter以默认方式编码
+    FileOutputStream+默认编码表
+
+采用转换流以默认方式编码
+   OutputStreamWriter + FileOutputStream + 默认编码表
+
+采用转换流以指定编码方式编码
+   OutputStreamWriter + FileOutputStream +指定编码表
+
+采用转换流以指定编码方式解码
+   InputStreamReader + FileInputStream +指定编码表
+
+
+代码实现：
+-----
+
+```
+package io.transfer;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+
+public class TranStreamDemo2 {
+
+	public static void main(String[] args) {
+		try {
+			//readTextDecoding1();
+			//readTextDecoding2();
+			writeTextEncoding();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void writeTextEncoding() throws IOException {
+		//第一种： FileWriter+默认编码表
+		FileWriter fw = new FileWriter("files\\w_utf-8.txt");//该文件的编码由平台(如MyEclipse或dos窗口)定，不一定是utf-8
+		fw.write("每天进步一点点...");
+		fw.close();
+		
+		//第二种: OutputStreamWriter+默认编码表
+		OutputStreamWriter osw = new OutputStreamWriter(new FileOutputStream("files\\w_utf-8_2.txt"));//该文件的编码由平台(如MyEclipse或dos窗口)定，不一定是utf-8
+		osw.write("第天进步一点点...");//牛耳
+		osw.close();
+		
+		//第三种: OutputStreamWriter+指定编码表
+		OutputStreamWriter osw2 = new OutputStreamWriter(new FileOutputStream("files\\w_utf-8_3.txt"),"utf-8");//该文件的编码一定是utf-8，因为是我们自己指定的
+		osw2.write("第天进步一点点...");
+		osw2.close();
+		
+	}
+
+	private static void readTextDecoding1() throws IOException {
+		FileReader fr = new FileReader("files\\utf-8.txt");//采用默认编码表解码
+		char[] cbuf = new char[10];
+		int len=0;
+		while( (len=fr.read(cbuf))!=-1){
+			String str = new String(cbuf,0,len);
+			System.out.print(str);
+		}
+		fr.close();
+	}
+	
+	private static void readTextDecoding2() throws IOException {
+		//InputStreamReader isr = new InputStreamReader(new FileInputStream("files\\gbk.txt"));//如果不指定编码表，则是采用默认的
+		
+		//用转换流自己指定解码表----只要文件的编码表和这里指定的解码表相同，就不会出现乱码
+		//InputStreamReader isr = new InputStreamReader( new FileInputStream("files\\gbk.txt"), "gbk"); //ok
+		//InputStreamReader isr = new InputStreamReader( new FileInputStream("files\\utf-8.txt"), "gbk");//乱码
+		InputStreamReader isr = new InputStreamReader( new FileInputStream("files\\utf-8.txt"), "utf-8");//ok
+		char[] cbuf = new char[20];
+		int len = isr.read(cbuf);
+		String str = new String(cbuf,0,len);
+		System.out.println(str);
+		isr.close();
+	}
+
+}
+
+```
+
+打印流
+===
+
+★打印流的特点：
+--------
+1）只有输出没有输入。PrintStream是字节打印流，PrintWriter是字符打印流。
+2）能够方便地打印各种数据“值表示形式”，提供了一系列的打印功能（只有它有，其它流都没有。）
+3）和其他输出流不同，它永远不会抛出IOException异常（构造方法除外），异常内部解决且设置了内部标志。
+4）可创建具有自动刷新的功能，可使用带换行符的println()方法。
+5）(在构造方法中)可以指定字符集编码的。
+
+★关于打印流的自动刷新
+-----------
+
+autoFlush - boolean 变量；如果为 true，则 println、printf 或 format 方法将刷新输出缓冲区。
+	     * ---其实是因为这几个方法中帮我们调用了out.flush()。
+
+代码实现：
+
+//演示PrintStream类的自动刷新功能
+-----------------------
+
+```
+package io.print;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-4-24
+ */
+
+//演示PrintStream类的自动刷新功能
+public class PrintStreamDemo {
+	public static void main(String[] args) {
+		try {
+			demo1();
+			demo2();
+			for(int i=0;i<10;i++){
+				System.out.println(i);
+			}
+			//屏幕终端不会有输出的，因为运行了demo2()；
+			//把System.out的输出目的地从屏幕更改到日志文件了
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+	
+	//把System.out的输出目的地从屏幕更改到日志文件
+	private static void demo2() throws IOException {
+		FileOutputStream font = new FileOutputStream("log.txt");
+		PrintStream out = new PrintStream(font,true);
+		System.setOut(out);
+	}
+
+	private static void demo1() throws IOException {
+		PrintStream out =new PrintStream("print.txt");
+		//out.write()只写入一个字节(二进制的8位)的信息,如果参数大于一个字节的范围，
+		//那么实际上只会写入最后一个字节的数据
+		out.write(97);
+		out.write(353);
+		//最后一个字节是97，因此写入的是一个字符'a'----写入的是值的表现形式
+		
+		System.out.write(353);//输出'a'
+		System.out.flush();
+		
+		
+		out.println(345);//把参数转换成字符串输出
+		//上一句等价于out.write( String.valueOf(i) )
+		
+		
+		//※总之，PrintStream中用write()输出的是字节数据且每次只输出一个字节，而print()输出的是数据的值的表现形式即转换成字符串输出。
+		//JSP中的out对象就是这种类型。要输出字节数据如图片声明等二进制格式则必须用write()，而输出页面数据(字符)则要用print()或println()
+		
+		
+	}
+
+}
+
+```
+
+//演示PrintWriter类的自动刷新功能
+-----------------------
+
+```
+package io.print;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-4-24
+ */
+
+//演示PrintWriter类的自动刷新功能
+public class PrintStreamDemo2 {
+	public static void main(String[] args)   {
+		demo1();
+		try {
+			demo2();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private static void demo1() {
+		//默认不自动刷新的
+		PrintWriter out  =new PrintWriter(System.out);
+		out.print("Hello World");//不会自动刷新
+		out.println("Hello World");//不会自动刷新
+		out.flush();//手动刷新
+	}
+	
+	
+	private static void demo2() throws IOException {
+		//设置自动刷新的
+		PrintWriter out = new PrintWriter(System.out,true);
+		out.print("Hello World");//不会自动刷新
+		out.println("Hello World");//会----因为println()内部调用了out.flush()
+	    out.print("Hello3 \n");//不会
+	    out.print("Hello3 \r\n");//不会
+	    out.printf("%s", "Hello4");//会
+	    
+	    /*总之：
+	     * autoFlush - boolean 变量；如果为 true，则 println、printf 或 format 方法将刷新输出缓冲区。
+	     * ---其实是因为这几个方法中帮我们调用了out.flush()。
+	     */
+	}
+
+}
+
+```
+
+
+![](http://img.blog.csdn.net/20160426003053096)
+
+![](http://img.blog.csdn.net/20160426003133132)
+
+![](http://img.blog.csdn.net/20160426003209601)
+
+
+IO包中的其他流
+========
+
+
+下面三个都是内存数组：
+-----------
+
+★字节数组流
+    ByteArrayInputStream与ByteArrayOutputStream
+    
+★字符数组流
+ CharArrayReader与CharArrayWriter
+ 
+★字符串流
+    StringReader 与 StringWriter
+
+
+1、用于操作字节数组的流对象，其实它们就是对应设备为内存的流对象。 
+2、该流的关闭是无效的，因为没有调用过系统资源。
+3、按照流的读写思想操作数组中元素。 
+
+
+★序列流
+----
+
+    SequenceInputStream  ——对多个流进行合并
+将多个流进行逻辑串联(合并变成一个流，操作起来很方便，因为多个源变成了一个源) 
+
+IO流知识点小结
+========
+
+流是用来处理数据的。
+处理数据时，一定要先明确数据源与数据目的地（数据汇）。
+数据源可以是文件、键盘或者其他流。
+数据目的地可以是文件、显示器或者其他流。
+流只是在帮助数据进行传输,并对传输的数据进行处理，比如过滤处理、转换处理等。
+
+★ IO流体系
+-------
+
+使用要点：看顶层(父类共性功能)，用底层(子类具体对象)。
+
+命名规律：
+-----
+
+每个子类的后缀名都是所属体系的父类的名称，很容易区分所属的体系。
+而且每一个子类前缀名都是该子类对象的功能体现。
+
+掌握IO流体系的要点和规律，开发时设计与查找相应的类就容易多了
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

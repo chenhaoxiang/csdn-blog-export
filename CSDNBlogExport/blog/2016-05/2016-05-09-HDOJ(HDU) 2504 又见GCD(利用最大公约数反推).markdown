@@ -1,0 +1,106 @@
+---
+layout: post
+title: "HDOJ(HDU) 2504 又见GCD(利用最大公约数反推)"
+date: 2016-05-09 01:45:22 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 公约数公倍数
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+有三个正整数a,b,c(0import java.util.Scanner;public class Main{    public static void main(String[] args) {
+        Scanner sc= new Scanner(System.in);        int t =sc.nextInt(); 
+---
+
+
+Problem Description 
+有三个正整数a,b,c(0import java.util.Scanner;public class Main{    public static void main(String[] args) {
+        Scanner sc= new Scanner(System.in);        int t =sc.nextInt();
+<!-- more -->
+----------
+
+Problem Description
+有三个正整数a,b,c(0<a,b,c<10^6)，其中c不等于b。若a和c的最大公约数为b，现已知a和b，求满足条件的最小的c。
+
+ 
+
+Input
+第一行输入一个n，表示有n组测试数据，接下来的n行，每行输入两个正整数a,b。
+
+ 
+
+Output
+输出对应的c，每组测试数据占一行。
+
+ 
+
+Sample Input
+2
+6 2
+12 4
+ 
+
+Sample Output
+4
+8
+
+
+其实还是一样的。求最大公约数。
+我们可以知道，c肯定是b的倍数。c!=b;
+
+不过我们必须写一个判断的函数。
+因为有时候c是b的倍数，a和c的最大公倍数可能就不是b。
+所以有了goc（）方法在这里判断，ac的最大公约数是不是b，如果是，直接结束循环，输出c。如果不是，继续循环。
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		
+		int t =sc.nextInt();
+		while(t-->0){
+			int a =sc.nextInt();
+			int b =sc.nextInt();
+			int c=0;
+			for(int i=2;;i++){
+				if(goc(a,i*b,b)){
+					c=i*b;
+					break;
+				}
+			}
+			System.out.println(c);
+		}
+	}
+	
+	//验证，a和c的最大公约数是不是b
+	private static boolean goc(int a, int c, int b) {
+		int n=a;
+		int m=c;
+		if(n<m){
+			n=n^m;
+			m=n^m;
+			n=n^m;
+		}
+		
+		while(m>0){
+			int k=n%m;
+			n=m;
+			m=k;
+		}
+		if(n==b){
+			return true;
+		}
+		return false;
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

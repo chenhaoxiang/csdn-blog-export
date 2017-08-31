@@ -1,0 +1,250 @@
+---
+layout: post
+title: "Java---对象与类的封装"
+date: 2015-12-15 01:49:58 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用
+tags: [实例,对象,数据]
+keyword: 陈浩翔, 谙忆
+description: 一、类和对象：package cn.hncu.Myclasslearn;
+/**
+ * 
+ * @author hncu_chx
+ *
+ * Mylove amin
+ */
+/**类是一种数据类型，声明一个类就是定义了一个数据类型。
+    类的实例（instance）是类的取值，对象就是类的变量，一个对象能引用一个实例，
+    就像一个int变量i能够保存int类型的一个常数。
+    声明对象 
+---
+
+
+一、类和对象：package cn.hncu.Myclasslearn;
+/**
+ * 
+ * @author hncu_chx
+ *
+ * Mylove amin
+ */
+/**类是一种数据类型，声明一个类就是定义了一个数据类型。
+    类的实例（instance）是类的取值，对象就是类的变量，一个对象能引用一个实例，
+    就像一个int变量i能够保存int类型的一个常数。
+    声明对象
+<!-- more -->
+----------
+
+一、类和对象：
+```
+package cn.hncu.Myclasslearn;
+/**
+ * 
+ * @author hncu_chx
+ *
+ * Mylove amin
+ */
+/**类是一种数据类型，声明一个类就是定义了一个数据类型。
+	类的实例（instance）是类的取值，对象就是类的变量，一个对象能引用一个实例，
+	就像一个int变量i能够保存int类型的一个常数。
+	声明对象：
+	类  对象
+	MyDate d1；//声明d1是MyDate类的一个对象
+**/
+public class MyDate {//类声明
+	int year;
+	int month;
+	int day;//成员变量
+	void set(int y,int m,int d){//成员方法，设置日期值
+		year=y;
+		month=m;
+		day=d;
+	}
+	
+	private void set(MyDate d) { //将当前对象值设置为参数值，重载
+		set(d.year,d.month,d.day);		//调用重载的同名成员方法
+	}
+                  
+	
+	@Override
+	public String toString() {   //返回中文日期字符串
+		return  year + "年" + month + "月" + day + "日";
+	}
+	public static void main(String[] args) {
+		MyDate d1 = new MyDate();      //声明对象、创建实例、引用赋值
+		d1.set(2012, 1, 1);            //调用类成员方法
+		MyDate d2 = d1;               //对象引用赋值
+		System.out.println("d1:"+d1.toString()+",d2:"+d2.toString());
+		
+		d2.month = 10;               //修改实例成员变量值
+		System.out.println("d1:"+d1+",d2:"+d2); //输出对象字符串描述，默认调用toString（）
+		
+		d2 = new MyDate();  //创建另一个实例
+		d2.set(d1);
+		System.out.println("d1:"+d1+",d2:"+d2);
+	}
+	                                                                                                              
+}
+
+```
+程序运行图片：
+![](http://img.blog.csdn.net/20151216031223118)
+
+
+
+二、类的封装
+
+```
+package cn.hncu.Myclasslearn;
+/**
+ * 
+ * @author hncu_chx
+ *
+ * Mylove amin
+ */
+public class MyDate_2 {
+	private int year,month,day; //私有成员变量
+	private static int thisYear; //当前年份，私有化静态成员变量
+	
+	static{
+		thisYear = 2012;
+	}
+	
+	public MyDate_2(int year,int month,int day){   //构造方法，指定日期
+		this.set(year,month,day);        //调用本类的成员方法
+	}
+	
+	public MyDate_2(){  //无参数构造方法，指定默认日期，重载
+		this(1970,1,1);     //调用本类已声明的其他构造方法
+	}
+	
+	public MyDate_2(MyDate_2 d){  //拷贝构造方法，日期通参数，重载
+		this.set(d);
+	}
+	
+	private void set(int year, int month, int day) {  //设置日期值，算法不全
+		this.year = year;
+		this.month = (month>=1&&month<=12)?month:1;
+		this.day = (day>=1&&day<=31)?day:1;  //this引用不能省略
+	}
+	private void set(MyDate_2 d) { //设置日期值，重载
+		set(d.year,d.month,d.day);//调用同名成员方法，不能使用this()
+		
+	}
+	
+	public int getYear(){    //获得年份
+		return this.year; 
+	}
+	
+	public int getMonth(){  //获得月份
+		return this.month;
+	}
+
+	public int getDay() {  //获得当月日期
+		return this.day;
+	}
+	
+	public String toString(){  //返回中文日期字符串，月日占2位
+		return year+"年"+String.format("%02d", month)+"月"+String.format("%02d", day)+"日";
+	}
+	
+	public static int getThisYear(){//获得今年年份，静态方法
+		return thisYear;        //访问静态成员变量
+	}
+	
+	public static boolean isLeapYear(int year){ //判断指定年份是否闰年，静态方法
+		return year%400==0||year%100!=0&&year%4==0;
+	}
+	
+	public boolean equals(MyDate_2 d){ //比较当前日期值与d是否相等
+		//this指代调用当前方法的对象
+		return this==d||d!=null&&this.year==d.year&&this.month==d.month&&this.day==d.day;
+	}
+	
+	public static int daysDfMonth(int year,int month){//返回指定年月的天数，静态方法
+		switch(month){ //计算每月的天数
+		case 1:case 3:case 5:case 7:case 8:case 10:case 12:return 31;
+		case 4:case 6:case 9:case 11:return 30;
+		case 2:return MyDate_2.isLeapYear(year)?29:28;
+		default : return 0;
+		}
+	}
+	
+	public int daysOfMonth(){//返回当月天数
+		return daysDfMonth(this.year, this.month);
+	}
+	
+	public void tomorrow(){//当前日期改为之后一天日期
+		this.day++;
+		if(this.day>this.daysOfMonth()){
+			this.day=1;
+			this.month++;
+			if(this.month>12){
+				this.month=1;
+				this.year ++;
+			}
+		}
+	}
+	
+	public MyDate_2 yestoday(){ //返回当前日期的前一天日期
+		MyDate_2 date = new MyDate_2(this);//进行拷贝构造方法，创建实例，没有改变this
+		date.day--;
+		if(date.day==0){
+			date.month--;
+			if(date.month==0){
+				date.month=12;
+				date.year--;
+			}
+			date.day = daysDfMonth(date.year, date.month);
+		}
+		return date;//返回对象date引用的实例
+	}
+	
+	
+}
+
+```
+
+```
+package cn.hncu.Myclasslearn;
+/**
+ * 
+ * @author hncu_chx
+ *
+ * Mylove amin
+ */
+public class MyDate_ex {
+
+	public static void main(String[] args) {
+		System.out.println("今年是"+MyDate_2.getThisYear()
+				+",闰年？"+MyDate_2.isLeapYear(MyDate_2.getThisYear()));
+		MyDate_2 d1 =new MyDate_2(2012, 12, 31);
+		MyDate_2 d2 =new MyDate_2(d1);//调用拷贝构造方法复制实例
+		
+		System.out.println("d1:"+d1+",d2:"+d2+",d1==d2?"+(d1==d2)+",d1.equals(d2)?"+d1.equals(d2));	
+		System.out.print(d1+"的明天是");
+		d1.tomorrow();
+		System.out.println(d1+"\n"+d1+"的昨天是 "+(d2=d1.yestoday()));
+		
+	}
+}
+/**日期类的设计问题讨论
+ * 虽然用3个整数表示一个日期符合人的思维习惯，但很多运算实现困难，如判断日期是否有效、
+ * 求多少天之前/之后的日期等。
+ * 本程序中的MyDate_2中的set()方法的算法不完整，其一，仍然会产生诸如“2013-2-30”之类的
+ * 错误日期；其二，将“2013-12-32”之类的错误日期改为“2013-12-1”，虽然得到了一个正确
+ * 日期，但这是一种不好的程序设计习惯，因为“2013-12-1”并不是调用者希望的数据，而且调用
+ * 者并不知道数据被修改了。正确的处理方法应该是抛出异常，详见以后的博客。
+ * 本题这样设计知识为了演示类的封装性。
+ * */
+
+```
+
+程序运行图片：
+![](http://img.blog.csdn.net/20151216031334392)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

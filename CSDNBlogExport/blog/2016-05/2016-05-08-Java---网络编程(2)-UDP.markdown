@@ -1,0 +1,308 @@
+---
+layout: post
+title: "Java---网络编程(2)-UDP"
+date: 2016-05-08 04:15:34 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java网络编程
+tags: [网络编程,大数据,socket,数据,udp]
+keyword: 陈浩翔, 谙忆
+description: UDP☆ UDP 
+将数据及源和目的封装成数据包中，不需要建立连接 
+每个数据报的大小在限制在64k内 
+因无连接，是不可靠协议 
+不需要建立连接，速度快DatagramSocket和DatagramPacket类 ☆ TCP 
+建立连接，形成传输数据的通道。 
+在连接中进行大数据量传输 
+通过三次握手完成连接，是可靠协议 
+必须建立连接，效率会稍低Socket 和  ServerSocket类☆ 
+---
+
+
+UDP☆ UDP 
+将数据及源和目的封装成数据包中，不需要建立连接 
+每个数据报的大小在限制在64k内 
+因无连接，是不可靠协议 
+不需要建立连接，速度快DatagramSocket和DatagramPacket类 ☆ TCP 
+建立连接，形成传输数据的通道。 
+在连接中进行大数据量传输 
+通过三次握手完成连接，是可靠协议 
+必须建立连接，效率会稍低Socket 和  ServerSocket类☆
+<!-- more -->
+----------
+
+UDP
+=======
+
+☆ UDP
+将数据及源和目的封装成数据包中，不需要建立连接
+每个数据报的大小在限制在64k内
+因无连接，是不可靠协议
+不需要建立连接，速度快
+
+DatagramSocket和DatagramPacket类 
+
+☆ TCP
+建立连接，形成传输数据的通道。
+在连接中进行大数据量传输
+通过三次握手完成连接，是可靠协议
+必须建立连接，效率会稍低
+
+Socket 和  ServerSocket类
+
+☆ Socket
+Socket就是为网络服务提供的一种机制。
+通信的两端都有Socket。
+网络通信其实就是Socket间的通信。
+数据在两个Socket间通过IO传输。
+
+
+UDP传输
+-----
+
+DatagramSocket与DatagramPacket
+建立发送端，接收端。
+建立数据包。
+调用Socket的发送接收方法。
+关闭Socket。
+
+发送端与接收端是两个独立的运行程序。
+
+UDP传输编程
+-------
+
+☆发送端
+
+
+在发送端，要在数据包对象中明确目的地IP及端口。
+
+```
+DatagramSocket ds = new DatagramSocket();
+byte[] by = “hello,udp”.getBytes();
+DatagramPacket dp = new DatagramPacket(by,0,by.length,
+	InetAddress.getByName(“127.0.0.1”),10000);
+ds.send(dp);
+ds.close();
+```
+
+☆接收端
+
+在接收端，要指定监听的端口。
+
+
+```
+DatagramSocket ds = new DatagramSocket(10000);
+byte[] by = new byte[1024];
+DatagramPacket dp = new DatagramPacket(by,by.length);
+ds.receive(dp);
+String str = new String(dp.getData(),0,dp.getLength());
+System.out.println(str+"--"+dp.getAddress());
+ds.close();
+```
+
+发送方：
+你们自己写的时候注意修改接收方的ip。
+```
+package cn.hncu.url.udp;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-5-8
+ */
+public class SendDemo {
+
+	public static void main(String[] args) {
+		try {
+			DatagramSocket ds = new DatagramSocket(9999);//用9999端口发送消息
+			String str = "你好，在吗？";
+			byte buf[] = str.getBytes("gbk");
+			
+			//DatagramPacket类中，有ip地址的构造方法是用来创建发送数据包的。
+			DatagramPacket dp = new DatagramPacket(buf, buf.length,InetAddress.getByName("192.168.1.127"), 10000);
+			//注意：ip和端口都是接收方的
+			
+			ds.send(dp);
+			ds.close();
+			
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+
+```
+
+接收方：
+
+```
+package cn.hncu.url.udp;
+
+import java.io.IOException;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.SocketException;
+
+public class ReceiveDemo {
+
+	public static void main(String[] args) {
+		
+		try {
+			//接收的端口
+			DatagramSocket ds = new DatagramSocket(10000);
+			
+			byte buf[] = new byte[1024];
+			
+			DatagramPacket dp = new DatagramPacket(buf, buf.length);
+			
+			ds.receive(dp);
+			
+			//从dp中解析出我们想要的信息
+			//获取ip
+			String ip = dp.getAddress().getHostAddress();
+			int port = dp.getPort();//端口
+			byte[] data = dp.getData();
+			System.out.println("ip: "+ip+" 端口："+port+" 消息："+new String(data));
+			
+		} catch (SocketException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+
+```
+
+练习：UDP聊天程序
+==========
+
+
+通过键盘录入获取要发送的信息。
+将发送和接收分别封装到两个线程中。
+
+
+```
+package cn.hncu.url.udp;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+
+class UDPChat {
+
+	public static void main(String[] args) {
+		
+		try {
+			DatagramSocket send = new DatagramSocket(10001);
+			DatagramSocket receive = new DatagramSocket(10000);
+			
+			new Thread(new Send(send)).start();
+			new Thread(new Receive(receive)).start();
+			
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+
+}
+
+class Send implements Runnable{
+	DatagramSocket ds;
+	
+	public Send(DatagramSocket send) {
+		this.ds=send;
+	}
+
+	@Override
+	public void run() {
+		DatagramPacket dp ;
+		BufferedReader bfr = new BufferedReader(new InputStreamReader(System.in) );
+		String line;
+		while(true){
+			try {
+				line = bfr.readLine();
+				byte[] buf = line.getBytes();
+				//填写接收方的ip和端口
+				dp = new DatagramPacket(buf, buf.length, InetAddress.getByName("192.168.1.127"), 10000);
+				
+				ds.send(dp);
+				if("end".equals(line)){
+					break;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		ds.close();
+	}
+}
+
+class Receive implements Runnable{
+	DatagramSocket ds;
+	public Receive(DatagramSocket receive) {
+		this.ds=receive;
+	}
+
+	@Override
+	public void run() {
+		
+		DatagramPacket dp;
+		
+		byte[] buf = new byte[2048];//大小够存一次发送过来的数据就可以了。
+		String line;
+		String ip;
+		int port;
+		while(true){
+			
+			dp = new DatagramPacket(buf, buf.length);
+			try {
+				ds.receive(dp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			ip = dp.getAddress().getHostAddress();//获得发送方的ip
+			port = dp.getPort();//端口
+			byte[] bf = dp.getData();
+			line = new String(bf,0,dp.getLength());
+			System.out.println("IP:"+ip+" 端口:"+port+" 消息:"+line);
+			if("end".equals(line)){
+				System.out.println("主机："+ip+" 下线了。");
+				break;
+			}
+			
+		}
+		ds.close();
+	}
+}
+
+```
+
+好了，到现在就可以实现2台联网的机子的互动了。哈哈、
+只是现在还有点单调，而且用UDP协议容易丢包。
+让我们一起进步吧。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

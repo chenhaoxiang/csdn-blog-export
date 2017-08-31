@@ -1,0 +1,97 @@
+---
+layout: post
+title: "HDOJ 2025  查找最大元素"
+date: 2015-12-11 02:21:47 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- String
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+对于输入的每个字符串，查找其中的最大字母，在该字母后面插入字符串“(max)”。Input 
+输入数据包括多个测试实例，每个实例由一行长度不超过100的字符串组成，字符串仅由大小写字母构成。Output 
+对于每个测试实例输出一行字符串，输出的结果是插入字符串“(max)”后的结果，如果存在多个最大的字母，就在每一个最大字母后面都插入”(max)”。Samp 
+---
+
+
+Problem Description 
+对于输入的每个字符串，查找其中的最大字母，在该字母后面插入字符串“(max)”。Input 
+输入数据包括多个测试实例，每个实例由一行长度不超过100的字符串组成，字符串仅由大小写字母构成。Output 
+对于每个测试实例输出一行字符串，输出的结果是插入字符串“(max)”后的结果，如果存在多个最大的字母，就在每一个最大字母后面都插入”(max)”。Samp
+<!-- more -->
+----------
+
+Problem Description
+对于输入的每个字符串，查找其中的最大字母，在该字母后面插入字符串“(max)”。
+
+ 
+
+Input
+输入数据包括多个测试实例，每个实例由一行长度不超过100的字符串组成，字符串仅由大小写字母构成。
+
+ 
+
+Output
+对于每个测试实例输出一行字符串，输出的结果是插入字符串“(max)”后的结果，如果存在多个最大的字母，就在每一个最大字母后面都插入"(max)"。
+
+ 
+
+Sample Input
+abcdefgfedcba
+xxxxx
+ 
+
+Sample Output
+abcdefg(max)fedcba
+x(max)x(max)x(max)x(max)x(max)
+
+
+在此介绍2个Java的String的函数：
+
+```
+replace和replaceAll
+1)replace的参数是char和CharSequence,即可以支持字符的替换,也支持字
+符串的替换(CharSequence即字符串序列的意思,说白了也就是字符串); 
+2)replaceAll的参数是regex,即基于规则表达式的替换,比如,可以通过
+replaceAll("\\d", "*")把一个字符串所有的数字字符都换成星号; 
+
+    相同点是都是全部替换,即把源字符串中的某一字符或字符串全部换成指定的
+这个方法也是基于规则表达式的替换,但与replaceAll()不同的是,只替换第一次出现的字符串; 
+    另外,如果replaceAll()和replaceFirst()所用的参数据不是基于规
+字符串的操作; 
+
+    还有一点注意:执行了替换操作后,源字符串的内容是没有发生改变的. 
+```
+
+用replace()或者replaceAll()在本题中都一样的：
+
+```
+import java.util.Scanner;
+
+class Main{
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            String Strs = sc.nextLine();
+            char Maxchar = Strs.charAt(0);
+            for(int i=1;i<Strs.length();i++){
+                if(Maxchar<Strs.charAt(i)){
+                    Maxchar=Strs.charAt(i);
+                }
+            }
+            System.out.println(Strs.replaceAll(""+Maxchar, Maxchar+"(max)"));
+/**System.out.println(Strs.replace(""+Maxchar, Maxchar+"(max)"));**/
+        }
+
+        }
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

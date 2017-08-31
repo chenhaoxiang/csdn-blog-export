@@ -1,0 +1,142 @@
+---
+layout: post
+title: "HDOJ 1287 破译密码（异或运算）"
+date: 2016-03-24 11:01:17 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 异或^,----- 加密解密
+tags: [异或,acm,java]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+有个叫“猪头帮”的国家，采用一种简单的文法加密，他们所用的语言里面只有大写字母，没有其他任何字符；现在还知道他们加密的方法是：只用一个大写字母和原文进行异或运算生成密文。请你帮忙解开。Input 
+有若干组，每组输入有2行，第一行整数N表示有N个密文，接着一行有N个整数分别表示N个密文。Output 
+输出仅有大写字母组成的原文。Sample Input 
+---
+
+
+Problem Description 
+有个叫“猪头帮”的国家，采用一种简单的文法加密，他们所用的语言里面只有大写字母，没有其他任何字符；现在还知道他们加密的方法是：只用一个大写字母和原文进行异或运算生成密文。请你帮忙解开。Input 
+有若干组，每组输入有2行，第一行整数N表示有N个密文，接着一行有N个整数分别表示N个密文。Output 
+输出仅有大写字母组成的原文。Sample Input
+<!-- more -->
+----------
+
+Problem Description
+有个叫“猪头帮”的国家，采用一种简单的文法加密，他们所用的语言里面只有大写字母，没有其他任何字符；现在还知道他们加密的方法是：只用一个大写字母和原文进行异或运算生成密文。请你帮忙解开。
+ 
+
+Input
+有若干组，每组输入有2行，第一行整数N表示有N个密文，接着一行有N个整数分别表示N个密文。
+ 
+
+Output
+输出仅有大写字母组成的原文。
+
+ 
+
+Sample Input
+30
+17 6 9 8 3 0 1 6 7 4 5 10 11 8 9 14 15 12 13 18 19 16 17 22 23 20 21 26 27 24
+ 
+
+Sample Output
+SDKJABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+异或的部分知识点：
+参与运算的两个值，如果两个相应bit位相同，则结果为0，否则为1。
+按位异或的3个特点:
+(1) 0^0=0,0^1=1  0异或任何数＝任何数
+(2) 1^0=1,1^1=0  1异或任何数－任何数取反
+(3) 任何数异或自己＝把自己置0
+按位异或的几个常见用途:
+(1) 使某些特定的位翻转
+    例如对数10100001的第2位和第3位翻转，则可以将该数与00000110进行按位异或运算。
+　　　　　  10100001^00000110 = 10100111
+
+(2) 实现两个值的交换，而不必使用临时变量。
+    例如交换两个整数a=10100001，b=00000110的值，可通过下列语句实现：
+　　　　a = a^b； 　　//a=10100111
+　　　　b = b^a； 　　//b=10100001
+　　　　a = a^b； 　　//a=00000110
+
+(3) 在汇编语言中经常用于将变量置零：
+    xor   a，a
+
+(4) 快速判断两个值是否相等
+    举例1: 判断两个整数a，b是否相等，则可通过下列语句实现：
+        return ((a ^ b) == 0)
+
+加密-解密：
+class E 
+{ public static void main(String args[ ]) 
+{ 
+  char  a1='十' ,  a2='点' ,  a3='进' ,  a4='攻' ; 
+  char secret='8' ; 
+  a1=(char) (a1^secret); 
+  a2=(char) (a2^secret); 
+  a3=(char) (a3^secret); 
+  a4=(char) (a4^secret); 
+  System.out.println("密文:"+a1+a2+a3+a4); 
+  a1=(char) (a1^secret); 
+  a2=(char) (a2^secret); 
+  a3=(char) (a3^secret); 
+  a4=(char) (a4^secret); 
+  System.out.println("原文:"+a1+a2+a3+a4); 
+} 
+}
+
+char类型,也就是字符类型实际上就是整形,就是数字.
+位运算就是二进制整数运算. 
+两个数按位异或意思就是从个位开始,一位一位的比. 
+如果两个数相应的位上一样,结果就是0,不一样就是1 
+所以111^101=010 
+那加密的过程就是逐个字符跟那个secret字符异或运算. 
+解密的过程就是密文再跟同一个字符异或运算 
+010^101=111 
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			int a[] = new int[n];
+			for(int i=0;i<n;i++){
+				a[i]=sc.nextInt();
+			}
+			boolean isFlag= true;
+			char ch[] = new char[n];
+			for(int i=65;i<=90;i++){
+				for(int h=0;h<n;h++){
+					ch[h]='0';
+				}
+				isFlag= true;
+				for(int j=0;j<n;j++){
+					ch[j] = (char) (i^a[j]);
+					if(ch[j]<65||ch[j]>90){
+						isFlag=false;
+						break;
+					}
+				}
+				if(isFlag){
+					for(int k=0;k<ch.length;k++){
+						System.out.print(ch[k]);
+					}
+					System.out.println();
+					break;
+				}
+			}
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

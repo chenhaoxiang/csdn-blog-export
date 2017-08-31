@@ -1,0 +1,375 @@
+---
+layout: post
+title: "Java---IO加强(1)"
+date: 2016-04-22 12:35:35 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- JavaIO流
+tags: [java,IO,缓冲]
+keyword: 陈浩翔, 谙忆
+description: RandomAccessFile★随机访问文件，自身具备读写的方法。new RandomAccessFile()之后，若文件不存在会自动创建，存在则不创建。——该类其实内部既封装了字节输入流，又封装了字节输出流。 
+该类若用write()方法写整数，每次只写它的最后一个字节。而采用writeInt()方法，则可把一个整数完整地写入。 ★通过skipBytes(int x),seek(int x)来达 
+---
+
+
+RandomAccessFile★随机访问文件，自身具备读写的方法。new RandomAccessFile()之后，若文件不存在会自动创建，存在则不创建。——该类其实内部既封装了字节输入流，又封装了字节输出流。 
+该类若用write()方法写整数，每次只写它的最后一个字节。而采用writeInt()方法，则可把一个整数完整地写入。 ★通过skipBytes(int x),seek(int x)来达
+<!-- more -->
+----------
+
+RandomAccessFile
+================
+
+★随机访问文件，自身具备读写的方法。
+------------------
+
+new RandomAccessFile()之后，若文件不存在会自动创建，存在则不创建。——该类其实内部既封装了字节输入流，又封装了字节输出流。
+该类若用write()方法写整数，每次只写它的最后一个字节。而采用writeInt()方法，则可把一个整数完整地写入。 
+
+★通过skipBytes(int x),seek(int x)来达到随机访问。
+---------------------------------------
+
+通过seek方法设置数据的指针就可以实现对文件数据的随机读写。InputStream中的skip()方法只能从头往后跳，不能反向；而seek()方法可双向随便定位。 
+
+★数据修改方面的特点
+----------
+
+用RandomAccessFile类可以实现数据的修改，当然文件中的数据一般要有规律，以方便在编程时能够进行定位，让数据写对地方。 
+而用“流”实现数据修改时，则通常需要把数据从流读到数组当中，在数组中进行数据修改，然后再把修改后的数组再重新写到流中。 
+
+序列化
+===
+
+★ 序列化介绍
+-----
+将一个对象存放到某种类型的永久存储器上称为保持。如果一个对象可以被存放到磁盘或磁带上，或者可以发送到另外一台机器并存放到存储器或磁盘上，那么这个对象就被称为可保持的。（在Java中，序列化、持久化、串行化是一个概念。）
+java.io.Serializable接口没有任何方法，它只作为一个“标记者”，用来表明实现了这个接口的类可以考虑串行化。类中没有实现Serializable的对象不能保存或恢复它们的状态。 
+(用IO流将数据读入文件都叫序列化)
+
+★ 对象图
+-----
+
+当一个对象被串行化时，只有对象的数据被保存；方法和构造函数不属于串行化流。如果一个数据变量是一个对象，那么这个对象的数据成员也会被串行化。树或者对象数据的结构，包括这些子对象，构成了对象图。
+
+★ 瞬时 transient
+--------------
+
+防止对象的属性被序列化。
+
+
+演示transient:
+------------
+
+```
+package io.sreializable;
+
+import java.io.Serializable;
+
+/**
+ * 对象类
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class Address implements Serializable{//实现可序列化接口
+	//静态变量是不会被序列化的。对于非静态变量，一般情况下都会被序列化，但如果声明成transient型则不会。
+	private static String address;//静态变量不属于对象的！
+	
+	transient int num;//瞬时变量---该变量是不会被序列化的---不会出现在对象图中的
+	
+	private String Name;//姓名
+	private int age;//年龄
+	private String tel;//电话
+	
+	
+	public Address(int num, String name, int age, String tel) {
+		this.num = num;
+		Name = name;
+		this.age = age;
+		this.tel = tel;
+	}
+	
+	public static String getAddress() {
+		return address;
+	}
+	public static void setAddress(String address) {
+		Address.address = address;
+	}
+	public int getNum() {
+		return num;
+	}
+	public void setNum(int num) {
+		this.num = num;
+	}
+	public String getName() {
+		return Name;
+	}
+	public void setName(String name) {
+		Name = name;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((Name == null) ? 0 : Name.hashCode());
+		result = prime * result + age;
+		result = prime * result + ((tel == null) ? 0 : tel.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Address other = (Address) obj;
+		if (Name == null) {
+			if (other.Name != null)
+				return false;
+		} else if (!Name.equals(other.Name))
+			return false;
+		if (age != other.age)
+			return false;
+		if (tel == null) {
+			if (other.tel != null)
+				return false;
+		} else if (!tel.equals(other.tel))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "Address [num=" + num + ", Name=" + Name + ", age=" + age
+				+ ", tel=" + tel + "]";
+	}
+	
+	
+	
+	
+	
+}
+
+```
+
+```
+package io.sreializable;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class Serializable {
+
+	//直接抛异常了。。。做项目千万不要这样
+	public static void main(String[] args) throws FileNotFoundException, IOException, ClassNotFoundException  {
+		Address a1 = new Address(1, "aaa", 23, "12345678911");
+		Address a2 = new Address(2, "bbb", 24, "12345678912");
+		Address a3 = new Address(3, "ccc", 25, "12345678913");
+		Address a4 = new Address(4, "ddd", 26, "12345678914");
+		Address a5 = new Address(5, "eee", 27, "12345678915");
+		//对象序列化---输出，写
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("hx.txt"));
+		out.writeObject(a1);
+		out.writeObject(a2);
+		out.writeObject(a3);
+		out.writeObject(a4);
+		out.writeObject(a5);
+		out.close();
+		
+		
+		//反序列化----读
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream("hx.txt"));
+		System.out.println(in.readObject());
+		System.out.println(in.readObject());
+		System.out.println(in.readObject());
+		System.out.println(in.readObject());
+		System.out.println(in.readObject());
+		//如果对象读完了，还读文件，就会抛出EOF异常java.io.EOFException
+	}
+
+}
+
+```
+
+运行图片：
+-----
+
+可以看到，瞬时变量的值并没有被存储起来，也就是没有被序列化！！
+
+![](http://img.blog.csdn.net/20160422122345288)
+
+
+缓冲输入输出流
+=======
+
+介绍：
+---
+
+（BufferedInputStream和BufferedOutputStream）
+
+第一种方式：
+```
+DataInputStream in = new DataInputStream(
+                       new BufferedInputStream( 
+                         new FileInputStream("Test.txt"));
+```
+
+第二种方式：
+```
+DataInputStream in = new DataInputStream(
+                        new FileInputStream("Test.txt"));
+```
+
+第三种方式：
+```
+BufferedInputStream in = new BufferedInputStream( 
+                            new DataInputStream( 
+                              new FileInputStream("Test.java"));
+```
+下面我们来看实现它们运行速度的比较：
+因为BufferedInputStream并没有一次读一行的方法，只能读字节，
+所以在文件中，我存储的是一行占97个字节的字符串。
+我让它一次读97个字节，所以和另外2种一次读一行也就差不多了。。
+
+这是存一行字符串的时候的文件大小：
+后面的字符串，每行都和第一行的一样大小！
+![](http://img.blog.csdn.net/20160422122924204)
+
+文件一共112KB。
+![](http://img.blog.csdn.net/20160422123028578)
+
+运行代码：
+-----
+
+```
+package io.buffer;
+
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
+/**
+ * 测试3种方法 流 的读取速度
+ * @author 陈浩翔
+ *
+ * 2016-4-22
+ */
+public class BufferedStreamDemo {
+	//在这里，我们简化了，直接抛异常了。
+	public static void main(String[] args) throws Exception {
+		//test1();
+		//test2();
+		test3();
+	}
+	
+	/**
+	 * 先new缓冲流
+	 * @throws Exception
+	 */
+	private static void test3() throws Exception {
+		long time1 = System.currentTimeMillis();
+		BufferedInputStream in = new BufferedInputStream(
+									new DataInputStream(
+										new FileInputStream("chx.txt")));
+		byte b[] = new byte[97];
+		int n = 0;
+		while((n=in.read(b))!=-1){
+			System.out.println(new String(b,0,n));
+		}
+		long time2 = System.currentTimeMillis();
+		System.out.println((time2-time1)+"毫秒");
+		//测试程序运行时间需要多次运行取平均值的
+	}
+	
+	/**
+	 * 不用缓冲流
+	 * @throws Exception
+	 */
+	private static void test2() throws Exception {
+		long time1 = System.currentTimeMillis();
+		DataInputStream in = new DataInputStream(
+						new FileInputStream("chx.txt"));
+		String str = null;
+		while((str=in.readLine())!=null){
+			System.out.println(str);
+		}
+		long time2 = System.currentTimeMillis();
+		System.out.println((time2-time1)+"毫秒");
+		//测试程序运行时间需要多次运行取平均值的
+	}
+	
+	/**
+	 * 在中间new缓冲流
+	 * @throws Exception
+	 */
+	private static void test1() throws Exception {
+		long time1 = System.currentTimeMillis();
+		DataInputStream in = new DataInputStream(
+								new BufferedInputStream(
+									new FileInputStream("chx.txt")));
+		String str = null;
+		while((str=in.readLine())!=null){
+			System.out.println(str);
+		}
+		long time2 = System.currentTimeMillis();
+		System.out.println((time2-time1)+"毫秒");
+		//测试程序运行时间需要多次运行取平均值的
+	}
+
+}
+
+```
+
+运行结果：
+-----
+我是取多次运行后，最接近平均值来截图的！
+第一种方式运行后的结果：
+![](http://img.blog.csdn.net/20160422123142580)
+
+第二种方式运行后的结果：
+![](http://img.blog.csdn.net/20160422123153314)
+
+第三种方式运行后的结果：
+![](http://img.blog.csdn.net/20160422123205314)
+
+
+☆示例测试技术总结：
+----------
+
+可以清楚的看到，第一种方式所用的时间是最短的！！！！
+第二种方式最慢，和第一种方法相比，慢了8倍！！！！
+方案1是最优的
+1）有buffer比没有更快；
+2）buffer放在中间层包装比放在外层更快；
+3）按行或按块操作 比 按字节或字符操作更快（用Object流操作的速度 比 字节字符方式 更快）
+4）缓冲区要结合流才可以使用，在流的基础上对流的功能进行了增强。
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

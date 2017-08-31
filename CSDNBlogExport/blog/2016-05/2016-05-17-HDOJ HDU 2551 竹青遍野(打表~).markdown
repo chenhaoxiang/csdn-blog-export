@@ -1,0 +1,99 @@
+---
+layout: post
+title: "HDOJ HDU 2551 竹青遍野(打表~)"
+date: 2016-05-17 01:52:01 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题,----- 模拟/推导/打表
+tags: [java,acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+“临流揽镜曳双魂 落红逐青裙 依稀往梦幻如真 泪湿千里云” 
+在MCA山上,除了住着众多武林豪侠之外,还生活着一个低调的世外高人,他本名逐青裙,因为经常被人叫做”竹蜻蜓”,终改名逐青,常年隐居于山中,不再见外人.根据山上附近居民所流传的说法,逐青有一个很奇怪的癖好,从他住进来那天开始,他就开始在他的院子周围种竹子,第1个月种1根竹子,第2个月种8根竹子,第3 
+---
+
+
+Problem Description 
+“临流揽镜曳双魂 落红逐青裙 依稀往梦幻如真 泪湿千里云” 
+在MCA山上,除了住着众多武林豪侠之外,还生活着一个低调的世外高人,他本名逐青裙,因为经常被人叫做”竹蜻蜓”,终改名逐青,常年隐居于山中,不再见外人.根据山上附近居民所流传的说法,逐青有一个很奇怪的癖好,从他住进来那天开始,他就开始在他的院子周围种竹子,第1个月种1根竹子,第2个月种8根竹子,第3
+<!-- more -->
+----------
+
+Problem Description
+"临流揽镜曳双魂 落红逐青裙 依稀往梦幻如真 泪湿千里云"
+在MCA山上,除了住着众多武林豪侠之外,还生活着一个低调的世外高人,他本名逐青裙,因为经常被人叫做"竹蜻蜓",终改名逐青,常年隐居于山中,不再见外人.根据山上附近居民所流传的说法,逐青有一个很奇怪的癖好,从他住进来那天开始,他就开始在他的院子周围种竹子,第1个月种1根竹子,第2个月种8根竹子,第3个月种27根竹子...第N个月就种(N^3)根竹子.他说当他种下第X根竹子那一刻,就是他重出江湖之时!告诉你X的值,你能算出逐青的复出会是在第几个月吗?
+ 
+
+Input
+首先输入一个t,表示有t组数据，跟着t行.每行是一个整数X,X < 1000000000
+
+ 
+
+Output
+输出一个整数n,表示在第n个月复出
+
+ 
+
+Sample Input
+3
+1
+2
+10
+ 
+
+Sample Output
+1
+2
+3
+
+
+
+直接打表就可以了~~
+将第i个月能种多少竹子，存在db[i]中~
+再从db.length-1依次往前面小的找~直到找到x大于db[i]，
+这个时候i+1就是答案了~~
+
+根据打表可知数组累加到253，和就正好超过10亿了。
+```
+import java.util.Scanner;
+
+/**
+ * @author 陈浩翔
+ * 2016-5-17
+ */
+public class Main{
+	static int db[] = new int[253];
+	public static void main(String[] args) {
+//		int num=0;
+//		for(int i=1;i<253;i++){
+//			System.out.println(num);
+//			num+=i*i*i;
+//		}
+		dabiao();
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int x = sc.nextInt();
+			for(int i=db.length-1;i>=0;i--){
+				if(x>db[i]){
+					System.out.println(i+1);
+					break;
+				}
+			}
+		}
+	}
+	private static void dabiao() {
+		db[0]=0;
+		for(int i=1;i<db.length;i++){
+			db[i]=db[i-1]+i*i*i;
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

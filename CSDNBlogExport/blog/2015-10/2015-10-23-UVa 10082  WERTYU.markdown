@@ -1,0 +1,66 @@
+---
+layout: post
+title: "UVa 10082  WERTYU"
+date: 2015-10-23 04:13:27 +0800
+comments: true
+categories:❶ ACM,----- UVa-ACM
+tags: [uva]
+keyword: 陈浩翔, 谙忆
+description: Problem DescriptionA common typing error is to place the hands on the keyboard one row to the right of the correct position. So “Q” is typed as “W” and “J” is typed as “K” and so on. You are to decode 
+---
+
+
+Problem DescriptionA common typing error is to place the hands on the keyboard one row to the right of the correct position. So “Q” is typed as “W” and “J” is typed as “K” and so on. You are to decode
+<!-- more -->
+----------
+
+Problem Description
+ 
+A common typing error is to place the hands on the keyboard one row to the right of the correct position. So "Q" is typed as "W" and "J" is typed as "K" and so on. You are to decode a message typed in this manner.
+ 
+
+Input
+Input consists of several lines of text. Each line may contain digits, spaces, upper case letters (except Q, A, Z), or punctuation shown above [except back-quote (`)]. Keys labelled with words [Tab, BackSp, Control, etc.] are not represented in the input.
+ 
+
+Output
+You are to replace each letter or punctuation symbol by the one immediately to its left on the QWERTY keyboard shown above. Spaces in the input should be echoed in the output. 
+ 
+
+Sample Input
+O S, GOMR YPFSU/
+ 
+
+Sample Output
+I AM FINE TODAY.
+ 
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+char s[]="`1234567890-=QWERTYUIOP[]\\ASDFGHJKL;'ZXCVBNM,./";
+int main(){
+    char c;
+    while((c=getchar())!=EOF){
+        int i,j;
+                bool flag = false;
+            for(j=0;j<strlen(s);j++)
+                if(c==s[j]){
+                    flag=true;
+                     putchar(s[j-1]);
+                }
+        if(flag==false)
+            putchar(c);
+    }
+    return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

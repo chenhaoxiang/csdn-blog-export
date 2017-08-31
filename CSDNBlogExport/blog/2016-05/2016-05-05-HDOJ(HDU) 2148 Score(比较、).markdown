@@ -1,0 +1,93 @@
+---
+layout: post
+title: "HDOJ(HDU) 2148 Score(比较、)"
+date: 2016-05-05 11:35:33 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+转眼又到了一年的年末，Lele又一次迎来了期末考试。虽然说每年都要考试，不过今年的这场考试对Lele来说却意义重大。因为经济原因，如果今年没有排在班级前几名，而拿不到奖学金的话，家里便无力再供他继续读书。而且家里帮他都想好出路了——回家种田！！虽说Lele心里有一百个不愿意，不过父母的话不能不听。忐忑不安地考完试，Lele拿到了全班的成绩单，这张成绩单是按学 
+---
+
+
+Problem Description 
+转眼又到了一年的年末，Lele又一次迎来了期末考试。虽然说每年都要考试，不过今年的这场考试对Lele来说却意义重大。因为经济原因，如果今年没有排在班级前几名，而拿不到奖学金的话，家里便无力再供他继续读书。而且家里帮他都想好出路了——回家种田！！虽说Lele心里有一百个不愿意，不过父母的话不能不听。忐忑不安地考完试，Lele拿到了全班的成绩单，这张成绩单是按学
+<!-- more -->
+----------
+
+Problem Description
+转眼又到了一年的年末，Lele又一次迎来了期末考试。虽然说每年都要考试，不过今年的这场考试对Lele来说却意义重大。
+
+因为经济原因，如果今年没有排在班级前几名，而拿不到奖学金的话，家里便无力再供他继续读书。而且家里帮他都想好出路了——回家种田！！
+
+虽说Lele心里有一百个不愿意，不过父母的话不能不听。
+
+忐忑不安地考完试，Lele拿到了全班的成绩单，这张成绩单是按学号顺序排好的。Lele很想知道班里到底有多少人分数比他高，现在就请你帮帮他，帮他数一下到底有多少人的分数比他高吧。
+
+ 
+
+Input
+数据的第一行有一个正整数T，表示测试的组数。接下来有T组测试。
+每组数据包括两行。
+第一行有两个正整数N K(0 < N <1000,0 < K<=N),分别表示成绩单上一共的学生数目，和Lele的学号。
+第二行有N个整数Xi（0<=Xi<=100）分别表示各个学生的成绩，以学号递增顺序给出，第一个学生学号为1。
+
+ 
+
+Output
+对于每组数据，请在一行里输出班里一共有多少个学生成绩高于Lele
+
+ 
+
+Sample Input
+1
+3 2
+81 72 63
+ 
+
+Sample Output
+1
+
+
+Hint：
+班级一共3人，LeLe的学号是2，三个学生的分数分别是81， 72和63，所以有一个人的分数比他的高
+
+
+简单题。。。。比较就行了。
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			int m =sc.nextInt();
+			int a[] = new int[n+1];
+			for(int i=1;i<=n;i++){
+				a[i]=sc.nextInt();
+			}
+			int sum=0;
+			for(int i=1;i<=n;i++){
+				if(a[i]>a[m]){
+					sum++;
+				}
+			}
+			System.out.println(sum);
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

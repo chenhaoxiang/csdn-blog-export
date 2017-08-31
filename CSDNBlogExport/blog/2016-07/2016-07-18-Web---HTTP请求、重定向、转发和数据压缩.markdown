@@ -1,0 +1,526 @@
+---
+layout: post
+title: "Web---HTTP请求、重定向、转发和数据压缩"
+date: 2016-07-18 02:55:16 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅
+tags: [tomcat,url,数据压缩,服务器,数据]
+keyword: 陈浩翔, 谙忆
+description: HTTP常用的请求方式包括：GET-最为常见,但发送的数据量很小,发送的数据直接包含到url的后面。 
+POST-可以包含大量数据，数据在请求正文中通过表单进行提交。HEAD,PUT,DELETE. 
+后面三种Tomcat服务器默认都不支持。常用的只有前两种。GET： 
+发送到服务器的数据出现在URL的后面。最多不能超过1K.如：http://localhost:8080/index.jsp?nam 
+---
+
+
+HTTP常用的请求方式包括：GET-最为常见,但发送的数据量很小,发送的数据直接包含到url的后面。 
+POST-可以包含大量数据，数据在请求正文中通过表单进行提交。HEAD,PUT,DELETE. 
+后面三种Tomcat服务器默认都不支持。常用的只有前两种。GET： 
+发送到服务器的数据出现在URL的后面。最多不能超过1K.如：http://localhost:8080/index.jsp?nam
+<!-- more -->
+----------
+
+HTTP常用的请求方式包括：
+==============
+
+GET-最为常见,但发送的数据量很小,发送的数据直接包含到url的后面。
+POST-可以包含大量数据，数据在请求正文中通过表单进行提交。
+
+HEAD,PUT,DELETE.
+后面三种Tomcat服务器默认都不支持。常用的只有前两种。
+
+<font color="red" size="5">GET：</font>
+发送到服务器的数据出现在URL的后面。最多不能超过1K.如：
+```
+http://localhost:8080/index.jsp?name=itcast&sex=man&..
+```
+
+<font color="red" size="5">POST：</font>
+发送到服务器的数据会出现有请求的正文部分。数据量不受限制。如：
+
+```
+<form name=“dd” method=“post” action=“some.jsp”>
+       Name:<input type=“text” name=“name”/>
+       <input type=“submit” value=“提交”/>
+</form>
+```
+
+```
+POST /a.html HTTP/1.1                            //请求行
+Accept: */*                        //客户端支持的返回类型
+Referer: http://localhost:2046/b.html     //客户端的网址
+Accept-Language: zh-cn                       //客户端的语言类型
+User-Agent: Mozilla/4.0                        //客户端的浏览器类型
+Accept-Encoding: gzip, deflate            //客户端支持的数据压缩类型
+Host: localhost:2046                            //服务器的地址
+Connection: Keep-Alive                //是否保持连接，可选的值为Keep-alive|close
+[必须的一行空行]
+name=itcast&pwd=1234               //请求的正文
+```
+Connection请求头详解：
+Connection：表示是否需要持久连接。如果Servlet看到这里的值为“Keep - Alive”，
+或者看到请求使用的是HTTP 1.1（HTTP 1.1默认进行持久连接），它就可以利用持久连接的优点，当页面包含多个元素时（例如Applet，图片），
+显著地减少下载所需要的时间。 
+
+请求头讲解：
+------
+所有的信息都在request中包含
+
+```
+Accept: */*   说明支持的数据类型  
+Referer: http://localhost:9999/itcast/a.html  //从哪儿来的，可以防止非法引用连接
+Accept-Language: zh-cn   //支持的语言
+User-Agent: Mozilla/4.0 //说明使用的浏览器的版本信息
+Accept-Encoding: gzip, deflate       //客户端支持压缩格式
+Host: localhost:9999  //访问的主机
+Connection: Keep-Alive //在请求完成后是否断开连接。可选值另有，HTTP/1.1 :close
+Cookie : 			//缓存在客户端的数据（数据量最大4K）
+Content-Length: 8		//发送的字节长度
+Cache-Control: no-cache //是否缓存数据
+Content-Type: application/x-www-form-urlencoded //内容类型，此意为表单
+```
+
+http响应的格式：
+----------
+
+```
+HTTP响应的格式也有三部分组成
+响应首行，也叫状态行。   HTTP/1.1    404(状态码)    not found
+响应头
+[空行]
+响应正文(Response Content)。
+```
+
+```
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Set-Cookie: JSESSIONID=D6241588E2D14A562CB5BD6ECD0B3DF3
+Content-Type: text/html;charset=GBK
+Content-Length: 200
+Date: Mon, 30 May 2011 09:02:03 GMT
+
+<html><head>Itcast<head>…
+```
+
+响应头格式讲解：
+--------
+
+```
+HTTP/1.1 200 OK  //状态码200是正常返回数据
+Location:http://localhost:8080/aa/abc.jsp //跳到哪个页面即重定向。等同于sendRedirect()，状态码为302
+Server: Apache-Coyote/1.1  //服务器类型
+Content-Type: text/html   //正文类型
+Content-Length: 8           //返回字节的长度
+Content-Encoding:gzip   //服务器端的压缩格式,用于通知客户端如何解压
+Date: Tue, 24 May 2011 10:42:28 GMT
+Refresh:1;url=http://www.baidu.com //1秒钟以后刷新到某个地址
+Content-Disposition:attchment;filename=“car.jpg” //下载文件时指定下载的文件
+Transfer-Encoding: chunked //数据是一块一块的方式发送给客户端的
+Expires:-1 //不需要缓存本次响应的数据
+Cache-control:no-cache	//针对不同版本的浏览器所以必须三个都用
+Pragma:no-cache
+
+```
+
+一些常用的状态码：
+=========
+
+```
+状态码都是用一个三位数来表示。
+200表示响应成功。
+302重定向表其他资源。
+404：找不到页，403：访问被拒绝，
+401：未认证的用户
+405不支持的请求方式，通常在继承了HttpServlet但没有实现doGet或doPost时出现。
+400：错误的请求。
+500内部错误，如编码或Exception.
+
+所有的状态码，在HttpServletResponse中使用一个静态常量来表示，见Servlet-Api。
+```
+
+设置页面不缓存：
+========
+虽然页面缓存可以为我们省流量，但是，有时候我们就是让它能时刻刷新，不要缓存，怎么办呢
+我们就可以利用响应头来告诉浏览器，这个页面不要给我缓存就可以了。
+```
+如果你是jsp页面则：
+<%
+response.setHeader("Expires","-1");
+response.setHeader("Cache-control","no-cache");
+response.setHeader("Pragma","no-cache");
+%> 
+如果你是Servlet在响应前设置：//这3个都有设置，以便于兼容不同的浏览器
+resp.setHeader("Expires","-1");
+resp.setHeader("Pragma","no-cache");
+resp.setHeader("Cache-Control","no-cache");
+操作方法：
+在IE上点<前进>和<后退>按扭，通过HTTPWatc查看是否是从(Cache)缓存中获取数据。
+刷新不会从缓存中获取数据，刷新时总是向服务器获取新的数据。
+```
+
+sendRedirect重定向：
+================
+
+代码：
+
+RedirectServlet.java:
+---------------------
+
+```
+package cn.hncu.img;
+
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 演示重定向
+ * @author 陈浩翔
+ *
+ * 2016-7-18
+ */
+public class RedirectServlet extends HttpServlet{
+
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		//重定向---法一：
+		String path = "/myHelloWeb/jsps/res.jsp";
+		//response.sendRedirect(path);
+		
+		//重定向---法二：
+		response.setStatus(302);//重定向
+		response.setHeader("Location", path);
+		
+		//response.setStatus(404);
+		//response.getWriter().print("aaaaaaaaa");//会输出这一句，但不会跳转到结果界面了。
+		
+	}
+}
+
+```
+
+配置web.xml
+---------
+
+```
+<servlet>
+  	<servlet-name>RedirectServlet</servlet-name>
+  	<servlet-class>cn.hncu.img.RedirectServlet</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>RedirectServlet</servlet-name>
+  	<url-pattern>/redirect</url-pattern>
+  	<!-- 这一个斜杠不能省略的啊！/在这里代表着这个项目根目录下 -->
+  </servlet-mapping>
+```
+
+index.jsp:
+----------
+
+```
+<h2><a href="redirect">演示重定向</a></h2>
+```
+
+结果页面res.jsp:
+------------
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  </head>
+  <body>
+      
+     <h1>这是最终的结果页面</h1>
+       
+  </body>
+</html>
+
+```
+
+演示结果：
+-----
+![](http://img.blog.csdn.net/20160718134724352)
+
+
+再点击：演示重定向
+
+![](http://img.blog.csdn.net/20160718134745993)
+
+注意到了吗，浏览器向服务器请求了2次！
+
+
+把这句的注释去了。再次点击访问
+response.setStatus(404);
+//response.getWriter().print("aaaaaaaaa");//会输出这一句，但不会跳转到结果界面了。
+
+![](http://img.blog.csdn.net/20160718134932152)
+
+response.getWriter().print("aaaaaaaaa");
+如果去掉这句的注释：
+![](http://img.blog.csdn.net/20160718135044778)
+
+
+重定向最核心的代码是：
+===========
+
+```
+resp.setStatus(HttpServletResponse.SC_FOUND);//或302
+resp.setHeader("Location","other.jsp");
+或
+resp.sendRedirect(“other.jsp”);
+```
+
+转发：
+===
+
+DispatcherServlet.java
+----------------------
+
+```
+package cn.hncu.img;
+
+import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * 演示转发
+ * @author 陈浩翔
+ *
+ * 2016-7-18
+ */
+public class DispatcherServlet extends HttpServlet{
+
+	@Override
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		String path = "/jsps/res.jsp";
+		RequestDispatcher rd = request.getRequestDispatcher(path);
+		rd.forward(request, response);
+		
+	}
+
+}
+
+```
+
+index.jsp:
+----------
+```
+ <h2><a href="dispatcher">演示转发</a></h2>
+```
+
+web.xml:
+--------
+
+```
+<servlet>
+  	<servlet-name>DispatcherServlet</servlet-name>
+  	<servlet-class>cn.hncu.img.DispatcherServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>DispatcherServlet</servlet-name>
+  	<url-pattern>/dispatcher</url-pattern>
+  </servlet-mapping>
+```
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160718141020957)
+
+注意：浏览器只向服务器请求了一次！！！这就是转发和重定向的一个区别！
+
+转发的核心代码：
+--------
+
+```
+RequestDispatcher rd = request.getRequestDispatcher("...");
+rd.forward(request, response);
+		
+```
+
+
+转发与重定向总结：
+=========
+
+有的时候我们需要重定向，有的时候需要转发。
+例如：我们在一个站点访问另外的网站，这个时候需要的就是重定向！
+因为转发时：我们的request和response是一起转发过去的。
+
+假如你是a,你本来想给c打电话，结果打给了b.
+转发是：
+你打电话给c,结果是b接电话，你和b聊了很久，其实你是打错了电话，b就把电话交给c（b会先把你之前对他说的话全部原封不动的告诉c）。你就不必再对c再说一遍你对b说的话了。
+
+而重定向是：
+你打电话给c,结果是b接电话，你和b聊了很久，其实你是打错了电话，b就把电话号码告诉你（b不会对c说任何你之前说的话）。你需要再对c再说一遍你对b说过的话。
+
+
+用一个示意图来表示重定向和转发：
+![](http://img.blog.csdn.net/20160718141121036)
+
+其他重点：
+![](http://img.blog.csdn.net/20160719224713453)
+
+jsps/res.jsp也可以象征是其他服务器，不一定是网页。
+
+
+压缩：
+===
+
+GzipServlet.java
+----------------
+
+```
+package cn.hncu.img;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.zip.GZIPOutputStream;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class GzipServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		String str="湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院" +
+"湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院" +
+"湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院" +
+"湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院" +
+"湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院" +
+"湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院" +
+"湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院湖南城市学院信息科学与工程学院";
+		
+		byte[] src = str.getBytes();
+		System.out.println("未压缩前："+src.length);
+		
+		//把字节数组src中的数据 压缩到 array内存流当中
+		ByteArrayOutputStream array = new ByteArrayOutputStream();
+		GZIPOutputStream gOut = new GZIPOutputStream(array);
+		
+		gOut.write(src);
+		gOut.close();
+		
+		//从内存流array中把压缩后的数据拿出来
+		byte[] dest = array.toByteArray();
+		System.out.println("已压缩后："+dest.length);
+		
+		response.setContentType("text/html");
+		response.setHeader("Content-Encoding", "gzip");
+		//告诉浏览器，当前发送的是gzip格式的内容
+		
+		//设置内容长度---法一
+		response.setContentLength(dest.length);
+		//法二
+		//response.setHeader("Content-Length",""+dest.length);
+		
+		OutputStream out = response.getOutputStream();
+		//out.write(src);
+		out.write(dest);
+		out.flush();
+		out.close();
+	}
+
+}
+
+```
+
+web.xml：
+--------
+
+```
+<servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>GzipServlet</servlet-name>
+    <servlet-class>cn.hncu.img.GzipServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>GzipServlet</servlet-name>
+    <url-pattern>/GzipServlet</url-pattern>
+  </servlet-mapping>
+```
+
+index.jsp:
+----------
+
+```
+<h2><a href="GzipServlet">演示压缩</a></h2>
+```
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160718145212663)
+体积明显减少！数据越多，压缩越明显
+
+![](http://img.blog.csdn.net/20160718145220366)
+
+压缩总结核心代码：
+```
+//1、声明输出流
+ByteArrayOutputStream out = new ByteArrayOutputStream();
+//2、声明压缩流
+GZipOutputStream zipout = new GZipOutputStream(out);
+//3、向输出流压缩数据,此时数据写入到out中
+zipout.write(“someString”.getBytes(“utf-8”));
+Zipout.close();  //不要忘了关闭
+//4、向客户端发送数据
+设置响应头：
+resp.setHeader("Content-Encoding","gzip");
+resp.setHeader("Content-Length",""+b.length);
+resp.setHeader("Content-Type","text/html;charset=UTF-8");
+response.getOutputStream().write(out.toByteArray());
+```
+
+
+小结：
+===
+```
+c/s和b/s。
+Tomcat,端口号，虚拟主机，虚拟目录。
+Get请求和post请求。
+1:GET：信息出现的地址栏中
+2:post：经过编码。
+1：GET ：Context-Type: null
+2:  POST: Contexnt-Type: application/x-www-form-urlencoded
+http协议。
+请求的:referer:来源
+设置服务器不缓存：Expire:-1,Cache-control:no-cache,Progam:no-chache
+response.setStatus(302);    response.sendRedirce(..jsp)_;
+response.setHeader(Location,”[定位到哪儿去]]”);
+转发与重定向。
+数据流量压缩。
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

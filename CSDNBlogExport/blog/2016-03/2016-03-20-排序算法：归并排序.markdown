@@ -1,0 +1,125 @@
+---
+layout: post
+title: "排序算法：归并排序"
+date: 2016-03-20 04:00:47 +0800
+comments: true
+categories:❺ 算法及基础题,----- 排序相关
+tags: [归并排序,排序算法,算法,合并]
+keyword: 陈浩翔, 谙忆
+description: 归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。归并排序，其的基本思路就是将数组分成二组A，B，如果这二组组内的数据都是有序的，那么就可以很方便的将这二组数据进行排序。如何让这二组组内数据有序了？ 
+可以将A，B组各自再分成二组。依次类推，当分出来的小组只有一个数据时，可以认为这个小组组内已经达到了有序，然后再合并相邻的 
+---
+
+
+归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。归并排序，其的基本思路就是将数组分成二组A，B，如果这二组组内的数据都是有序的，那么就可以很方便的将这二组数据进行排序。如何让这二组组内数据有序了？ 
+可以将A，B组各自再分成二组。依次类推，当分出来的小组只有一个数据时，可以认为这个小组组内已经达到了有序，然后再合并相邻的
+<!-- more -->
+----------
+
+**归并排序是建立在归并操作上的一种有效的排序算法。该算法是采用分治法（Divide and Conquer）的一个非常典型的应用。**
+
+归并排序，其的基本思路就是将数组分成二组A，B，如果这二组组内的数据都是有序的，那么就可以很方便的将这二组数据进行排序。如何让这二组组内数据有序了？
+可以将A，B组各自再分成二组。依次类推，当分出来的小组只有一个数据时，可以认为这个小组组内已经达到了有序，然后再合并相邻的二个小组就可以了。这样通过先递归的分解数列，再合并数列就完成了归并排序。
+
+利用递归和分而治之的技术将数据序列划分成为越来越小的半子表，再对半子表排序，最后再用递归步骤将排好序的半子表合并成为越来越大的有序序列，归并排序包括两个步骤，分别为：
+**1）划分子表**
+ **2）合并半子表**
+
+```
+package cn.hncu;
+
+import javax.swing.text.DefaultEditorKit.CopyAction;
+
+public class MergeSort {
+	public static void main(String[] args) {
+		int a[]= new int[100];
+		
+		for(int i=0;i<a.length;i++){
+			a[i]=(int)(Math.random()*(a.length));
+			//System.out.println(a[i]);
+		}
+		mergrSort(a,0,a.length-1);
+		                   
+		print(a);
+		
+	}
+	
+	private static void print(int[] a) {
+		for(int i=0;i<a.length-1;i++){
+			System.out.print(a[i]+" ");
+		}
+		System.out.println(a[a.length-1]);
+	}
+
+	public  static void mergrSort(int a[],int left,int right){
+		
+		if(left<right){
+			// 1、先分解
+			//把整个数组分解成：[left,mid]和[mid+1,right]
+			int mid = (left+right)/2;
+			mergrSort(a,left,mid);
+			mergrSort(a,mid+1,right);
+			
+			
+			//2、归并
+			int b[] = new int[a.length];
+			
+			merge(a,b,left,mid,right);
+			
+			
+			//把辅助序列b中的数据复制到数组a当中
+			copyArray(a,b,left,right);
+		}
+		
+	}
+
+	private static void merge(int[] a, int[] b, int left, int mid, int right) {
+		int p = left;//游标遍历a[left,mid]
+		int r = mid+1;//游标遍历a[mid+1,right]
+		
+		int k = left;//元素放入新数组的当前的位置（判断后）
+		//游标遍历合并后的结果数组
+		while(p<=mid&&r<=right){
+			if(a[p]<a[r]){
+				b[k]=a[p++];
+			}else{
+				b[k]=a[r++];
+			}
+			k++;
+		}
+		
+		//把其中一个子序列当中剩余的元素直接照搬到归并结果数组当中
+		if(p>mid){
+			//左序列已完成合并，剩下的是右序列（照搬）
+			for(int i=r;i<=right;i++){
+				b[k]=a[i];
+				k++;
+			}
+			
+		}else{
+			for(int i=p;i<=mid;i++){
+				b[k++]=a[i];
+			}
+			
+		}
+		
+		
+	}
+
+	private static void copyArray(int[] a, int[] b, int left, int right) {
+		for(int i=left;i<=right;i++){
+			a[i]=b[i];
+		}
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

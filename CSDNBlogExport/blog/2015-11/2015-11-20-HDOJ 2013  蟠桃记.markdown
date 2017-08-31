@@ -1,0 +1,86 @@
+---
+layout: post
+title: "HDOJ 2013  蟠桃记"
+date: 2015-11-20 08:19:09 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [数学]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+喜欢西游记的同学肯定都知道悟空偷吃蟠桃的故事，你们一定都觉得这猴子太闹腾了，其实你们是有所不知：悟空是在研究一个数学问题！ 
+什么问题？他研究的问题是蟠桃一共有多少个！ 
+不过，到最后，他还是没能解决这个难题，呵呵^-^ 
+当时的情况是这样的： 
+第一天悟空吃掉桃子总数一半多一个，第二天又将剩下的桃子吃掉一半多一个，以后每天吃掉前一天剩下的一半多一个，到第n 
+---
+
+
+Problem Description 
+喜欢西游记的同学肯定都知道悟空偷吃蟠桃的故事，你们一定都觉得这猴子太闹腾了，其实你们是有所不知：悟空是在研究一个数学问题！ 
+什么问题？他研究的问题是蟠桃一共有多少个！ 
+不过，到最后，他还是没能解决这个难题，呵呵^-^ 
+当时的情况是这样的： 
+第一天悟空吃掉桃子总数一半多一个，第二天又将剩下的桃子吃掉一半多一个，以后每天吃掉前一天剩下的一半多一个，到第n
+<!-- more -->
+----------
+
+Problem Description
+喜欢西游记的同学肯定都知道悟空偷吃蟠桃的故事，你们一定都觉得这猴子太闹腾了，其实你们是有所不知：悟空是在研究一个数学问题！
+什么问题？他研究的问题是蟠桃一共有多少个！
+不过，到最后，他还是没能解决这个难题，呵呵^-^
+当时的情况是这样的：
+第一天悟空吃掉桃子总数一半多一个，第二天又将剩下的桃子吃掉一半多一个，以后每天吃掉前一天剩下的一半多一个，到第n天准备吃的时候只剩下一个桃子。聪明的你，请帮悟空算一下，他第一天开始吃的时候桃子一共有多少个呢？
+
+ 
+
+Input
+输入数据有多组，每组占一行，包含一个正整数n（1<n<30），表示只剩下一个桃子的时候是在第n天发生的。
+ 
+
+Output
+对于每组输入数据，输出第一天开始吃的时候桃子的总数，每个测试实例占一行。
+ 
+
+Sample Input
+2
+4
+ 
+
+Sample Output
+4
+22
+
+
+```
+import java.util.Scanner;
+class Main{
+    static int sum = 1;
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            sum=1;
+           int n = sc.nextInt();
+           pan(n);
+           System.out.println(sum);
+      }
+    }
+    public static void pan(int n ){
+        if(n==1){
+            return ;
+        }
+        else{
+        sum = 2*sum + 2;
+        n--;
+        pan(n);
+     }
+     }
+    
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

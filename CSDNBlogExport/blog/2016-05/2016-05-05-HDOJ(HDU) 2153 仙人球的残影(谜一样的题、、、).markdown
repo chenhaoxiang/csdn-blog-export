@@ -1,0 +1,147 @@
+---
+layout: post
+title: "HDOJ(HDU) 2153 仙人球的残影(谜一样的题、、、)"
+date: 2016-05-05 12:25:37 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [java,ACM]
+keyword: 陈浩翔, 谙忆
+description: Problem Description
+在美丽的HDU，有一名大三的同学，他的速度是众所周知的，跑100米仅仅用了2秒47，在他跑步过程中会留下残影的哎，大家很想知道他是谁了吧，他叫仙人球，既然名字这样了，于是他的思想是单一的，他总是喜欢从一点出发，经过3次转折（每次向右转90°），回到出发点，而且呢，他每次转折前总是跑相同长度的路程，所以很多人都想知道如果用‘1’算他跑步出发的第一个残影的话， 
+---
+
+
+Problem Description
+在美丽的HDU，有一名大三的同学，他的速度是众所周知的，跑100米仅仅用了2秒47，在他跑步过程中会留下残影的哎，大家很想知道他是谁了吧，他叫仙人球，既然名字这样了，于是他的思想是单一的，他总是喜欢从一点出发，经过3次转折（每次向右转90°），回到出发点，而且呢，他每次转折前总是跑相同长度的路程，所以很多人都想知道如果用‘1’算他跑步出发的第一个残影的话，
+<!-- more -->
+----------
+
+
+<div class="panel_title" align="left"><strong><span style="font-size:14px">Problem Description</span></strong></div>
+<div class="panel_content"><span style="font-size:14px">在美丽的HDU，有一名大三的同学，他的速度是众所周知的，跑100米仅仅用了2秒47，在他跑步过程中会留下残影的哎，大家很想知道他是谁了吧，他叫仙人球，既然名字这样了，于是他的思想是单一的，他总是喜欢从一点出发，经过3次转折（每次向右转90°），回到出发点，而且呢，他每次转折前总是跑相同长度的路程，所以很多人都想知道如果用‘1’算他跑步出发的第一个残影的话，那么回到起点的时候，他的残影是怎么样的呢？</span></div>
+<div class="panel_bottom"><span style="font-size:14px">&nbsp;</span></div>
+<span style="font-size:14px"><br>
+</span>
+<div class="panel_title" align="left"><strong><span style="font-size:14px">Input</span></strong></div>
+<div class="panel_content"><span style="font-size:14px">测试数据有多行，每一行为一个数N(1&lt;=N&lt;=10)(以0结尾,0不做处理)，即仙人球在没有回到起点的时候，跑过留下N个残影后突然90°右转。</span></div>
+<div class="panel_bottom"><span style="font-size:14px">&nbsp;</span></div>
+<span style="font-size:14px"><br>
+</span>
+<div class="panel_title" align="left"><strong><span style="font-size:14px">Output</span></strong></div>
+<div class="panel_content"><span style="font-size:14px">每组测试数据输出一个结果，并且每个残影的计数位长度为3个字符长度。（当然N等于1的话，它的结果也是占用3个字符位置的）</span></div>
+<div class="panel_bottom"><span style="font-size:14px">&nbsp;</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span>
+<div class="panel_title" align="left"><strong><span style="font-size:14px">Sample Input</span></strong></div>
+<div class="panel_content">
+<pre><div style="font-family:'Courier New',Courier,monospace"><span style="font-size:14px">4</span></div></pre>
+</div>
+<div class="panel_bottom"><span style="font-size:14px">&nbsp;</span></div>
+<span style="font-size:14px"><br>
+</span>
+<div class="panel_title" align="left"><strong><span style="font-size:14px">Sample Output</span></strong></div>
+<div class="panel_content">
+<pre><div style="font-family:'Courier New',Courier,monospace"><span style="font-size:14px">  1  2  3  4
+ 12        5
+ 11        6
+</span><p><span style="font-size:14px"> 10  9  8  7</span></p></div></pre>
+</div>
+<span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px">题目有点坑啊，。。n竟然可以为0，搞得我WA了几次、、一定要有一个判断n&lt;=0，break的、不然会WA、</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><pre code_snippet_id="1672939" snippet_file_name="blog_20160505_1_6216468"  code_snippet_id="1672939" snippet_file_name="blog_20160505_1_6216468" name="code" class="java">import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n =sc.nextInt();
+			if(n&lt;=0){
+				break;
+			}
+			if(n==1){
+				System.out.println(&quot;  1&quot;);
+				continue;
+			}
+			//上面的数字
+			int up[] = new int[n];
+			//下面的数字
+			int down[] = new int[n];
+			//右边的数字
+			int right[] = new int[n-2];
+			//左边的数字
+			int left[] = new int[n-2];
+			int t=1;
+			for(int i=0;i&lt;n;i++){
+				up[i]=t;
+				t++;
+			}
+			for(int i=0;i&lt;n-2;i++){
+				right[i]=t;
+				t++;
+			}
+			for(int i=0;i&lt;n;i++){
+				down[i]=t;
+				t++;
+			}
+			for(int i=0;i&lt;n-2;i++){
+				left[i]=t;
+				t++;
+			}
+			int r=0;
+			int f=n-3;
+			for(int i=0;i&lt;n;i++){
+				
+				for(int j=0;j&lt;n;j++){
+					if(i==0){
+						System.out.printf(&quot;%3d&quot;,up[j]);
+					}else if(i==n-1){
+						System.out.printf(&quot;%3d&quot;,down[n-1-j]);
+					}else{
+						if(j==0){
+							System.out.printf(&quot;%3d&quot;,left[f]);
+							f--;
+						}else if(j==n-1){
+							System.out.printf(&quot;%3d&quot;,right[r]);
+							r++;
+						}else{
+							System.out.print(&quot;   &quot;);
+						}
+					}
+				}
+				System.out.println();
+			}
+		}
+	}
+}
+</pre></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<div class="panel_bottom"><span style="font-size:14px"><br>
+</span></div>
+<span style="font-size:14px"><br>
+</span>
+<div class="panel_title" align="left"><span style="font-size:14px"><br>
+</span></div>
+<div style="top:0px"><br>
+</div>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

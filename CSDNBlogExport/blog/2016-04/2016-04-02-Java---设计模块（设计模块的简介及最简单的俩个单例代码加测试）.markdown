@@ -1,0 +1,225 @@
+---
+layout: post
+title: "Java---设计模块（设计模块的简介及最简单的俩个单例代码加测试）"
+date: 2016-04-02 06:42:25 +0800
+comments: true
+categories:----- ②、Java设计模块,❷ Java大学之行
+tags: [测试,设计,设计模式,架构]
+keyword: 陈浩翔, 谙忆
+description: 设计模式学习概述： 
+★ 为什么要学习设计模式 
+1、设计模式都是一些相对优秀的解决方案，很多问题都是典型的、有代表性的问题，学习设计模式，我们就不用自己从头来解决这些问题，相当于在巨人的肩膀上，复用这些方案即可。 
+2、设计模式已经成为专业人士的常用词汇，不懂不利于交流。 
+3、能让你设计的系统更加专业，让系统有更好的架构。★ 学习设计模式的层次 
+1、基本入门级——套用型（半年到一年左右时间领悟 
+---
+
+
+设计模式学习概述： 
+★ 为什么要学习设计模式 
+1、设计模式都是一些相对优秀的解决方案，很多问题都是典型的、有代表性的问题，学习设计模式，我们就不用自己从头来解决这些问题，相当于在巨人的肩膀上，复用这些方案即可。 
+2、设计模式已经成为专业人士的常用词汇，不懂不利于交流。 
+3、能让你设计的系统更加专业，让系统有更好的架构。★ 学习设计模式的层次 
+1、基本入门级——套用型（半年到一年左右时间领悟
+<!-- more -->
+----------
+
+**设计模式学习概述：**
+**★ 为什么要学习设计模式**
+1、设计模式都是一些相对优秀的解决方案，很多问题都是典型的、有代表性的问题，学习设计模式，我们就不用自己从头来解决这些问题，相当于在巨人的肩膀上，复用这些方案即可。
+2、设计模式已经成为专业人士的常用词汇，不懂不利于交流。
+3、能让你设计的系统更加专业，让系统有更好的架构。
+
+**★ 学习设计模式的层次**
+1、基本入门级——套用型（半年到一年左右时间领悟学会）
+2、基本掌握级——可变形使用型（一年左右时间领悟学会）
+3、真正理解和掌握级——思想上吸收和趋同型（看个人天赋，不确定时间学会）
+
+
+**设计模式1——单例**
+解决：**保证了一个类在内存中只能有一个对象。**
+思路：
+1、如果其他程序能够随意用new创建该类对象，那么就无法控制个数。因此，不让其他程序用new创建该类的对象。
+2、既然不让其他程序new该类对象，那么该类在自己内部就要创建一个对象，否则该类就永远无法创建对象了。
+3、该类将创建的对象对外(整个系统)提供，让其他程序获取并使用。
+
+步骤：
+1、	将该类中的构造函数私有化。
+2、在本类中创建一个本类对象。
+3、定义一个方法，返回值类型是本类类型。让其他程序通过该方法就可以获取到该类对象。
+
+
+第一种方法：
+```
+package cn.hncu.pattern.singleton.one;
+/*
+ *  饿汉式   
+ */
+public class Single {
+	private static final Single S  = new Single();
+	private Single(){
+	}
+	public static Single getInstance(){
+		return S;
+	}
+}
+
+```
+测试的类：
+
+```
+package cn.hncu.pattern.singleton.one;
+
+public class TestSingle {
+	public static void main(String[] args) {
+		System.out.println(Single.getInstance());
+		System.out.println(Single.getInstance());
+		System.out.println(Single.getInstance());
+		System.out.println(Single.getInstance());
+		System.out.println(Single.getInstance());
+		
+		Single s1 = Single.getInstance();
+		Single s2 = Single.getInstance();
+		//测试地址值是否相等
+		System.out.println(s1==s2);
+		
+	}
+
+}
+
+```
+测试结果：
+
+```
+cn.hncu.pattern.singleton.one.Single@bcda2d
+cn.hncu.pattern.singleton.one.Single@bcda2d
+cn.hncu.pattern.singleton.one.Single@bcda2d
+cn.hncu.pattern.singleton.one.Single@bcda2d
+cn.hncu.pattern.singleton.one.Single@bcda2d
+true
+
+```
+第二种方法：
+
+```
+package cn.hncu.pattern.singleton.two;
+/*
+ * 懒汉式
+ */
+public class Single {
+	private static Single s = null;
+	private Single(){
+	}
+	//单例的延迟加载方式,有一个小bug，就是多线程加载时，会出现多次new的情况
+	//下面给出解决这个延迟的问题。
+//	public static Single getInstance(){
+//		if(s==null){
+//			s = new Single();
+//		}
+//		return s;
+//	}
+	
+	//优化方案---多线程加锁，谁调用锁谁，每次只能让一个线程调用
+	public static synchronized Single getInstance(){
+		if(s==null){
+			s = new Single();
+		}
+		return s;
+	}
+	
+}
+
+```
+测试的类：
+
+```
+package cn.hncu.pattern.singleton.two;
+
+public class TestSingle2 {
+	public static void main(String[] args) {
+		Thread[] td = new Thread[50];
+		//给一个线程数组
+		
+		for(int i=0;i<td.length;i++){
+			td[i] = new useSingle();
+		}//new出每一个线程
+		
+		for(int i=0;i<td.length;i++){
+			td[i].start();
+		}
+	}
+}
+
+class useSingle extends Thread {
+	@Override
+	public void run() {
+		Single obj = Single.getInstance();
+		System.out.println(obj);
+	}
+
+}
+
+```
+
+测试结果：
+
+```
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+cn.hncu.pattern.singleton.two.Single@2af081
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

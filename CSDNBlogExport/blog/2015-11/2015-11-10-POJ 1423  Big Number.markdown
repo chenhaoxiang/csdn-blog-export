@@ -1,0 +1,116 @@
+---
+layout: post
+title: "POJ 1423  Big Number"
+date: 2015-11-10 09:06:26 +0800
+comments: true
+categories:❶ ACM,----- POJ-ACM,❺ 算法及基础题,----- 大数问题
+tags: [poj]
+keyword: 陈浩翔, 谙忆
+description: DescriptionIn many applications very large integers numbers are required. Some of these applications are using keys for secure transmission of data, encryption, etc. In this problem you are given a num 
+---
+
+
+DescriptionIn many applications very large integers numbers are required. Some of these applications are using keys for secure transmission of data, encryption, etc. In this problem you are given a num
+<!-- more -->
+----------
+
+Description
+
+In many applications very large integers numbers are required. Some of these applications are using keys for secure transmission of data, encryption, etc. In this problem you are given a number, you have to determine the number of digits in the factorial of the number.
+Input
+
+Input consists of several lines of integer numbers. The first line contains an integer n, which is the number of cases to be tested, followed by n lines, one integer 1 <= m <= 10^7 on each line.
+Output
+
+The output contains the number of digits in the factorial of the integers appearing in the input.
+Sample Input
+
+2
+10
+20
+Sample Output
+
+7
+19
+
+（部分转载）
+补充知识 ：若n=a+b^10,(a<1,b∈N)，则n的位数为b。
+所以要求一个数字num有多少位，可以用(int)log10(num)+1，这样就求出num有多少位.
+如果sum=n*(n-1)*(n-2)*......*1，那么log10(sum)=log10(n)+
+log10(n-1)+.....+log10(2)+log10(1)。即sum的位数是
+( int )( log10(n)+log10(n-1)+.....+log10(2)+log10(1) )+1。
+（从小到大算）
+
+下面这一种方法是程序外打表法，需要消耗时间。
+还有一种是程序外打表，就是直接给复制，再导入，则肯定是0ms。
+```
+#include <stdio.h>
+#include <math.h>
+
+int a[10000010];
+int main()
+{
+    double d;
+    int i;
+    int t;
+    int n;
+    for(i=1,d=0;i<10000005;i++){
+        d+=log10(i);
+        a[i]=(int)d+1;
+    }
+
+    scanf("%d",&t);
+    while(t-->0){
+        scanf("%d",&n);
+        printf("%d\n",a[n]);
+
+    }
+    return 0;
+}
+
+```
+
+
+还有一种方法：
+利用Stirling公式. n!≈sqrt(2*pi*n)*[(n/e)^n]
+n越大，答案越准确。
+在n=1的情况下，也最大不过相差0.2.
+这里只要计算位数，所以是可以用的。
+此处的：
+e ≈ 2.7182818284590452354, pi ≈ 3.141592653589793239;    
+
+```
+#include<iostream>
+#include<cmath>
+using namespace std;
+const double e = 2.7182818284590452354, pi = 3.141592653589793239;
+double strling_digits_num(int n)
+{
+        return log10(2*pi*n)/2.0+n*(log10(n/e));
+}
+
+int main()
+{
+        int t;
+        cin>>t;
+        while(t--)
+        {
+                int n;
+                cin>>n;
+                double m=0;
+                m=strling_digits_num(n);
+                int answer=(int)m;
+                answer++;
+                cout<<answer<<endl;
+        }
+        return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

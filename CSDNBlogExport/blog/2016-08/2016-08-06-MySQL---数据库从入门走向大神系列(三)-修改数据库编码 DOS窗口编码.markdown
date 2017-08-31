@@ -1,0 +1,103 @@
+---
+layout: post
+title: "MySQL---数据库从入门走向大神系列(三)-修改数据库编码 DOS窗口编码"
+date: 2016-08-06 04:39:43 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑤、数据库
+tags: [数据库,编码]
+keyword: 陈浩翔, 谙忆
+description: 如何查看与修改数据库的编码，如何修改dos窗口的显示编码，都在本篇详细讲解。查看当前数据库的编码:show variables where variable_name like 'character%';如果出现了中文乱码，我们只要看： 
+character_set_client —客户端的编码 
+character_set_connection —连接的编码(传输时的编码) 
+character_ 
+---
+
+
+如何查看与修改数据库的编码，如何修改dos窗口的显示编码，都在本篇详细讲解。查看当前数据库的编码:show variables where variable_name like 'character%';如果出现了中文乱码，我们只要看： 
+character_set_client —客户端的编码 
+character_set_connection —连接的编码(传输时的编码) 
+character_
+<!-- more -->
+----------
+
+如何查看与修改数据库的编码，如何修改dos窗口的显示编码，都在本篇详细讲解。
+
+查看当前数据库的编码:
+===========
+
+```
+show variables where variable_name like 'character%';
+```
+
+![](http://img.blog.csdn.net/20160806153150250)
+
+如果出现了中文乱码，我们只要看：
+character_set_client ---客户端的编码
+character_set_connection ---连接的编码(传输时的编码)
+character_set_results --- 最后的输出编码
+
+只要保证这三个编码是相同的，且编码集有中文，中文就不会出现乱码。
+(原来的这3个都为gbk)
+
+我们可以这样来设置某个编码：
+```
+set character_set_resuults = utf8;
+```
+![](http://img.blog.csdn.net/20160806154006296)
+
+我们改了character_set_resuults的编码后再看stud表，是不是中文出现乱码了：(注:只有character_set_client和character_set_connection改为utf8并没有出现乱码)(原数据库是utf-8)
+![](http://img.blog.csdn.net/20160806154127219)
+
+如果把编码全部改为utf-8，数据会变成乱码，因为我的window窗口是gbk的，显示不了utf-8的编码的汉字。
+
+![](http://img.blog.csdn.net/20160806161301999)
+
+DOS的编码：
+
+![](http://img.blog.csdn.net/20160806160242607)
+
+
+
+
+修改dos窗口编码为utf8
+==================
+
+首先：打开CMD.exe命令行窗口
+通过 chcp命令改变代码页，UTF-8的代码页为65001
+		GBK为936
+	chcp 65001
+![](http://img.blog.csdn.net/20160806160928469)
+
+执行该操作后，代码页就被变成UTF-8了。但是，在窗口中仍旧不能正确显示UTF-8字符。
+修改窗口属性，改变字体
+在命令行标题栏上点击右键，选择"属性"->"字体"，将字体修改为True Type字体"Lucida Console"，然后点击确定将属性应用到当前窗口。
+
+![](http://img.blog.csdn.net/20160806161019298)
+
+
+![](http://img.blog.csdn.net/20160806164243211)
+
+
+这时使用type命令就可以显示UTF-8文本文件的内容了：
+上面那句显示时，文本内容为utf-8编码。
+后面那句显示时，文本内容为GBK编码。
+![](http://img.blog.csdn.net/20160806163737310)
+
+
+这样就可以查看utf-8的汉字内容了。我们再来看设为utf-8之后的表格内容是不是能够正常显示了。
+
+
+很可惜，还是无法显示utf-8的数据库内容：
+
+![](http://img.blog.csdn.net/20160806163610091)
+
+如有大神解决了这个问题，求告知。
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

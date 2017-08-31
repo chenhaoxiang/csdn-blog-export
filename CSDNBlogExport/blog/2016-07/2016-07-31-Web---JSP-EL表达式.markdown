@@ -1,0 +1,497 @@
+---
+layout: post
+title: "Web---JSP-EL表达式"
+date: 2016-07-31 02:17:43 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅,----- ----- JSP/XML知识点
+tags: [java,web开发,对象,EL表达式]
+keyword: 陈浩翔, 谙忆
+description: EL表达式简介EL 全名为Expression Language。EL主要作用：获取数据： 
+EL表达式主要用于替换JSP页面中的脚本表达式，以从各种类型的java对象中获取数据。执行运算： 
+利用EL表达式可以在JSP页面中执行一些基本的关系运算、逻辑运算和算术运算，以在JSP页面中完成一些简单的逻辑运算。获取web开发常用对象 
+EL 表达式定义了一些隐式对象，利用这些隐式对象，web开发人员可 
+---
+
+
+EL表达式简介EL 全名为Expression Language。EL主要作用：获取数据： 
+EL表达式主要用于替换JSP页面中的脚本表达式，以从各种类型的java对象中获取数据。执行运算： 
+利用EL表达式可以在JSP页面中执行一些基本的关系运算、逻辑运算和算术运算，以在JSP页面中完成一些简单的逻辑运算。获取web开发常用对象 
+EL 表达式定义了一些隐式对象，利用这些隐式对象，web开发人员可
+<!-- more -->
+----------
+
+EL表达式简介
+===========
+
+EL 全名为Expression Language。
+
+EL主要作用：
+
+获取数据：
+EL表达式主要用于替换JSP页面中的脚本表达式，以从各种类型的java对象中获取数据。
+
+执行运算：
+利用EL表达式可以在JSP页面中执行一些基本的关系运算、逻辑运算和算术运算，以在JSP页面中完成一些简单的逻辑运算。
+
+获取web开发常用对象
+EL 表达式定义了一些隐式对象，利用这些隐式对象，web开发人员可以很轻松获得对web常用对象的引用，从而获得这些对象中的数据。
+
+调用Java方法
+EL表达式允许用户开发自定义EL函数，以在JSP页面中通过EL表达式调用Java类的方法。
+
+获取数据
+=======
+
+```
+使用EL表达式获取数据语法：“${标识符}”
+EL表达式语句在执行时，会调用pageContext.findAttribute方法，用标识符为关键字，分别从page、request、session、application四个域中查找相应的对象，找到则返回相应对象，找不到则返回”” （注意，不是null，而是空字符串）。 
+
+EL表达式也可以很轻松获取JavaBean的属性，或获取数组、Collection、Map类型集合的数据，例如：
+${user.address.city}
+${user.list[0]}：访问有序集合某个位置的元素
+${map.key}  ： 获得map集合中指定key的值
+结合JSTL的foreach标签，使用EL表达式也可以很轻松迭代各种类型的数组或集合，示例：
+迭代数组
+迭代collection类型集合
+迭代map类型集合
+```
+
+下面就来演示一下：
+
+User.java:
+----------
+
+```
+package cn.hncu.elWeb.domain;
+
+public class User {
+	private String name;
+	private Integer age;
+
+	public User() {
+		super();
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	@Override
+	public String toString() {
+		return "User [name=" + name + ", age=" + age + "]";
+	}
+
+}
+
+```
+
+index.jsp:
+----------
+
+```
+<%@page import="cn.hncu.elWeb.domain.User"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  </head>
+  
+  <body>
+  	<h2>演示El表达式技术---格式：${表达式}</h2>
+	<h2>注意，El表达式的功能：按从小到大的顺序依次从4个容器中读取数据(如果读到则后面的容器跳过)。</h2>
+	<h2>***数据必须要放入容器中</h2>
+	<%
+		pageContext.setAttribute("pageName", "page_Jack");
+		request.setAttribute("reqName", "req_Jack");
+		session.setAttribute("sessName", "sess_Jack");
+		application.setAttribute("appName", "app_Jack");
+	%>
+	${pageName}, ${reqName}, ${sessName}, ${appName}
+	
+	<hr/><br/>
+	<!-- 用EL表达式读取JavaBean中的信息，注意"表达式"是"属性名" -->
+	<%
+		User user = new User();
+		user.setName("张三");
+		user.setAge(25);
+		//注意！一定要把数据放入容器中
+		pageContext.setAttribute("u", user);
+		//这里为了区分下面的输出，特意用u来区分user，其实取user也是可以的
+	%>
+	${u}<br/>
+	${u.name},${u.age}
+	
+	<hr/><br/>
+	
+	<!-- 用EL表达式读取Map中的信息 -->
+	<%
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("name", "Rose");
+		map.put("sex", "Female");
+		map.put("age", 25);
+		map.put("tel", "13812345678");
+		
+		map.put("friend", user);
+		//一定要记得把数据放入容器中
+		request.setAttribute("m", map);
+		//这里为了演示下面的输出，特意用m来区分map，其实取map也是可以的
+	%>
+	${m.name},${m.sex},${m.age},${m.tel}<br/>
+	朋友的名字：${m.friend.name}<br/>
+	
+	<hr/><br/>
+	<!-- 用EL表达式读取List中的信息 -->
+	<%
+		List list = new ArrayList();
+		list.add("TOM");
+		list.add(user);
+		list.add(map);
+		session.setAttribute("list", list);
+	%>
+	${list[0]},${list[1].name}<br/>
+	朋友名字：${list[2].friend.name}<br/>
+	
+	  	                                      
+  </body>
+</html>
+
+```
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160731001749367)
+
+
+EL表达式中的运算：
+==========
+
+语法：${运算表达式}，EL表达式支持如下运算符：
+
+![](http://img.blog.csdn.net/20160731002459457)
+
+empty运算符：检查变量是否为null或“空”，这个很好用，最好熟记它！
+二元表达式：${user!=null?user.name : “”} ！
+[ ] 和 . 号运算符。
+
+
+
+运算示例
+----
+
+```
+<!-- 演示El表达式中的运算 -->
+	1、可以使用算术运算符：+  -  *  /  % 等<br/>
+	${u.age+10}
+	
+	2、可以使用比较运算符:== != <=  > >= 等<br/>
+	${u.name=="张三"}
+	<br/>
+	3、逻辑运算符：&&  ||  !(非) 等<br/>
+	${u.name=="张三" && u.age>20 }
+	<br/>
+	4、条件运算符：即"?"号表达式<br/>
+	${u.name!="张三" ? 100 : 50 }
+	<br/>
+	5、empty 运算符：如果表达式的值为null 或者 不存在该变量(存在该变量,该变量是一个List或Map，但是其中不包含元素)
+	---这些返回的全部是true<br/> 
+	${empty dkkkk}  --- true   不存在这样的变量名<br/>
+	<%
+		List li = new ArrayList();
+		request.setAttribute("li", li);
+	%>
+	${empty li}   --- true li中没有元素<br/>
+	${empty map}  --- true  因为那个map取名是m <br/>
+	${empty m}    --- false<br/>
+	${!empty m}   --- true<br/>
+	
+```
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160731004959018)
+
+
+
+获得web开发常用对象
+===========
+
+EL表达式语言中定义了11个隐含对象，使用这些隐含对象可以很方便地获取web开发中的一些常见对象，并读取这些对象的数据。
+语法：${隐式对象名称}  ：获得对象的引用
+
+![](http://img.blog.csdn.net/20160731005601908)
+![](http://img.blog.csdn.net/20160731005610565)
+
+
+测试各个隐式对象
+注意事项
+
+```
+测试headerValues时，如果头里面有“-” ，例Accept-Encoding，则要headerValues[“Accept-Encoding”]
+测试cookie时，例${cookie.key}取的是cookie对象，如访问cookie的名称和值，须${cookie.key.name}或${cookie.key.value}
+```
+
+演示实例：
+-----
+
+```
+	<!-- 用EL表达式获取El表达式中的隐藏对象--EL表达式语言中定义了11个隐含对象 -->
+	<!-- 从指定的容器中读取数据 -->
+	${pageScope.u }----*${requestScope.u}*因为u是在page域中，request没有，所以是空(EL表达式不会输出null(除非值是null))！----${requestScope.m}----${sessionScope.list[0]}
+	<br/>
+	${header}<br/>
+	${header.host}---服务器端的IP和端口<br/>
+	${header.cookie}<br/>
+	JSESSIONID:${cookie.JSESSIONID}<br/>  //取的是cookie对象--输出的是地址
+	name:${cookie.JSESSIONID.name}<br/>
+	value:${cookie.JSESSIONID.value}<br/>
+	<br/>
+	${param}<br/> //这里需要访问地址：http://localhost:8080/myElWeb/?name=Jack&age=21&age=23<br/>
+	${param.age}<br/>
+	${paramValues}<br/>
+	${paramValues.name[0]}<br/>
+	${paramValues.age[0]}<br/>
+	${paramValues.age[1]}<br/>
+	
+```
+
+输入地址栏：`http://localhost:8080/myElWeb/?name=Jack&age=21&age=23`
+
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160731012424296)
+
+
+
+El使用的综合示例
+===========
+
+index.jsp:
+----------
+
+```
+<a href="${pageContext.request.contextPath}/ShowServlet">El使用的综合示例页面</a>
+```
+
+
+Car.java:
+---------
+
+```
+package cn.hncu.elWeb.domain;
+
+public class Car {
+	private String name;
+	private String no;
+	private String color;
+	public Car() {
+		super();
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getNo() {
+		return no;
+	}
+	public void setNo(String no) {
+		this.no = no;
+	}
+	public String getColor() {
+		return color;
+	}
+	public void setColor(String color) {
+		this.color = color;
+	}
+	@Override
+	public String toString() {
+		return "Car [name=" + name + ", no=" + no + ", color=" + color + "]";
+	}
+}
+
+```
+
+Person.java:
+------------
+
+```
+package cn.hncu.elWeb.domain;
+
+import java.util.Arrays;
+
+public class Person {
+	
+	private String id;
+	private String name;
+	private String pwd;
+	private Integer age;
+	
+	private Car cars[];
+
+	public Person() {
+		super();
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getPwd() {
+		return pwd;
+	}
+
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+
+	public Integer getAge() {
+		return age;
+	}
+
+	public void setAge(Integer age) {
+		this.age = age;
+	}
+
+	public Car[] getCars() {
+		return cars;
+	}
+
+	public void setCars(Car[] cars) {
+		this.cars = cars;
+	}
+
+	@Override
+	public String toString() {
+		return "Person [id=" + id + ", name=" + name + ", pwd=" + pwd
+				+ ", age=" + age + ", cars=" + Arrays.toString(cars) + "]";
+	}
+	
+}
+
+```
+
+ShowServlet.java:
+-----------------
+
+```
+package cn.hncu.elWeb.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import cn.hncu.elWeb.domain.Car;
+import cn.hncu.elWeb.domain.Person;
+
+public class ShowServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		Person p = new Person();
+		p.setId("P001");
+		p.setName("Jack");
+		p.setAge(24);
+		p.setPwd("123456");
+		
+		Car cars[] = new Car[3];
+		for(int i=0;i<3;i++){
+			Car c = new Car();
+			c.setName("Car"+i);
+			c.setNo("No."+i);
+			c.setColor("RED");
+			cars[i]=c;
+		}
+		p.setCars(cars);
+		
+		request.setAttribute("p", p);
+		request.getRequestDispatcher("/jsps/show.jsp").forward(request, response);
+	}
+
+}
+
+```
+
+show.jsp:
+---------
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  </head>
+  
+  <body>
+  	<h2>用户信息展示</h2>
+  		工号:${p.id}<br/>
+  		姓名:${p.name}<br/>
+  		年龄:${p.age}<br/>
+  	<hr/>
+  	<h3>车辆信息</h3>
+  	<table border="1">
+		<tr><th>车牌号</th> <th>车名</th> <th>颜色</th></tr>
+		<tr><td>${p.cars[0].no}</td> <td>${p.cars[0].name}</td> <td>${p.cars[0].color}</td></tr>
+		<tr><td>${p.cars[1].no}</td> <td>${p.cars[1].name}</td> <td>${p.cars[1].color}</td></tr>
+		<tr><td>${p.cars[2].no}</td> <td>${p.cars[2].name}</td> <td>${p.cars[2].color}</td></tr>
+		<!-- 其实这里用这种方式很不好的-变量个数全部写死了，我们可以用JSTL把这里写活，不过我们在这里不是演示那个技术的，为了简便突出EL重点，就这样写了 -->
+  	</table>
+  </body>
+</html>
+
+```
+
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160731021646615)
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

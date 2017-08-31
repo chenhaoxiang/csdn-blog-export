@@ -1,0 +1,78 @@
+---
+layout: post
+title: "HDOJ 2051  Bitset"
+date: 2016-01-27 03:37:42 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA
+tags: [bitset,java]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Give you a number on base ten,you should output it on base two.(0 < n < 1000)Input 
+For each case there is a postive number n on base ten, end of file.Output 
+For each case output 
+---
+
+
+Problem Description 
+Give you a number on base ten,you should output it on base two.(0 < n < 1000)Input 
+For each case there is a postive number n on base ten, end of file.Output 
+For each case output
+<!-- more -->
+----------
+
+Problem Description
+Give you a number on base ten,you should output it on base two.(0 < n < 1000)
+ 
+
+Input
+For each case there is a postive number n on base ten, end of file.
+ 
+
+Output
+For each case output a number on base two.
+ 
+
+Sample Input
+1
+2
+3
+ 
+
+Sample Output
+1
+10
+11
+
+就是将一个十进制的数按二进制输出。
+JAVA中直接调用Integer.toBinaryString(int i)；
+以二进制（基数 2）无符号整数形式返回一个整数参数的字符串表示形式。
+
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			
+			System.out.println(Integer.toBinaryString(n));
+			
+		}
+		
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

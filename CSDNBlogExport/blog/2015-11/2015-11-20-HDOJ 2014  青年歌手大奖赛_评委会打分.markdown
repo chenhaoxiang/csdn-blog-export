@@ -1,0 +1,83 @@
+---
+layout: post
+title: "HDOJ 2014  青年歌手大奖赛_评委会打分"
+date: 2015-11-20 08:19:56 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [数据,class,string]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+青年歌手大奖赛中，评委会给参赛选手打分。选手得分规则为去掉一个最高分和一个最低分，然后计算平均得分，请编程输出某选手的得分。Input 
+输入数据有多组，每组占一行，每行的第一个数是n(2import java.util.Scanner;
+class Main{
+    public static void main(String args[]){ 
+---
+
+
+Problem Description 
+青年歌手大奖赛中，评委会给参赛选手打分。选手得分规则为去掉一个最高分和一个最低分，然后计算平均得分，请编程输出某选手的得分。Input 
+输入数据有多组，每组占一行，每行的第一个数是n(2import java.util.Scanner;
+class Main{
+    public static void main(String args[]){
+<!-- more -->
+----------
+
+Problem Description
+青年歌手大奖赛中，评委会给参赛选手打分。选手得分规则为去掉一个最高分和一个最低分，然后计算平均得分，请编程输出某选手的得分。
+ 
+
+Input
+输入数据有多组，每组占一行，每行的第一个数是n(2<n<=100)，表示评委的人数，然后是n个评委的打分。
+ 
+
+Output
+对于每组输入数据，输出选手的得分，结果保留2位小数，每组输出占一行。
+ 
+
+Sample Input
+3 99 98 97
+4 100 99 98 97
+ 
+
+Sample Output
+98.00
+98.50
+
+```
+import java.util.Scanner;
+class Main{
+    public static void main(String args[]){
+        Scanner sc= new Scanner(System.in);
+        while(sc.hasNext()){
+            int n = sc.nextInt();
+            int a[] = new int[n];
+            a[0] = sc.nextInt();
+            int min = a[0];
+            int max = a[0];
+            int sum = a[0];
+            for(int i=1;i<n;i++){
+                a[i] = sc.nextInt();
+                sum+=a[i];//System.out.println(sum);
+                if(a[i]>max){
+                    max = a[i];
+                }
+                if(a[i]<min){
+                    min = a[i] ; 
+                }
+            }
+            double t;
+            t =((double)(sum-min-max))/((double)(n-2.0));
+            System.out.printf("%.2f",t);
+            System.out.println();
+        }
+        
+    }
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

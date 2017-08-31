@@ -1,0 +1,554 @@
+---
+layout: post
+title: "【AJAX】AJAX技术详细解析以及实例"
+date: 2016-08-23 05:50:31 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅,----- ----- HTML/CSS/JS网络编程
+tags: [ajax,javascript,xml,css]
+keyword: 陈浩翔, 谙忆
+description: 转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+Ajax技术介绍:全称: Asynchronized(异步) Javascript And Xml 
+技术组成有: Javascript、DOM、CSS 和 XMLHttpRequest AJAX = 异步 JavaScript 和 XML。 
+AJAX 是一种用于创建快速动态网页的技 
+---
+
+
+转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+Ajax技术介绍:全称: Asynchronized(异步) Javascript And Xml 
+技术组成有: Javascript、DOM、CSS 和 XMLHttpRequest AJAX = 异步 JavaScript 和 XML。 
+AJAX 是一种用于创建快速动态网页的技
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+#Ajax技术介绍:
+
+全称: Asynchronized(异步) Javascript And Xml
+技术组成有: Javascript、DOM、CSS 和 XMLHttpRequest 
+
+AJAX = 异步 JavaScript 和 XML。
+AJAX 是一种用于创建快速动态网页的技术。
+通过在后台与服务器进行少量数据交换，AJAX 可以使网页实现异步更新。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+传统的网页（不使用 AJAX）如果需要更新内容，必需重载整个网页面。
+有很多使用 AJAX 的应用程序案例：新浪微博、Google 地图、开心网等等。
+
+#XMLHttpRequest 对象
+所有现代浏览器均支持 XMLHttpRequest 对象（IE5 和 IE6 使用 ActiveXObject）。
+
+XMLHttpRequest 用于在后台与服务器交换数据。这意味着可以在不重新加载整个网页的情况下，对网页的某部分进行更新。
+
+##创建 XMLHttpRequest 对象
+
+所有现代浏览器（IE7+、Firefox、Chrome、Safari 以及 Opera）均内建 XMLHttpRequest 对象。
+创建 XMLHttpRequest 对象的语法：
+```
+variable=new XMLHttpRequest();
+```
+
+老版本的 Internet Explorer （IE6、IE5）使用 ActiveX 对象：
+
+```
+variable=new ActiveXObject("Microsoft.XMLHTTP");
+```
+
+为了应对所有的现代浏览器，包括 IE5 和 IE6，请检查浏览器是否支持 XMLHttpRequest 对象。如果支持，则创建 XMLHttpRequest 对象。如果不支持，则创建 ActiveXObject ：
+
+```
+var xmlhttp;
+if (window.XMLHttpRequest)
+  {// code for IE7+, Firefox, Chrome, Opera, Safari
+  xmlhttp=new XMLHttpRequest();
+  }
+else
+  {// code for IE6, IE5
+  xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+  }
+```
+
+##XMLHttpRequest 对象的两个方法:
+
+**open(method,url,async)**
+```
+规定请求的类型、URL 以及是否异步处理请求。
+
+    method：请求的类型；GET 或 POST
+    url：文件在服务器上的位置
+    async：true（异步）或 false（同步）
+
+```
+**open() 方法的 url 参数是服务器上文件的地址：**
+该文件可以是任何类型的文件，比如 .txt 和 .xml，或者服务器脚本文件，比如 .asp 和 .php （在传回响应之前，能够在服务器上执行任务）。
+
+**异步 - True 或 False？**
+AJAX 指的是异步 JavaScript 和 XML（Asynchronous JavaScript and XML）。
+XMLHttpRequest 对象如果要用于 AJAX 的话，其 open() 方法的 async 参数必须设置为 true：
+```
+通过 AJAX，JavaScript 无需等待服务器的响应，而是：
+    在等待服务器响应时执行其他脚本
+    当响应就绪后对响应进行处理
+```
+Async = true
+当使用 async=true 时，请规定在响应处于 onreadystatechange 事件中的就绪状态时执行的函数：
+
+```
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    //还可以加函数
+    }
+  }
+xmlhttp.open("GET","test1.txt",true);
+xmlhttp.send();
+```
+
+Async = false
+如需使用 async=false，请将 open() 方法中的第三个参数改为 false：
+
+```
+xmlhttp.open("GET","test1.txt",false);
+```
+不推荐使用 async=false，但是对于一些小型的请求，也是可以的。
+
+请记住，JavaScript 会等到服务器响应就绪才继续执行。如果服务器繁忙或缓慢，应用程序会挂起或停止。
+注释：当您使用 async=false 时，请不要编写 onreadystatechange 函数 - 把代码放到 send() 语句后面即可：
+```
+xmlhttp.open("GET","test1.txt",false);
+xmlhttp.send();
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+```
+
+**send(string)** 	
+```
+将请求发送到服务器。
+    string：仅用于 POST 请求
+    类似:"name=jack&pwd=1234"    
+```
+##使用get方式提交:
+
+get方式有可能得到的是浏览器缓存的结果，这个时候我们可以传递一个时间去请求.
+
+为了避免这种情况，请向 URL 添加一个唯一的 ID：
+```
+xmlhttp.open("GET","demo_get.asp?t=" + Math.random(),true);
+xmlhttp.send();
+```
+
+如果希望通过 GET 方法发送信息，请向 URL 添加信息：
+
+```
+xmlhttp.open("GET","demo_get2.asp?fname=Bill&lname=Gates",true);
+xmlhttp.send();
+```
+
+##使用post方式提交:
+如果需要像 HTML 表单那样 POST 数据，需要setRequestHeader() 来添加 HTTP 头。然后在 send() 方法中规定您希望发送的数据：
+
+```
+xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+```
+
+##选择GET 还是 POST？
+与 POST 相比，GET 更简单也更快，并且在大部分情况下都能用。
+
+然而，在以下情况中，请使用 POST 请求：
+
+```
+    无法使用缓存文件（更新服务器上的文件或数据库）
+    向服务器发送大量数据（POST 没有数据量限制）
+    发送包含未知字符的用户输入时，POST 比 GET 更稳定也更可靠
+```
+
+#获得来自服务器的响应
+
+如需获得来自服务器的响应，使用 XMLHttpRequest 对象的 responseText 或 responseXML 属性。
+```
+   属性 	                 描述
+responseText 	获得字符串形式的响应数据。
+responseXML 	获得 XML 形式的响应数据。
+```
+##responseText 属性
+如果来自服务器的响应并非 XML，请使用 responseText 属性。
+responseText 属性返回字符串形式的响应，因此您可以这样使用：
+```
+document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+```
+##responseXML 属性
+如果来自服务器的响应是 XML，而且需要作为 XML 对象进行解析，请使用 responseXML 属性：
+请求 books.xml 文件，并解析响应：
+```
+xmlDoc=xmlhttp.responseXML;
+txt="";
+x=xmlDoc.getElementsByTagName("ARTIST");
+for (i=0;i<x.length;i++)
+  {
+  txt=txt + x[i].childNodes[0].nodeValue + "<br />";
+  }
+document.getElementById("myDiv").innerHTML=txt;
+```
+
+#onreadystatechange 事件
+当请求被发送到服务器时，我们需要执行一些基于响应的任务。
+每当 readyState 改变时，就会触发 onreadystatechange 事件。
+readyState 属性存有 XMLHttpRequest 的状态信息。
+下面是 XMLHttpRequest 对象的三个重要的属性：
+
+```
+onreadystatechange:
+存储函数（或函数名），每当 readyState 属性改变时，就会调用该函数。
+
+readyState:
+存有 XMLHttpRequest 的状态。从 0 到 4 发生变化。
+    0: 请求未初始化-对象已建立，但是尚未初始化（尚未调用open方法） 
+    1: 服务器连接已建立-对象已建立，尚未调用send方法 
+    2: 请求已接收- send方法已调用，但是当前的状态及http头未知 
+    3: 请求处理中- 已接收部分数据，因为响应及http头不全，这时通过responseBody和responseText获取部分数据会出现错误， 
+    4: 请求已完成，且响应已就绪-数据接收完毕,此时可以通过通过responseBody和responseText获取完整的回应数据 
+
+status:
+200: "OK"
+404: 未找到页面
+```
+**注释：onreadystatechange 事件被触发 5 次（0 - 4），对应着 readyState 的每个变化。**
+
+在 onreadystatechange 事件中，我们规定当服务器响应已做好被处理的准备时所执行的任务。
+当 readyState 等于 4 且状态为 200 时，表示响应已就绪：
+```
+xmlhttp.onreadystatechange=function()
+  {
+  if (xmlhttp.readyState==4 && xmlhttp.status==200)
+    {
+    document.getElementById("myDiv").innerHTML=xmlhttp.responseText;
+    }
+  }
+```
+
+#GET方式实例演示：
+
+##index.jsp:
+
+```
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<head>
+<title>Ajax技术</title>
+<script type="text/javascript">
+	var xmlhttp;
+	//1 创建一个ajax对象
+	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	function checkGet(obj) {
+		//进行数据格式检验-这里省略了。
+		var name = obj.value;//获取用户填入的用户名
+
+		var url = "<c:url value='/OneServlet?name=" + name + "' />";
+
+		//2 设置通讯方式和地址
+		xmlhttp.open("GET", url, true);//异步--多线程
+
+		//3 设置访问成功后的 js对象(回调函数)
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4) {//服务器的响应消息接收完毕
+				if (xmlhttp.status == 200) {//服务器正常响应
+					var txt = xmlhttp.responseText;//后台的响应信息
+					alert("返回的信息是:" + txt);
+					succ(txt);
+				} else {
+					alert("服务器响应出错信息,错误代码:" + xhr.status);
+				}
+			}
+		};
+
+		//4发送---Get方式，没有参数(请求体) ---数据在请求地址中
+		xmlhttp.send();
+
+		//如果这里设置xmlhttp.open("GET", url, false);//同步
+		//alert("OKOK");//同步时，必须等到ajax回来之后才会执行到send之后。异步时不用等
+	}
+	function succ(obj) {
+		document.getElementById("divGet").innerHTML = obj;
+		//divGet.innerHTML=obj;
+	}
+</script>
+
+<form action="">
+		<h3>GET方式的ajax演示</h3>
+		Name-GET方式提交<input type="text" name="name" onblur="checkGet(this);" />
+		<div id="divGet"></div>
+
+		<h3>POST方式的ajax演示</h3>
+		Name-POST方式提交<input type="text" name="name" onblur="checkPost(this);" />
+		<div id="divPost"></div>
+		<br /> <br /> <input type="submit" value="注册">
+	</form>
+```
+
+##OneServlet:
+
+```
+private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		String name = request.getParameter("name");
+//		try { //用来演示设置xmlhttp.open("GET", url, false);//同步时，效果更明显而使用的
+//			Thread.sleep(3000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+		out.println(name+"通过GET方式来访\t\n时间是:"+sdf.format(new Date()) );
+	}
+```
+
+##web.xml:
+
+写Servlet-不要忘记配置web.xml
+
+```
+<servlet>
+  	<servlet-name>OneServlet</servlet-name>
+  	<servlet-class>cn.hncu.servlet.OneServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+  	<servlet-name>OneServlet</servlet-name>
+  	<url-pattern>/OneServlet</url-pattern>
+  </servlet-mapping>
+```
+
+##演示结果：
+
+![](http://img.blog.csdn.net/20160823164939361)
+
+![](http://img.blog.csdn.net/20160823164950026)
+
+
+
+#POST方式实例演示：
+
+```
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<head>
+<title>Ajax技术</title>
+<script type="text/javascript">
+	var xmlhttp;
+	//1 创建一个ajax对象
+	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	function checkPost(obj){
+		var name=obj.value;//获取用户输入的用户名
+		
+		var url = "<c:url value='/OneServlet'/>";
+		
+		xmlhttp.open("POST", url, true);
+		
+		xmlhttp.onreadystatechange=function(){
+			if(xmlhttp.readyState==4){//服务器的响应消息接收完毕
+    			   if(xmlhttp.status==200){//服务器正常响应
+	    			   var txt = xmlhttp.responseText;//后台的响应信息
+	    			   alert("返回的信息是:"+txt);
+	    			   succPost(txt);
+    			   }else{
+    				   alert("服务器响应出错信息,错误代码:"+xhr.status);
+    			   }
+    		   }
+		};
+		
+		//注意要设置请求头！！！
+		xmlhttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		
+		xmlhttp.send("name="+name);
+	}
+	function succPost(obj){
+		divPost.innerHTML=obj;
+	}
+</script>
+
+</head>
+
+<body>
+	<form action="">
+		<h3>POST方式的ajax演示</h3>
+		Name-POST方式提交<input type="text" name="name" onblur="checkPost(this);" />
+		<div id="divPost"></div>
+		<br /> <br /> <input type="submit" value="注册">
+	</form>
+</body>
+```
+
+##OneServlet:
+
+```
+public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		request.setCharacterEncoding("utf-8");
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		String name = request.getParameter("name");
+		//int i=100/0;//故意让后台响应500的错误信息
+		out.println(name+"通过POST方式来访\t\n时间是:"+sdf.format(new Date()) );
+	}
+```
+
+#封装AJAX：
+
+是不是感觉上面这样写有点麻烦，其实我们完全可以先配置好ajax函数，在用的时候传入参数就可以了。
+
+我们只要new Ajak(),然后调用里面的get、post函数，进行传值就可以了。
+
+post方式需要多传入一个data参数，get方式就可以不用，因为参数在url中传的。
+##ajax.js
+
+```
+function Ajax(){
+	var xmlhttp;
+	//1 创建一个ajax对象
+	if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} else {// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	//url为请求的链接或文件。
+	//succ是status返回为200后运行的函数。
+	//failure是status返回不为200后运行的函数。
+	this.get=function(url,succ,failure){
+		//2 设置通讯方式和地址
+	 	xmlhttp.open("GET",url,true);//异步--多线程
+	 	//3 设置访问成功后的 js对象(回调函数)
+	 	xmlhttp.onreadystatechange=function(){
+	 		if(xmlhttp.readyState==4){//服务器的响应消息接收完毕
+	 			if(xmlhttp.status==200){//服务器正常响应
+	 				var txt = xmlhttp.responseText;//后台的响应信息
+	    			succ(txt);
+	 			}else{
+	 				if(failure){
+	  				    failure(xmlhttp.status);
+	  				 }
+	 			}
+	 		}
+	 	};
+	 	//4发送---Get方式，没有参数(请求体) ---数据在请求地址中
+	 	xmlhttp.send();
+	};
+	
+	this.post= function(url,data,succ, failure){
+		//2 设置通讯方式和地址
+	 	xmlhttp.open("POST",url,true);//异步--多线程
+	 	//3 设置访问成功后的 js对象(回调函数)
+	 	xmlhttp.onreadystatechange=function(){
+	 		if(xmlhttp.readyState==4){//服务器的响应消息接收完毕
+	 			if(xmlhttp.status==200){//服务器正常响应
+	 				var txt = xmlhttp.responseText;//后台的响应信息
+	 				succ(txt);
+	 			}else{
+	 				if(failure){
+	  				    failure(xmlhttp.status);
+	  				 }
+	 			}
+	 		}
+	 	};
+	 	//4设置请求头
+	 	xmlhttp.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
+	 	
+	 	//5发送---Post方式，有参数(请求体) <---数据 ※
+	 	xmlhttp.send(data);
+	};
+}
+```
+##演示的JSP
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<title>Ajax技术</title>
+<script type="text/javascript" src="<c:url value='js/ajax.js'/>"></script>
+<script type="text/javascript">
+	function checkGet(obj) {
+		//进行数据格式检验-这里省略了。
+		var name = obj.value;//获取用户填入的用户名
+		var url = "<c:url value='/OneServlet?name=" + name + "' />";
+		var ajax = new Ajax();
+		ajax.get(url, succ, failure);
+	}
+	function succ(obj) {
+		document.getElementById("divGet").innerHTML = obj;
+	}
+
+	function checkPost(obj) {
+		var name = obj.value;//获取用户输入的用户名
+		var url = "<c:url value='/OneServlet'/>";
+		var ajax = new Ajax();
+		ajax.post(url,"name="+name, succPost, failure);
+	}
+	function succPost(obj) {
+		divPost.innerHTML = obj;
+	}
+	function failure(obj) {
+		alert("服务器响应的错误信息代码:" + obj);
+	}
+</script>
+</head>
+
+<body>
+	<form action="">
+		<h3>GET方式的ajax演示</h3>
+		Name-GET方式提交<input type="text" name="name" onblur="checkGet(this);" />
+		<div id="divGet"></div>
+
+		<h3>POST方式的ajax演示</h3>
+		Name-POST方式提交<input type="text" name="name" onblur="checkPost(this);" />
+		<div id="divPost"></div>
+		<br /> <br /> <input type="submit" value="注册">
+	</form>
+</body>
+</html>
+
+```
+
+servlet还是和刚才的是一个！
+
+##演示结果:
+
+返回结果为200-正确的页面:
+
+![](http://img.blog.csdn.net/20160823174914632)
+
+返回结果为500-错误的页面:
+让servlet出一个异常就可以模仿出来了。
+例如:int a=12/0;
+
+![](http://img.blog.csdn.net/20160823174923922)
+
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

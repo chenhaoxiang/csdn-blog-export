@@ -1,0 +1,82 @@
+---
+layout: post
+title: "HTML-通过点击网页上的文字弹出QQ添加好友页面"
+date: 2016-05-16 01:00:24 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅,----- ----- HTML/CSS/JS网络编程
+tags: [界面,qq]
+keyword: 陈浩翔, 谙忆
+description: 在网上参考了部分方法，综合了一下。 
+发现有2中方式： 
+第一种是不能直接弹出添加界面的，只能弹出网页，再通过网页中的添加好友才能添加： 
+ 
+弹出的网页是这样的（我是写成在新的网页中打开） 
+现在看实现的代码：<html>  
+<body>  
+<a  href="http://shang.qq.com/email/stop/email_stop.html?qq=619699629
+&sig=a1 
+---
+
+
+在网上参考了部分方法，综合了一下。 
+发现有2中方式： 
+第一种是不能直接弹出添加界面的，只能弹出网页，再通过网页中的添加好友才能添加： 
+ 
+弹出的网页是这样的（我是写成在新的网页中打开） 
+现在看实现的代码：<html>  
+<body>  
+<a  href="http://shang.qq.com/email/stop/email_stop.html?qq=619699629
+&sig=a1
+<!-- more -->
+----------
+
+在网上参考了部分方法，综合了一下。
+发现有2中方式：
+第一种是不能直接弹出添加界面的，只能弹出网页，再通过网页中的添加好友才能添加：
+![](http://img.blog.csdn.net/20160516004030464)
+弹出的网页是这样的（我是写成在新的网页中打开）
+![](http://img.blog.csdn.net/20160516004109702)
+
+现在看实现的代码：
+
+```
+<html>  
+<body>  
+<a  href="http://shang.qq.com/email/stop/email_stop.html?qq=619699629
+&sig=a1c657365db7e82805ea4b2351081fc3ebcde159f8ae49b1&tttt=1" 
+target="_blank"><span style="color:red">点击我加为好友</sapn></a>
+<br/>
+<font color="#00EC00">邮箱：chenhaoxiang0117@qq.com</font>
+</body>  
+</html>  
+```
+
+现在来看第二种方法，直接弹出添加界面的：
+貌似在CSDN的栏目里面不能实现~
+自己用一个网页测试了一下，是可以的。
+![](http://img.blog.csdn.net/20160516005750318)
+
+```
+<h3><li> <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=619699629" target="class">ACM</a></li></h3>
+```
+然而在CSDN栏目中，貌似自动屏蔽了~
+本来保存了那行代码~可是保存后就没了~
+![](http://img.blog.csdn.net/20160516005842834)
+
+
+还有一种方法是弹出临时对话框：
+
+```
+<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&amp;uin=619699629&amp;site=qq&amp;menu=yes">点这里给我发消息</a>
+```
+效果：
+![](http://img.blog.csdn.net/20160516012613725)
+
+我因为是自己的QQ在线~~~弹不出~不过你们可以在我的栏目：联系方式看到，试一试的
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

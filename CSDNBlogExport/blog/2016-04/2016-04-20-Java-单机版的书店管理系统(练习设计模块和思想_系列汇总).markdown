@@ -1,0 +1,1941 @@
+---
+layout: post
+title: "Java-单机版的书店管理系统(练习设计模块和思想_系列汇总)"
+date: 2016-04-20 05:26:49 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块,----- ----- Java书店管理系统
+tags: [java,设计,管理,面向对象编程,应用]
+keyword: 陈浩翔, 谙忆
+description: 介绍：本软件系列到此，我已经全部写完了。项目练习目标 ：1、Java应用程序基本分析  
+2、培养面向对象编程的基本思想  
+3、Java基本设计模式综合应用  
+4、掌握分层和接口的基本设计  
+5、构建合理的Java应用程序包结构  
+6、综合应用JSE所学习的知识  
+7、在应用中合理使用集合框架  
+8、在应用中综合使用swing的常用组件  
+9、基本的表现层的实现机制  
+10、IO流和 
+---
+
+
+介绍：本软件系列到此，我已经全部写完了。项目练习目标 ：1、Java应用程序基本分析  
+2、培养面向对象编程的基本思想  
+3、Java基本设计模式综合应用  
+4、掌握分层和接口的基本设计  
+5、构建合理的Java应用程序包结构  
+6、综合应用JSE所学习的知识  
+7、在应用中合理使用集合框架  
+8、在应用中综合使用swing的常用组件  
+9、基本的表现层的实现机制  
+10、IO流和
+<!-- more -->
+----------
+
+介绍：
+===
+
+本软件系列到此，我已经全部写完了。
+
+项目练习目标 ：
+--------
+
+1、Java应用程序基本分析 
+2、培养面向对象编程的基本思想 
+3、Java基本设计模式综合应用 
+4、掌握分层和接口的基本设计 
+5、构建合理的Java应用程序包结构 
+6、综合应用JSE所学习的知识 
+7、在应用中合理使用集合框架 
+8、在应用中综合使用swing的常用组件 
+9、基本的表现层的实现机制 
+10、IO流和文件的基本操作 
+11、培养良好的Java编程习惯 
+12、培养调试Java程序的能力，培养改错的能力
+
+项目功能需求 ：
+--------
+
+1、能进行操作用户的注册，修改基本信息，删除和查询。 
+2、能对图书的基本信息进行增加、删除、修改和查询操作。 
+3、能填写进货单，一张进货单带有多条具体的进货信息，进货的书籍必须是图书管理里面已经有的；进货的同时修改库存对应书籍的存货量。 
+4、能填写销售单，一张销售单带有多条具体的销售信息，销售的书籍必须是图书管理里面已经有的，而且销售的数量不能超过当前库存的数量；销售的同时修改库存对应书籍的存货量。 
+5、可以查看库存的明细，可以按照条件进行查找具体的图书的库存值。 
+6、权限方面进行简化，做固定的权限控制。把用户按照模块分成不同操作权限的人员，特设一个admin的用户，可以操作全部的功能。
+
+
+项目基本设计 ：
+--------
+
+★ 架构设计 
+整体框架、模块划分 
+模块划分：用户、图书、进货、销售和库存5个模块
+
+★ 系统功能结构设计 
+每个功能模块的具体功能子模块
+
+★ 数据库设计 
+项目框架实现：分模块、分层、分包、构建应用程序
+
+自己的总结：
+------
+这可以说是自己的第一个项目吧。小项目。O(∩_∩)O哈哈~、
+写到现在也有10多天了，自己比较享受写项目的这个过程，不过因为这个项目是跟着老师指导来做的，所以呢，自己的感触还不是很深，不过现在对分包啊，取名字啊，值对象封装啊，工厂方法，面向接口编程啊，表现层，逻辑层，数据层啊，这些以前用都没用过的，那时候完全不懂得怎么回事，不过在自己写了之后，感觉嘛、也就那么回事。
+O(∩_∩)O~，这种项目开发，还是得自己多练练手，写得多了，自己就熟了。
+以后就是手到擒来。
+下面来看代码吧：
+
+包含main方法的BookStore类：
+====================
+
+```
+/*
+ * BookStore.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore;
+
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+
+import cn.hncu.bookStore.book.ui.BookListPanel;
+import cn.hncu.bookStore.in.ui.InListPanel;
+import cn.hncu.bookStore.login.ui.LoginPanel;
+import cn.hncu.bookStore.out.ui.OutListPanel;
+import cn.hncu.bookStore.stock.ui.StockListPanel;
+import cn.hncu.bookStore.user.ui.ListPanel;
+
+/**
+ * 
+ * @author 陈浩翔
+ * @version 1.0  2016-4-20
+ */
+public class BookStore extends javax.swing.JFrame {
+
+	/** Creates new form BookStore */
+	public BookStore() {
+		super("书店管理系统---CHX---联系QQ——619699629");
+		initComponents();
+		this.setContentPane(new LoginPanel(this));
+		this.setResizable(false);//不能缩放
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		Dimension scr = Toolkit.getDefaultToolkit().getScreenSize();
+		this.setLocation(scr.width / 5, scr.height / 5);
+	}
+
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		menuBar = new javax.swing.JMenuBar();
+		fileMenu = new javax.swing.JMenu();
+		openMenuItem = new javax.swing.JMenuItem();
+		saveMenuItem = new javax.swing.JMenuItem();
+		saveAsMenuItem = new javax.swing.JMenuItem();
+		exitMenuItem = new javax.swing.JMenuItem();
+		editMenu = new javax.swing.JMenu();
+		cutMenuItem = new javax.swing.JMenuItem();
+		copyMenuItem = new javax.swing.JMenuItem();
+		pasteMenuItem = new javax.swing.JMenuItem();
+		deleteMenuItem = new javax.swing.JMenuItem();
+		helpMenu = new javax.swing.JMenu();
+		contentsMenuItem = new javax.swing.JMenuItem();
+		aboutMenuItem = new javax.swing.JMenuItem();
+		jMenu1 = new javax.swing.JMenu();
+		jMenuItemUser = new javax.swing.JMenuItem();
+		jMenuItemBook = new javax.swing.JMenuItem();
+		jMenuItemIn = new javax.swing.JMenuItem();
+		jMenuItemOut = new javax.swing.JMenuItem();
+		jMenuItemStock = new javax.swing.JMenuItem();
+		jMenuItem1 = new javax.swing.JMenuItem();
+
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		getContentPane().setLayout(null);
+		getContentPane().add(jLabel1);
+		jLabel1.setBounds(0, 0, 0, 0);
+
+		fileMenu.setText("File");
+
+		openMenuItem.setText("Open");
+		fileMenu.add(openMenuItem);
+
+		saveMenuItem.setText("Save");
+		fileMenu.add(saveMenuItem);
+
+		saveAsMenuItem.setText("Save As ...");
+		fileMenu.add(saveAsMenuItem);
+
+		exitMenuItem.setText("Exit");
+		exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				exitMenuItemActionPerformed(evt);
+			}
+		});
+		fileMenu.add(exitMenuItem);
+
+		menuBar.add(fileMenu);
+
+		editMenu.setText("Edit");
+
+		cutMenuItem.setText("Cut");
+		editMenu.add(cutMenuItem);
+
+		copyMenuItem.setText("Copy");
+		editMenu.add(copyMenuItem);
+
+		pasteMenuItem.setText("Paste");
+		editMenu.add(pasteMenuItem);
+
+		deleteMenuItem.setText("Delete");
+		editMenu.add(deleteMenuItem);
+
+		menuBar.add(editMenu);
+
+		helpMenu.setText("Help");
+
+		contentsMenuItem.setText("Contents");
+		helpMenu.add(contentsMenuItem);
+
+		aboutMenuItem.setText("About");
+		helpMenu.add(aboutMenuItem);
+
+		menuBar.add(helpMenu);
+
+		jMenu1.setForeground(new java.awt.Color(204, 0, 0));
+		jMenu1.setText("\u6a21\u5757");
+		jMenu1.setFont(new java.awt.Font("Dialog", 1, 14));
+
+		jMenuItemUser.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_U,
+				java.awt.event.InputEvent.CTRL_MASK));
+		jMenuItemUser.setFont(new java.awt.Font("Dialog", 1, 14));
+		jMenuItemUser.setForeground(new java.awt.Color(0, 204, 0));
+		jMenuItemUser.setText("\u7528\u6237");
+		jMenuItemUser.setEnabled(false);
+		jMenuItemUser.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItemUserActionPerformed(evt);
+			}
+		});
+		jMenu1.add(jMenuItemUser);
+
+		jMenuItemBook.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_B,
+				java.awt.event.InputEvent.CTRL_MASK));
+		jMenuItemBook.setFont(new java.awt.Font("Dialog", 1, 14));
+		jMenuItemBook.setForeground(new java.awt.Color(0, 204, 51));
+		jMenuItemBook.setText("\u56fe\u4e66");
+		jMenuItemBook.setEnabled(false);
+		jMenuItemBook.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItemBookActionPerformed(evt);
+			}
+		});
+		jMenu1.add(jMenuItemBook);
+
+		jMenuItemIn.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_I,
+				java.awt.event.InputEvent.CTRL_MASK));
+		jMenuItemIn.setFont(new java.awt.Font("Dialog", 1, 14));
+		jMenuItemIn.setForeground(new java.awt.Color(0, 204, 0));
+		jMenuItemIn.setText("\u8fdb\u8d27");
+		jMenuItemIn.setEnabled(false);
+		jMenuItemIn.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItemInActionPerformed(evt);
+			}
+		});
+		jMenu1.add(jMenuItemIn);
+
+		jMenuItemOut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_O,
+				java.awt.event.InputEvent.CTRL_MASK));
+		jMenuItemOut.setFont(new java.awt.Font("Dialog", 1, 14));
+		jMenuItemOut.setForeground(new java.awt.Color(0, 204, 0));
+		jMenuItemOut.setText("\u9500\u552e");
+		jMenuItemOut.setEnabled(false);
+		jMenuItemOut.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItemOutActionPerformed(evt);
+			}
+		});
+		jMenu1.add(jMenuItemOut);
+
+		jMenuItemStock.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_S,
+				java.awt.event.InputEvent.CTRL_MASK));
+		jMenuItemStock.setFont(new java.awt.Font("Dialog", 1, 14));
+		jMenuItemStock.setForeground(new java.awt.Color(0, 204, 0));
+		jMenuItemStock.setText("\u5e93\u5b58");
+		jMenuItemStock.setEnabled(false);
+		jMenuItemStock.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItemStockActionPerformed(evt);
+			}
+		});
+		jMenu1.add(jMenuItemStock);
+
+		jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(
+				java.awt.event.KeyEvent.VK_DELETE,
+				java.awt.event.InputEvent.CTRL_MASK));
+		jMenuItem1.setFont(new java.awt.Font("Dialog", 1, 14));
+		jMenuItem1.setForeground(new java.awt.Color(0, 204, 0));
+		jMenuItem1.setText("\u6ce8\u9500");
+		jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				jMenuItem1ActionPerformed(evt);
+			}
+		});
+		jMenu1.add(jMenuItem1);
+
+		menuBar.add(jMenu1);
+
+		setJMenuBar(menuBar);
+
+		pack();
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	/**
+	 * 进入销售模块
+	 * @param evt
+	 */
+	protected void jMenuItemOutActionPerformed(ActionEvent evt) {
+		this.setContentPane(new OutListPanel(this));
+		this.validate();
+	}
+
+	/**
+	 * 进入库存模块
+	 * @param evt
+	 */
+	protected void jMenuItemStockActionPerformed(ActionEvent evt) {
+		this.setContentPane(new StockListPanel(this));
+		this.validate();
+	}
+
+	/**
+	 * 监听进入进货列表
+	 * @param evt
+	 */
+	private void jMenuItemInActionPerformed(java.awt.event.ActionEvent evt) {
+		this.setContentPane(new InListPanel(this));
+		this.validate();
+	}
+
+	/**
+	 * 注销菜单项
+	 * @param evt
+	 */
+	private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
+		this.setContentPane(new LoginPanel(this));
+		this.validate();
+		jMenuItemUser.setEnabled(false);
+		jMenuItemBook.setEnabled(false);
+		jMenuItemIn.setEnabled(false);
+		jMenuItemOut.setEnabled(false);
+		jMenuItemStock.setEnabled(false);
+	}
+
+	/**
+	 * 监听进入图书模块
+	 * @param evt
+	 */
+	private void jMenuItemBookActionPerformed(java.awt.event.ActionEvent evt) {
+		this.setContentPane(new BookListPanel(this));
+		this.validate();
+	}
+
+	/**
+	 * 监听进入用户模块
+	 * @param evt
+	 */
+	private void jMenuItemUserActionPerformed(java.awt.event.ActionEvent evt) {
+		this.setContentPane(new ListPanel(this));
+		this.validate();
+
+	}
+
+	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+		System.exit(0);
+	}//GEN-LAST:event_exitMenuItemActionPerformed
+
+	/**
+	 * @param 主函数 args the command line arguments
+	 */
+	public static void main(String args[]) {
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new BookStore().setVisible(true);
+			}
+		});
+	}
+
+	public javax.swing.JMenuItem getjMenuItemBook() {
+		return jMenuItemBook;
+	}
+
+	public javax.swing.JMenuItem getjMenuItemIn() {
+		return jMenuItemIn;
+	}
+
+	public javax.swing.JMenuItem getjMenuItemOut() {
+		return jMenuItemOut;
+	}
+
+	public javax.swing.JMenuItem getjMenuItemStock() {
+		return jMenuItemStock;
+	}
+
+	public javax.swing.JMenuItem getjMenuItemUser() {
+		return jMenuItemUser;
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JMenuItem aboutMenuItem;
+	private javax.swing.JMenuItem contentsMenuItem;
+	private javax.swing.JMenuItem copyMenuItem;
+	private javax.swing.JMenuItem cutMenuItem;
+	private javax.swing.JMenuItem deleteMenuItem;
+	private javax.swing.JMenu editMenu;
+	private javax.swing.JMenuItem exitMenuItem;
+	private javax.swing.JMenu fileMenu;
+	private javax.swing.JMenu helpMenu;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JMenu jMenu1;
+	private javax.swing.JMenuItem jMenuItem1;
+	private javax.swing.JMenuItem jMenuItemBook;
+	private javax.swing.JMenuItem jMenuItemIn;
+	private javax.swing.JMenuItem jMenuItemOut;
+	private javax.swing.JMenuItem jMenuItemStock;
+	private javax.swing.JMenuItem jMenuItemUser;
+	private javax.swing.JMenuBar menuBar;
+	private javax.swing.JMenuItem openMenuItem;
+	private javax.swing.JMenuItem pasteMenuItem;
+	private javax.swing.JMenuItem saveAsMenuItem;
+	private javax.swing.JMenuItem saveMenuItem;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+
+登录模块的源代码：
+======
+
+逻辑层接口LoginEbi：
+--------------
+
+```
+package cn.hncu.bookStore.login.business.ebi;
+/**
+ * 用户登录模块的逻辑层接口
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public interface LoginEbi {
+	/**
+	 * 用户登录的方法
+	 * @param name 用户名
+	 * @param pwd  密码
+	 * @return 返回字符串，若登录成功则返回null，如果失败则返回相应的错误信息如用户名不存在或密码不正确
+	 */
+	public String login(String name,String pwd);	
+}
+
+```
+
+实现类LoginEbo：
+------------
+
+```
+package cn.hncu.bookStore.login.business.ebo;
+
+import cn.hncu.bookStore.login.business.ebi.LoginEbi;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+
+/**
+ * 登录模块的实现类
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class LoginEbo implements LoginEbi{
+
+	@Override
+	public String login(String name, String pwd) {
+		UserEbi ebi = UserEbiFactory.getUserEbi();
+		UserModel user = ebi.getUserByName(name);
+		if(user==null){
+			return "对不起，该用户不存在!";
+		}
+		if(!user.getPwd().equals(pwd)){
+			return "您输入的密码不正确!";			
+		}
+		return null;
+	}
+ 
+}
+
+```
+
+工厂类LoginEbiFactory：
+-------------------
+
+```
+package cn.hncu.bookStore.login.business.factory;
+
+import cn.hncu.bookStore.login.business.ebi.LoginEbi;
+import cn.hncu.bookStore.login.business.ebo.LoginEbo;
+
+/**
+ * 登录模块的工厂类
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class LoginEbiFactory {
+	
+	/**
+	 * 工厂方法
+	 * @return
+	 */
+	public static LoginEbi getLoginEbi(){
+		return new LoginEbo();
+	}
+}
+
+```
+
+表现层登录界面LoginPanel：
+------------------
+
+```
+/*
+ * LoginPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.login.ui;
+
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.BookStore;
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.login.business.factory.LoginEbiFactory;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class LoginPanel extends javax.swing.JPanel {
+	private BookStore mainFrame = null;
+
+	/** Creates new form LoginPanel */
+	public LoginPanel(BookStore mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+	}
+
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		tfdName = new javax.swing.JTextField();
+		jLabel3 = new javax.swing.JLabel();
+		tfpPwd = new javax.swing.JPasswordField();
+		btnLogin = new javax.swing.JButton();
+		btnHelp = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("Dialog", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(255, 51, 0));
+		jLabel1.setText("\u767b\u5f55");
+		add(jLabel1);
+		jLabel1.setBounds(320, 20, 140, 120);
+
+		jLabel2.setFont(new java.awt.Font("宋体", 1, 24));
+		jLabel2.setForeground(new java.awt.Color(51, 0, 255));
+		jLabel2.setText("\u5bc6 \u7801:");
+		add(jLabel2);
+		jLabel2.setBounds(210, 330, 80, 40);
+
+		tfdName.setFont(new java.awt.Font("微软雅黑", 1, 24));
+		add(tfdName);
+		tfdName.setBounds(310, 220, 190, 40);
+
+		jLabel3.setFont(new java.awt.Font("宋体", 1, 24));
+		jLabel3.setForeground(new java.awt.Color(51, 0, 255));
+		jLabel3.setText("\u7528\u6237\u540d:");
+		add(jLabel3);
+		jLabel3.setBounds(200, 220, 120, 40);
+
+		tfpPwd.setFont(new java.awt.Font("宋体", 1, 24));
+		add(tfpPwd);
+		tfpPwd.setBounds(310, 330, 190, 40);
+
+		btnLogin.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnLogin.setForeground(new java.awt.Color(51, 0, 255));
+		btnLogin.setText("\u767b\u5f55");
+		btnLogin.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnLoginActionPerformed(evt);
+			}
+		});
+		add(btnLogin);
+		btnLogin.setBounds(150, 440, 120, 70);
+
+		btnHelp.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnHelp.setForeground(new java.awt.Color(0, 0, 255));
+		btnHelp.setText("\u5e2e\u52a9");
+		btnHelp.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnHelpActionPerformed(evt);
+			}
+		});
+		add(btnHelp);
+		btnHelp.setBounds(450, 440, 130, 70);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnHelpActionPerformed(java.awt.event.ActionEvent evt) {
+		mainFrame.setContentPane(new LoginHelp(mainFrame));
+		mainFrame.validate();
+	}
+
+	private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {
+		//1收集
+		String name = tfdName.getText();
+		String pwd = new String(tfpPwd.getPassword());
+		
+		if(name.equals("admin")&&pwd.equals("123456")){
+			mainFrame.getjMenuItemUser().setEnabled(true);
+			mainFrame.getjMenuItemBook().setEnabled(true);
+			mainFrame.getjMenuItemIn().setEnabled(true);
+			mainFrame.getjMenuItemOut().setEnabled(true);
+			mainFrame.getjMenuItemStock().setEnabled(true);
+			
+			mainFrame.setContentPane(new LoginWelcomePanel());
+			mainFrame.validate();
+		}
+		
+		//2组织---没有值对象，不组织了		
+		//3调用逻辑层
+		String result = LoginEbiFactory.getLoginEbi().login(name, pwd);
+
+		//4返回到结果页面
+		if (result != null) {
+			JOptionPane.showMessageDialog(mainFrame, result);
+			return;
+		}
+
+		//接下来，登录成功的情况
+		//把该用户类型所对应的模块点亮
+		UserModel user = UserEbiFactory.getUserEbi().getUserByName(name);
+		//超级管理员，点亮所有模块
+		if (user.getType() == UserTypeEnum.ADMIN.getType()) {
+			mainFrame.getjMenuItemUser().setEnabled(true);
+			mainFrame.getjMenuItemBook().setEnabled(true);
+			mainFrame.getjMenuItemIn().setEnabled(true);
+			mainFrame.getjMenuItemOut().setEnabled(true);
+			mainFrame.getjMenuItemStock().setEnabled(true);
+		}
+
+		//图书管理员，点亮图书模块
+		if (user.getType() == UserTypeEnum.BOOK.getType()) {
+			mainFrame.getjMenuItemBook().setEnabled(true);
+		}
+		//进货管理员，点亮进货模块
+		if (user.getType() == UserTypeEnum.IN.getType()) {
+			mainFrame.getjMenuItemIn().setEnabled(true);
+		}
+		//销售管理员，点亮销售模块
+		if (user.getType() == UserTypeEnum.OUT.getType()) {
+			mainFrame.getjMenuItemOut().setEnabled(true);
+		}
+		//库存管理员，点亮库存模块
+		if (user.getType() == UserTypeEnum.STOCK.getType()) {
+			mainFrame.getjMenuItemStock().setEnabled(true);
+		}
+
+		mainFrame.setContentPane(new LoginWelcomePanel());
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnHelp;
+	private javax.swing.JButton btnLogin;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JTextField tfdName;
+	private javax.swing.JPasswordField tfpPwd;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+表现层欢迎界面LoginWelcomePanel：
+-------------------------
+
+```
+/*
+ * LoginWelcomePanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.login.ui;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class LoginWelcomePanel extends javax.swing.JPanel {
+
+	/** Creates new form LoginWelcomePanel */
+	public LoginWelcomePanel() {
+		initComponents();
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("Dialog", 1, 36));
+		jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+		jLabel1.setText("\u6b22\u8fce\u767b\u5f55\uff0c\u592a\u9633\u6bcf\u5929\u90fd\u662f\u65b0\u7684\uff01\uff01");
+		add(jLabel1);
+		jLabel1.setBounds(100, 190, 590, 170);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JLabel jLabel1;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+表现层帮助界面LoginHelp：
+-----------------
+
+```
+/*
+ * LoginHelp.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.login.ui;
+
+import javax.swing.JFrame;
+
+import cn.hncu.bookStore.BookStore;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class LoginHelp extends javax.swing.JPanel {
+
+	private JFrame mainFrame = null;
+
+	/** Creates new form LoginHelp 
+	 * @param mainFrame */
+	public LoginHelp(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("Dialog", 1, 14));
+		jLabel1.setText("\u5982\u679c\u4f60\u4e0d\u5c0f\u5fc3\u628a\u7528\u6237\u6587\u4ef6\u5220\u9664\u4e86\uff0c\u53ef\u4ee5\u5229\u7528admin\u8d85\u7ea7\u7ba1\u7406\u5458\u767b\u5f55\uff0c\u5bc6\u7801\u4e3a:123456");
+		add(jLabel1);
+		jLabel1.setBounds(90, 250, 590, 80);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JLabel jLabel1;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+
+库存模块：Stock
+==========
+
+数据层接口StockDao：
+------
+
+```
+package cn.hncu.bookStore.stock.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+
+/**
+ * 库存模块的数据层接口
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public interface StockDao {
+	/**
+	 * 创建一个库存对象
+	 * @param stock
+	 * @return
+	 */
+	public boolean create(StockModel stock);
+	
+	/**
+	 * 
+	 * @return 返回所有的库存对象数据
+	 */
+	public List<StockModel> getAl();
+	
+	/**
+	 * 根据uuid  -- 修改为传入的库存对象
+	 * @param stock
+	 * @return
+	 */
+	public boolean update(StockModel stock);
+	
+	/**
+	 * 查询 符合条件 的 库存对象集合
+	 * @param sqm---查询条件
+	 * @return---符合条件的库存对象集合
+	 */
+	public List<StockModel> getByCondition(StockQueryModel sqm);
+	
+	/**
+	 * 根据uuid查找当前的uuid对应的库存对象
+	 * @param uuid
+	 * @return
+	 */
+	public StockModel getSingle(String uuid);
+	
+}
+
+```
+
+
+数据层实现类StockDaoImpl：
+-------------------
+
+```
+package cn.hncu.bookStore.stock.dao.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.hncu.bookStore.stock.dao.dao.StockDao;
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+import cn.hncu.bookStore.util.StringComparison;
+
+/**
+ * 库存模块数据层的实现类  
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class StockDaoImpl implements StockDao{
+	private final String FILE_NAME = "Stock.txt";
+	
+	@Override
+	public boolean create(StockModel stock) {
+		List<StockModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		for(StockModel model :lists){
+			if(model.getUuid().equals(stock.getUuid())){
+				return false;
+			}
+		}
+		lists.add(stock);
+		FileIoUtil.write2file(lists, FILE_NAME);
+		return true;
+	}
+
+	@Override
+	public List<StockModel> getAl() {
+		return FileIoUtil.readFormFile(FILE_NAME);
+	}
+
+	@Override
+	public boolean update(StockModel stock) {
+		List<StockModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		for(int i=0;i<lists.size();i++){
+			if(lists.get(i).getUuid().equals(stock.getUuid())){
+				lists.set(i, stock);
+				FileIoUtil.write2file(lists, FILE_NAME);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public List<StockModel> getByCondition(StockQueryModel sqm) {
+		List<StockModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		List<StockModel> results = new ArrayList<StockModel>();
+		
+		for(StockModel model : lists){
+			//卫条件
+			
+			//比较库存ID
+			if(!StringComparison.stringEquals(model.getUuid(), sqm.getUuid())){
+				continue;
+			}
+			
+			//比较图书ID
+			if(!StringComparison.stringEquals(model.getBookUuid(), sqm.getBookUuid())){
+				continue;
+			}
+			
+			//库存查询最小数量
+			if(sqm.getSumNum()>0){
+				if(sqm.getSumNum()>model.getSumNum()){
+					continue;
+				}
+			}
+			
+			//库存查询最大数量
+			if(sqm.getSumNum2()>0){
+				if(sqm.getSumNum2()<model.getSumNum()){
+					continue;
+				}
+			}
+			
+			results.add(model);
+		}
+		return results;
+	}
+
+	@Override
+	public StockModel getSingle(String uuid) {
+		List<StockModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		for(StockModel model : lists){
+			if(model.getUuid().equals(uuid)){
+				//找到uuid相同，直接返回库存对象
+				return model;
+			}
+		}
+		return null;
+	}
+
+}
+
+```
+
+
+数据层工厂方法StockDaoFactory：
+-----------------------
+
+```
+package cn.hncu.bookStore.stock.dao.factory;
+
+import cn.hncu.bookStore.stock.dao.dao.StockDao;
+import cn.hncu.bookStore.stock.dao.impl.StockDaoImpl;
+
+/**
+ * 工厂类-库存
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class StockDaoFactory {
+	/**
+	 * 工厂方法
+	 * @return --- new 一个数据层实例
+	 */
+	public static StockDao getStockDao(){
+		return new StockDaoImpl();
+	}
+	
+}
+
+```
+
+
+逻辑层接口StockEbi：
+--------------
+
+```
+package cn.hncu.bookStore.stock.business.ebi;
+
+import java.util.List;
+
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+
+
+/**
+ * 库存逻辑层的接口
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public interface StockEbi {
+	/**
+	 * 得到所有的库存对象
+	 * @return---所有的库存对象集合
+	 */
+	public List<StockModel> getAll();
+	
+	/**
+	 * 根据查询条件，查询所有符合条件的库存对象
+	 * @param sqm---查询条件
+	 * @return---所有符合条件的库存对象集合
+	 */
+	public List<StockModel> getByCondition(StockQueryModel sqm);
+	
+}
+
+```
+
+
+逻辑层实现类StockEbo:
+---------------
+
+
+```
+package cn.hncu.bookStore.stock.business.ebo;
+
+import java.util.List;
+
+import cn.hncu.bookStore.stock.business.ebi.StockEbi;
+import cn.hncu.bookStore.stock.dao.dao.StockDao;
+import cn.hncu.bookStore.stock.dao.factory.StockDaoFactory;
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+
+/**
+ * 库存逻辑层实现类
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class StockEbo implements StockEbi{
+	//注入 dao 
+	StockDao dao = StockDaoFactory.getStockDao();
+	
+	@Override
+	public List<StockModel> getAll() {
+		return dao.getAl();
+	}
+
+	@Override
+	public List<StockModel> getByCondition(StockQueryModel sqm) {
+		return dao.getByCondition(sqm);
+	}
+	
+}
+
+```
+
+
+逻辑层工厂类StockEbiFactory：
+----------------------
+
+
+```
+package cn.hncu.bookStore.stock.business.factory;
+
+import cn.hncu.bookStore.stock.business.ebi.StockEbi;
+import cn.hncu.bookStore.stock.business.ebo.StockEbo;
+
+/**
+ * 库存逻辑层工厂类
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class StockEbiFactory {
+	/**
+	 * 工厂方法
+	 * @return---new一个逻辑层实现类
+	 */
+	public static StockEbi getStockEbi(){
+		return new StockEbo();
+	}
+}
+
+```
+
+
+
+值对象StockModel：
+--------------
+
+```
+package cn.hncu.bookStore.stock.vo;
+
+import java.io.Serializable;
+
+/**
+ * 库存封装值对象
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class StockModel implements Serializable{
+	//库存编号
+	private String uuid;
+	//图书编号
+	private String bookUuid;
+	//库存数量
+	private int sumNum;
+	
+	//为显示给用户看而补的
+	private String bookName;
+	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getBookUuid() {
+		return bookUuid;
+	}
+	public void setBookUuid(String bookUuid) {
+		this.bookUuid = bookUuid;
+	}
+	public int getSumNum() {
+		return sumNum;
+	}
+	public void setSumNum(int sumNum) {
+		this.sumNum = sumNum;
+	}
+	
+	public String getBookName() {
+		return bookName;
+	}
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		StockModel other = (StockModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "库存编号:"+uuid + ", 《" + bookName
+				+ "》, 库存数量:" + sumNum+"本";
+	}
+	
+	
+	
+	
+}
+
+```
+
+
+查询值对象StockQueryModel：
+---------------------
+
+```
+package cn.hncu.bookStore.stock.vo;
+/**
+ * 库存查询值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class StockQueryModel extends StockModel{
+	//最大的图书库存数量
+	private int sumNum2;
+
+	public int getSumNum2() {
+		return sumNum2;
+	}
+
+	public void setSumNum2(int sumNum2) {
+		this.sumNum2 = sumNum2;
+	}
+	
+	
+	
+}
+
+```
+
+
+表现层库存列表StockListPanel：
+----------------------
+
+```
+/*
+ * StockListPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.stock.ui;
+
+import java.util.List;
+
+import javax.swing.JFrame;
+
+import cn.hncu.bookStore.stock.business.factory.StockEbiFactory;
+import cn.hncu.bookStore.stock.vo.StockModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class StockListPanel extends javax.swing.JPanel {
+
+	private JFrame mainFrame = null;
+
+	/** Creates new form StockListPanel */
+	public StockListPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+
+	public StockListPanel(JFrame mainFrame, List<StockModel> results) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		jListStocks.setListData(results.toArray());
+	}
+
+	private void myInitData() {
+		List<StockModel> lists = StockEbiFactory.getStockEbi().getAll();
+		jListStocks.setListData(lists.toArray());
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		jListStocks = new javax.swing.JList();
+		btnQuery = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("微软雅黑", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+		jLabel1.setText("\u5e93\u5b58\u5217\u8868");
+		add(jLabel1);
+		jLabel1.setBounds(280, 0, 220, 90);
+
+		jListStocks.setFont(new java.awt.Font("微软雅黑", 1, 18));
+		jListStocks.setForeground(new java.awt.Color(0, 0, 153));
+		jListStocks.setModel(new javax.swing.AbstractListModel() {
+			String[] strings = { "" };
+
+			public int getSize() {
+				return strings.length;
+			}
+
+			public Object getElementAt(int i) {
+				return strings[i];
+			}
+		});
+		jScrollPane1.setViewportView(jListStocks);
+
+		add(jScrollPane1);
+		jScrollPane1.setBounds(120, 100, 520, 320);
+
+		btnQuery.setFont(new java.awt.Font("Dialog", 1, 36));
+		btnQuery.setForeground(new java.awt.Color(255, 0, 51));
+		btnQuery.setText("\u67e5\u8be2\u5e93\u5b58");
+		btnQuery.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnQueryActionPerformed(evt);
+			}
+		});
+		add(btnQuery);
+		btnQuery.setBounds(270, 440, 190, 90);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnQueryActionPerformed(java.awt.event.ActionEvent evt) {
+		mainFrame.setContentPane(new StockQueryPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnQuery;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JList jListStocks;
+	private javax.swing.JScrollPane jScrollPane1;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+表现层库存查询StockQueryPanel：
+-----------------------
+
+```
+/*
+ * StockQueryPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.stock.ui;
+
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.book.business.factory.BookEbiFactory;
+import cn.hncu.bookStore.book.vo.BookModel;
+import cn.hncu.bookStore.stock.business.factory.StockEbiFactory;
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-20
+ */
+public class StockQueryPanel extends javax.swing.JPanel {
+
+	private JFrame mainFrame = null;
+
+	/** Creates new form StockQueryPanel 
+	 * @param mainFrame */
+	public StockQueryPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+	
+	/**
+	 * 初始化图书box
+	 */
+	private void myInitData() {
+		List<BookModel> books = BookEbiFactory.getBookEbi().getAll();
+		for(BookModel book:books){
+			combBook.addItem(book.getName());
+		}
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel7 = new javax.swing.JLabel();
+		tfdStockUuid = new javax.swing.JTextField();
+		jLabel5 = new javax.swing.JLabel();
+		combBook = new javax.swing.JComboBox();
+		jLabel8 = new javax.swing.JLabel();
+		tfdStockNum = new javax.swing.JTextField();
+		jLabel11 = new javax.swing.JLabel();
+		tfdStockNum2 = new javax.swing.JTextField();
+		btnQuery = new javax.swing.JButton();
+		btnBack = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("Dialog", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(255, 0, 0));
+		jLabel1.setText("\u5e93\u5b58\u67e5\u8be2");
+		add(jLabel1);
+		jLabel1.setBounds(270, 0, 230, 90);
+
+		jLabel7.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel7.setText("\u5e93\u5b58\u7f16\u53f7:");
+		add(jLabel7);
+		jLabel7.setBounds(80, 160, 80, 30);
+		add(tfdStockUuid);
+		tfdStockUuid.setBounds(180, 160, 150, 30);
+
+		jLabel5.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel5.setText("\u56fe\u4e66:");
+		add(jLabel5);
+		jLabel5.setBounds(430, 150, 50, 30);
+
+		combBook.setFont(new java.awt.Font("Dialog", 1, 18));
+		combBook.setModel(new javax.swing.DefaultComboBoxModel(
+				new String[] { "查询所有" }));
+		add(combBook);
+		combBook.setBounds(490, 150, 190, 30);
+
+		jLabel8.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel8.setText("\u5e93\u5b58\u6700\u5c0f\u6570\u91cf:");
+		add(jLabel8);
+		jLabel8.setBounds(50, 270, 140, 30);
+		add(tfdStockNum);
+		tfdStockNum.setBounds(180, 270, 150, 30);
+
+		jLabel11.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel11.setText("\u5e93\u5b58\u6700\u5927\u6570\u91cf:");
+		add(jLabel11);
+		jLabel11.setBounds(360, 270, 120, 30);
+		add(tfdStockNum2);
+		tfdStockNum2.setBounds(490, 270, 190, 30);
+
+		btnQuery.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnQuery.setForeground(new java.awt.Color(255, 0, 51));
+		btnQuery.setText("\u67e5\u8be2");
+		btnQuery.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnQueryActionPerformed(evt);
+			}
+		});
+		add(btnQuery);
+		btnQuery.setBounds(140, 410, 120, 70);
+
+		btnBack.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnBack.setForeground(new java.awt.Color(255, 0, 51));
+		btnBack.setText("\u8fd4\u56de");
+		btnBack.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnBackActionPerformed(evt);
+			}
+		});
+		add(btnBack);
+		btnBack.setBounds(490, 410, 120, 70);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnQueryActionPerformed(java.awt.event.ActionEvent evt) {
+		// 1收集参数(且验证输入有效性)
+		//库存编号
+		String uuid = tfdStockUuid.getText();
+		//图书编号
+		String bookUuid = null;
+		if (combBook.getSelectedIndex() > 0) {
+			bookUuid = BookEbiFactory.getBookEbi()
+					.getBookByName(combBook.getSelectedItem().toString())
+					.getUuid();
+		}
+
+		//库存最小数量
+		int sumNum = 0;
+		if (tfdStockNum.getText() != null
+				&& tfdStockNum.getText().trim().length() > 0) {
+			try {
+				sumNum = Integer.parseInt(tfdStockNum.getText());
+				if (sumNum < 0) {
+					throw new NumberFormatException();
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(mainFrame, "库存最小数量必须输入正整数!");
+				return;
+			}
+		}
+
+		//库存最大数量
+		int sumNum2 = 0;
+		if (tfdStockNum2.getText() != null
+				&& tfdStockNum2.getText().trim().length() > 0) {
+			try {
+				sumNum2 = Integer.parseInt(tfdStockNum2.getText());
+				if (sumNum2 < 0) {
+					throw new NumberFormatException();
+				}
+			} catch (NumberFormatException e) {
+				JOptionPane.showMessageDialog(mainFrame, "库存最大数量必须输入正整数!");
+				return;
+			}
+		}
+
+		// 2组织参数----StockQueryModel
+		StockQueryModel sqm = new StockQueryModel();
+		sqm.setUuid(uuid);
+		sqm.setBookUuid(bookUuid);
+		sqm.setSumNum(sumNum);
+		sqm.setSumNum2(sumNum2);
+
+		// 3调用逻辑层
+		List<StockModel> results = StockEbiFactory.getStockEbi()
+				.getByCondition(sqm);
+
+		// 4返回到结果页面
+		mainFrame.setContentPane(new StockListPanel(mainFrame, results));
+		mainFrame.validate();
+	}
+
+	private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+		back();
+	}
+
+	private void back() {
+		mainFrame.setContentPane(new StockListPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnBack;
+	private javax.swing.JButton btnQuery;
+	private javax.swing.JComboBox combBook;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel11;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel7;
+	private javax.swing.JLabel jLabel8;
+	private javax.swing.JTextField tfdStockNum;
+	private javax.swing.JTextField tfdStockNum2;
+	private javax.swing.JTextField tfdStockUuid;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+
+进货模块：
+=====
+
+进货模块的逻辑层接口，在写了库存模块之后改了一点,增加了和库存模块的串接：
+
+逻辑层接口InMainEbo：
+---------------
+
+```
+package cn.hncu.bookStore.in.business.ebo;
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import cn.hncu.bookStore.book.business.ebi.BookEbi;
+import cn.hncu.bookStore.book.business.factory.BookEbiFactory;
+import cn.hncu.bookStore.common.UuidModelConstance;
+import cn.hncu.bookStore.common.uuid.dao.dao.UuidDao;
+import cn.hncu.bookStore.common.uuid.dao.factory.UuidDaoFactory;
+import cn.hncu.bookStore.in.business.ebi.InMainEbi;
+import cn.hncu.bookStore.in.business.factory.InMainEbiFactory;
+import cn.hncu.bookStore.in.dao.dao.InDetailDao;
+import cn.hncu.bookStore.in.dao.dao.InMainDao;
+import cn.hncu.bookStore.in.dao.factory.InDetailDaoFactory;
+import cn.hncu.bookStore.in.dao.factory.InMainDaoFactory;
+import cn.hncu.bookStore.in.vo.InDetailModel;
+import cn.hncu.bookStore.in.vo.InDetailQueryModel;
+import cn.hncu.bookStore.in.vo.InMainModel;
+import cn.hncu.bookStore.in.vo.InMainQueryModel;
+import cn.hncu.bookStore.stock.dao.dao.StockDao;
+import cn.hncu.bookStore.stock.dao.factory.StockDaoFactory;
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class InMainEbo implements InMainEbi{
+	//注入dao
+	
+	InMainDao inMainDao = InMainDaoFactory.getInMainDao();
+	InDetailDao inDetailDao = InDetailDaoFactory.getInDetailDao();
+	UuidDao uuidDao = UuidDaoFactory.getUuidDao();
+	BookEbi bookEbi = BookEbiFactory.getBookEbi();
+	
+	@Override
+	public boolean create(InMainModel inMain, List<InDetailModel> inDetails) {
+		//////////1存储inMain信息///////////
+		//补全inMain中的数据
+		//需要:inUuid,inDate,inUserUuid   已组织:inUserUuid
+		//还缺(需补):inUuid,inDate
+		String inUuid = uuidDao.getNextUuid(UuidModelConstance.IN_MAIN);
+		inMain.setUuid(inUuid);
+		inMain.setInDate(System.currentTimeMillis());
+		inMainDao.create(inMain);
+		
+		 //////////2存储inDetail信息///////////
+		for(InDetailModel model:inDetails){
+			//补全每一个inDetail中的数据
+			//需要:inDetailUuid,inMainUuid,bookUuid,sumNum,sumMoney   已组织:bookUuid,sumNum
+	        //还缺(需补):inDetailUuid,inMainUuid,sumMoney
+			model.setUuid(uuidDao.getNextUuid(UuidModelConstance.IN_DETAIL));
+			model.setInId(inUuid);
+			
+			double sumMoney = model.getSumNum() * bookEbi.getSingle(model.getBookId()).getInPrice();
+			model.setSumMoney(sumMoney);
+			inDetailDao.create(model);
+			
+			//////////※※※3 图书入库--到库存表格///////////
+			putInStock(model.getBookId(),model.getSumNum());
+			
+		}
+		return true;
+	}
+	
+	/**
+	 * 入库动作
+	 * @param bookId
+	 * @param bookName
+	 */
+	private void putInStock(String bookId, int sumNum) {
+		//注入Stock模块的dao
+		StockDao dao = StockDaoFactory.getStockDao();
+		
+		//查询库存，看看是否已经存在该bookUuid所对应的书，如果没有则库存数据为sumNum，否则为在原有基础上再加上sumNum
+		StockQueryModel sqm = new StockQueryModel();
+		sqm.setBookUuid(bookId);
+		List<StockModel> lists = dao.getByCondition(sqm);
+		
+		//库存中没有这种书
+		if(lists==null||lists.size()==0){
+			//表现层只负责组织进货模块的值对象，库存模块我们在逻辑层自己补
+			StockModel stock = new StockModel();
+			
+			//补:库存编号 uuid
+			stock.setUuid(UuidDaoFactory.getUuidDao().getNextUuid(UuidModelConstance.STOCK));
+			
+			//补: bookName 专为显示给用户看的书名
+			stock.setBookName(BookEbiFactory.getBookEbi().getSingle(bookId).getName());
+			stock.setBookUuid(bookId);
+			
+			stock.setSumNum(sumNum);
+			
+			dao.create(stock);
+			
+		}else{//库存中已经存在该图书对应的库存记录
+			StockModel stock = lists.get(0);
+			stock.setSumNum( stock.getSumNum()+sumNum );
+			dao.update(stock);
+		}
+		
+	}
+
+	@Override
+	public Map<InMainModel, List<InDetailModel>> getAll() {
+		Map<InMainModel,List<InDetailModel>> map = new TreeMap<InMainModel, List<InDetailModel>>();
+		
+		List<InMainModel> inMains = inMainDao.getAll();
+		
+		for(InMainModel inMain: inMains ){
+			//查询条件值对象的创建
+			InDetailQueryModel idqm = new InDetailQueryModel();
+			String inUuid = inMain.getUuid();
+			idqm.setInId(inUuid);
+
+			List<InDetailModel> details = inDetailDao.getbyCondition(idqm);
+			
+			map.put(inMain, details);
+		}
+		
+		return map;
+	}
+
+	@Override
+	public Map<InMainModel, List<InDetailModel>> getByCondition(
+			InMainQueryModel imqm, InDetailQueryModel idqm) {
+		Map<InMainModel, List<InDetailModel>> map = new TreeMap<InMainModel, List<InDetailModel>>();
+		
+		List<InMainModel> list = inMainDao.getbyCondition(imqm);
+		
+		for(InMainModel inMain : list){
+			idqm.setInId(inMain.getUuid());
+			
+			List<InDetailModel> details = inDetailDao.getbyCondition(idqm);
+			if(details.size()!=0){
+				map.put(inMain, details);
+			}
+		}
+		
+		return map;
+	}
+
+}
+
+```
+
+
+销售模块：
+=====
+
+销售模块的逻辑层接口也增加了和库存模块的串接：
+
+逻辑层接口OutMainEbo：
+----------------
+
+
+```
+package cn.hncu.bookStore.out.business.ebo;
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.book.business.ebi.BookEbi;
+import cn.hncu.bookStore.book.business.factory.BookEbiFactory;
+import cn.hncu.bookStore.common.UuidModelConstance;
+import cn.hncu.bookStore.common.uuid.dao.dao.UuidDao;
+import cn.hncu.bookStore.common.uuid.dao.factory.UuidDaoFactory;
+import cn.hncu.bookStore.out.business.ebi.OutMainEbi;
+import cn.hncu.bookStore.out.dao.dao.OutDetailDao;
+import cn.hncu.bookStore.out.dao.dao.OutMainDao;
+import cn.hncu.bookStore.out.dao.factory.OutDetailDaoFactory;
+import cn.hncu.bookStore.out.dao.factory.OutMainDaoFactory;
+import cn.hncu.bookStore.out.vo.OutDetailModel;
+import cn.hncu.bookStore.out.vo.OutDetailQueryModel;
+import cn.hncu.bookStore.out.vo.OutMainModel;
+import cn.hncu.bookStore.out.vo.OutMainQueryModel;
+import cn.hncu.bookStore.stock.business.factory.StockEbiFactory;
+import cn.hncu.bookStore.stock.dao.dao.StockDao;
+import cn.hncu.bookStore.stock.dao.factory.StockDaoFactory;
+import cn.hncu.bookStore.stock.vo.StockModel;
+import cn.hncu.bookStore.stock.vo.StockQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutMainEbo implements OutMainEbi{
+	//注入dao
+	
+	OutMainDao outMainDao = OutMainDaoFactory.getOutMainDao();
+	OutDetailDao outDetailDao = OutDetailDaoFactory.getOutDetailDao();
+	UuidDao uuidDao = UuidDaoFactory.getUuidDao();
+	BookEbi bookEbi = BookEbiFactory.getBookEbi();
+	
+	@Override
+	public boolean create(OutMainModel outMain, List<OutDetailModel> outDetails) {
+		//※※※库存操作1：在添加销售信息之前要进行防护:检查库存，看是否可能库存不够。如果不够，本次添加直接失败,不进行数据存储---return false;
+		//检查库存----用明细单(outDetail)中的bookUuid
+		//注入Stock模块的dao
+		StockDao stockDao = StockDaoFactory.getStockDao();
+		for(OutDetailModel detail : outDetails){
+			StockQueryModel sqm = new StockQueryModel();
+			sqm.setBookUuid(detail.getBookId());
+			List<StockModel> lists = stockDao.getByCondition(sqm);
+			if(lists==null||lists.size()==0){//库存中没有该图书信息
+				JOptionPane.showMessageDialog(null, "库存中不存在《"+detail.getBookName()+"》,本次销售添加失败!");
+				return false;
+			}else {
+				StockModel sm = lists.get(0);
+				if(sm.getSumNum()<detail.getSumNum()){
+					JOptionPane.showMessageDialog(null, "库存中《"+detail.getBookName()+"》数量不足,本次销售添加失败!");
+					return false;
+				}
+			}
+			
+		}
+		
+		
+		
+		//////////1存储outMain信息///////////
+		//补全outMain中的数据
+		//需要:inUuid,inDate,inUserUuid   已组织:inUserUuid
+		//还缺(需补):inUuid,inDate
+		String outUuid = uuidDao.getNextUuid(UuidModelConstance.OUT_MAIN);
+		outMain.setUuid(outUuid);
+		outMain.setOutDate(System.currentTimeMillis());
+		outMainDao.create(outMain);
+		
+		 //////////2存储inDetail信息///////////
+		for(OutDetailModel model:outDetails){
+			//补全每一个inDetail中的数据
+			//需要:inDetailUuid,outMainUuid,bookUuid,sumNum,sumMoney   已组织:bookUuid,sumNum
+	        //还缺(需补):inDetailUuid,outMainUuid,sumMoney
+			model.setUuid(uuidDao.getNextUuid(UuidModelConstance.OUT_DETAIL));
+			model.setOutId(outUuid);
+			
+			double sumMoney = model.getSumNum() * bookEbi.getSingle(model.getBookId()).getSalePrice();
+			model.setSumMoney(sumMoney);
+			outDetailDao.create(model);
+			
+			
+			//※※※库存操作2：更新库存---把对应的每种图书的数量  减去  这次销售的数量
+			StockQueryModel sqm = new StockQueryModel();
+			sqm.setBookUuid(model.getBookId());
+			List<StockModel> stocks = StockEbiFactory.getStockEbi().getByCondition(sqm);
+			//经过之前的防护，list里面一定有一个值，而且库存一定可以更新成功
+			StockModel stock = stocks.get(0);
+			stock.setSumNum(stock.getSumNum()-model.getSumNum());
+			StockDaoFactory.getStockDao().update(stock);
+			
+		}
+		return true;
+	}
+
+	@Override
+	public Map<OutMainModel, List<OutDetailModel>> getAll() {
+		Map<OutMainModel,List<OutDetailModel>> map = new TreeMap<OutMainModel, List<OutDetailModel>>();
+		
+		List<OutMainModel> outMains = outMainDao.getAll();
+		
+		for(OutMainModel outMain: outMains ){
+			//查询条件值对象的创建
+			OutDetailQueryModel odqm = new OutDetailQueryModel();
+			String inUuid = outMain.getUuid();
+			odqm.setOutId(inUuid);
+
+			List<OutDetailModel> details = outDetailDao.getbyCondition(odqm);
+			
+			map.put(outMain, details);
+		}
+		
+		return map;
+	}
+
+	@Override
+	public Map<OutMainModel, List<OutDetailModel>> getByCondition(
+			OutMainQueryModel imqm, OutDetailQueryModel odqm) {
+		Map<OutMainModel, List<OutDetailModel>> map = new TreeMap<OutMainModel, List<OutDetailModel>>();
+		
+		List<OutMainModel> list = outMainDao.getbyCondition(imqm);
+		
+		for(OutMainModel outMain : list){
+			odqm.setOutId(outMain.getUuid());
+			
+			List<OutDetailModel> details = outDetailDao.getbyCondition(odqm);
+			if(details.size()!=0){
+				map.put(outMain, details);
+			}
+		}
+		
+		return map;
+	}
+
+}
+
+```
+
+
+展示图片：
+=====
+
+登录界面：
+-----
+菜单项，除了注销是点亮之外，其他的都是暗的。
+![登录界面](http://img.blog.csdn.net/20160420170941493)
+
+帮助界面：
+-----
+当用户文件被删除了之后，就只能通过这个账号登录了。
+
+![](http://img.blog.csdn.net/20160420171054072)
+
+管理员登录后的欢迎界面：
+-----
+这个是管理员登录的欢迎界面，可以看到所有的菜单项都被点亮了的。
+
+![](http://img.blog.csdn.net/20160420171140291)
+
+
+库存管理用户登录后的库存界面：
+---------------
+可以看到，菜单项只有库存那一项是点亮的。
+
+![](http://img.blog.csdn.net/20160420171233713)
+
+销售管理用户登录后的销售界面：
+---------------
+可以看到，菜单项只有销售那一项是点亮的。
+![这里写图片描述](http://img.blog.csdn.net/20160420171923731)
+
+
+
+其他的都是，一个模块的用户对应相应的模块！
+
+本系列就到此结束啦。
+可能有一些小bug，我也就没去改了，时间比较紧，O(∩_∩)O哈哈~，大家有兴趣的可以去改改，做做。
+
+所有代码的百度云链接：
+链接: http://pan.baidu.com/s/1c2ob5r6 密码: u6jv
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

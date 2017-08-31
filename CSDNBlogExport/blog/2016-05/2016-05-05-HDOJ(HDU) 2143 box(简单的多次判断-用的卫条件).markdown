@@ -1,0 +1,97 @@
+---
+layout: post
+title: "HDOJ(HDU) 2143 box(简单的多次判断-用的卫条件)"
+date: 2016-05-05 10:50:43 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+One day, winnie received a box and a letter. In the letter, there are three integers and five operations(+,-,*,/,%). If one of the three integers can be calculated by the other two 
+---
+
+
+Problem Description 
+One day, winnie received a box and a letter. In the letter, there are three integers and five operations(+,-,*,/,%). If one of the three integers can be calculated by the other two
+<!-- more -->
+----------
+
+Problem Description
+One day, winnie received a box and a letter. In the letter, there are three integers and five operations(+,-,*,/,%). If one of the three integers can be calculated by the other two integers using any operations only once.. He can open that mysterious box. Or that box will never be open.
+
+ 
+
+Input
+The input contains several test cases.Each test case consists of three non-negative integers.
+
+ 
+
+Output
+If winnie can open that box.print "oh,lucky!".else print "what a pity!"
+
+ 
+
+Sample Input
+1 2 3
+ 
+
+Sample Output
+oh,lucky!
+
+题意：
+给你3个数，判断其中2个数进行+-*/%运算后的结果是不是剩余的那个数。
+
+
+注意几点：
+1.数据类型要用long型，不然数据会溢出。
+2.除法是真实的除法，是计算机的3/2=1.5；不是计算机的1；
+3.求模判断不为0；
+4.其他两个数是和本身不同的两个数，不包括本身。
+
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			long a = sc.nextLong();
+			long b = sc.nextLong();
+			long c = sc.nextLong();
+			
+			//a+b=c,也就是c-b=a,c-a=b;
+			if((a+b)==c||(b+c)==a||(a+c)==b){
+				System.out.println("oh,lucky!");
+				continue;
+			}
+			
+			//这里用乘法判断除法好些。a*b=c也就是c/b=a.c/a=b(实际上)
+			//因为这里的判断除法是：3/2=1.5的。计算机中的int，long进行除法：3/2=1;
+			//如果我们写除法判断，还要判断结果是不是整数、
+			if((a*b)==c||(a*c)==b||(b*c)==a){
+				System.out.println("oh,lucky!");
+				continue;
+			}
+			
+			//不能对0取模
+			if((b!=0&&(a%b==c||c%b==a))||(c!=0&&(a%c==b||b%c==a)||(a!=0&&(b%a==c||c%a==b)))){
+				System.out.println("oh,lucky!");
+				continue;
+			}
+			System.out.println("what a pity!");
+		}
+	}
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

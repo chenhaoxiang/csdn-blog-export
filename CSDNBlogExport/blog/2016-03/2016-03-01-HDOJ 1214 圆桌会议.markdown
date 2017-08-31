@@ -1,0 +1,76 @@
+---
+layout: post
+title: "HDOJ 1214 圆桌会议"
+date: 2016-03-01 03:39:38 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 逆序数和回文串
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+HDU ACM集训队的队员在暑假集训时经常要讨论自己在做题中遇到的问题.每当面临自己解决不了的问题时,他们就会围坐在一张圆形的桌子旁进行交流,经过大家的讨论后一般没有解决不了的问题,这也只有HDU ACM集训队特有的圆桌会议,有一天你也可以进来体会一下哦:),在一天在讨论的时候,Eddy想出了一个极为古怪的想法,如果他们在每一分钟内,一对相邻的两个ACM队员 
+---
+
+
+Problem Description 
+HDU ACM集训队的队员在暑假集训时经常要讨论自己在做题中遇到的问题.每当面临自己解决不了的问题时,他们就会围坐在一张圆形的桌子旁进行交流,经过大家的讨论后一般没有解决不了的问题,这也只有HDU ACM集训队特有的圆桌会议,有一天你也可以进来体会一下哦:),在一天在讨论的时候,Eddy想出了一个极为古怪的想法,如果他们在每一分钟内,一对相邻的两个ACM队员
+<!-- more -->
+----------
+
+Problem Description
+HDU ACM集训队的队员在暑假集训时经常要讨论自己在做题中遇到的问题.每当面临自己解决不了的问题时,他们就会围坐在一张圆形的桌子旁进行交流,经过大家的讨论后一般没有解决不了的问题,这也只有HDU ACM集训队特有的圆桌会议,有一天你也可以进来体会一下哦:),在一天在讨论的时候,Eddy想出了一个极为古怪的想法,如果他们在每一分钟内,一对相邻的两个ACM队员交换一下位子,那么要多少时间才能得到与原始状态相反的座位顺序呢?(即对于每个队员，原先在他左面的队员后来在他右面，原先在他右面的队员在他左面),这当然难不倒其他的聪明的其他队友们,马上就把这个古怪的问题给解决了,你知道是怎么解决的吗?
+
+ 
+
+Input
+对于给定数目N(1<=N<=32767)，表示有N个人,求要多少时间才能得到与原始状态相反的座位顺序(reverse)即对于每个人，原先在他左面的人后来在他右面，原先在他右面的人在他左面。
+
+ 
+
+Output
+对每个数据输出一行，表示需要的时间(以分钟为单位)
+
+ 
+
+Sample Input
+4
+5
+6
+ 
+
+Sample Output
+2
+4
+6
+ 
+思路：
+把圆桌分成两部分，分别求两部分的逆序数，然后再让分开后的圆桌合并（即让两逆序数相加），n个有序数的逆序数为：n*(n-1)/2； 所以为了让结果逆序数最小，则尽量要让两部分等分（也就是说若为n个人的圆桌，则一部分是 n/2，另一部分为 n-n/2）
+由题意可知目的是将123...n 转化为n....321    可知要转换n+n-1+...1 = n*（n-1）/2 次， 即1转到最后一位需要n次， 2转换到n-1的位置需要n-1次...
+又因为是首尾相接的所以可以一半从这边交换， 另一半从那边交换.
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			System.out.println(f(n/2)+f(n-n/2));
+		}
+	}
+
+	private static int f(int i) {
+		return i*(i-1)/2;
+	}
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

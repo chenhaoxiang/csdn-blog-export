@@ -1,0 +1,97 @@
+---
+layout: post
+title: "HDOJ(HDU) 2178 猜数字(题意有点难理解、、、)"
+date: 2016-05-05 08:12:31 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+A有1数m，B来猜.B每猜一次，A就说”太大”，”太小”或”对了” 。  
+问B猜n次可以猜到的最大数。 Input 
+第1行是整数T,表示有T组数据，下面有T行  
+每行一个整数n (1 ≤ n ≤ 30) Output 
+猜n次可以猜到的最大数Sample Input 
+2 
+1 
+3Sample Output 
+1 
+7这个题目我总感觉题意没说明白，没 
+---
+
+
+Problem Description 
+A有1数m，B来猜.B每猜一次，A就说”太大”，”太小”或”对了” 。  
+问B猜n次可以猜到的最大数。 Input 
+第1行是整数T,表示有T组数据，下面有T行  
+每行一个整数n (1 ≤ n ≤ 30) Output 
+猜n次可以猜到的最大数Sample Input 
+2 
+1 
+3Sample Output 
+1 
+7这个题目我总感觉题意没说明白，没
+<!-- more -->
+----------
+
+Problem Description
+A有1数m，B来猜.B每猜一次，A就说"太大"，"太小"或"对了" 。 
+问B猜n次可以猜到的最大数。 
+
+ 
+
+Input
+第1行是整数T,表示有T组数据，下面有T行 
+每行一个整数n (1 ≤ n ≤ 30) 
+
+ 
+
+Output
+猜n次可以猜到的最大数
+
+ 
+
+Sample Input
+2
+1
+3
+ 
+
+Sample Output
+1
+7
+
+
+这个题目我总感觉题意没说明白，没办法。参考了一下网上的题意。
+
+题意就是：
+最多猜n次一定可以猜到1至m(闭区间)内的任意数字，求m的最大值。
+
+用二分法猜可以很快的猜出一个被猜数 
+但是如果一个数在特定的次数下被猜出来的话，用二分法算出的这个被猜数的范围会更大
+也就是题目中说出的最大数
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			System.out.println((int)(Math.pow(2, n)-1));
+		}
+	}
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

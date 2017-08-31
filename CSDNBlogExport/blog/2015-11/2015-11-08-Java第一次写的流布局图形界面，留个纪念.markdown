@@ -1,0 +1,92 @@
+---
+layout: post
+title: "Java第一次写的流布局图形界面，留个纪念"
+date: 2015-11-08 08:15:38 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目
+tags: [java,界面,图形,布局,框架]
+keyword: 陈浩翔, 谙忆
+description: package jisuanqi;import java.awt.*;public class MyFrame extends Frame{
+      //继承Frame类
+    public MyFrame() {
+        super("第一个图形界面");
+        //设置框架窗口标题
+        this.setSize(200, 130);
+        //设置组 
+---
+
+
+package jisuanqi;import java.awt.*;public class MyFrame extends Frame{
+      //继承Frame类
+    public MyFrame() {
+        super("第一个图形界面");
+        //设置框架窗口标题
+        this.setSize(200, 130);
+        //设置组
+<!-- more -->
+----------
+
+```
+package jisuanqi;
+
+import java.awt.*;
+
+public class MyFrame extends Frame{
+      //继承Frame类
+	public MyFrame() {
+		super("第一个图形界面");
+		//设置框架窗口标题
+		this.setSize(200, 130);
+		//设置组件尺寸（宽，高）
+		this.setLocation(300, 240);
+		//设置组件的显示位置
+		this.setBackground(Color.lightGray);
+		//设置组件的背景颜色
+	    this.setLayout(new FlowLayout());
+	    //设置的容器布局为流布局，居中
+	    
+	    
+	    this.add(new Label("姓名:"));
+	    //创建标签，添加到框架上
+	    this.add(new TextField("陈浩翔",10));
+	    //创建文本行，10列
+	    this.add(new Label("密码"));
+	    
+	    this.add(new TextField(10));
+	    //创建10列的文本行
+	    this.add(new Button("OK"));
+	    //创建按钮
+	    this.add(new Button("Cancel"));
+	    //创建按钮
+		
+	    this.setVisible(true);
+	    //是否显示框架窗口，必须在添加组件后
+		
+		
+	}
+	public static void main(String[] args) {
+		new MyFrame();
+		
+	}
+}
+```
+第一次写图形界面的源代码，小小的激动啊。
+![](http://img.blog.csdn.net/20151108201120041)
+
+
+![](http://img.blog.csdn.net/20151108201104009)
+
+流布局的图形构造方法默认为居中排列；
+对齐常量：
+LEFT（0）：左对齐
+CENTER（1）：居中
+RIGHT（2）：右对齐
+public FlowLayout(int align)
+//align参数指定对齐方式，取值为对齐常量。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

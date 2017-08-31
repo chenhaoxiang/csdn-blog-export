@@ -1,0 +1,89 @@
+---
+layout: post
+title: "HDOJ 2802 F(N)"
+date: 2016-03-01 04:52:39 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 判断循环-循环节
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+ 
+Giving the N, can you tell me the answer of F(N)?Input 
+Each test case contains a single integer N(1<=N<=10^9). The input is terminated by a set starting with N = 0. This set sho 
+---
+
+
+Problem Description 
+ 
+Giving the N, can you tell me the answer of F(N)?Input 
+Each test case contains a single integer N(1<=N<=10^9). The input is terminated by a set starting with N = 0. This set sho
+<!-- more -->
+----------
+
+Problem Description
+![](http://img.blog.csdn.net/20160301165114146)
+Giving the N, can you tell me the answer of F(N)?
+ 
+
+Input
+Each test case contains a single integer N(1<=N<=10^9). The input is terminated by a set starting with N = 0. This set should not be processed.
+ 
+
+Output
+For each test case, output on a line the value of the F(N)%2009.
+ 
+
+Sample Input
+1
+2
+3
+0
+ 
+
+Sample Output
+1
+7
+20
+
+一般这种让根据公式求出对应项的值得题都有规律   （有一个循环，此题的循环为4018（注意  这种有循环规律的是让你输出对应项对某个数取余后的题））可以先打表写出有限个数的结果，再观察规律，或者直接写代码判断是否进入了循环。
+
+```
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+public class Main {
+	static int[] f = new int[10000];
+	public static void main(String[] args) {
+		f[1]=1;
+		f[2]=7;
+		for(int i=3;i<=4018;i++){
+			f[i] = (f[i-2]-((i-1)*(i-1)*(i-1))+(i*i*i))%2009;
+			//System.out.println(i+" "+f[i]);
+		}
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			if(n==0)
+				return ;
+//			for(int i=3;i<100000;i+=2){
+//				if(f[i]==1&&f[i+1]==7){
+//					System.out.println(i-1);
+//					break;
+//				}
+//			}
+			//判断多久开始循环
+			System.out.println(f[n%4018]);
+		}
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

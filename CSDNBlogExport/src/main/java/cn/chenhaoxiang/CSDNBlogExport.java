@@ -16,7 +16,7 @@ public class CSDNBlogExport implements PageProcessor {
 	private static Set<String> blogIdSet = null;
 	private static JTextArea textArea=null;
 	// 部分一：抓取网站的相关配置，包括编码、抓取间隔、重试次数等  可以做成用户输入
-	private Site site = Site.me().setRetryTimes(5).setSleepTime(5000).setCharset("utf-8");
+	private Site site = Site.me().setRetryTimes(10).setSleepTime(5000).setCharset("utf-8");
 	public static String name = "";// CSDN用户名
 	public static Boolean nameIsOK = false;
 
@@ -79,10 +79,11 @@ public class CSDNBlogExport implements PageProcessor {
 				textArea.append("已获取到您的博客文章ID:"+lastStr+"\n");
 			logger.info("已获取到您的博客文章ID:"+lastStr);
 			pageInt++;
+			Main.blogs++;
 		}
 //		logger.info("获取所有的文章博客ID完成，您一共有" + pageInt + "篇文章...");
 		if(textArea!=null)
-			textArea.append("本次线程获取" + pageInt + "篇文章...\n");
+			textArea.append("本次线程获取" + pageInt + "篇文章...共"+Main.blogs+"篇\n");
 		if(name.equals("")) {
 			String names = page.getHtml().xpath("//div[@id='blog_userface']").links().regex(".*/my.csdn.net/.*").get();
 			names = names.substring(names.lastIndexOf("/") + 1);
@@ -121,6 +122,7 @@ public class CSDNBlogExport implements PageProcessor {
 
 	/**
 	 * Launch the application.
+	 * qq_26525215
 	 */
 	public static void main(String[] args) {
 		isOnePage =true;

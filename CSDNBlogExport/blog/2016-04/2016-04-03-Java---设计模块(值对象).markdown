@@ -1,0 +1,210 @@
+---
+layout: post
+title: "Java---设计模块(值对象)"
+date: 2016-04-03 11:32:06 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块
+tags: [值对象,java,设计模块]
+keyword: 陈浩翔, 谙忆
+description: ★ 场景和问题 
+在Java开发时，需要来回交换大量的数据，比如要为方法传入参数，也要获取方法的返回值，该如何能更好的进行数据的交互？★ 基本的编写步骤 
+◎第1步：写一个类，实现可序列化（如果以后数据是往数据库里存的，那么可以不序列化，节省资源） 
+◎第2步：私有化所有属性，保持一个默认构造方法(public无参) 
+◎第3步：为每个属性提供get()、set()方法（如果是boolean型变量， 
+---
+
+
+★ 场景和问题 
+在Java开发时，需要来回交换大量的数据，比如要为方法传入参数，也要获取方法的返回值，该如何能更好的进行数据的交互？★ 基本的编写步骤 
+◎第1步：写一个类，实现可序列化（如果以后数据是往数据库里存的，那么可以不序列化，节省资源） 
+◎第2步：私有化所有属性，保持一个默认构造方法(public无参) 
+◎第3步：为每个属性提供get()、set()方法（如果是boolean型变量，
+<!-- more -->
+----------
+
+**★ 场景和问题**
+在Java开发时，需要来回交换大量的数据，比如要为方法传入参数，也要获取方法的返回值，该如何能更好的进行数据的交互？
+
+**★ 基本的编写步骤**
+**◎第1步**：写一个类，实现可序列化（如果以后数据是往数据库里存的，那么可以不序列化，节省资源）
+**◎第2步**：私有化所有属性，保持一个默认构造方法(public无参)
+**◎第3步**：为每个属性提供get()、set()方法（如果是boolean型变量，最好把get改成is）
+**◎第4步**：推荐覆盖实现equals()、hashCode()和toString()方法
+
+
+**值对象的本质是“封装数据”**
+User 类：
+```
+package cn.hncu.pattern.factory.vo.v2.vo;
+
+import java.io.Serializable;
+
+public class User implements Serializable{
+	//只能将支持 java.io.Serializable 接口的对象写入流中,必须实现这个接口
+	private String userId;
+	private String tel;
+	private String address;
+    private int age;
+    private boolean isMale;
+    public User() {
+    }
+    
+    public User(String userId, String tel, String address, int age){
+    	this.userId = userId;
+    	this.tel = tel;
+    	this.address = address;
+    	this.age = age;
+    }
+    
+	public String getTel() {
+		return tel;
+	}
+	public void setTel(String tel) {
+		this.tel = tel;
+	}
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public int getAge() {
+		return age;
+	}
+	public void setAge(int age) {
+		this.age = age;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public boolean isMale() {
+		return isMale;
+	}
+	public void setMale(boolean isMale) {
+		this.isMale = isMale;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		if (userId == null) {
+			if (other.userId != null)
+				return false;
+		} else if (!userId.equals(other.userId))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", tel=" + tel + ", address="
+				+ address + ", age=" + age + "]";
+	}
+    
+    
+}
+
+```
+B类：
+
+```
+package cn.hncu.pattern.factory.vo.v2;
+
+import cn.hncu.pattern.factory.vo.v2.vo.User;
+
+
+public class B {
+	String userId=null;
+	User user = null;
+	public boolean sendData(User user){ //Value Object ----Model
+		System.out.println("数据已经接受到。。。");
+		operate(user);
+		return true;
+	}
+	private void operate(User user) {
+		this.user = user;
+		this.user.setUserId("CN_"+user.getUserId());
+		System.out.println("处理数据...");
+	}
+	
+	public User getData(){
+		return user;
+	}
+	
+	public String getUserId(){
+		return userId;
+	}
+	
+}
+
+```
+
+A类：
+
+```
+package cn.hncu.pattern.factory.vo.v2;
+
+import cn.hncu.pattern.factory.vo.v2.vo.User;
+
+
+public class A {
+	public static void main(String[] args) {
+		B obj = new B();
+		User user = new User("A001", "13512345678", "hncu",20);
+		
+		obj.sendData(user);
+		User data = obj.getData();
+		
+		System.out.println( data.getUserId() );
+		System.out.println(data);
+		User user2 = new User();
+		user2.setAge(21);
+		user2.setUserId("A002");
+		System.out.println(user2);
+		obj.sendData(user2);
+		System.out.println(user2);
+		//可以做得更好的： 
+		// Id可以用唱票模型 2318,2319,......
+
+	}
+
+}
+
+```
+输出:
+
+```
+数据已经接受到。。。
+处理数据...
+CN_A001
+User [userId=CN_A001, tel=13512345678, address=hncu, age=20]
+User [userId=A002, tel=null, address=null, age=21]
+数据已经接受到。。。
+处理数据...
+User [userId=CN_A002, tel=null, address=null, age=21]
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

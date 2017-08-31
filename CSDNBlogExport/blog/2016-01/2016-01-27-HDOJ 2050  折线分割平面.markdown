@@ -1,0 +1,106 @@
+---
+layout: post
+title: "HDOJ 2050  折线分割平面"
+date: 2016-01-27 03:23:08 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 模拟/推导/打表
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+我们看到过很多直线分割平面的题目，今天的这个题目稍微有些变化，我们要求的是n条折线分割平面的最大数目。比如，一条折线可以将平面分成两部分，两条折线最多可以将平面分成7部分，具体如下所示。 
+Input 
+输入数据的第一行是一个整数C,表示测试实例的个数，然后是C 行数据，每行包含一个整数n(0 < n < = 10000),表示折线的数量。Output 
+对 
+---
+
+
+Problem Description 
+我们看到过很多直线分割平面的题目，今天的这个题目稍微有些变化，我们要求的是n条折线分割平面的最大数目。比如，一条折线可以将平面分成两部分，两条折线最多可以将平面分成7部分，具体如下所示。 
+Input 
+输入数据的第一行是一个整数C,表示测试实例的个数，然后是C 行数据，每行包含一个整数n(0 < n < = 10000),表示折线的数量。Output 
+对
+<!-- more -->
+----------
+
+Problem Description
+我们看到过很多直线分割平面的题目，今天的这个题目稍微有些变化，我们要求的是n条折线分割平面的最大数目。比如，一条折线可以将平面分成两部分，两条折线最多可以将平面分成7部分，具体如下所示。
+![](http://img.blog.csdn.net/20160127152234709)
+ 
+
+Input
+输入数据的第一行是一个整数C,表示测试实例的个数，然后是C 行数据，每行包含一个整数n(0 < n < = 10000),表示折线的数量。
+
+
+ 
+
+Output
+对于每个测试实例，请输出平面的最大分割数，每个实例的输出占一行。
+
+
+ 
+
+Sample Input
+2
+1
+2
+ 
+
+Sample Output
+2
+7
+
+分析：
+ 折线分平面（hdu2050）
+
+解析：根据直线分平面可知，由交点决定了射线和线段的条数，进而决定了新增的区域数。 
+当n-1条折线时，区域数为f（n-1）。为了使增加的区域最多， 
+则折线的两边的线段要和n-1条折线的边，即2*（n-1）条线段相交。 
+那么新增的线段数为4*（n-1），射线数为2。 
+但要注意的是，折线本身相邻的两线段只能增加一个区域。 
+故：f(n)=f(n-1)+4*(n-1)+1 
+f(n-1)=f(n-2) + 4*(n-2)+1 
+…… 
+f(2)=f(1) + 4*1 + 1 
+因为，f(1)=2 
+所以，f(n)=2n^2-n+1
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	static long[] sLine = new long[10001];
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		SLSP();
+		
+		int n = sc.nextInt();
+		while(n-->0){
+			int m = sc.nextInt();
+			
+			System.out.println(sLine[m]);
+		}
+		
+		
+	}
+
+	private static void SLSP() {
+		sLine[0]=1;
+		sLine[1]=2;
+		sLine[2]=7;
+		for(int i=3;i<sLine.length;i++){
+			sLine[i] = sLine[i-1]+4*(i-1)+1;
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

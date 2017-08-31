@@ -1,0 +1,108 @@
+---
+layout: post
+title: "java---计算器图形界面（无功能）"
+date: 2015-11-12 03:19:05 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目
+tags: [java,界面,图形]
+keyword: 陈浩翔, 谙忆
+description: package cn.hncu.chx1;import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+i 
+---
+
+
+package cn.hncu.chx1;import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+i
+<!-- more -->
+----------
+
+```
+package cn.hncu.chx1;
+
+import java.awt.BorderLayout;
+import java.awt.Button;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Frame;
+import java.awt.GridLayout;
+import java.awt.Label;
+import java.awt.Panel;
+import java.awt.TextArea;
+import java.awt.TextField;
+
+public class jisuanqi extends Frame{
+	
+	public jisuanqi(){
+		super("计算器");
+		String aa[]={"MC","MR","MS","M+","M-","←","CE","C","±","√","7","8","9","/","%","4","5","6","*","1/x","1","2","3","-","=","0",".","+"};
+		this.setLocation(400, 300);
+		//显示位置
+		this.setSize(250, 320);
+		//组件宽和高
+		this.setBackground(new Color(224,238,238));
+		//this.setLayout(new FlowLayout(0));流布局
+		
+		Panel p = new Panel();
+		//new 一个面板
+		p.setSize(230, 30);
+		p.setBackground(new Color(230,230,250));
+		this.add(p,BorderLayout.NORTH);
+		p.add(new Label("查看（V）"));
+		p.add(new Label("编辑（E）"));
+		p.add(new Label("帮助（H）"));
+		
+		this.add(new TextArea(28,10));
+		
+		
+		Panel p1 = new Panel();
+		p1.setSize(250, 100);
+		p1.setBackground(new Color(224,238,238));
+		this.add(p1,BorderLayout.SOUTH);
+		p1.setLayout(new GridLayout(6, 5,8,8));
+		
+		Button btns[];
+		btns = new Button[35];
+		for(int i=0;i<aa.length;i++){
+			btns[i] = new Button(aa[i]);
+			p1.add(btns[i]);
+		}
+		p1.add(new Label(""),26);
+		p1.add(new Label(""),28);
+		
+		this.setResizable(false);
+		//不可以调大小
+		setVisible(true);
+		//显示组件可见
+		
+	}
+	
+
+	public static void main(String[] args) {
+		new jisuanqi();
+		
+	}
+
+}
+```
+
+
+![](http://img.blog.csdn.net/20151112151708554)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

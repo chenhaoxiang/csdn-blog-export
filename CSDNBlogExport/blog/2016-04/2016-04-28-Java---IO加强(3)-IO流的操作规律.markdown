@@ -1,0 +1,365 @@
+---
+layout: post
+title: "Java---IO加强(3)-IO流的操作规律"
+date: 2016-04-28 01:05:38 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- JavaIO流
+tags: [字符流,数据,Unicode,IO]
+keyword: 陈浩翔, 谙忆
+description: 一般写关于操作文件的读取的几个通用步骤！！！ 
+1、明确源和目的。源：InputStream   Reader 一定是被读取的。 
+目的：OutputStream  Writer 一定是被写入的。2、处理的数据是否是纯文本的数据？是：使用字符流。Reader Writer 
+否：使用字节流。 InputStream OutputStream   到这里，两个明确确定完，就可以确定出要使用哪个体系。接 
+---
+
+
+一般写关于操作文件的读取的几个通用步骤！！！ 
+1、明确源和目的。源：InputStream   Reader 一定是被读取的。 
+目的：OutputStream  Writer 一定是被写入的。2、处理的数据是否是纯文本的数据？是：使用字符流。Reader Writer 
+否：使用字节流。 InputStream OutputStream   到这里，两个明确确定完，就可以确定出要使用哪个体系。接
+<!-- more -->
+----------
+
+
+一般写关于操作文件的读取的几个通用步骤！！！
+**1、明确源和目的。**
+
+源：InputStream   Reader 一定是被读取的。
+目的：OutputStream  Writer 一定是被写入的。
+
+**2、处理的数据是否是纯文本的数据？**
+
+是：使用字符流。Reader Writer
+否：使用字节流。 InputStream OutputStream	
+
+
+到这里，两个明确确定完，就可以确定出要使用哪个体系。接下来，就应该明确具体这个体系要使用哪个具体的对象。(看顶层)
+
+**3、明确数据所在的设备。**
+
+到这里，具体使用哪个对象就可以明确了。(用底层)
+
+**4、明确是否需要额外功能？**
+
+另外：如果数据有规律，并且源和目的都是file，需要随机访问时，可以使用RandomAccessFile工具类。
+
+★ 明确数据所在的设备：
+  源设备：
+    键盘(System.in)
+    硬盘(FileXXX)FileReader FileInputStream
+    内存(数组)ByteArrayInputStream CharArrayReader StringReader
+    网络(Socket)
+  目的设备：
+    显示器(控制台System.out)
+    硬盘(FileXXX)FileWriter FileOutputStream
+    内存(数组)ByteArrayOutputStream CharArrayWriter StringWriter
+    网络(Socket) 
+
+★ 明确是否需要额外功能？
+  1) 是否需要高效？缓冲区Buffered (字符与字节各两个)。 
+  2) 是否需要转换？转换流  InputStreamReader OutputStreamWriter	
+  3) 是否操作基本数据类型？ DataInputStream  DataOutputStream
+  4) 是否操作对象(对象序列化)？ ObjectInputStream ObjectOutputStream 
+  5) 需要对多个源合并吗？ SequenceInputStream
+  6) 需要保证数据的表现形式到目的地吗？ PrintStream 或 PrintWriter 
+
+ **IO流的操作规律之设计方案练习需求1：复制一个文本文件。**
+ 
+**1、明确源和目的。**
+
+源：InputStream   Reader
+目的：OutputStream  Writer
+
+**2、处理的数据是否是纯文本的数据？**
+
+源：Reader
+目的：Writer
+
+**3、明确数据所在的设备。**
+
+源：file(硬盘)
+目的：file(硬盘)
+
+**4、明确是否需要额外功能？**
+
+BufferedReader bufr = new BufferedReader(new FileReader("a.txt"));
+BufferedWriter bufw = new BufferedWriter(new FileWriter("b.txt"));
+
+
+ **IO流的操作规律之设计方案练习需求2：复制一个图片文件。**
+**1、明确源和目的。**
+
+源：InputStream   Reader
+目的：OutputStream  Writer
+
+**2、处理的数据是否是纯文本的数据？**
+
+源：InputStream
+目的：OutputStream
+
+**3、明确数据所在的设备。**
+
+源：file(硬盘)  FileInputStream fin = new FileInputStream("1.jpg");
+目的：file(硬盘)   FileOutputStream fout = new FileOutputStrema("2.jpg");
+
+**4、明确是否需要额外功能？**
+
+BufferedInputStream bufin = new BufferedInputStream( fin );
+BufferedOutputStream bufout = new BufferedOutputStream( fout );
+
+
+ **IO流的操作规律之设计方案练习需求3：读取键盘录入，存储到一个文件中。**
+**1、明确源和目的。**
+
+源：InputStream   Reader
+目的：OutputStream  Writer
+
+**2、处理的数据是否是纯文本的数据？**
+
+源：Reader
+目的：Writer
+
+**3、明确数据所在的设备。**
+
+源：键盘  InputStream in = System.in;
+目的：硬盘   FileWriter fw = new FileWriter("a.txt");
+
+**4、明确是否需要额外功能？**
+(必须要将键盘录入的字节转成字符。
+需要将字节-->字符的转换流。InputStreamReader
+还想需要高效。)
+InputStreamReader isr = new InputStreamReader(System.in);
+FileWriter fw = new FileWriter("a.txt");
+BufferedReader bufr = new BufferedReader( isr);
+BufferedWriter bufw = new BufferedWriter( fw );
+
+
+
+**IO流的操作规律之设计方案练习需求4：读取一个文本文件，显示到显示器上。**
+**1、明确源和目的。**
+
+源：InputStream   Reader
+目的：OutputStream  Writer
+
+**2、处理的数据是否是纯文本的数据？**
+
+源：Reader
+目的：Writer
+
+**3、明确数据所在的设备。**
+
+源：硬盘  FileReader fr = new FileReader("a.txt");
+目的：显示器   OutputStream out = System.out;
+
+
+**4、明确是否需要额外功能？**
+(要将字符数据转换成字节输出。
+输出转换流：OutputStreamWriter
+还想需要高效。)
+
+FileReader fr = new FileReader("a.txt");
+OutputStreamWriter osw = new OutputStreamWriter(System.out);
+
+BufferedReader bufr = new BufferedReader( fr);
+BufferedWriter bufw = new BufferedWriter( osw );
+
+
+
+**IO流的操作规律之设计方案练习需求5：读取一个文本文件，将文本按照指定的编码表UTF-8写入到另一个文件中。**
+
+**1、明确源和目的。**
+
+源：InputStream   Reader
+目的：OutputStream  Writer
+
+**2、处理的数据是否是纯文本的数据？**
+
+源：Reader
+目的：Writer
+
+**3、明确数据所在的设备。**
+
+源：硬盘    FileReader fr = new FileReader("a.txt");
+目的：硬盘    FileOutputStream fout = new FileOutputStream("b.txt");
+
+**4、明确是否需要额外功能？**
+(假定输出时要为字符数据指定编码表。转换流中的参数需要字节流，因此用FileOutputStream。
+转换流：OutputStreamWriter，还想需要高效。)
+
+
+FileReader fr = new FileReader("a.txt");
+OutputStreamWriter osw = new OutputStreamWriter(fout,”utf-8”);
+
+BufferedReader bufr = new BufferedReader( fr);
+BufferedWriter bufw = new BufferedWriter( osw );
+
+
+
+**常见的编码表**
+
+ASCII：美国标准信息交换码。
+      用一个字节的7位可以表示。
+ISO8859-1：拉丁码表。欧洲码表
+           用一个字节的8位表示。
+GB2312：中国的中文编码表。
+GBK：中国的中文编码表升级，融合了更多的中文文字符号。
+Unicode：国际标准码，融合了多种文字。
+           所有文字都用两个字节来表示,Java语言使用的就是unicode
+UTF-8：一种变长的unicode码的实现方式，由1~4个字节表示。
+
+
+★转换流的编码应用
+
+可以将字符以指定编码格式存储。
+可以对文本数据指定编码格式来解读。
+指定编码表的动作由构造函数完成。
+
+
+★字符编码
+
+编码：字符串字节数组
+解码：字节数组字符串
+
+
+**Unicode和UTF-8的关系**
+
+
+
+★ Unicode
+
+世界上存在着多种编码方式，同一个二进制数字可以被解释成不同的符号。因此，要想打开一个文本文件，就必须知道它的编码方式，否则用错误的编码方式解读，就会出现乱码。为什么电子邮件常常出现乱码？就是因为发信人和收信人使用的编码方式不一样。 
+可以想象，如果有一种编码，将世界上所有的符号都纳入其中。每一个符号都给予一个独一无二的编码，那么乱码问题就会消失。这就是Unicode，就像它的名字都表示的，这是一种所有符号的编码。 
+Unicode只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。
+
+★ UTF-8
+
+UTF-8是在互联网上使用最广的一种unicode的实现方式。其他实现方式还包括UTF-16和UTF-32，不过在互联网上基本不用。UTF-8是Unicode的实现方式之一。
+
+★ UTF-8的编码格式
+UTF-8最大的一个特点，就是它是一种变长的编码方式。它可以使用1~4个字节表示一个符号，根据不同的符号而变化字节长度。
+
+
+UTF-8的编码规则很简单，只有二条：
+1）对于单字节的符号，字节的第一位设为0，后面7位为这个符号的unicode码。因此对于英语字母，UTF-8编码和ASCII码是相同的。
+2）对于n字节的符号（n>1），第一个字节的前n位都设为1，第n+1位设为0，后面字节的前两位一律设为10。剩下的没有提及的二进制位，全部为这个符号的unicode码。
+
+```
+   Unicode符号范围      |    UTF-8编码方式 
+        (十六进制)             |      （二进制） 
+-------------------------------+---------------------------------- 
+0000 0000-0000 007F  |  0xxxxxxx 
+0000 0080-0000 07FF  |  110xxxxx 10xxxxxx 
+0000 0800-0000 FFFF  |  1110xxxx 10xxxxxx 10xxxxxx 
+0001 0000-0010 FFFF  |  11110xxx 10xxxxxx 10xxxxxx 10xxxxxx 
+```
+
+
+```
+package unicode;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-28
+ */
+public class StringEncoding {
+
+	public static void main(String[] args) throws IOException {
+		//先演示正常的编码解码-----编码表和解码表必须一致，否则会乱码。----还有个前提，码表中必须要有你给的相应字符
+		//只有gb2312,gbk和utf-8三个码表中才有中文，因此对我们来讲，只有用这3个表编码，才能处理中文
+		String str = "湖南城市";
+		byte buf[] = str.getBytes("utf-8");//编码---编码表是utf-8
+		//printBytes( buf );
+		String s = new String(buf,"gbk");//解码---解码表是gbk
+		System.out.println(s);
+		
+		//※编码编错必挂，解码解错可以补救!
+		
+		//编码编错必挂
+		/*
+		String str = "湖南城市";
+		byte buf[] = str.getBytes("iso8859-1");//编码---编错码了，必挂----因为iso8859-1这个码表中根本就没有中文，因此编出来的码肯定是错的
+		printBytes( buf );
+		*/
+		
+		//解码解错可以补救!----中文乱码解决技术
+		demo();
+		
+	}
+	private static void demo() throws IOException {
+		//应用场景： 浏览器中网页(中文数据,字节数组的形式buf[]) --io-->  server (Tomcat,iso8859-1) 
+		//--->Tomcat会把我们的buf[]用iso8859-1解码成字符串str(其实是用错码表的解码结果),然后把str通过传参传递到我们写的程序(servlet)中来
+		//因此，我们程序中拿到的str是乱码，由此我们需要把 str恢复成真实的中文数据----该过程就叫中文乱码解决
+		//1浏览器
+		String str1 = "湖南城院";
+		byte buf1[] = str1.getBytes();//用系统默认的编码---GBK或UTF-8
+		//2Tomcat
+		String str2 = new String(buf1,"iso8859-1");//解错码
+		System.out.println("Tomcat解码后的数据："+str2);
+		////Tomcat把str2通过传参传给MyServlet////
+		//3MyServlet---解决乱码
+		byte buf2[] = str2.getBytes("iso8859-1");//反查---编码
+		String str = new String(buf2);//用系统默认的码表解码
+		System.out.println("MyServlet解决筹码之后："+str);
+	}
+
+
+	private static void printBytes(byte[] buf) {
+		for(byte b: buf){
+			System.out.print(b+" ");
+		}
+		System.out.println();
+	}
+}
+
+```
+
+
+//看看大部分汉字在UTF-8中的占有的字节数
+```
+package unicode;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-28
+ */
+public class UnicodeDemo1 {
+
+	public static void main(String[] args) throws IOException {
+		String str = "湖南城市";
+		byte buf[] = str.getBytes("utf-8");
+		printBytes( buf );
+	
+	}
+
+	private static void printBytes(byte[] buf) {
+		for(byte b: buf){
+			System.out.print(b+" ");
+		}
+		System.out.println();
+	}
+
+}
+
+```
+
+输出结果：
+```
+-26 -71 -106 -27 -115 -105 -27 -97 -114 -27 -72 -126 
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

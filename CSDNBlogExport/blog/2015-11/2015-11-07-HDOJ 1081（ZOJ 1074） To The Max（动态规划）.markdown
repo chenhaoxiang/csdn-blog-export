@@ -1,0 +1,110 @@
+---
+layout: post
+title: "HDOJ 1081（ZOJ 1074） To The Max（动态规划）"
+date: 2015-11-07 12:18:51 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-C++,----- ZOJ-ACM,❺ 算法及基础题,----- 动态规划（DP）
+tags: [hdoj,zoj,动态规划]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Given a two-dimensional array of positive and negative integers, a sub-rectangle is any contiguous sub-array of size 1 x 1 or greater located within the whole array. The sum of a r 
+---
+
+
+Problem Description 
+Given a two-dimensional array of positive and negative integers, a sub-rectangle is any contiguous sub-array of size 1 x 1 or greater located within the whole array. The sum of a r
+<!-- more -->
+----------
+
+Problem Description
+Given a two-dimensional array of positive and negative integers, a sub-rectangle is any contiguous sub-array of size 1 x 1 or greater located within the whole array. The sum of a rectangle is the sum of all the elements in that rectangle. In this problem the sub-rectangle with the largest sum is referred to as the maximal sub-rectangle.
+
+As an example, the maximal sub-rectangle of the array:
+
+0 -2 -7 0
+9 2 -6 2
+-4 1 -4 1
+-1 8 0 -2
+
+is in the lower left corner:
+
+9 2
+-4 1
+-1 8
+
+and has a sum of 15.
+
+ 
+
+Input
+The input consists of an N x N array of integers. The input begins with a single positive integer N on a line by itself, indicating the size of the square two-dimensional array. This is followed by N 2 integers separated by whitespace (spaces and newlines). These are the N 2 integers of the array, presented in row-major order. That is, all numbers in the first row, left to right, then all numbers in the second row, left to right, etc. N may be as large as 100. The numbers in the array will be in the range [-127,127].
+
+ 
+
+Output
+Output the sum of the maximal sub-rectangle.
+
+ 
+
+Sample Input
+4
+0 -2 -7 0 9 2 -6 2
+-4 1 -4 1 -1
+8 0 -2
+ 
+
+Sample Output
+15
+
+![](http://img.blog.csdn.net/20151107121816606)
+
+```
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+int a[2000];
+int dp[150][150];
+
+int main(){
+   int n;
+   while(scanf("%d",&n)==1){
+        int t;
+      memset(dp,0,sizeof(dp));
+      for(int i=1;i<=n;i++){
+         for(int j=1;j<=n;j++){
+            scanf("%d",&t);
+            dp[i][j]=t+dp[i-1][j];
+           /// printf("i=%d",i);
+         }
+      }
+//        for(int i=0;i<=n;i++){
+//         for(int j=0;j<=n;j++){
+//                printf("%4d",dp[i][j]);
+//         }
+//         printf("\n");
+//        }
+      int maxx=-1000;
+      for(int i=1;i<=n;i++){
+          for(int j=i;j<=n;j++){
+                int sum=0;
+              for(int k=1;k<=n;k++){
+                    t=dp[j][k]-dp[i-1][k];
+                    sum+=t;
+                    if(sum<0)  sum=0;
+                    if(sum>maxx) maxx=sum;
+              }
+          }
+      }
+      printf("%d\n",maxx);
+   }
+   return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

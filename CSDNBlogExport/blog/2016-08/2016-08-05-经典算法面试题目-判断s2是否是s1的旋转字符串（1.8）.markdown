@@ -1,0 +1,108 @@
+---
+layout: post
+title: "经典算法面试题目-判断s2是否是s1的旋转字符串（1.8）"
+date: 2016-08-05 11:28:40 +0800
+comments: true
+categories:❺ 算法及基础题,----- 经典面试算法
+tags: [面试题,算法]
+keyword: 陈浩翔, 谙忆
+description: 题目
+
+Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstr 
+---
+
+
+题目
+
+Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstr
+<!-- more -->
+----------
+
+题目
+==
+
+Assume you have a method isSubstring which checks if one word is a substring of another. Given two strings, s1 and s2, write code to check if s2 is a rotation of s1 using only one call to isSubstring ( i.e., “waterbottle” is a rotation of “erbottlewat”).
+
+假设你有一个isSubstring函数，可以检测一个字符串是否是另一个字符串的子串。 给出字符串s1和s2，只使用一次isSubstring就能判断s2是否是s1的旋转字符串， 请写出代码。
+例如：”waterbottle”是”erbottlewat”的旋转字符串。
+
+
+
+解答
+==
+
+题目说我们使用一次isSubstring函数就可以判断s2是否是s1的旋转字符串， 如果从原始字符串s1和s2直接入手肯定不行，因为它们根本不存在子串关系。 如果不断地旋转字符，然后调用isSubstring，又需要调用多次的isSubstring。 而且通过旋转字符再判断，可以直接用等号判断，根本用不上isSubstring。
+
+既然如此，我们就要考虑去改变原始字符串。要判断a串是否是b串的子串， 一般情况下都会有b串长度大于a串，长度相等的话就直接判断它们是不是相等的串了。 我们可以考虑把串s1变长，然后调用一次isSubstring判断s2是否是s1变长后的子串， 如果是，就得出s2是s1的旋转字符串。s1怎么变长呢？无非就是s1+s1或是s1+s2， s2一定是s1+s2的子串，因此这样做没有任何意义。而s1+s1呢？ 我们就上面的例子进行讨论：s1=waterbottle，s2=erbottlewat. 则：
+
+```
+s1 + s1 = waterbottlewaterbottle
+```
+很容易可以发现，s1+s1其实是把s1中每个字符都旋转了一遍，而同时保持原字符不动。 比如waterbottle向右旋转2个字条应该是：terbottlewa，但如果同时保持原字符不动， 我们得到的就是waterbottlewa，而terbottlewa一定是waterbottlewa的子串， 因为waterbottlewa只是在terbottlewa的基础上再加上一条原字符不动的限制。 因此s1+s1将包含s1的所有旋转字符串，如果s2是s1+s1的子串，自然也就是s1 的旋转字符串了。
+
+
+首先，我们来了解一个函数：
+a.find(b) 表示查找字符串a是否包含子串b，若查找成功，返回按查找规则找到的第一个字符或子串的位置；若查找失败，返回npos，即-1（打印出来为4294967295）。
+
+接下来，利用这个函数，我们可以很方便的写出判断s2是否是s1的旋转字符串的代码。
+
+关键代码：
+=====
+
+```
+//判断s2是不是s1的子串
+bool isSubstring(string s1, string s2){
+    if(s1.find(s2) != string::npos) return true;
+    else return false;
+}
+
+//防范一下,以及调用:isSubstring(s1+s1, s2)
+bool isRotation(string s1, string s2){
+    if(s1.length() != s2.length() || s1.length()<=0)
+        return false;
+    return isSubstring(s1+s1, s2);
+}
+```
+
+
+
+
+完整代码：
+=====
+
+```
+#include <iostream>
+#include <string>
+using namespace std;
+
+bool isSubstring(string s1, string s2){
+    //a.find(b)查找字符串a是否包含子串b。string::npos(很大的无符号整数)也可以认为就是-1。
+    if(s1.find(s2) != string::npos) return true;
+    else return false;
+}
+bool isRotation(string s1, string s2){
+    //防范一下！如果s2的长度和s1的不相等，肯定就不可能s2是s1的旋转子串了。
+    if(s1.length() != s2.length() || s1.length()<=0)
+        return false;
+    return isSubstring(s1+s1, s2);
+}
+
+int main(){
+    string s1 = "apple";
+    string s2 = "pleap";
+    if(isRotation(s1, s2)){
+        cout<<s2+"是"+s1+"的旋转字符串"<<<<endl;
+    }
+    //cout<<string::npos<<endl; //4294967295
+    //cout<<s1.find(s2)<<endl;  //4294967295
+    return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

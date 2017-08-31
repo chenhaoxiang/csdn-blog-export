@@ -1,0 +1,95 @@
+---
+layout: post
+title: "HDOJ 2045 不容易系列之(3)—— LELE的RPG难题"
+date: 2016-01-25 12:13:10 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 模拟/推导/打表
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+人称“AC女之杀手”的超级偶像LELE最近忽然玩起了深沉，这可急坏了众多“Cole”（LELE的粉丝,即”可乐”）,经过多方打探，某资深Cole终于知道了原因，原来，LELE最近研究起了著名的RPG难题:有排成一行的ｎ个方格，用红(Red)、粉(Pink)、绿(Green)三色涂每个格子，每格涂一色，要求任何相邻的方格不能同色，且首尾两格也不同色．求全部的满 
+---
+
+
+Problem Description 
+人称“AC女之杀手”的超级偶像LELE最近忽然玩起了深沉，这可急坏了众多“Cole”（LELE的粉丝,即”可乐”）,经过多方打探，某资深Cole终于知道了原因，原来，LELE最近研究起了著名的RPG难题:有排成一行的ｎ个方格，用红(Red)、粉(Pink)、绿(Green)三色涂每个格子，每格涂一色，要求任何相邻的方格不能同色，且首尾两格也不同色．求全部的满
+<!-- more -->
+----------
+
+Problem Description
+人称“AC女之杀手”的超级偶像LELE最近忽然玩起了深沉，这可急坏了众多“Cole”（LELE的粉丝,即"可乐"）,经过多方打探，某资深Cole终于知道了原因，原来，LELE最近研究起了著名的RPG难题:
+
+有排成一行的ｎ个方格，用红(Red)、粉(Pink)、绿(Green)三色涂每个格子，每格涂一色，要求任何相邻的方格不能同色，且首尾两格也不同色．求全部的满足要求的涂法.
+
+以上就是著名的RPG难题.
+
+如果你是Cole,我想你一定会想尽办法帮助LELE解决这个问题的;如果不是,看在众多漂亮的痛不欲生的Cole女的面子上,你也不会袖手旁观吧?
+
+
+ 
+
+Input
+输入数据包含多个测试实例,每个测试实例占一行,由一个整数N组成，(0< n < =50)。
+
+ 
+
+Output
+对于每个测试实例，请输出全部的满足要求的涂法，每个实例的输出占一行。
+
+ 
+
+Sample Input
+1
+2
+ 
+
+Sample Output
+3
+6
+
+
+**分析：假设有n个方格时涂法有f（n）种，在已有n-1个方格的情况下再增添第n个方格使得第n-1个方格由原来的最后一个方格成为倒数第二个方格，这样它可以选择的颜色种类有变化。起初方格n-1作为最后一个方格，它不能与方格1和方格n-2同色，此时，（1）当方格n-2与方格1同色时，n-1只需与n-2不同色即满足条件，注意此时方格n-1与方格1必不同色，因而加上第n个方格时，第n个方格的颜色已经确定了（作为最后一个方格，n只能涂与方格n-1、1不同的第三种色），既然如此，增加第n个方格对于总的涂法总数就没影响。（2）当方格n-2与方格1不同色时，起初方格n-1作为最后一个方格，由于要跟方格1和n-2不同，它可涂的颜色只有一种，而当加上方格n时，它就不需要和方格1不同，于是方格n-1可选的颜色种数+1，总的涂法总数加f（n-2），增加的这f（n-2）种涂法中，方格n-1均与方格1同色，此时方格n有两种颜色可选（因为只要跟方格n-1不一样就同时与方格1不一样），故增加的涂法为2*f（n-2），即f（n）比f（n-1）大2*f（n-2），递推关系：f(n)=f(n-1)+2*f(n-2),n>=4;这里n>=4是因为此时方格n-2不会是方格1**
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+    
+    static long[] fan = new long[51];
+    public static void main(String[] args) {
+        Long();
+        
+        Scanner sc = new Scanner(System.in);
+        
+        
+        while(sc.hasNext()){
+            int n = sc.nextInt();
+            
+            System.out.println(fan[n]);
+            
+            
+        }
+        
+    }
+    private static void Long() {
+        fan[1]=3;
+        fan[2]=6;
+        fan[3]=6;
+        for(int i=4;i<fan.length;i++){
+            fan[i]=fan[i-1]+2*fan[i-2];
+        }
+        
+        
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

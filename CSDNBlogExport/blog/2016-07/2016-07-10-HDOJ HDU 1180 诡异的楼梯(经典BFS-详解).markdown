@@ -1,0 +1,418 @@
+---
+layout: post
+title: "HDOJ HDU 1180 诡异的楼梯(经典BFS-详解)"
+date: 2016-07-10 04:25:08 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-C++,❺ 算法及基础题,----- 递归搜索回溯
+tags: [bfs,移动,深搜,acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Hogwarts正式开学以后,Harry发现在Hogwarts里,某些楼梯并不是静止不动的，相反,他们每隔一分钟就变动一次方向. 
+比如下面的例子里,一开始楼梯在竖直方向,一分钟以后它移动到了水平方向,再过一分钟它又回到了竖直方向.Harry发现对他来说很难找到能使得他最快到达目的地的路线,这时Ron(Harry最好的朋友)告诉Harry正好有一个魔法道具可 
+---
+
+
+Problem Description 
+Hogwarts正式开学以后,Harry发现在Hogwarts里,某些楼梯并不是静止不动的，相反,他们每隔一分钟就变动一次方向. 
+比如下面的例子里,一开始楼梯在竖直方向,一分钟以后它移动到了水平方向,再过一分钟它又回到了竖直方向.Harry发现对他来说很难找到能使得他最快到达目的地的路线,这时Ron(Harry最好的朋友)告诉Harry正好有一个魔法道具可
+<!-- more -->
+----------
+
+Problem Description
+Hogwarts正式开学以后,Harry发现在Hogwarts里,某些楼梯并不是静止不动的，相反,他们每隔一分钟就变动一次方向.
+比如下面的例子里,一开始楼梯在竖直方向,一分钟以后它移动到了水平方向,再过一分钟它又回到了竖直方向.Harry发现对他来说很难找到能使得他最快到达目的地的路线,这时Ron(Harry最好的朋友)告诉Harry正好有一个魔法道具可以帮助他寻找这样的路线,而那个魔法道具上的咒语,正是由你纂写的.
+ 
+
+Input
+测试数据有多组，每组的表述如下：
+第一行有两个数,M和N,接下来是一个M行N列的地图,'*'表示障碍物,'.'表示走廊,'|'或者'-'表示一个楼梯,并且标明了它在一开始时所处的位置:'|'表示的楼梯在最开始是竖直方向,'-'表示的楼梯在一开始是水平方向.地图中还有一个'S'是起点,'T'是目标,0<=M,N<=20,地图中不会出现两个相连的梯子.Harry每秒只能停留在'.'或'S'和'T'所标记的格子内.
+ 
+
+Output
+只有一行,包含一个数T,表示到达目标的最短时间.
+注意:Harry只能每次走到相邻的格子而不能斜走,每移动一次恰好为一分钟,并且Harry登上楼梯并经过楼梯到达对面的整个过程只需要一分钟,Harry从来不在楼梯上停留.并且每次楼梯都恰好在Harry移动完毕以后才改变方向.
+ 
+
+Sample Input
+```
+5 5
+**..T
+**.*.
+..|..
+.*.*.
+S....
+```
+
+
+Sample Output
+
+7
+
+Hint
+Hint
+ 
+地图如下：
+![](http://img.blog.csdn.net/20160710161624773)
+
+<font color="red" size="4">
+挺经典的一个广搜题目！
+题意很好理解。做的时候理清思路，注意楼梯的方向，楼梯的方向可以用到达时候的时间的奇偶来判断。因为楼梯只有2个方向！上下，或者左右。
+移动到楼梯后面也还要判断下是否越界，楼梯对面是不是墙，是不是已经走过，这3个条件，满足了才能过去。
+如果到的时候，楼梯方向与过去的方向不同，就只能等待一分钟，在这个时候，位置不动，时间加1！再进入队列。这个顺序很重要！
+不能先过去，然后时间加2，再入队列。这样会超内存，这是很多人用优先队列的原因！
+（因为这样的话，你会发现，弹出的node型变量的t会出现t-时间小的会在后面弹出，这样增加了内存的使用！！！）</font>
+
+
+```
+#include <iostream>
+#include <cstdio>
+#include <cstring>
+#include <queue>
+using namespace std;
+struct node{
+    int x,y,t;
+};
+int n,m;
+int mx[]={0,1,0,-1};
+int my[]={1,0,-1,0};//右，下，左，上
+char map[30][30];
+int d[30][30];
+int tx,ty,sx,sy;
+node ft;
+int judge(int x,int y){
+    if(x<0||x>=n||y<0||y>=m){
+        return 0;
+    }
+    if(d[x][y]){
+        return 0;
+    }
+    if(map[x][y]=='*'){
+        return 0;
+    }
+    return 1;
+}
+
+
+void bfs(){
+    queue<node> q;
+    ft.x=sx;
+    ft.y=sy;
+    ft.t=0;
+    q.push(ft);
+    d[sx][sy]=1;
+    while(!q.empty()){
+        node ff=q.front();
+        q.pop();
+        int x=ff.x;
+        int y=ff.y;
+        if(map[x][y]=='T'){
+            printf("%d\n",ff.t);
+            return;
+        }
+        for(int i=0;i<4;i++){
+            x=ff.x+mx[i];
+            y=ff.y+my[i];
+            if(!judge(x,y)){
+                continue;
+            }
+            node nt;
+            if(map[x][y]=='.'||map[x][y]=='T'){//正常走
+                nt.x=x;
+                nt.y=y;
+                nt.t=ff.t+1;
+                d[nt.x][nt.y]=1;
+                q.push(nt);
+                continue;
+            }else if(i==0||i==2){//右和左
+                if(map[x][y]=='-'&&ff.t%2==0){//可以过去
+                    nt.x=x+mx[i];
+                    nt.y=y+my[i];
+                    if(judge(nt.x,nt.y)){
+                        nt.t=ff.t+1;
+                        d[nt.x][nt.y]=1;
+                        q.push(nt);
+                    }
+                }else if(map[x][y]=='|'&&ff.t%2!=0){
+                    nt.x=x+mx[i];
+                    nt.y=y+my[i];
+                    if(judge(nt.x,nt.y)){
+                        nt.t=ff.t+1;
+                        d[nt.x][nt.y]=1;
+                        q.push(nt);
+                    }
+                }else {//不能过楼梯，得等一分钟
+                    nt.x=ff.x;
+                    nt.y=ff.y;
+                    nt.t=ff.t+1;
+                    d[nt.x][nt.y]=1;
+                    q.push(nt);
+                }
+            }else{//上和下
+                if(map[x][y]=='|'&&ff.t%2==0){//可以过去
+                    nt.x=x+mx[i];
+                    nt.y=y+my[i];
+                    if(judge(nt.x,nt.y)){
+                        nt.t=ff.t+1;
+                        d[nt.x][nt.y]=1;
+                        q.push(nt);
+                    }
+                }else if(map[x][y]=='-'&&ff.t%2!=0){
+                    nt.x=x+mx[i];
+                    nt.y=y+my[i];
+                    if(judge(nt.x,nt.y)){
+                        nt.t=ff.t+1;
+                        d[nt.x][nt.y]=1;
+                        q.push(nt);
+                    }
+                }else {//不能过楼梯，得等一分钟
+                    nt.x=ff.x;
+                    nt.y=ff.y;
+                    nt.t=ff.t+1;
+                    d[nt.x][nt.y]=1;
+                    q.push(nt);
+                }
+            }
+        }
+    }
+}
+
+
+int main(){
+    while(~scanf("%d%d",&n,&m)){
+        memset(d,0,sizeof(d));
+        for(int i=0;i<n;i++){
+            scanf("%s",map[i]);
+            for(int j=0;j<m;j++){
+                if(map[i][j]=='S'){
+                    sx=i,sy=j;
+                }
+            }
+        }
+        bfs();
+    }
+    return 0;
+}
+
+
+测试数据：
+/*
+3 3
+S|.
+-..
+T..
+5 5
+**..T
+**.*.
+..|..
+.*.*.
+S....
+3 4
+S|.|
+-T-.
+.|..
+20 20
+S.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.|
+|.|.|.|.|.|.|.|.|.|.
+.|.|.|.|.|.|.|.|.|.T
+2 7 7 20
+*/
+
+```
+
+优先队列：
+
+```
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <queue>
+
+using namespace std;
+
+char map[30][30];
+int vis[30][30];
+struct node
+{
+    int x,y,t;
+     bool operator < (const node &a) const {
+        return t>a.t;//最小值优先
+    }
+};
+int dx[4]= {0,1,0,-1};//右，下，左，上
+int dy[4]= {1,0,-1,0};
+int n,m;
+int sx,sy;
+
+int judge(int x,int y)
+{
+    if(x<0||x>=n||y<0||y>=m||map[x][y]=='*'||vis[x][y])
+        return 0;
+    return 1;
+}
+
+int bfs()
+{
+    memset(vis,0,sizeof(vis));
+    priority_queue<node> q;
+    node ft;
+    ft.x=sx;
+    ft.y=sy;
+    ft.t=0;
+    vis[sx][sy]=1;
+    q.push(ft);
+    while(!q.empty())
+    {
+        ft = q.top();
+        q.pop();
+        if(map[ft.x][ft.y]=='T')
+        {
+            return ft.t;
+        }
+        for(int i=0; i<4; i++)
+        {
+            node next;
+            int nx=ft.x+dx[i];
+            int ny=ft.y+dy[i];
+            if(nx<0||nx>=n||ny<0||ny>=m)
+            {
+                continue;
+            }
+            if(vis[nx][ny]||map[nx][ny]=='*')
+            {
+                continue;
+            }else if(map[nx][ny]=='.'||map[nx][ny]=='T')
+            {
+                next.x=nx;
+                next.y=ny;
+                next.t=ft.t+1;
+                vis[nx][ny]=1;
+                q.push(next);
+            }
+            else
+            {
+                if(i==0||i==2)//右和左
+                {
+                    //楼梯是横向，且走的时间为偶数
+                    if(map[nx][ny]=='-'&&ft.t%2==0)
+                    {
+                        nx=nx+dx[i];
+                        ny=ny+dy[i];
+                        if(judge(nx,ny))
+                        {
+                            next.x=nx;
+                            next.y=ny;
+                            next.t=ft.t+1;
+                            vis[nx][ny]=1;
+                            q.push(next);
+                        }
+                    }
+                    else if(map[nx][ny]=='|'&&ft.t%2==1)
+                    {
+                        //楼梯是竖向，且走的时间为奇数
+                        nx=nx+dx[i];
+                        ny=ny+dy[i];
+                        if(judge(nx,ny))
+                        {
+                            next.x=nx;
+                            next.y=ny;
+                            next.t=ft.t+1;
+                            vis[nx][ny]=1;
+                            q.push(next);
+                        }
+                    }
+                    else  //方向不对，需要等待一分钟
+                    {
+                        next.x=ft.x;
+                        next.y=ft.y;
+                        next.t=ft.t+1;
+                        q.push(next);
+                    }
+                }
+                else  //下上
+                {
+                    if(map[nx][ny]=='-'&&ft.t%2==1)
+                    {
+                        nx=nx+dx[i];
+                        ny=ny+dy[i];
+                        if(judge(nx,ny))
+                        {
+                            next.x=nx;
+                            next.y=ny;
+                            next.t=ft.t+1;
+                            vis[nx][ny]=1;
+                            q.push(next);
+                        }
+                    }
+                    else if(map[nx][ny]=='|'&&ft.t%2==0)
+                    {
+                        nx=nx+dx[i];
+                        ny=ny+dy[i];
+                        if(judge(nx,ny))
+                        {
+                            next.x=nx;
+                            next.y=ny;
+                            next.t=ft.t+1;
+                            vis[nx][ny]=1;
+                            q.push(next);
+                        }
+                    }
+                    else  //方向不对，等待一分钟
+                    {
+                        next.x=ft.x;
+                        next.y=ft.y;
+                        next.t=ft.t+1;
+                        q.push(next);
+                    }
+                }
+            }
+        }
+    }
+    return -1;
+}
+
+
+int main()
+{
+    while(scanf("%d%d",&n,&m)!=EOF)
+    {
+        for(int i=0; i<n; i++)
+        {
+            scanf("%s",map[i]);
+            for(int j=0; j<m; j++)
+            {
+                if(map[i][j]=='S')
+                {
+                    sx=i,sy=j;
+                }
+            }
+        }
+        printf("%d\n",bfs());
+    }
+    return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

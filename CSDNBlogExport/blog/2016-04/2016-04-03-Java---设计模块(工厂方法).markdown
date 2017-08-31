@@ -1,0 +1,180 @@
+---
+layout: post
+title: "Java---设计模块(工厂方法)"
+date: 2016-04-03 11:07:26 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块
+tags: [java,设计,工厂]
+keyword: 陈浩翔, 谙忆
+description: ★ 场景和问题 
+Java程序开发讲究面向接口编程，隐藏具体的实现类，可是如何得到接口呢？工厂类的命名规范：***Factory 
+单例工厂方法的命名规范：getInstance()工厂的本质是“选择实现”工厂、接口和实现类之间的技术边界：工厂只负责选择实现，实现类才做真正的实现，而接口是限定到底实现什么东西和返回什么东西，三者之间分工明确、各负其责。下面为简单的工厂方法介绍和源代码： 
+接口Dep 
+---
+
+
+★ 场景和问题 
+Java程序开发讲究面向接口编程，隐藏具体的实现类，可是如何得到接口呢？工厂类的命名规范：***Factory 
+单例工厂方法的命名规范：getInstance()工厂的本质是“选择实现”工厂、接口和实现类之间的技术边界：工厂只负责选择实现，实现类才做真正的实现，而接口是限定到底实现什么东西和返回什么东西，三者之间分工明确、各负其责。下面为简单的工厂方法介绍和源代码： 
+接口Dep
+<!-- more -->
+----------
+
+**★ 场景和问题**
+Java程序开发讲究面向接口编程，隐藏具体的实现类，可是如何得到接口呢？
+
+工厂类的命名规范：***Factory
+单例工厂方法的命名规范：getInstance()
+
+**工厂的本质是“选择实现”**
+
+工厂、接口和实现类之间的技术边界：工厂只负责选择实现，实现类才做真正的实现，而接口是限定到底实现什么东西和返回什么东西，三者之间分工明确、各负其责。
+
+下面为简单的工厂方法介绍和源代码：
+接口DepApi ：
+
+```
+package cn.hncu.pattern.factory.dep;
+//接口
+public interface DepApi {
+	public String t1();
+}
+
+```
+实例1 Deplmpl1 ：
+
+```
+package cn.hncu.pattern.factory.dep;
+
+public class Deplmpl1 implements DepApi{
+
+	@Override
+	public String t1() {
+		System.out.println("DepApi--Deplmpl1.t1()...");
+		return "Deplmpl1_t1()";
+	}
+	
+	//下面这个方法在外面访问不到，因为被接口隔离了
+	public String t2() {
+		System.out.println("DepApi--Deplmpl1.t2()...");
+		return "Deplmpl1_t2()";
+	}
+	
+	
+	
+}
+
+```
+实例2 Deplmpl2 ：
+
+```
+package cn.hncu.pattern.factory.dep;
+
+public class Deplmpl2 implements DepApi{
+
+	@Override
+	public String t1() {
+		System.out.println("DepApi--Deplmpl2.t1()...");
+		return "Deplmpl2_t1()";
+	}
+	
+	//下面这个方法在外面访问不到，因为被接口隔离了
+	public String t2() {
+		System.out.println("DepApi--Deplmpl2.t2()...");
+		return "Deplmpl2_t2()";
+	}
+	
+	
+	
+}
+
+```
+工厂类 DepFactory ：
+
+```
+package cn.hncu.pattern.factory.dep;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
+//工厂真正的作用是：选择实现
+public class DepFactory {
+	
+	// 工厂方法,命名规范：createDepApi,getDepApi,getDepInstance
+	public static DepApi getDepApi(){
+		Properties p = new Properties();
+		int type=1;
+		InputStream inStream;
+		try {
+			inStream = new FileInputStream("a.properties");
+			p.load(inStream);
+			type = Integer.parseInt(p.getProperty("type"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		if(type==1){
+			return new Deplmpl1();
+		}
+		if(type==2){
+			return new Deplmpl2();
+		}
+		return null;
+	}
+
+}
+
+```
+测试 Client ：
+
+```
+package cn.hncu.pattern.factory;
+
+import cn.hncu.pattern.factory.dep.DepApi;
+import cn.hncu.pattern.factory.dep.DepFactory;
+
+public class Client {
+	public static void main(String[] args) {
+		
+		DepApi da = DepFactory.getDepApi();
+		da.t1();//修改配置文件a.properties就可达到修改调用方法的目的，而不用修改源代码
+		//da.t2(); //实现类当中的t2()方法已经被接口封装隔离了，访问不了
+	}
+
+}
+
+```
+
+a.properties文件里面的内容：
+此为配置文件，修改配置文件不叫修改源代码的。
+
+```
+type=1
+
+```
+此时的输出结果为;
+
+```
+DepApi--Deplmpl1.t1()...
+
+```
+只修改配置文件：
+
+```
+type=2
+```
+此时的输出结果为：
+
+```
+DepApi--Deplmpl2.t1()...
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

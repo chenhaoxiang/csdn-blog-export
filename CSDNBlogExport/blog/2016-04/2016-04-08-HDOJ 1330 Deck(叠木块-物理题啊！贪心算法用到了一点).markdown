@@ -1,0 +1,127 @@
+---
+layout: post
+title: "HDOJ 1330 Deck(叠木块-物理题啊！贪心算法用到了一点)"
+date: 2016-04-08 10:21:10 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 贪心算法和背包问题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+A single playing card can be placed on a table, carefully, so that the short edges of the card are parallel to the table’s edge, and half the length of the card hangs over the edge 
+---
+
+
+Problem Description 
+A single playing card can be placed on a table, carefully, so that the short edges of the card are parallel to the table’s edge, and half the length of the card hangs over the edge
+<!-- more -->
+----------
+
+Problem Description
+A single playing card can be placed on a table, carefully, so that the short edges of the card are parallel to the table's edge, and half the length of the card hangs over the edge of the table. If the card hung any further out, with its center of gravity off the table, it would fall off the table and flutter to the floor. The same reasoning applies if the card were placed on another card, rather than on a table. 
+
+Two playing cards can be arranged, carefully, with short edges parallel to table edges, to extend 3/4 of a card length beyond the edge of the table. The top card hangs half a card length past the edge of the bottom card. The bottom card hangs with only 1/4 of its length past the table's edge. The center of gravity of the two cards combined lies just over the edge of the table. 
+
+Three playing cards can be arranged, with short edges parallel to table edges, and each card touching at most one other card, to extend 11/12 of a card length beyond the edge of the table. The top two cards extend 3/4 of a card length beyond the edge of the bottom card, and the bottom card extends only 1/6 over the table's edge; the center of gravity of the three cards lines over the edges of the table. 
+
+If you keep stacking cards so that the edges are aligned and every card has at most one card above it and one below it, how far out can 4 cards extend over the table's edge? Or 52 cards? Or 1000 cards? Or 99999?
+
+ 
+
+Input
+Input contains several nonnegative integers, one to a line. No integer exceeds 99999.
+
+ 
+
+Output
+The standard output will contain, on successful completion of the program, a heading: 
+
+ # Cards Overhang 
+
+(that's two spaces between the words) and, following, a line for each input integer giving the length of the longest overhang achievable with the given number of cards, measured in cardlengths, and rounded to the nearest thousandth. The length must be expressed with at least one digit before the decimal point and exactly three digits after it. The number of cards is right-justified in column 5, and the decimal points for the lengths lie in column 12.
+
+ 
+
+Sample Input
+1 
+2 
+3 
+4 
+30 
+ 
+
+Sample Output
+The line of digits is intended to guide you in proper output alignment, and is not part of the output that your solution should produce. 
+
+12345678901234567
+```
+# Cards  Overhang
+    1     0.500
+    2     0.750
+    3     0.917
+    4     1.042
+   30     1.997
+```
+
+物理题！还是一个英语题！
+题意：就是在桌面上铺一样的卡片，求最多能够超过桌面多少。
+
+理想化条件：问题中几个理想化的用词---“水平桌面”、“完全相同”、“质量均匀”、“长方体”
+
+物理学原理：  若物体的重心位于支持面的上方，当重力作用线在支持面内，重力矩与支持力矩平衡，物体处于平衡状态；反之，重力矩与支持力矩同方向，物体处于不平衡状态；临界的平衡条件为重力的作用线恰好经过支持面的边缘。
+
+![](http://img.blog.csdn.net/20160408101329066)
+
+贪心法求解：  设每个卡片长度均为L，重力均为G。将卡片从上到下编号，依次为1、2、3、„、n。记第k（k=1,2,3,„,n）块卡片相对其下方支持物的最大允许伸出量为x.k（n号卡片的支持物为水平桌面，其余卡片的支持物为其下方的木块），第k块卡片及其上方所有卡片的公共重心到第k块卡片另一端的距离为g.k。显然，1号卡片的伸出量为及公共重心为
+
+![](http://img.blog.csdn.net/20160408101421757)
+
+现加入2号卡片，1号卡片平衡的临界条件为其重力作用下恰好位于2号卡片对其支持面的边缘。公共重心的坐标是其各组成部分的重心坐标的加权平均，在图示位置下两个卡片的公共重心到2号卡片最左端的距离为
+
+![](http://img.blog.csdn.net/20160408101457052)
+
+![](http://img.blog.csdn.net/20160408101534820)
+
+加入第k块卡片后的公共重心到第k块卡片最左端的距离为：
+ 
+ ![](http://img.blog.csdn.net/20160408101607835)
+
+第t块木块的最大允许伸出量为：
+ 
+ ![](http://img.blog.csdn.net/20160408101645304)
+
+总伸出量为：
+![](http://img.blog.csdn.net/20160408101717758)
+
+贪心算法简介： 
+所谓贪心算法，就是指在对问题求解时，总是做出在当前看来是最好的选择。在本题中，每一步加入一个木块，1号木块的最大允许伸出量为L/2；加入2号木块后，两个木块的公共重心与1号木块的伸出量有关，那么2号木块的最大允许伸出量也就受1号木块的最大允许伸出量所限。由于贪心算法并非从整体最优上加以考虑，使得贪心算法并非对所有的问题都能求得最佳解；但在大多数情况下，贪心算法都能得出满意解。
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		double[] dabiao = new double[100010];
+		double sum=0.0;
+		dabiao[1]=0.5;
+		for(int i=2;i<=100000;i++){
+			dabiao[i]=dabiao[i-1]+1.0/i/2.0;
+		}
+		System.out.println("# Cards  Overhang");
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			System.out.printf("%5d%10.3f\r\n",n,dabiao[n]);
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

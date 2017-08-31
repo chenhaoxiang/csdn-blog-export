@@ -1,0 +1,263 @@
+---
+layout: post
+title: "JSP-讲解(生成java类、静态导入与动态导入)"
+date: 2016-07-29 12:09:38 +0800
+comments: true
+categories:----- ③、Java知识点及应用,----- ④、Web学习之旅,----- ----- JSP/XML知识点
+tags: [java,servlet,html,web开发,jsp]
+keyword: 陈浩翔, 谙忆
+description: 一、JSP技术简介JSP是Java Server Page的缩写，它是Servlet的扩展，它的作用是简化网站的创建和维护。 
+JSP是HTML代码与Java代码的混合体。 
+JSP文件通常以JSP或JSPX的扩展名。 
+JSP拥有自己的语法。 
+JSP形式上像HTML，但本质上是Servlet。 
+JSP的出现，使得将Web开发中的HTML与业务逻辑代码有效分离成为可能。通常JSP只负责生成动态的 
+---
+
+
+一、JSP技术简介JSP是Java Server Page的缩写，它是Servlet的扩展，它的作用是简化网站的创建和维护。 
+JSP是HTML代码与Java代码的混合体。 
+JSP文件通常以JSP或JSPX的扩展名。 
+JSP拥有自己的语法。 
+JSP形式上像HTML，但本质上是Servlet。 
+JSP的出现，使得将Web开发中的HTML与业务逻辑代码有效分离成为可能。通常JSP只负责生成动态的
+<!-- more -->
+----------
+
+一、JSP技术简介
+=========
+
+JSP是Java Server Page的缩写，它是Servlet的扩展，它的作用是简化网站的创建和维护。
+JSP是HTML代码与Java代码的混合体。
+JSP文件通常以JSP或JSPX的扩展名。
+JSP拥有自己的语法。
+JSP形式上像HTML，但本质上是Servlet。
+JSP的出现，使得将Web开发中的HTML与业务逻辑代码有效分离成为可能。通常JSP只负责生成动态的HTML文档，而业务逻辑由其他Java组件如JavaBean来实现。JSP可以通过Scriptlet来访问这些组件。
+<% %>
+
+Tomcat首次访问JSP的过程图示：
+=================
+
+![](http://img.blog.csdn.net/20160729120659405)
+
+
+首先来看下，我们用Tomcat发布这个一个web ： index.jsp的代码是：
+=========================================
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  
+  </head>
+  
+  <body>
+  	<h1>演示JSP技术</h1>
+  	<%
+  		String name = "jack";
+  		HttpSession s = request.getSession();
+  		ServletConfig cfig = getServletConfig();
+  		ServletContext aa = getServletContext();
+  		response.setCharacterEncoding("utf-8");
+  		response.setContentType("text/html;charset=utf-8");
+		session.setAttribute("a","aabbcc");  		
+		request.setAttribute("req", "request");	
+  	 %>
+  	<h1>这里用文字隔一下</h1>
+  	
+  	<%
+  		out.println("name="+name);//注解1：上面jsp中定义了name变量，所以这里能访问，至于为什么能访问，去看下底层代码就知道了
+		out.println(session.getAttribute("a"));  	
+  	 %>
+  	
+  	<br/>
+  	<!-- 我们在这里就调用sum函数，和输出age -->
+  	sum=<%=sum(100) %><br/>
+  	age=<%=age %>
+  	
+  	<%!
+  	//下面是加了"!"号的内容
+  		int age = 25;
+  		int sum(int n){
+  			int s=0;
+  			for(int i=0;i<=n;i++){
+  				s+=i;
+  			}
+  			return s;
+  		}
+  	 %>
+  </body>
+</html>
+
+```
+
+运行的结果是这样的：
+==========
+
+![](http://img.blog.csdn.net/20160729015453398)
+
+为什么会这样的呢。我们来看Tomcat帮我们生成的java源代码(无论jsp怎么写，别人访问我们的网站的时候，tomcat会临时去读我们的jsp，然后再生成对应的.java文件)：
+我的tomcat安装在D盘下，myJspDemo是我的项目名，
+D:\apache-tomcat-7.0.30\work\Catalina\localhost\myJspDemo\org\apache\jsp   这个目录下面会生成：index_jsp.java文件，我们打开它，
+
+我只贴出与我刚写的jsp有关的代码图片了，不然太长了。
+
+
+![](http://img.blog.csdn.net/20160729020003927)
+
+看完第一张图片，有没有感觉到什么~
+
+![](http://img.blog.csdn.net/20160729020014077)
+
+再看第二张~~是不是一下子就懂了，原来jsp<%  %>中的字符就只是原样写进java代码中啊~
+
+<%  %>中的字符是写进servlet()方法中的！！！！
+
+而<%!  %>中的字符是写进类的，和方法一个级别，变量就是成员变量！----用这个有一个好玩的东西哦，自己再写一个servlet进去，覆盖tomcat的  public void _jspService(final javax.servlet.http.HttpServletRequest request, final javax.servlet.http.HttpServletResponse response)类！也就是运行后，自己写的jsp完全不会再运行，只会运行自己的servlet中的内容了(方法名字取和tomcat一样_jspService，里面的变量用HttpServletRequest 的父类，就可以实现覆盖啦)。有趣吧，嘿嘿，不过只是画蛇添足啦，没必要这样，我只是想说明一个，就是用了<%!  %>，这个中的变量，方法 的作用域就是整个类了！(写内部类都行)
+
+<%=age %>  底层是把该名翻译成：out.print(age );
+
+
+静态导入：
+=====
+在index.jsp的<%! %>之后插入：
+
+```
+ <h2>--从这里开始导入包含页--静态导入，合成一个类，可以共享：局部变量、request和response对象等等</h2>
+  	 <!-- 静态导入： 
+  	 -->
+  	 <%@include file="jsps/a.jsp" %>
+```
+
+/jsps/a.jsp:
+------------
+这个写出来，myEclipse会报错的，但是没关系，这是myEclipse的智能识别问题，它无法识别那个变量名。
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+	<h1>a.jsp...开始</h1>
+	<%
+		out.println("name="+name);	//局部变量，可以访问	
+		out.println("age="+age); 	//全局变量，可以访问	
+		out.println("sum="+sum(100));//方法，可以访问
+		out.println(session.getAttribute("a"));//可以访问
+	%>
+	<h1>a.jsp...结束</h1>
+```
+
+演示结果：
+-----
+![](http://img.blog.csdn.net/20160729112914068)
+看下tomcat帮我们把这个a.jsp的代码生成到哪了：
+
+![](http://img.blog.csdn.net/20160729110434963)
+
+很明显，和index.jsp的生成在一个类中了，而且是servlet方法中！
+
+所以，通过这个，我们就很容易理解为什么能够访问到name，age变量和sum()方法了吧。
+
+解释一下：
+-----
+静态导入其实就是把另外导入的jsp中的代码(相当于除了jsp的头，其他的全部原样拷过来)(采用jsp的方式翻译后的)直接插入到当前 _jspServlet()中的对应的位置！
+jsp的方式翻译：html代码(包括html、body等标记、DOCTYPE约束)是采用 out.write()封装。jsp中写的java代码，就原样拷入！
+
+
+动态导入：
+=====
+
+index.jsp中在静态导入演示之后添加：
+
+```
+<h2>以下演示动态导入(包含)---生成两个独立的jsp类，只能够共享：request对象（输出结果是合并成一个页面显示的）</h2>
+	<jsp:include page="jsps/b.jsp"></jsp:include>
+	
+	<%
+		out.println("<br/>");
+		out.println("index中的request="+request); 
+		out.println("<br/>");
+		out.println(request.getAttribute("req")); 
+	%>
+	<h2>这是index.jsp的结尾</h2>
+```
+
+b.jsp:
+------
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  	<title>这是被动态导入的页面</title>
+  </head>
+  
+  <body>
+  	<h1>这是被jsp:include(动态导入)的页面</h1>
+  	<%
+  		out.println("b.jsp中的session.getAttribute(a)="+session.getAttribute("a"));
+  		out.println("<br/>");
+  		out.println("b.jsp中的request="+request);
+  		out.println("<br/>");
+		out.println(request.getAttribute("req")); 
+  	 %>
+  
+  </body>
+</html>
+
+```
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160729114448529)
+
+
+index_jsp.java：
+![](http://img.blog.csdn.net/20160729114546266)
+
+可以很明显的看到，b.jsp中内容并没有生成在这里。
+
+而是重新生成了一个类：
+
+![](http://img.blog.csdn.net/20160729114644034)
+
+自然，b.jsp中的代码是在这个类中生成了，至于为什么不能访问那些局部变量和成员变量，懂Java的人很容易理解了吧！
+
+所以，静态导入和动态导入，
+区别是：静态导入不另外生成java类，而是在当前导入的类中生成java代码，而动态导入，会另外再生成java类，这也是为什么访问静态导入的网站运行会比动态导入的网站运行快的原因。
+静态导入时导入所有，编译指令会起作用。
+而动态导入时被导入页面的编译指令则失去作用，只是插入被导入页面的body内容。
+
+
+实际应用：
+=====
+
+使用包含引入页面统一的元素，如网头和网脚。
+使用`<%@ include file = url %>`或`<jsp:include page=url/>`都可以。
+使用包含引用用户是否已经登录的验证。
+必须使用`<%@ include file=url%>`静态包含。
+因为在同一个servlet中执行了redirect后面的代码将不会再执行。
+而动态包含无论目标页面如何操作，都会再返回到源页再执行后面的代码。
+
+
+
+
+JSP的注释语句：
+=========
+
+```
+<%- - 在这儿输入注释 - - %>
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

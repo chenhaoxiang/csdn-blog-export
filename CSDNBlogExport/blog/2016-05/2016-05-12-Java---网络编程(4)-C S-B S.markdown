@@ -1,0 +1,390 @@
+---
+layout: post
+title: "Java---网络编程(4)-C S-B S"
+date: 2016-05-12 12:02:26 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java网络编程
+tags: [网络编程,clientserver,浏览器,程序员,服务器]
+keyword: 陈浩翔, 谙忆
+description: C/S 与 B/S
+
+☆ C/S ( Client/Server ) 客户端和服务端的特点
+
+1、客户端和服务端的软件都需要程序员进行编写。 
+2、客户端维护起来较为麻烦。(缺陷) 
+3、客户端的存在可以将一部分运算分离到客户端来运行，减轻了服务器端的压力。(优势)
+
+☆ B/S ( Browse/Server ) 浏览器和服务端的特点
+
+1、客户端不用程序员编写，直接使用系统中具备的浏览器软件作 
+---
+
+
+C/S 与 B/S
+
+☆ C/S ( Client/Server ) 客户端和服务端的特点
+
+1、客户端和服务端的软件都需要程序员进行编写。 
+2、客户端维护起来较为麻烦。(缺陷) 
+3、客户端的存在可以将一部分运算分离到客户端来运行，减轻了服务器端的压力。(优势)
+
+☆ B/S ( Browse/Server ) 浏览器和服务端的特点
+
+1、客户端不用程序员编写，直接使用系统中具备的浏览器软件作
+<!-- more -->
+----------
+
+C/S 与 B/S
+=========
+
+☆ C/S ( Client/Server ) 客户端和服务端的特点
+
+1、客户端和服务端的软件都需要程序员进行编写。
+2、客户端维护起来较为麻烦。(缺陷)
+3、客户端的存在可以将一部分运算分离到客户端来运行，减轻了服务器端的压力。(优势)
+
+
+☆ B/S ( Browse/Server ) 浏览器和服务端的特点
+
+1、客户端不用程序员编写，直接使用系统中具备的浏览器软件作为客户端即可。程序员只需要编写服务器端就OK了。
+2、维护起来也很容易，因为只要维护服务器即可。（优势）
+3、所有的运算都在服务器端，相对压力较大。（缺陷）
+
+![](http://img.blog.csdn.net/20160510232834572)
+
+
+
+
+编程练习1
+====
+
+1、自定义一个服务器，接收浏览器发来的信息。显示浏览器发送了什么信息，并向浏览器发送简单的网页信息。
+
+只实现了单线程~~~多线程我写了~只是由于不知道的原因~会出现Socket异常关闭的情况~!所以并没有实现~
+
+单线程：成功~
+
+```
+package cn.hncu.bs;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * @author 陈浩翔
+ * 
+ * @version 1.0 2016-5-11
+ */
+public class MyServer {
+	public static void main(String[] args) {
+		try {
+			while (true) {
+				ServerSocket server = new ServerSocket(80);
+				Socket s = server.accept();
+				System.out.println(s.getInetAddress().getHostAddress()
+						+ "...来访");
+				InputStream in = s.getInputStream();
+				byte buf[] = new byte[1024];
+				int len = in.read(buf);
+				String text = new String(buf, 0, len);
+				System.out.println(text);
+
+				BufferedReader bin = new BufferedReader(new FileReader(
+						"chx.html"));
+				// 要加true刷新PrintWriter流
+				PrintWriter pw = new PrintWriter(s.getOutputStream(), true);
+				String line = null;
+				while ((line = bin.readLine()) != null) {
+					pw.println(line);
+				}
+				in.close();
+				pw.close();
+				s.close();
+				server.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+}
+
+```
+
+多线程：失败了的例子：
+求解：
+
+```
+package cn.hncu.bs;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class MyServer {
+
+	public static void main(String[] args) {
+		try {
+			while(true){
+				ServerSocket server = new ServerSocket(80);
+				//多客户同时访问
+				Socket s = server.accept();
+				new Thread(new ServerThread(s)).start();
+				
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class ServerThread implements Runnable{
+	Socket s = null;
+	public ServerThread(Socket s) {
+		this.s = s;
+	}
+	@Override
+	public void run() {
+		try {
+			String ip = s.getInetAddress().getHostAddress();
+			System.out.println(ip+"...来访问了~");
+			InputStream in = s.getInputStream();
+			byte buf[] = new byte[1024];
+			int len = in.read(buf);
+			String text = new String(buf,0,len);
+			System.out.println(text);
+			
+			BufferedReader bin = new BufferedReader(new FileReader("chx.html"));
+			
+			//要加true刷新PrintWriter流
+			PrintWriter pw = new PrintWriter(s.getOutputStream(),true);
+			String line=null;
+			
+			while((line=bin.readLine())!=null){
+				System.out.println(line);
+				pw.println(line);
+			}
+			in.close();
+			pw.close();
+			s.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+}
+
+```
+
+我老师给的解释是：
+
+```
+在练习MyServer时采用多线程都出现了多次请求与应该的情况，这很可能是TCP的三次握手造成的，即客户浏览器跟服务器进行几次请求与应答通讯，而服务器在第二次(同一次请求中的第2次握手)收到信息时却用另一个线程去接，因此握手就实现不了，而服务器却多次输出收到消息
+```
+
+
+编程练习2
+====
+
+2、模拟一个浏览器客户端向服务器发请求，接收并显示响应消息。
+
+
+```
+package cn.hncu.bs;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+/**
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-5-11
+ */
+public class MyBrowse {
+
+	public static void main(String[] args) {
+		String ipAdd = "www.hncu.net";
+		try {
+			Socket s = new Socket(ipAdd, 80);
+			//向服务器发送http协议请求头，以让服务器认识我们，给我们正确地响应
+			OutputStream out = s.getOutputStream();
+			System.out.println(s.getPort());//端口
+			PrintWriter pw = new PrintWriter(out,true);
+			
+			pw.println("GET / HTTP/1.1");//请求行包含： 请求方式(GET POST) 空格 请求的资源路径 空格 http的协议版本
+			pw.println("Accept: */*;");
+			pw.println("Host: "+ipAdd);//下面这些key-value是请求头
+			//out.println("User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko");
+			//out.println("Accept-Encoding: gzip, deflate");
+			pw.println("Connection: close");//如果没有这一句，程序不会自己结束的
+			pw.println();//空行---http协议请求头结束之后，必须要一个空行
+			System.out.println("请求完毕!");
+			
+			//接收服务器的响应
+			InputStream in = s.getInputStream();
+			int len=0;
+			byte b[] = new byte[1024];
+			while((len=in.read(b))!=-1){
+				String str = new String(b,0,len,"UTF-8");
+				System.out.println(str);
+			}
+			s.close();
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+	}
+}
+
+```
+
+响应过来的消息就是：
+
+```
+HTTP/1.1 200 OK
+Date: Wed, 11 May 2016 10:56:05 GMT
+Server: VWebServer
+X-Frame-Options: SAMEORIGIN
+Last-Modified: Wed, 11 May 2016 06:04:55 GMT
+ETag: "6060-5328ad214afc0"
+Accept-Ranges: bytes
+Content-Length: 24672
+Vary: User-Agent,Accept-Encoding
+Cache-Control: private, max-age=600
+Expires: Wed, 11 May 2016 11:06:05 GMT
+Connection: close
+Content-Type: text/html
+Content-Language: zh-CN
+
+//后面的就是网站的html代码了~~~
+?<!DOCTYPE html><html><head><title>湖南城市学院</title>
+...
+...
+...
+...
+
+</body></html>
+
+```
+
+
+
+编程练习3：
+======
+
+3、网络蜘蛛，收集网页中的邮箱地址信息。
+
+```
+package cn.hncu.bs;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.junit.Test;
+
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
+
+/**
+ * @author 陈浩翔
+ * 
+ * @version 1.0 2016-5-11
+ */
+public class SpiderDemo {
+	
+	//读取网页的邮箱
+	public static void main(String[] args) {
+		try {
+			URL url = new URL("http://www.sina.com.cn/");
+			System.out.println(url.getHost());
+			BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+			String regex = "\\w+@\\w+(\\.\\w+)+";
+			
+			Pattern p = Pattern.compile(regex);
+			
+			String line = null;
+			
+			while((line=br.readLine())!=null){
+				
+				Matcher m = p.matcher(line);
+				while(m.find()){
+					System.out.println(m.group());
+				}
+			}
+			
+			System.out.println("读取完！");
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * 先测试本地的邮箱地址看能不能读取出来---成功
+	 */
+	@Test
+	public void Test() {
+		try {
+			BufferedReader br = new BufferedReader(new FileReader("mail.html"));
+
+			// 正则表达式
+			String regex= "\\w+@\\w+(\\.\\w+)+";
+			
+			Pattern p = Pattern.compile(regex);
+			String line=null;
+			while((line=br.readLine())!=null){
+				Matcher m = p.matcher(line);
+				while(m.find()){
+					System.out.println(m.group());
+				}
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+```
+
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

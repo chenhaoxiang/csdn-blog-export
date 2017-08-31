@@ -1,0 +1,176 @@
+---
+layout: post
+title: "Java新手入门必须掌握的30个基本概念"
+date: 2016-07-22 02:31:32 +0800
+comments: true
+categories:❻ 其他,----- 好文/知识点
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 今天给大家推荐的文章是有关Java基本概念的，掌握好这些基本概念对学习J2SE、J2EE、J2ME都很重要，也能更好地理解Java的精髓，初学者要注意啦！
+
+
+
+
+▶Java概述: 
+
+　　目前Java主要应用于中间件的开发(middleware)---处理客户机与服务器之间的通信技术，早期的实践证明，Java不适合pc应用程序的开发，其发展逐渐变成在开发手持设备，互联网信息站，及车 
+---
+
+
+今天给大家推荐的文章是有关Java基本概念的，掌握好这些基本概念对学习J2SE、J2EE、J2ME都很重要，也能更好地理解Java的精髓，初学者要注意啦！
+
+
+
+
+▶Java概述: 
+
+　　目前Java主要应用于中间件的开发(middleware)---处理客户机与服务器之间的通信技术，早期的实践证明，Java不适合pc应用程序的开发，其发展逐渐变成在开发手持设备，互联网信息站，及车
+<!-- more -->
+----------
+
+
+<p><span style="color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; font-size:16px; line-height:25px; text-indent:26px; white-space:pre-wrap; background-color:rgb(248,247,245)">今天给大家推荐的文章是有关Java基本概念的，掌握好这些基本概念对学习J2SE、J2EE、J2ME都很重要，也能更好地理解Java的精髓，初学者要注意啦！</span></p>
+<p><span style="color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; font-size:16px; line-height:25px; text-indent:26px; white-space:pre-wrap; background-color:rgb(248,247,245)"><br>
+</span></p>
+<p><span style="color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; font-size:16px; line-height:25px; text-indent:26px; white-space:pre-wrap; background-color:rgb(248,247,245)"></span></p>
+<p style="margin-top:0px; margin-bottom:10px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; line-height:25.59375px; max-width:100%; word-wrap:normal; clear:both; min-height:1em; white-space:pre-wrap">
+<span style="margin:0px; padding:0px; max-width:100%; font-size:18px; word-wrap:break-word!important"><span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important"><span style="margin:0px; padding:0px; max-width:100%; line-height:25.6px; word-wrap:break-word!important">▶Java概述:&nbsp;</span></span></span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+　　目前Java主要应用于中间件的开发(middleware)---处理客户机与服务器之间的通信技术，早期的实践证明，Java不适合pc应用程序的开发，其发展逐渐变成在开发手持设备，互联网信息站，及车载计算机的开发。Java与其他语言所不同的是程序运行时提供了平台的独立性，称许可以在windows,solaris,linux其他操作系统上使用完全相同的代码。Java的语法与C&#43;&#43;语法类&#20284;，C&#43;&#43;/C程序员很容易掌握，而且Java是完全的彻底的面向对象的，其中提出了很好的GC(Garbage Collector)垃圾处理机制，防止内存溢出。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">Java的白皮书为我们提出了Java语言的11个关键特性。&nbsp;</span><br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(1)Easy：Java的语法比C&#43;&#43;的相对简单，另一个方面就是Java能使软件在很小的机器上运行，基础解释其和类库的支持的大小约为40kb，增加基本的标准库和线程支持的内存需要增加125kb。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(2)分布式：Java带有很强大的TCP/IP协议族的例程库，Java应用程序能够通过URL来穿过网络来访问远程对象，由于servlet机制的出现，使Java编程非常的高效，现在许多的大的web server都支持servlet。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(3)OO：面向对象设计是把重点放在对象及对象的接口上的一个编程技术。其面向对象和C&#43;&#43;有很多不同，在与多重继承的处理及Java的原类模型。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(4)健壮特性：Java采取了一个安全指针模型，能减小重写内存和数据崩溃的可能型。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(5)安全：Java用来设计网路和分布系统，这带来了新的安全问题，Java可以用来构建防病毒和防攻击的System。事实证明Java在防毒这一方面做的比较好。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(6)中立体系结构：Java编译其生成体系结构中立的目标文件&#26684;式可以在很多处理器上执行，编译器产生的指令字节码(Javabytecode)实现此特性，此字节码可以在任何机器上解释执行。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(7)可移植性：Java中对基本数据结构类型的大小和算法都有严&#26684;的规定所以可移植性很好。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(8)多线程：Java处理多线程的过程很简单，Java把多线程实现交给底下操作系统或线程程序完成。所以多线程是Java作为服务器端开发语言的流行原因之一。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　(9)Applet和servlet：能够在网页上执行的程序叫Applet，需要支持Java的浏览器很多，而applet支持动态的网页，这是很多其他语言所不能做到的。</p>
+<p style="margin-top:10px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; font-size:18px; line-height:1.75em; word-wrap:break-word!important">▶基本概念:&nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">
+1.OOP中唯一关系的是<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">对象的接口</span>是什么，就像计算机的销售商她不管电源内部结构是怎样的，他只关系能否给你提供电就行了，也就是只要知道can&nbsp;or&nbsp;not而不是how and why。所有的程序是由一定的属性和行为对象组成的，不同的对象的访问通过函数调用来完成，对象间所有的交流都是通过方法调用，通过对封装对象数据，很大限度上提高复用率。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　2.OOP中最重要的思想是<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">类</span>，类是模板是蓝图，从类中构造一个对象，即创建了这个类的一个实例(instance)。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　3.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">封装</span>：就是把数据和行为结合起在一个包中，并对对象使用者隐藏数据的实现过程,一个对象中的数据叫他的实例字段(instance field)。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　4.通过扩展一个类来获得一个新类叫<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">继承</span>(inheritance),而所有的类都是由Object根超类扩展而得,根超类下文会做介绍。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　5.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">对象的3个主要特性</span>&nbsp;：<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　（1）behavior---说明这个对象能做什么。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　（2）state---当对象施加方法时对象的反映。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　（3）identity---与其他相&#20284;行为对象的区分标志，每个对象有唯一的indentity 与这三者之间相互影响。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　6.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">类之间的关系</span>：<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;（1）use-a：依赖关系&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;（2）has-a：聚合关系&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;（3）is-a：继承关系--例：A类继承了B类，此时A类不仅有了B类的方法，还有其自己的方法。(个性存在于共性中)&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　7.构造对象使用<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">构造器</span>：构造器的提出，构造器是一种特殊的方法，构造对象并对其初始化。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">例</span>:Data类的构造器叫Data&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　　new Data()---构造一个新对象，且初始化当前时间。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　　Data happyday=new Data()---把一个对象赋&#20540;给一个变量happyday，从而使该对象能够多次使用，此处要声明的使变量与对象变量二者是不同的。new返回的&#20540;是一个引用。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">构造器特点</span>：构造器可以有0个，一个或多个参数；&nbsp;构造器和类有相同的名字；一个类可以有多个构造器；构造器没有返回&#20540;；构造器总是和new运算符一起使用。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　8.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">重载</span>：当多个方法具有相同的名字而含有不同的参数时，便发生重载.编译器必须挑选出调用哪个方法。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+　　9<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">.包(package)</span>：Java允许把一个或多个类收集在一起成为一组,称作包，以便于组织任务，标准Java库分为许多包。java.lang java.util java<span style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">.</span>net等，包是分层次的，所有的java包都在java和javax包层次内。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 10.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">继承思想</span>：允许在已经存在的类的基础上构建新的类，当你继承一个已经存在的类时，那么你就复用了这个类的方法和字段，同时你可以在新类中添加新的方法和字段。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+　　 11.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">扩展类</span>：扩展类充分体现了is-a的继承关系。形式为：class (子类) extends (基类)。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 12.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">多态</span>：在java中，对象变量是多态的。而java中不支持多重继承。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 13.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">动态绑定</span>：调用对象方法的机制。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 (1)编译器检查对象声明的类型和方法名。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 (2)编译器检查方法调用的参数类型。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 (3)静态绑定：若方法类型为priavte static final 编译器会准确知道该调用哪个方法。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 (4)当程序运行并且使用动态绑定来调用一个方法时,那么虚拟机必须调用x所指向的对象的实际类型相匹配的方法版本。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 (5)动态绑定：是很重要的特性,它能使程序变得可扩展而不需要重编译已存代码。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 14.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">final类</span>：为防止他人从你的类上派生新类,此类是不可扩展的。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 15.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">动态调用比静态调用花费的时间要长。</span>&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 16.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">抽象类</span>：规定一个或多个抽象方法的类本身必须定义为abstract。<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">例:</span>
+ public abstract string getDescripition&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 17.Java中的每一个类都是从<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">Object类</span>扩展而来的。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 18.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">object类中的equal和toString方法。</span>&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （1）equal用于测试一个对象是否同另一个对象相等。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （2）toString返回一个代表该对象的字符串，几乎每一个类都会重载该方法，以便返回当前状态的正确表示。(toString 方法是一个很重要的方法)&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 19.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">通用编程</span>：任何类类型的所有&#20540;都可以同object类性的变量来代替。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 20.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">数组列表</span>：ArrayList动态数组列表，是一个类库，定义在java.uitl包中，可自动调节数组的大小。</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">
+21.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">class类</span>:object类中的getclass方法返回ckass类型的一个实例，程序启动时包含在main方法的类会被加载，虚拟机要加载他需要的所有类，每一个加载的类都要加载它需要的类。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 22.class类为编写可动态操纵java代码的程序提供了强大的<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">功能反射</span>，这项功能为JavaBeans特别有用，使用反射Java能支持VB程序员习惯使用的工具。&nbsp;能够分析类能力的程序叫反射器，Java中提供此功能的包叫Java.lang.reflect反射机制十分强大。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （1）.在运行时分析类的能力。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （2）.在运行时探察类的对象。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （3）.实现通用数组操纵代码。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （4）.提供方法对象。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 而此机制主要针对是工具者而不是应用及程序。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 反射机制中的最重要的部分是允许你检查类的结构.用到的API有:&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+java.lang.reflect.Field 返回字段。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+java.reflect.Method 返回方法。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+java.lang.reflect.Constructor 返回参数。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 方法指针：java没有方法指针，把一个方法的地址传给另一个方法，可以在后面调用它，而接口是更好的解决方案。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 23.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">接口(Interface)</span>说明类该做什么而不指定如何去做,一个类可以实现一个或多个interface。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 24.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">接口不是一个类,而是对符合接口要求的类的一套规范。</span>&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 若实现一个接口需要2个步骤:　&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （1）.声明类需要实现的指定接口。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （2）.提供接口中的所有方法的定义。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 声明一个类实现一个接口需要使用implements 关键字&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 class actionb implements Comparable 其actionb需要提供CompareTo方法,接口不是类,不能用new实例化一个接口.&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 25.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">一个类只有一个超类，但一个类能实现多个接口。</span>Java中的一个重要接口：Cloneable</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 26.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">接口和回调</span>。编程一个常用的模式是回调模式，在这种模式中你可以指定当一个特定时间发生时回调对象上的方法。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 <span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+例</span>：ActionListener 接口监听。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 类&#20284;的API有：</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">
+<span style="margin:0px; padding:0px; max-width:100%; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">ja</span><span style="margin:0px; padding:0px; max-width:100%; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">va.swing.JOptionPane&nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">
+<span style="margin:0px; padding:0px; max-width:100%; line-height:1.75em; text-indent:0em; word-wrap:break-word!important">j</span><span style="margin:0px; padding:0px; max-width:100%; line-height:1.75em; text-indent:0em; word-wrap:break-word!important">ava.swing.Timer&nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; text-indent:2em; word-wrap:break-word!important">
+<span style="margin:0px; padding:0px; max-width:100%; line-height:1.75em; text-indent:0em; word-wrap:break-word!important">java.awt.Tookit&nbsp;</span></p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; color:rgb(62,62,62); font-family:微软雅黑; font-size:16px; text-indent:0em; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; line-height:1.75em; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 27.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">对象clone</span>：clone方法是object一个保护方法，这意味着你的代码不能简单的调用它。<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 28.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">内部类</span>：一个内部类的定义是定义在另一个内部的类。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 原因是:&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （1）.一个内部类的对象能够访问创建它的对象的实现,包括私有数据。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （2）.对于同一个包中的其他类来说,内部类能够隐藏起来。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （3）.匿名内部类可以很方便的定义回调。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （4）.使用内部类可以非常方便的编写事件驱动程序。&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 29.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">代理类(proxy)</span>：<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （1）.指定接口要求所有代码&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 （2）.object类定义的所有的方法(toString equals)&nbsp;<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; font-weight:inherit; font-style:inherit; word-wrap:break-word!important">
+　　 30.<span style="font-weight:700; margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">数据类型</span>：Java是强调类型的语言，每个变量都必须先申明它都类型，java中总共有8个基本类型。4种是整型，2种是浮点型，一种是字符型，被用于Unicode编码中的字符，布尔型。</p>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,83 @@
+---
+layout: post
+title: "HDOJ 1106 排序"
+date: 2016-02-20 03:10:25 +0800
+comments: true
+categories:----- HDOJ-JAVA,----- 基础题,----- String
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入一行数字，如果我们把这行数字中的‘5’都看成空格，那么就得到一行用空格分割的若干非负整数（可能有些整数以‘0’开头，这些头部的‘0’应该被忽略掉，除非这个整数就是由若干个‘0’组成的，这时这个整数就是0）。你的任务是：对这些分割得到的整数，依从小到大的顺序排序输出。Input 
+输入包含多组测试用例，每组输入数据只有一行数字（数字之间没有空格），这行数字 
+---
+
+
+Problem Description 
+输入一行数字，如果我们把这行数字中的‘5’都看成空格，那么就得到一行用空格分割的若干非负整数（可能有些整数以‘0’开头，这些头部的‘0’应该被忽略掉，除非这个整数就是由若干个‘0’组成的，这时这个整数就是0）。你的任务是：对这些分割得到的整数，依从小到大的顺序排序输出。Input 
+输入包含多组测试用例，每组输入数据只有一行数字（数字之间没有空格），这行数字
+<!-- more -->
+----------
+
+Problem Description
+输入一行数字，如果我们把这行数字中的‘5’都看成空格，那么就得到一行用空格分割的若干非负整数（可能有些整数以‘0’开头，这些头部的‘0’应该被忽略掉，除非这个整数就是由若干个‘0’组成的，这时这个整数就是0）。
+
+你的任务是：对这些分割得到的整数，依从小到大的顺序排序输出。
+
+
+ 
+
+Input
+输入包含多组测试用例，每组输入数据只有一行数字（数字之间没有空格），这行数字的长度不大于1000。  
+
+输入数据保证：分割得到的非负整数不会大于100000000；输入数据不可能全由‘5’组成。
+
+ 
+
+Output
+对于每个测试用例，输出分割得到的整数排序的结果，相邻的两个整数之间用一个空格分开，每组输出占一行。
+
+ 
+
+Sample Input
+0051231232050775
+ 
+
+Sample Output
+0 77 12312320
+
+
+```
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		while(sc.hasNext()){
+			String str = sc.next();
+			String[] num = str.split("5");
+			int[] number = new int[1005];
+			int count=0;
+			for(int i=0;i<num.length;i++){
+				if(num[i].equals("")){
+					continue;
+				}
+				number[count++] = Integer.valueOf(num[i]);
+			}
+			Arrays.sort(number, 0, count);//从小到大排序number数组[o-conut)
+			for(int i=0;i<count-1;i++){
+				System.out.print(number[i]+" ");
+			}
+			System.out.println(number[count-1]);
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

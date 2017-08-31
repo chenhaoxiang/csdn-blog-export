@@ -1,0 +1,83 @@
+---
+layout: post
+title: "POJ 1936  All in All"
+date: 2015-10-23 06:42:36 +0800
+comments: true
+categories:❶ ACM,----- POJ-ACM
+tags: [poj]
+keyword: 陈浩翔, 谙忆
+description: DescriptionYou have devised a new encryption technique which encodes a message by inserting between its characters randomly generated strings in a clever way. Because of pending patent issues we will n 
+---
+
+
+DescriptionYou have devised a new encryption technique which encodes a message by inserting between its characters randomly generated strings in a clever way. Because of pending patent issues we will n
+<!-- more -->
+----------
+
+Description
+
+You have devised a new encryption technique which encodes a message by inserting between its characters randomly generated strings in a clever way. Because of pending patent issues we will not discuss in detail how the strings are generated and inserted into the original message. To validate your method, however, it is necessary to write a program that checks if the message is really encoded in the final string. 
+
+Given two strings s and t, you have to decide whether s is a subsequence of t, i.e. if you can remove characters from t such that the concatenation of the remaining characters is s. 
+Input
+
+The input contains several testcases. Each is specified by two strings s, t of alphanumeric ASCII characters separated by whitespace.The length of s and t will no more than 100000.
+Output
+
+For each test case output "Yes", if s is a subsequence of t,otherwise output "No".
+Sample Input
+
+sequence subsequence
+person compression
+VERDI vivaVittorioEmanueleReDiItalia
+caseDoesMatter CaseDoesMatter
+Sample Output
+
+Yes
+No
+Yes
+No
+题目要求就是在s2中找字串s1！
+
+```
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+using namespace std;
+char a[100005],b[100005];
+int main()
+{
+    while(~scanf("%s",a)){
+        scanf("%s",b);
+        int a_length = strlen(a);
+        int b_length = strlen(b);
+        int a1,b1=0;
+        int i;
+        for(i=0;i<a_length;i++){
+                bool flag=false;
+            for(int j=b1;j<b_length;j++){
+                if(a[i]==b[j]){
+                    b1=j+1;
+                    flag=true;
+                    break;
+                }
+            }
+            if(!flag)
+                break;
+        }
+        if(i==a_length)
+            printf("Yes\n");
+        else
+            printf("No\n");
+    }
+    return 0;
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

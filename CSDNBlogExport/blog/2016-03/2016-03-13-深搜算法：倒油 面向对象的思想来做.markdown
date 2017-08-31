@@ -1,0 +1,312 @@
+---
+layout: post
+title: "深搜算法：倒油 面向对象的思想来做"
+date: 2016-03-13 02:21:07 +0800
+comments: true
+categories:❺ 算法及基础题,----- 递归搜索回溯
+tags: [java,面向对象,算法]
+keyword: 陈浩翔, 谙忆
+description: 题目：有一位厨师要从盛12斤油（a桶）的桶中倒出6斤油来，可是手边只有盛8斤油（b桶）和盛5斤油（c桶）的两个桶，问如何操作才能将6斤取出来呢？下面为JAVA实现代码： 
+主类：package cn.hncu.oil.dfs1;import cn.hncu.oil.common.Bucket;
+import cn.hncu.oil.common.DumpCase;
+import cn.hncu.oi 
+---
+
+
+题目：有一位厨师要从盛12斤油（a桶）的桶中倒出6斤油来，可是手边只有盛8斤油（b桶）和盛5斤油（c桶）的两个桶，问如何操作才能将6斤取出来呢？下面为JAVA实现代码： 
+主类：package cn.hncu.oil.dfs1;import cn.hncu.oil.common.Bucket;
+import cn.hncu.oil.common.DumpCase;
+import cn.hncu.oi
+<!-- more -->
+----------
+
+题目：有一位厨师要从盛12斤油（a桶）的桶中倒出6斤油来，可是手边只有盛8斤油（b桶）和盛5斤油（c桶）的两个桶，问如何操作才能将6斤取出来呢？
+
+下面为JAVA实现代码：
+主类：
+```
+package cn.hncu.oil.dfs1;
+
+import cn.hncu.oil.common.Bucket;
+import cn.hncu.oil.common.DumpCase;
+import cn.hncu.oil.common.Myset;
+
+public class DumpOilDFS {
+	public static void main(String[] args) {
+		
+		Bucket buckets[] = new Bucket[3];
+		buckets[0] = new Bucket(12, 12);
+		buckets[1] = new Bucket(8, 0);
+		buckets[2] = new Bucket(5, 0);
+		
+		DumpCase u = new DumpCase(buckets);
+		Myset caseset = new Myset();
+		caseset.add(u);
+		
+		dfs(u,caseset);
+		
+		
+		
+		
+	}
+
+	private static void dfs(DumpCase u0, Myset caseset) {
+		
+		for(Bucket bucket: u0.getBucket()){
+			if(bucket.getNow()==6){
+				//System.out.println("find a case");
+				print(u0);
+				return;
+			}
+		}
+		
+		int n = u0.getBucket().length;//桶的个数
+		DumpCase u = new DumpCase(u0);
+		//用备份节点去搜
+		//遍历所有的DumpCase: 依次让桶i向j倒
+		for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				if(i==j){//不能自己给自己的桶倒油
+					continue;
+				}
+				//算出桶i给j倒时，能倒多少-->temp
+				int temp = u.getBucket()[i].canOut();
+				if(u.getBucket()[j].canIn()<u.getBucket()[i].canOut()){
+					temp = u.getBucket()[j].canIn();
+				}
+				//倒油
+				u.getBucket()[i].out(temp);
+				u.getBucket()[j].in(temp);
+				
+				//判断该情况是否已经出现过了//如果存在，要还原(把油倒回去)
+				if(caseset.contains(u)){
+					u.getBucket()[i].in(temp);
+					u.getBucket()[j].out(temp);
+					continue;
+				}
+				
+				
+				DumpCase v = new DumpCase(u);
+				v.setParent(u0);
+				caseset.add(v);
+				//System.out.println(a);
+				dfs(v,caseset);
+				
+				u.getBucket()[i].in(temp);
+				u.getBucket()[j].out(temp);
+		
+		
+	
+				
+			}
+		}
+		
+		
+	}
+
+	private static void print(DumpCase u0) {
+		Myset set  =new Myset();
+		set.add(u0);
+		DumpCase v =u0.getParent();
+		while(v!=null){
+			set.add(v);
+			//System.out.println(v.getBucket()[0].getNow()+","+v.getBucket()[1].getNow()+","+v.getBucket()[2].getNow());
+			v= v.getParent();
+		}
+		System.out.println("------------");
+		//System.out.println("12,0,0");
+		Object objs[] = set.getAll();
+		
+		for(int i=objs.length-1;i>=0;i--){
+			DumpCase u =(DumpCase) objs[i];
+			System.out.println(u.getBucket()[0].getNow()+","+u.getBucket()[1].getNow()+","+u.getBucket()[2].getNow());
+		}
+		
+		
+		
+	}
+
+}
+
+```
+DumpCase 类：
+```
+package cn.hncu.oil.common;
+
+import java.util.Arrays;
+
+public class DumpCase {
+	Bucket buckets[];
+	DumpCase parent = null;
+	
+	public DumpCase(){
+		
+	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Arrays.hashCode(buckets);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		DumpCase other = (DumpCase) obj;
+		if (!Arrays.equals(buckets, other.buckets))
+			return false;
+		return true;
+	}
+
+	public DumpCase(Bucket buckets[]){
+		this.buckets = buckets;
+	}
+
+	public DumpCase(DumpCase u) {//必须要深拷贝
+		this.buckets = new Bucket[u.getBucket().length];
+		for(int i=0;i<u.getBucket().length;i++){
+			this.buckets[i] = new Bucket(0, 0);
+			this.buckets[i].max=u.buckets[i].max;
+			this.buckets[i].now=u.buckets[i].now;
+		}
+		
+	}
+
+	public Bucket[] getBucket() {
+		return buckets;
+	}
+
+	public void setBucket(Bucket[] buckets) {
+		this.buckets = buckets;
+	}
+
+	public DumpCase getParent() {
+		return parent;
+	}
+
+	public void setParent(DumpCase parent) {
+		this.parent = parent;
+	}
+	
+	
+	
+}
+
+```
+Bucket 类：
+```
+package cn.hncu.oil.common;
+
+public class Bucket {//桶的容量和现在装的油的多少
+	int now;
+	int max;
+	
+	public Bucket(int max,int now) {
+		this.max=max;
+		this.now=now;
+	}
+	
+	public void in(int n){
+		 now+=n;
+	}
+	
+	public void out(int n){
+		now-=n;
+	}
+	
+	public int getNow() {
+		return now;
+	}
+
+	public int getMax() {
+		return max;
+	}
+
+	public int canIn(){
+		return max-now;
+	}
+	
+	public int canOut(){
+		return now;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + max;
+		result = prime * result + now;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bucket other = (Bucket) obj;
+		if (max != other.max)
+			return false;
+		if (now != other.now)
+			return false;
+		return true;
+	}
+	
+}
+
+```
+Myset 类：
+```
+package cn.hncu.oil.common;
+
+public class Myset {
+	private Object[] objs = new Object[0];
+	
+	public boolean contains(Object obj){
+		for(Object objtemp:objs){
+			if(objtemp.equals(obj)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean add(Object obj){
+		if(contains(obj)){
+			return false;
+		}
+		Object[] objstemp = new Object[objs.length+1];
+		System.arraycopy(objs, 0, objstemp, 0, objs.length);
+		objstemp[objs.length]=obj;
+		objs = objstemp;
+		return true;
+	}
+	
+	public Object[] getAll(){
+		return objs;
+	}
+	
+	public int Size(){
+		return objs.length;
+	}
+	
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

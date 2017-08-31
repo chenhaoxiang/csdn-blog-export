@@ -1,0 +1,107 @@
+---
+layout: post
+title: "HDOJ(HDU) 1859 最小长方形(水题、、)"
+date: 2016-04-22 03:20:47 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+给定一系列2维平面点的坐标(x, y)，其中x和y均为整数，要求用一个最小的长方形框将所有点框在内。长方形框的边分别平行于x和y坐标轴，点落在边上也算是被框在内。Input 
+测试输入包含若干测试用例，每个测试用例由一系列坐标组成，每对坐标占一行，其中|x|和|y|小于 231；一对0 坐标标志着一个测试用例的结束。注意(0, 0)不作为任何一个测试用例里面 
+---
+
+
+Problem Description 
+给定一系列2维平面点的坐标(x, y)，其中x和y均为整数，要求用一个最小的长方形框将所有点框在内。长方形框的边分别平行于x和y坐标轴，点落在边上也算是被框在内。Input 
+测试输入包含若干测试用例，每个测试用例由一系列坐标组成，每对坐标占一行，其中|x|和|y|小于 231；一对0 坐标标志着一个测试用例的结束。注意(0, 0)不作为任何一个测试用例里面
+<!-- more -->
+----------
+
+Problem Description
+给定一系列2维平面点的坐标(x, y)，其中x和y均为整数，要求用一个最小的长方形框将所有点框在内。长方形框的边分别平行于x和y坐标轴，点落在边上也算是被框在内。
+ 
+
+Input
+测试输入包含若干测试用例，每个测试用例由一系列坐标组成，每对坐标占一行，其中|x|和|y|小于 231；一对0 坐标标志着一个测试用例的结束。注意(0, 0)不作为任何一个测试用例里面的点。一个没有点的测试用例标志着整个输入的结束。 
+
+ 
+
+Output
+对每个测试用例，在1行内输出2对整数，其间用一个空格隔开。第1对整数是长方形框左下角的坐标，第2对整数是长方形框右上角的坐标。
+
+ 
+
+Sample Input
+12 56
+23 56
+13 10
+0 0
+12 34
+0 0
+0 0
+ 
+
+Sample Output
+12 10 23 56
+12 34 12 34
+
+
+很简单，就是找那个最小的x坐标和最小的y坐标组成一个点，还有最大的x坐标和最大的y坐标组成一个点，然后这2个点作为那个最小长方形的对角线就可以了！！！
+
+你在脑海中想象一下就知道了。水题！排序都不要用的。
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		
+		while(sc.hasNext()){
+			int minx = sc.nextInt();
+			int maxx = minx;
+			int miny =sc.nextInt();
+			int maxy = miny;
+			if(minx==0&&miny==0){
+				break ;	
+			}
+			
+			while(true){
+				int x = sc.nextInt();
+				int y = sc.nextInt();
+				if(x==0&&y==0){
+					break;
+				}
+				if(x>maxx){
+					maxx=x;
+				}
+				
+				if(x<minx){
+					minx =x;
+				}
+				
+				if(y>maxy){
+					maxy = y;
+				}
+				
+				if(y<miny){
+					miny=y;
+				}
+			}
+					
+			System.out.println(minx+" "+miny+" "+maxx+" "+maxy);
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,111 @@
+---
+layout: post
+title: "HDOJ(HDU) 2519 新生晚会(组合公式)"
+date: 2016-05-09 02:56:57 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 阶乘相关
+tags: [数据,杭电]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+开学了，杭电又迎来了好多新生。ACMer想为新生准备一个节目。来报名要表演节目的人很多，多达N个，但是只需要从这N个人中选M个就够了，一共有多少种选择方法？Input 
+数据的第一行包括一个正整数T，接下来有T组数据，每组数据占一行。 
+每组数据包含两个整数N（来报名的人数,1<=N<=30），M（节目需要的人数0<=M<=30）Output 
+每组数据输出 
+---
+
+
+Problem Description 
+开学了，杭电又迎来了好多新生。ACMer想为新生准备一个节目。来报名要表演节目的人很多，多达N个，但是只需要从这N个人中选M个就够了，一共有多少种选择方法？Input 
+数据的第一行包括一个正整数T，接下来有T组数据，每组数据占一行。 
+每组数据包含两个整数N（来报名的人数,1<=N<=30），M（节目需要的人数0<=M<=30）Output 
+每组数据输出
+<!-- more -->
+----------
+
+Problem Description
+开学了，杭电又迎来了好多新生。ACMer想为新生准备一个节目。来报名要表演节目的人很多，多达N个，但是只需要从这N个人中选M个就够了，一共有多少种选择方法？
+ 
+
+Input
+数据的第一行包括一个正整数T，接下来有T组数据，每组数据占一行。
+每组数据包含两个整数N（来报名的人数,1<=N<=30），M（节目需要的人数0<=M<=30）
+
+ 
+
+Output
+每组数据输出一个整数，每个输出占一行
+ 
+
+Sample Input
+5
+3 2
+5 3
+4 4
+3 6
+8 0
+ 
+
+Sample Output
+3
+10
+1
+0
+1
+
+
+就是组合公式的应用！
+c(n,m) = n!/(n-m)!/m!;
+
+注意！此题用long可能会过不了、
+不过如果你在算乘的时候去除的话，应该是可以过的。
+我在这里是用double过的。
+
+```
+
+import java.util.Scanner;
+
+public class Main{
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int t =sc.nextInt();
+        while(t-->0){
+            int n =sc.nextInt();
+            int m=sc.nextInt();
+            double num = group(n,m);
+            System.out.printf("%.0f",num);
+            System.out.println();
+        }
+    }
+    private static double group(int n, int m) {
+        if(m>n){
+            return 0;
+        }
+        if(m==0){
+            return 1;
+        }
+        int h=n-m;
+        if(n-m>m){
+            h=m;
+            m=n-m;
+        }
+        double s=1;
+        for(int i=n;i>=m+1;i--){
+            s*=i;
+        }
+        double k=1;
+        for(int i=1;i<=h;i++){
+            k*=i;
+        }
+        return s/k;
+    }
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

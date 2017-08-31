@@ -1,0 +1,98 @@
+---
+layout: post
+title: "HDOJ 2089 不要62（打表）"
+date: 2016-03-23 10:58:16 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+杭州人称那些傻乎乎粘嗒嗒的人为62（音：laoer）。 
+杭州交通管理局经常会扩充一些的士车牌照，新近出来一个好消息，以后上牌照，不再含有不吉利的数字了，这样一来，就可以消除个别的士司机和乘客的心理障碍，更安全地服务大众。 
+不吉利的数字为所有含有4或62的号码。例如： 
+62315 73418 88914 
+都属于不吉利号码。但是，61152虽然含有6和2 
+---
+
+
+Problem Description 
+杭州人称那些傻乎乎粘嗒嗒的人为62（音：laoer）。 
+杭州交通管理局经常会扩充一些的士车牌照，新近出来一个好消息，以后上牌照，不再含有不吉利的数字了，这样一来，就可以消除个别的士司机和乘客的心理障碍，更安全地服务大众。 
+不吉利的数字为所有含有4或62的号码。例如： 
+62315 73418 88914 
+都属于不吉利号码。但是，61152虽然含有6和2
+<!-- more -->
+----------
+
+Problem Description
+杭州人称那些傻乎乎粘嗒嗒的人为62（音：laoer）。
+杭州交通管理局经常会扩充一些的士车牌照，新近出来一个好消息，以后上牌照，不再含有不吉利的数字了，这样一来，就可以消除个别的士司机和乘客的心理障碍，更安全地服务大众。
+不吉利的数字为所有含有4或62的号码。例如：
+62315 73418 88914
+都属于不吉利号码。但是，61152虽然含有6和2，但不是62连号，所以不属于不吉利数字之列。
+你的任务是，对于每次给出的一个牌照区间号，推断出交管局今次又要实际上给多少辆新的士车上牌照了。
+
+ 
+
+Input
+输入的都是整数对n、m（0<n≤m<1000000），如果遇到都是0的整数对，则输入结束。
+
+ 
+
+Output
+对于每个整数对，输出一个不含有不吉利数字的统计个数，该数值占一行位置。
+
+ 
+
+Sample Input
+1 100
+0 0
+ 
+
+Sample Output
+80
+
+
+除了打表还可以用DP做。
+```
+import java.util.Scanner;
+
+public class Main {
+	static int num[] = new int[1000005];
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		dabiao();
+		while(sc.hasNext()){
+			int n = sc.nextInt();
+			int m = sc.nextInt();
+			if(n==0&&m==0){
+				return;
+			}
+			int sum=0;
+			for(int i=n;i<=m;i++){
+				sum+=num[i];
+			}
+			System.out.println(m-n+1-sum);
+			
+		}
+	}
+	private static void dabiao() {
+		String a = "";
+		for(int i=1;i<=1000000;i++){
+			a = i+"";
+			if(a.lastIndexOf("4")!=-1||a.lastIndexOf("62")!=-1){
+				num[i]++;
+			}
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,186 @@
+---
+layout: post
+title: "HDOJ 1070 Milk(水题，考英文的)"
+date: 2016-03-31 08:01:02 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Ignatius drinks milk everyday, now he is in the supermarket and he wants to choose a bottle of milk. There are many kinds of milk in the supermarket, so Ignatius wants to know whic 
+---
+
+
+Problem Description 
+Ignatius drinks milk everyday, now he is in the supermarket and he wants to choose a bottle of milk. There are many kinds of milk in the supermarket, so Ignatius wants to know whic
+<!-- more -->
+----------
+
+Problem Description
+Ignatius drinks milk everyday, now he is in the supermarket and he wants to choose a bottle of milk. There are many kinds of milk in the supermarket, so Ignatius wants to know which kind of milk is the cheapest.
+
+Here are some rules:
+1. Ignatius will never drink the milk which is produced 6 days ago or earlier. That means if the milk is produced 2005-1-1, Ignatius will never drink this bottle after 2005-1-6(inclusive).
+2. Ignatius drinks 200mL milk everyday.
+3. If the milk left in the bottle is less than 200mL, Ignatius will throw it away.
+4. All the milk in the supermarket is just produced today.
+
+Note that Ignatius only wants to buy one bottle of milk, so if the volumn of a bottle is smaller than 200mL, you should ignore it.
+Given some information of milk, your task is to tell Ignatius which milk is the cheapest.
+
+ 
+
+Input
+The input contains several test cases. The first line of the input is a single integer T which is the number of test cases. T test cases follow.
+Each test case starts with a single integer N(1<=N<=100) which is the number of kinds of milk. Then N lines follow, each line contains a string S(the length will at most 100 characters) which indicate the brand of milk, then two integers for the brand: P(Yuan) which is the price of a bottle, V(mL) which is the volume of a bottle.
+
+ 
+
+Output
+For each test case, you should output the brand of the milk which is the cheapest. If there are more than one cheapest brand, you should output the one which has the largest volume.
+
+ 
+
+Sample Input
+2
+2
+Yili 10 500
+Mengniu 20 1000
+4
+Yili 10 500
+Mengniu 20 1000
+Guangming 1 199
+Yanpai 40 10000
+ 
+
+Sample Output
+Mengniu
+Mengniu
+
+HintIn the first case, milk Yili can be drunk for 2 days, it costs 10 Yuan. Milk Mengniu can be drunk for 5 days, it costs 20 Yuan. So Mengniu is the cheapest.In the second case,
+milk Guangming should be ignored. Milk Yanpai can be drunk for 5 days, but it costs 40 Yuan. So Mengniu is the cheapest.
+
+首先要确认的是，每盒奶只喝五天啊。
+倘若两种奶的日花销相同，那么就只挑量大的那盒买。
+
+
+
+有2种方法，一种是对每天的开销来求的：如下：
+
+```
+import java.util.Scanner;
+//按照每天的开销来算
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int n = sc.nextInt();
+			sc.nextLine();
+			String[] strs = new String[n];
+			for(int i=0;i<n;i++){
+				strs[i]=sc.nextLine();
+			}
+//			for(int i=0;i<n;i++){
+//				System.out.println(strs[i]);
+//			}
+			String[][] milk = new String[n][3];
+			int num[][] = new int[n][2];
+			for(int i=0;i<n;i++){
+				milk[i]=strs[i].split(" ");
+				num[i][0]=Integer.parseInt(milk[i][1]);
+				num[i][1]=Integer.parseInt(milk[i][2]);
+				if(num[i][1]>1000){
+					num[i][1]=1000;
+				}
+			}
+			int k=0;
+			int day=0;
+			day=0;
+			double vp = 100000000;
+			for(int i=0;i<n;i++){
+				if(num[i][1]<200){
+					continue;
+				}
+				day=num[i][1]/200;
+				if((num[i][0]*1.0/day*1.0)<vp){
+					k=i;
+					vp=num[i][0]*1.0/day*1.0;
+				}
+				if((num[i][0]*1.0/day*1.0)==vp){
+					if(Integer.parseInt(milk[i][2])>Integer.parseInt(milk[k][2])){
+						k=i;
+						vp=num[i][0]*1.0/day*1.0;
+					}
+				}
+			}
+			System.out.println(milk[k][0]);
+		}
+	}
+
+}
+
+```
+还有一种是按照实际的没ml的价格来算的：
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int n = sc.nextInt();
+			sc.nextLine();
+			String[] strs = new String[n];
+			for(int i=0;i<n;i++){
+				strs[i]=sc.nextLine();
+			}
+//			for(int i=0;i<n;i++){
+//				System.out.println(strs[i]);
+//			}
+			String[][] milk = new String[n][3];
+			int num[][] = new int[n][2];
+			for(int i=0;i<n;i++){
+				milk[i]=strs[i].split(" ");
+				num[i][0]=Integer.parseInt(milk[i][1]);
+				num[i][1]=Integer.parseInt(milk[i][2]);
+				if(num[i][1]>1000){
+					num[i][1]=1000;
+				}
+			}
+			int k=0;
+			double vp = -100;
+			for(int i=0;i<n;i++){
+				if(num[i][1]<200){
+					continue;
+				}
+				while(num[i][1]%200!=0){
+					num[i][1]--;
+				}
+				double p =num[i][1]*1.0/num[i][0]*1.0;
+				if(p>vp){
+					k=i;
+					vp=p;
+				}
+				if(p==vp){
+					if(Integer.parseInt(milk[i][2])>Integer.parseInt(milk[k][2])){
+						k=i;
+						vp=p;
+					}
+				}
+			}
+			System.out.println(milk[k][0]);
+		}
+	}
+
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

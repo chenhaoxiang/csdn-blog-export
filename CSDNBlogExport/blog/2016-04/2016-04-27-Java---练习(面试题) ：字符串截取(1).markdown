@@ -1,0 +1,159 @@
+---
+layout: post
+title: "Java---练习(面试题) ：字符串截取(1)"
+date: 2016-04-27 12:07:43 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- JavaIO流
+tags: [java,面试题,编码,utf-8]
+keyword: 陈浩翔, 谙忆
+description: 在java中，字符串“abcd”与字符串“ab你好”的长度是一样，都是四个字符。 
+但对应的字节数不同，一个汉字占两个字节。 
+定义一个方法，按照指定的字节数来取子串。 
+如：对于“ab你好”，如果取三个字节，那么子串就是ab与“你”字的半个，那么半个就要舍弃。如果取四个字节就是“ab你”，取五个字节还是“ab你”。上面给出的是在gbk编码下的截取字符串。 
+下面我写了个代码，可以在utf-8和gb 
+---
+
+
+在java中，字符串“abcd”与字符串“ab你好”的长度是一样，都是四个字符。 
+但对应的字节数不同，一个汉字占两个字节。 
+定义一个方法，按照指定的字节数来取子串。 
+如：对于“ab你好”，如果取三个字节，那么子串就是ab与“你”字的半个，那么半个就要舍弃。如果取四个字节就是“ab你”，取五个字节还是“ab你”。上面给出的是在gbk编码下的截取字符串。 
+下面我写了个代码，可以在utf-8和gb
+<!-- more -->
+----------
+
+在java中，字符串“abcd”与字符串“ab你好”的长度是一样，都是四个字符。
+但对应的字节数不同，一个汉字占两个字节。
+定义一个方法，按照指定的字节数来取子串。
+如：对于“ab你好”，如果取三个字节，那么子串就是ab与“你”字的半个，那么半个就要舍弃。如果取四个字节就是“ab你”，取五个字节还是“ab你”。
+
+
+
+上面给出的是在gbk编码下的截取字符串。
+下面我写了个代码，可以在utf-8和gbk编码下都能截取字符串。
+
+注意：utf-8下的绝大多数汉字都是3个字节，所以，为了简化，全部当成了3个字节处理。
+
+```
+package io.string;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+public class StringCutOut {
+	static final String STR = "汗";
+
+	public static void main(String[] args) throws IOException {
+		Scanner sc = new Scanner(System.in);
+		// 只考虑GBK和UTF-8
+		while (true) {
+			if (STR.getBytes().length % 2 == 0) {// GBK
+				System.out.println("请输入字符串：(输入'#'结束为结束程序)");
+				String str = sc.next();
+				if ("#".equals(str)) {
+					return;
+				}
+				System.out.println("请输入指定字节以用来截取字符串(截取的字符串的字串每个占一行)：");
+				int n = sc.nextInt();
+
+				int len = 0;
+				int m = n;
+				while (len < str.length()) {
+					if (str.charAt(len) >= 0 && str.charAt(len) <= 128) {
+						n--;
+						System.out.print(str.charAt(len));
+						if (n <= 0) {
+							n = m;
+							System.out.println();
+						}
+						len++;
+					} else {
+						n -= 2;
+						System.out.print(str.charAt(len));
+						if (n  <= 0) {
+							n = m;
+							System.out.println();
+						}
+						len++;
+					}
+				}
+				System.out.println();
+			} else if (STR.getBytes().length % 2 != 0) {// utf-8
+
+				System.out.println("请输入字符串：(输入'#'结束为结束程序)");
+				String str = sc.next();
+				if ("#".equals(str)) {
+					return;
+				}
+				str = new String(str.getBytes("gbk"), "UTF-8");
+				//因为我的终端输入默认是gbk的，改了系统的编码还是没用。所以就用这个转码了。。
+				//这里肯定是有bug的----留待下次编辑修复
+				// System.out.println(str);
+				// System.out.println(str.length());
+				System.out.println("请输入指定字节以用来截取字符串(截取的字符串的字串每个占一行)：");
+				int n = sc.nextInt();
+				int len = 0;
+				int m = n;
+				while (len < str.length()) {
+					if (str.charAt(len) >= 0 && str.charAt(len) <= 128) {
+						n--;
+						System.out.print(str.charAt(len));
+						len++;
+						if (n <= 0) {
+							n = m;
+							System.out.println();
+						}
+					} else {
+						if(n-2<=0&&m>=3){
+							n=m;
+							System.out.println();
+							continue;
+						}
+						n -= 3;
+						System.out.print(str.charAt(len));
+						if(n<=0){
+							n=m;
+							System.out.println();
+						}
+						len++;
+					}
+				}
+			}
+			System.out.println();
+		}
+	}
+}
+
+```
+
+GBK编码下的一个测试结果：
+
+```
+请输入字符串：(输入'#'结束为结束程序)
+ab你好
+请输入指定字节以用来截取字符串(截取的字符串的字串每个占一行)：
+4
+ab你
+好
+```
+
+UTF-8下的一个测试结果：
+
+```
+请输入字符串：(输入'#'结束为结束程序)
+ab你好
+请输入指定字节以用来截取字符串(截取的字符串的字串每个占一行)：
+4
+ab
+你
+好
+```
+
+今天就先到这里了。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

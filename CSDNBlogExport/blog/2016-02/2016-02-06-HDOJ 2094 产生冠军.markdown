@@ -1,0 +1,140 @@
+---
+layout: post
+title: "HDOJ 2094 产生冠军"
+date: 2016-02-06 02:31:51 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+有一群人，打乒乓球比赛，两两捉对撕杀，每两个人之间最多打一场比赛。 
+球赛的规则如下： 
+如果A打败了B，B又打败了C，而A与C之间没有进行过比赛，那么就认定，A一定能打败C。 
+如果A打败了B，B又打败了C，而且，C又打败了A，那么A、B、C三者都不可能成为冠军。 
+根据这个规则，无需循环较量，或许就能确定冠军。你的任务就是面对一群比赛选手，在经过了若干场 
+---
+
+
+Problem Description 
+有一群人，打乒乓球比赛，两两捉对撕杀，每两个人之间最多打一场比赛。 
+球赛的规则如下： 
+如果A打败了B，B又打败了C，而A与C之间没有进行过比赛，那么就认定，A一定能打败C。 
+如果A打败了B，B又打败了C，而且，C又打败了A，那么A、B、C三者都不可能成为冠军。 
+根据这个规则，无需循环较量，或许就能确定冠军。你的任务就是面对一群比赛选手，在经过了若干场
+<!-- more -->
+----------
+
+Problem Description
+有一群人，打乒乓球比赛，两两捉对撕杀，每两个人之间最多打一场比赛。
+球赛的规则如下：
+如果A打败了B，B又打败了C，而A与C之间没有进行过比赛，那么就认定，A一定能打败C。
+如果A打败了B，B又打败了C，而且，C又打败了A，那么A、B、C三者都不可能成为冠军。
+根据这个规则，无需循环较量，或许就能确定冠军。你的任务就是面对一群比赛选手，在经过了若干场撕杀之后，确定是否已经实际上产生了冠军。
+
+ 
+
+Input
+输入含有一些选手群，每群选手都以一个整数n(n<1000)开头，后跟n对选手的比赛结果，比赛结果以一对选手名字（中间隔一空格）表示，前者战胜后者。如果n为0，则表示输入结束。
+
+ 
+
+Output
+对于每个选手群，若你判断出产生了冠军，则在一行中输出“Yes”，否则在一行中输出“No”。
+
+ 
+
+Sample Input
+3
+Alice Bob
+Smith John
+Alice Smith
+5
+a c
+c d
+d e
+b e
+a d
+0
+ 
+
+Sample Output
+Yes
+No
+
+总共的不同人的数目，减去输的不同的人的数目。
+如果等于一，输出yes，其他的为no。
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int m = sc.nextInt();
+			if(m==0){
+				return ;
+			}
+			String[] a = new String[2*m];
+			int[] b = new int[2*m];
+			for(int i=0;i<2*m;i++){
+				b[i]=1;
+			}
+			int[] c = new int[2*m];
+			for(int i=1;i<2*m;i=i+2){
+				c[i]=1;
+			}
+			for(int i=0;i<2*m;i++){
+				a[i]=sc.next();
+			}
+			int name =0;
+			int time =0;
+			for(int i=0;i<2*m-1;i++){
+				
+				for(int j=i+1;j<2*m;j++){
+					if(a[j].equals(a[i])){
+						b[j]=0;
+					}
+				}
+			}
+			for(int i=0;i<2*m;i++){
+				name+=b[i];
+			}
+			//System.out.println(name);
+			
+			for(int i=1;i<2*m-2;i=i+2){
+				
+				for(int j=i+2;j<2*m;j=j+2){
+					if(a[j].equals(a[i])){
+						c[j]=0;
+					}
+				}
+			}
+			for(int i=1;i<2*m;i=i+2){
+				time +=c[i];
+			}
+			//System.out.println(time);
+			
+			if(name-time==1){
+				System.out.println("Yes");
+			}else{
+				System.out.println("No");
+			}
+			
+			
+		}
+		
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

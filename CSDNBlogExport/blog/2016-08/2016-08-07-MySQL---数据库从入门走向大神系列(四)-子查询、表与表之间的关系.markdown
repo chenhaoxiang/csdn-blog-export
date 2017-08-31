@@ -1,0 +1,499 @@
+---
+layout: post
+title: "MySQL---数据库从入门走向大神系列(四)-子查询、表与表之间的关系"
+date: 2016-08-07 04:05:08 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑤、数据库
+tags: [数据库,SQL,子查询,表与表的关系]
+keyword: 陈浩翔, 谙忆
+description: 本篇博客讲解(子查询)非相关子查询/相关子查询，一对一，一对多，多对一，多对的的关系！准备：首先我们创建一列sex。再为部分行设置好值0(女)或者1(男)；delete from stud where age=26; 
+ 删除年龄为26的行。 update stud set sex='1' where saddress like '湖南%';将地址中湖南开头的人的的sex修改为1。update st 
+---
+
+
+本篇博客讲解(子查询)非相关子查询/相关子查询，一对一，一对多，多对一，多对的的关系！准备：首先我们创建一列sex。再为部分行设置好值0(女)或者1(男)；delete from stud where age=26; 
+ 删除年龄为26的行。 update stud set sex='1' where saddress like '湖南%';将地址中湖南开头的人的的sex修改为1。update st
+<!-- more -->
+----------
+
+本篇博客讲解(子查询)非相关子查询/相关子查询，一对一，一对多，多对一，多对的的关系！
+
+准备：
+===
+首先我们创建一列sex。再为部分行设置好值0(女)或者1(男)；
+
+![](http://img.blog.csdn.net/20160806165127834)
+
+`delete from stud where age=26;`
+ 删除年龄为26的行。
+
+```
+ update stud set sex='1' where saddress like '湖南%';
+```
+将地址中湖南开头的人的的sex修改为1。
+
+```
+update stud set sex='0' where age>=30 and sex is null;
+```
+将年龄大于等于30的，且性别为null的人的sex设置为0.
+
+case-when then else end  语句.
+================
+现在要做这样一件事，查询显示的时候sex不显示0,1和null，我们让它0的就显示女，1的就显示男，null就显示未知。
+这时我们需要用到:
+case-when then else end  语句.
+
+修改 * 当 * 时候 修改成 * 否则修改成 * END
+when then 可以写多句
+
+```
+select sno,sname,age,saddress,(case sex when '0' then '女' when '1' then '男' else '未知' end) as 性别 from stud;
+```
+有人可能会有疑问，不是定义了sex只能有一个字符嘛，为什么还能用‘未知’啊，因为这里只是显示的，并不是存储到数据库中的数据，只是相当于输出字符。
+
+![](http://img.blog.csdn.net/20160806170905200)
+
+子查询：
+=====
+
+子查询：嵌套在其它查询中的查询语句。（又称为内部查询）
+
+主查询：包含其它子查询的查询称为主查询。（又称外部查询）
+
+
+非相关子查询：
+--------------
+
+在主查询中，子查询只需要执行一次，子查询结果不再变化，供主查询使用，这种查询方式称为非相关子查询。
+也可以这么理解：
+非相关子查询是独立于外部查询的子查询，子查询总共执行一次，执行完毕后将值传递给外部查询。 
+
+![](http://img.blog.csdn.net/20160807010230992)
+
+现在我们来对这个表做一个查询：
+查询具有年龄相同的人在2人及以上的，他们的年龄分别是多少。
+
+```
+select age from stud group by age having count(age)>=2;
+```
+
+![](http://img.blog.csdn.net/20160807010437792)
+
+
+
+count(age)在这里只是作为供主查询使用的条件。
+
+
+相关子查询：
+------------
+
+相关子查询的执行依赖于外部查询的数据，外部查询执行一行，子查询就执行一次。
+也可以这么理解：
+执行查询的时候先取得外部查询的一个属性值，然后执行与此属性值相关的子查询，执行完毕后再取得外部父查询的下一个值，依次再来重复执行子查询；
+
+我们先把表格增加一列sex并设置好值。
+
+![](http://img.blog.csdn.net/20160807014106530)
+
+接下来：
+查询不但具有年龄相同的人在2人及以上的，而且性别是1的那些人的年龄。
+
+```
+SELECT age,sex FROM stud GROUP BY age,sex HAVING COUNT(age)>=2 AND sex='1';
+```
+![](http://img.blog.csdn.net/20160807015153679)
+
+
+
+表与表之间的关系：
+===========
+
+
+一对一：
+--------
+需要两个表。当然做项目时为了省空间，通常只建一个表，如果要实现一对一的查询，可以建立两个视图。示例如下:
+1)先建物理表，初始化数据、
+
+```
+create table person(
+	id int,
+	name varchar(10),
+	sex char(1),
+	wife int,
+	husband int
+);
+insert into person values(1,'小花','0',1,3);
+insert into person values(2,'玉芳','0',0,4);
+insert into person values(3,'张三','1',1,0);
+insert into person values(4,'李四','1',2,0);
+insert into person values(5,'王五','1',0,0);
+```
+
+![](http://img.blog.csdn.net/20160806174442387)
+
+
+2)建立两个视图
+
+```
+create view women as select * from person where sex='0';
+create view men as select * from person where sex='1';
+```
+
+![](http://img.blog.csdn.net/20160807020050871)
+
+
+3)查询夫妻信息
+92年以前是这样查询的：
+
+```
+select women.name as 妻子,men.name as 丈夫 from women,men where women.husband=men.id and women.id=men.wife;
+```
+
+![](http://img.blog.csdn.net/20160807023002055)
+
+
+一对多/多对一：
+----------------
+数据库设计分析：
+案例：一个人可以拥有多辆汽车，要求查询出某人所拥有的所有汽车。
+
+方案一：(差的设计-用一张表存储--数据冗余太严重)
+
+```
+编号   姓名  性别   年龄   汽车编号   车型  排量  价格
+P001  Jack   男     25     C001     BMW    12L   80w
+P001  Jack   男     25     C002     Benz   12L   100w
+P001  Jack   男     25     C003     Benz   12L   100w
+P002  Tom    男     25     C004     BMW    12L   80w
+P002  Tom    男     25     C005     Benz   12L   100w
+P003  Rose   女     25     C006     Benz   12L   100w
+```
+
+方案二(好的设计)：
+1）把一方单独建个表
+
+```
+编号   姓名  性别   年龄
+P001  Jack   男     25
+P002  Tom    男     25
+P003  Rose   女     25
+```
+2）把多方也建个表(依赖一方,通过外键--补一个字段)
+外键:位于依赖一方，它是被依赖一方是主键
+
+```
+汽车编号   车型  排量  价格    车主
+ C001     BMW    12L   80w    P001
+ C002     Benz   12L   100w   P001
+ C003     Benz   12L   120w   P001
+ C004     BMW    12L   80w    P002
+ C005     Benz   12L   100w   P002
+ C006     Benz   12L   100w   P003
+```
+
+3)代码实现：
+
+```
+create table person2(
+	id varchar(32) primary key,
+	sname varchar(30),
+	sex char(1),
+	age int
+);
+insert into person2 values('P1001','Jack','0',25);
+insert into person2 values('P1002','Tom','1',22);
+insert into person2 values('P1003','Rose','1',24);
+insert into person2 values('P1004','张三','0',25);
+
+create table car(
+	id varchar(32) primary key,
+	sname varchar(30),
+	price numeric(10,2),
+	/*numeric(a,b),a表示一共多少位数，b表示带有几位小数*/
+	pid varchar(32),
+	/*为字段pid定义一个外键约束(来自person2表的字段id)*/
+	constraint car_fk foreign key(pid) references person2(id)
+);
+
+insert into car values('C001','BMW',80.5,'P1001');
+insert into car values('C002','Benz',100,'P1001');
+insert into car values('C003','BMW',120.05,'P1001');
+insert into car values('C004','Benz',88.5,'P1002');
+insert into car values('C005','QQ',8.5,'P1002');
+insert into car values('C006','BIKE',0.5,'P1003');
+```
+
+![](http://img.blog.csdn.net/20160807030343126)
+
+查询每个人拥有的车辆：
+92年之前的写法：
+
+```
+select person2.sname as 车主,car.sname as 车辆 from person2,car where car.pid=person2.id;
+```
+![](http://img.blog.csdn.net/20160807031434002)
+
+现在的内关联写法:
+
+```
+select person2.sname as 车主 ,car.sname as 车辆 from person2 join car on car.pid=person2.id;
+```
+
+![](http://img.blog.csdn.net/20160807031634785)
+
+一对多和多对一是一样的！反过来理解就是了。
+
+
+多对多：
+---------
+
+数据库设计分析
+案例：一个人可以选择多门课程，一门课程又可以被多人选择。
+
+方案一：（差的设计--数据冗余太严重）
+1)学生表
+
+```
+编号   姓名  性别   年龄  电话 ...
+P001  Jack   男     25
+P002  Tom    男     25
+P003  Rose   女     25
+```
+
+--------------------------
+2)课程表
+
+```
+编号   名称   教材  学分...  学生
+S001   Java   ...  ......   P001
+S001   Java   ...  ......   P002
+S001   Java   ...  ......   ...
+S002   数据库  ... ......   P001
+S002   数据库  ... ......   P002
+```
+pass。
+
+方案二(好的设计:两个实体表+一个关系表)：
+1)学生表(独立)---实体
+
+```
+编号   姓名  性别   年龄  电话 ...
+P001  Jack   男     25
+P002  Tom    男     25
+P003  Rose   女     25
+```
+
+2)课程表(独立)---实体
+
+```
+编号   名称   教材  学分... 
+S001   Java   ...  ......
+S002   数据库  ... ......
+S003   XML   ... ......
+```
+
+
+3)选课表(专为体现多对多的关系而新增的表)--关系
+
+```
+课程编号  学生编号
+S001      P001
+S001      P002
+...
+S002      P002
+S002      P003
+...
+S003      P001
+...
+--------------
+外键      外键
+ |         |
+ |         |
+  ---------
+	  |
+   联合主键
+```
+
+
+4) 代码实现
+
+```
+create table stud(
+	id varchar(32) primary key,
+	sname varchar(30),
+	age int
+);
+create table ject(
+	id varchar(32) primary key,
+	sname varchar(30)
+);
+create table sj(
+	studid varchar(32),
+	jectid varchar(32)
+);
+/*单独添加约束，必须先添加联合主键，再添加外键*/
+/*创建联合主键*/
+alter table sj add constraint pk_sj primary key(studid,jectid);
+/*创建两个外键*/
+alter table sj add constraint fk_stud foreign key(studid) references stud(id);
+alter table sj add constraint fk_ject foreign key(jectid) references ject(id);
+```
+
+如果需要删除外键
+
+```
+alter table sj drop foreign key fk_stud;
+alter table sj drop foreign key fk_ject;
+```
+
+初始化stud表数据
+
+```
+insert into stud values('P001','小花',25);
+insert into stud values('P002','Jack',23);
+insert into stud values('P003','Tom',24);
+insert into stud values('P004','张三',24);
+insert into stud values('P005','赵子龙',26);
+```
+![](http://img.blog.csdn.net/20160807120546161)
+
+初始化ject表：
+
+```
+insert into ject values('S001','Java');
+insert into ject values('S002','JavaEE');
+insert into ject values('S003','XML');
+insert into ject values('S004','数据库');
+insert into ject values('S005','JQuery');
+```
+
+![](http://img.blog.csdn.net/20160807120841712)
+
+
+初始化sj表：
+
+```
+insert into sj values('P001','S001');
+insert into sj values('P001','S003');
+insert into sj values('P002','S001');
+insert into sj values('P002','S002');
+insert into sj values('P002','S003');
+insert into sj values('P003','S001');
+insert into sj values('P004','S002');
+insert into sj values('P004','S003');
+```
+![](http://img.blog.csdn.net/20160807121057765)
+
+
+关联（也称为连接）:
+左关联(left join) 右关联(right join) 内关联(inner join)
+mysql不支持: 全关联(full join)  外关联(outter join)
+
+可以把关联理解成：几个表合成一个新的表，然后在新表中进行查询！
+
+
+查询哪些人选了哪些课：
+-----------------------------
+92年之前是这样查询的：(没有用关联)
+
+```
+select stud.sname,ject.sname from stud,sj,ject where stud.id=sj.studid and ject.id=sj.jectid;
+```
+![](http://img.blog.csdn.net/20160807122111987)
+
+用内关联来：
+
+```
+select stud.sname,ject.sname from
+	stud inner join sj on stud.id=sj.studid
+		 inner join ject on ject.id=sj.jectid;
+	
+```
+
+![](http://img.blog.csdn.net/20160807122620986)
+
+
+内关联可以这样来看，以中间的sj表为主表，来合另外2个表。
+
+![](http://img.blog.csdn.net/20160807122808553)
+
+
+查询哪些人没有选课：
+----------------------
+
+不用关联的写法:
+
+```
+select stud.sname from stud where stud.id not in(select studid from sj);
+```
+
+![](http://img.blog.csdn.net/20160807154351134)
+
+用左关联的写法:
+
+```
+select stud.sname from
+	stud left join sj on stud.id=sj.studid
+		 left join ject on ject.id=sj.jectid
+	where ject.sname is null;
+/*下面这句也可以查询出*/
+select stud.sname from
+	stud left join sj on stud.id=sj.studid
+		 left join ject on ject.id=sj.jectid
+	where ject.id is null;
+
+```
+![](http://img.blog.csdn.net/20160807154709825)
+
+左关联就是把左边的表作为主表，也就是说，stud必须是完整的，可以增加，但不能减少，再按照sj表的关系，来添加ject表的数据。
+
+![](http://img.blog.csdn.net/20160807154946485)
+
+
+查询哪些课程没人选:
+----------------------
+
+不用关联的写法:
+
+```
+select ject.sname from ject where ject.id not in(select jectid from sj);
+```
+
+![](http://img.blog.csdn.net/20160807155503430)
+
+用左关联的写法：
+
+```
+select ject.sname from
+	ject left join sj on ject.id=sj.jectid
+		 left join stud on stud.id=sj.studid
+	where stud.id is null;
+```
+最后的那里也可以用stud.sname is null来判断。
+但要注意，需要原来的stud表中的那个属性定义了not null。
+否则会出现bug。
+
+
+![](http://img.blog.csdn.net/20160807155729037)
+
+
+用右关联写：
+
+```
+select ject.sname from
+	stud right join sj on stud.id=sj.studid
+		 right join ject on ject.id=sj.jectid
+	where stud.sname is null;
+```
+
+![](http://img.blog.csdn.net/20160807160303743)
+
+
+左关联和右关联实质上是差不多的。认真的看下上面的左关联和右关联就可以看出来了。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

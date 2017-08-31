@@ -1,0 +1,100 @@
+---
+layout: post
+title: "排序算法：希尔排序"
+date: 2016-03-07 04:08:08 +0800
+comments: true
+categories:❺ 算法及基础题,----- 排序相关
+tags: [希尔排序,排序算法,插入排序]
+keyword: 陈浩翔, 谙忆
+description: 希尔排序法(缩小增量法) 属于插入类排序，是将整个无序列分割成若干小的子序列分别进行插入排序的方法。 
+//shell排序/*
+基本思想:将序列分成几类，在类里将它分成几个小组，再让它在小组内进行排序，依次重复直至排序成功
+1，找出间距gap(分类)最后间距分类必须为1， 第一重循环
+2， 找出各组 ,组间循环，第二重循环
+3，找出组内元素，第三重循环,并对转储
+*/#include <stdio. 
+---
+
+
+希尔排序法(缩小增量法) 属于插入类排序，是将整个无序列分割成若干小的子序列分别进行插入排序的方法。 
+//shell排序/*
+基本思想:将序列分成几类，在类里将它分成几个小组，再让它在小组内进行排序，依次重复直至排序成功
+1，找出间距gap(分类)最后间距分类必须为1， 第一重循环
+2， 找出各组 ,组间循环，第二重循环
+3，找出组内元素，第三重循环,并对转储
+*/#include <stdio.
+<!-- more -->
+----------
+
+希尔排序法(缩小增量法) 属于插入类排序，是将整个无序列分割成若干小的子序列分别进行插入排序的方法。
+//shell排序
+
+/*
+
+* 基本思想:将序列分成几类，在类里将它分成几个小组，再让它在小组内进行排序，依次重复直至排序成功
+
+* 1，找出间距gap(分类)最后间距分类必须为1， 第一重循环
+
+* 2， 找出各组 ,组间循环，第二重循环
+
+* 3，找出组内元素，第三重循环,并对转储
+
+*/
+
+```
+#include <stdio.h>
+void shellsort(int a[],int n)
+{
+    int i,j,flag,gap=n;
+    int tmmp;
+    while(gap>1)
+    {
+        gap=gap/2;//缩小增量，每次减半
+        do//子序列应用冒泡排序
+        {
+            flag=0;
+            for(i=0; i<n-gap; i++)
+            {
+                j=i+gap;
+                if(a[i]<a[j])
+                {
+                    a[i]=a[i]^a[j];
+                    a[j]=a[i]^a[j];
+                    a[i]=a[i]^a[j];
+                    flag=1;
+                }
+            }
+
+        }
+        while(flag!=0);//优化冒泡排序
+    }
+}
+
+main()
+{
+    int i,a[10] = {-12,23,345,1,34,-45,34,3,2,5};
+    printf("原序列的元素排序为:\n");
+    for(i=0; i<10; i++)
+    {
+        printf("%d ",a[i]);
+
+    }
+    shellsort(a,10);
+
+    printf("\n排序后的元素位置：");
+    for(i=0; i<10; i++)
+    {
+        printf("%d ",a[i]);
+
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

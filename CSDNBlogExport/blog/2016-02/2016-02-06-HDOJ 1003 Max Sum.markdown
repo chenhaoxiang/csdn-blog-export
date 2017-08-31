@@ -1,0 +1,105 @@
+---
+layout: post
+title: "HDOJ 1003 Max Sum"
+date: 2016-02-06 01:48:05 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 动态规划（DP）
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Given a sequence a[1],a[2],a[3]……a[n], your job is to calculate the max sum of a sub-sequence. For example, given (6,-1,5,4,-7), the max sum in this sequence is 6 + (-1) + 5 + 4 = 
+---
+
+
+Problem Description 
+Given a sequence a[1],a[2],a[3]……a[n], your job is to calculate the max sum of a sub-sequence. For example, given (6,-1,5,4,-7), the max sum in this sequence is 6 + (-1) + 5 + 4 =
+<!-- more -->
+----------
+
+Problem Description
+Given a sequence a[1],a[2],a[3]......a[n], your job is to calculate the max sum of a sub-sequence. For example, given (6,-1,5,4,-7), the max sum in this sequence is 6 + (-1) + 5 + 4 = 14.
+
+ 
+
+Input
+The first line of the input contains an integer T(1<=T<=20) which means the number of test cases. Then T lines follow, each line starts with a number N(1<=N<=100000), then N integers followed(all the integers are between -1000 and 1000).
+
+ 
+
+Output
+For each test case, you should output two lines. The first line is "Case #:", # means the number of the test case. The second line contains three integers, the Max Sum in the sequence, the start position of the sub-sequence, the end position of the sub-sequence. If there are more than one result, output the first one. Output a blank line between two cases.
+
+ 
+
+Sample Input
+2
+5 6 -1 5 4 -7
+7 0 6 -1 1 -6 7 -5
+ 
+
+Sample Output
+Case 1:
+14 1 4
+
+Case 2:
+7 1 6
+
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		int time = 1;
+		while(t-->0){
+			int m = sc.nextInt();
+			int p1,p2=1;
+			int n = sc.nextInt();
+			int now=n;
+			int max=n;
+			int x=1;
+			p1=1;
+			for(int i=1;i<m;i++){
+				n=sc.nextInt();
+				if(n>n+now){
+					x=i+1;
+					now=n;
+				}else{
+					now = n+now;
+				}
+				if(now>max){
+					max=now;
+					p1=x;
+					p2=i+1;
+				}
+				
+				
+			}
+			
+			System.out.println("Case "+time+":");
+			time++;
+			System.out.println(max+" "+p1+" "+p2);
+			if(t!=0){
+				System.out.println();
+			}
+			
+		}
+		
+		
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,106 @@
+---
+layout: post
+title: "HDOJ HDU 2547 无剑无我(两点间的距离)"
+date: 2016-05-16 11:33:31 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 模拟/推导/打表
+tags: [java,acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+北宋末年，奸臣当道，宦官掌权，外侮日亟，辽军再犯。时下战火连连，烽烟四起，哀鸿遍野，民不聊生，又有众多能人异士群起而反，天下志士云集响应,景粮影从。 
+值此危急存亡之秋，在一个与世隔绝的地方—MCA山上一位江湖人称<英雄哪里出来>的人正在为抗击辽贼研究剑法，终于于一雷电交加之夜精确计算出了荡剑回锋的剑气伤害公式。定义 f(x, y, m, n) = sqrt 
+---
+
+
+Problem Description 
+北宋末年，奸臣当道，宦官掌权，外侮日亟，辽军再犯。时下战火连连，烽烟四起，哀鸿遍野，民不聊生，又有众多能人异士群起而反，天下志士云集响应,景粮影从。 
+值此危急存亡之秋，在一个与世隔绝的地方—MCA山上一位江湖人称<英雄哪里出来>的人正在为抗击辽贼研究剑法，终于于一雷电交加之夜精确计算出了荡剑回锋的剑气伤害公式。定义 f(x, y, m, n) = sqrt
+<!-- more -->
+----------
+
+Problem Description
+北宋末年，奸臣当道，宦官掌权，外侮日亟，辽军再犯。时下战火连连，烽烟四起，哀鸿遍野，民不聊生，又有众多能人异士群起而反，天下志士云集响应,景粮影从。
+值此危急存亡之秋，在一个与世隔绝的地方---MCA山上一位江湖人称<英雄哪里出来>的人正在为抗击辽贼研究剑法，终于于一雷电交加之夜精确计算出了荡剑回锋的剑气伤害公式。
+
+定义 f(x, y, m, n) = sqrt(x*x + y*y + m*m + n*n - 2*m*x - 2*n*y);
+hint : sqrt表示开方，即sqrt（4） = 2； sqrt（16） = 4；
+
+（其中x，y为位置变量，m，n为属性常量）
+剑气伤害 = f(x, y, a, b) + f(x, y, c, d)；
+剑气威力巨大无比，实难控制，现在他想知道剑气伤害的最小伤害值。
+
+
+ 
+
+Input
+首先输入一个t,表示有t组数据，跟着t行：
+输入四个实数a，b，c，d均小于等于100
+
+ 
+
+Output
+输出剑气的最小伤害值M，保留小数点后一位
+（可以使用.1lf）
+
+ 
+
+Sample Input
+2
+0 0 3 4
+4 0 0 3
+ 
+
+Sample Output
+5.0
+5.0
+
+
+一个数学求2点间的距离问题；
+sqrt(x*x + y*y + m*m + n*n - 2*m*x - 2*n*y)即
+sqrt((x-m)*(x-m)+(y-n)*(y-n));
+这个是点(x,y)到(m,n)的距离~
+总的来说，就是让我们求一个点p到p1(a,b) ,p2(b,c)这2个点的最短距离~
+显而易见，p点在p1和p2的连线上时，距离最短。
+也就是转过来求p1到p2的距离。
+
+
+
+```
+import java.util.Scanner;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-5-16
+ */
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt()
+				;
+		while(t-->0){
+			double a = sc.nextDouble();
+			double b = sc.nextDouble();
+			double c = sc.nextDouble();
+			double d = sc.nextDouble();
+			
+			double m = Math.sqrt((a-c)*(a-c)+(b-d)*(b-d));
+			System.out.printf("%.1f",m);
+			System.out.println();
+			
+		}
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

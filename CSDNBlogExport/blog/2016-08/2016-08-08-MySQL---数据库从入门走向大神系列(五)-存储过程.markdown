@@ -1,0 +1,156 @@
+---
+layout: post
+title: "MySQL---数据库从入门走向大神系列(五)-存储过程"
+date: 2016-08-08 12:55:04 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑤、数据库
+tags: [数据库,SQL,存储过程]
+keyword: 陈浩翔, 谙忆
+description: 本篇博客讲解： 
+自动增长列、字段值唯一性约束、存储过程！自动增长列、字段值唯一性约束create table aa(
+    id int auto_increment primary key,
+    sname varchar(32) unique
+);
+insert into aa values(5,'abc');
+创建一个自动增长的id属性(最开始不设置就从0开始增长) 
+(后面的id如果 
+---
+
+
+本篇博客讲解： 
+自动增长列、字段值唯一性约束、存储过程！自动增长列、字段值唯一性约束create table aa(
+    id int auto_increment primary key,
+    sname varchar(32) unique
+);
+insert into aa values(5,'abc');
+创建一个自动增长的id属性(最开始不设置就从0开始增长) 
+(后面的id如果
+<!-- more -->
+----------
+
+本篇博客讲解：
+自动增长列、字段值唯一性约束、存储过程、区分大小写的查询！
+
+
+自动增长列、字段值唯一性约束
+====================
+
+```
+create table aa(
+	id int auto_increment primary key,
+	sname varchar(32) unique
+);
+insert into aa values(5,'abc');
+
+```
+创建一个自动增长的id属性(最开始不设置就从0开始增长)
+(后面的id如果有值了，如果添加数据时没有设置id，MySQL就会用最大的id加1做为最新的id)
+注意：auto_increment 在MySQL中支持，其他的数据库设置自动增长列中关键字不一样。
+unique 对sname进行唯一性约束，也就是不能有相同的sname(可以有一个值是null)。
+
+
+存储过程：
+=====
+
+其实这个SQL中的存储过程很像Java中的定义函数，调用函数。
+
+首先看定义：
+
+```
+create procedure 过程名(参数...)
+begin
+	SQL语句...
+end
+```
+
+调用:
+
+```
+call 过程名(实参)
+```
+
+有一个需要注意的地方：
+在定义前，需要先把默认的语句结束';'号改成其它，如'&&',这样存储过程中定义的分号就不会被看成是语句结束(否则会直接被提交)。
+在定义完之后，还要把';'还原成默认的结束符。
+
+实例一：无参的存储过程
+--------------------------
+
+```
+delimiter &&
+create procedure p1()
+begin
+	insert into stud values('P100','小李',43);
+	select * from stud;
+end&&
+delimiter ;
+
+call p1;/*调用p1()中的SQL语句,如果没有call之前，p1()中的SQL语句是没有被执行的*/
+```
+![](http://img.blog.csdn.net/20160808000441277)
+
+
+实例二：有参的存储过程
+--------------------------
+
+```
+delimiter &&
+create procedure p2(in id varchar(32),in sname varchar(32),in age int)
+begin
+	insert into stud values(id,sname,age);
+	select * from stud;
+end &&
+delimiter ;
+
+call p2('P1007','小白',25);
+call p2('P1008','小丽',28);
+```
+
+实例三：有返回值的存储过程
+-------------------------------
+
+```
+delimiter &&
+create procedure p3(in id varchar(32) ,in sname varchar(32),in age int ,out num int)
+begin
+	insert into stud values(id,sname,age);
+	select * from stud;
+	select count(*) into num from stud;
+end&&
+delimiter ;
+
+call p3('P012','小小五',27, @num);
+/*调用且用num接收结果*/
+
+select @num; /*显示用户变量num*/
+```
+系统变量名称：@@变量名
+用户变量名称：@变量名
+
+
+
+区分大小写的查询：
+===========
+因为MySQL的查询是默认不区分大小写的：
+如果有些时候需要区分大小写，我们就需要binary这个关键字了。
+可以这样用，在stud表中查找sname中带'j' /'J'：
+先不写binary进行查询：
+```
+select * from stud where sname like 'J%';
+```
+![](http://img.blog.csdn.net/20160808004650832)
+
+写binary进行查询：
+
+```
+select * from stud where binary sname like 'J%';
+```
+
+![](http://img.blog.csdn.net/20160808004933271)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,105 @@
+---
+layout: post
+title: "HDOJ 2099 整除的尾数"
+date: 2016-01-28 09:38:27 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+一个整数，只知道前几位，不知道末二位，被另一个整数除尽了，那么该数的末二位该是什么呢？Input 
+输入数据有若干组，每组数据包含二个整数a，b（ 0< a < 10000, 10 < b < 100），若遇到0 0则处理结束。Output 
+对应每组数据，将满足条件的所有尾数在一行内输出，格式见样本输出。同组数据的输出，其每个尾数之间空一格，行末没有空格。 
+---
+
+
+Problem Description 
+一个整数，只知道前几位，不知道末二位，被另一个整数除尽了，那么该数的末二位该是什么呢？Input 
+输入数据有若干组，每组数据包含二个整数a，b（ 0< a < 10000, 10 < b < 100），若遇到0 0则处理结束。Output 
+对应每组数据，将满足条件的所有尾数在一行内输出，格式见样本输出。同组数据的输出，其每个尾数之间空一格，行末没有空格。
+<!-- more -->
+----------
+
+Problem Description
+一个整数，只知道前几位，不知道末二位，被另一个整数除尽了，那么该数的末二位该是什么呢？
+ 
+
+Input
+输入数据有若干组，每组数据包含二个整数a，b（ 0< a < 10000, 10 < b < 100），若遇到0 0则处理结束。
+ 
+
+Output
+对应每组数据，将满足条件的所有尾数在一行内输出，格式见样本输出。同组数据的输出，其每个尾数之间空一格，行末没有空格。
+ 
+
+Sample Input
+200 40
+1992 95
+0 0
+ 
+
+Sample Output
+00 40 80
+15
+ 
+注意：特别注意输出格式！！！
+还有后面2位数小于10的输出！！
+例：00   05   04  
+
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            if(a==0&&b==0){
+                return ;
+            }
+            
+            a=a*100;
+            int c=0;
+            for(int i=a/b-105;i<a/b+105;i++){
+                if(((b*i)-a>=0)&&((b*i)-a<100)){
+                    if((b*i)%100<10){
+                        if(c==0){
+                            c=1;
+                            System.out.print("0"+(b*i)%100);
+                        }else{
+                            System.out.println(" "+"0"+(b*i)%100);
+                        }
+                    }else{
+                        if(c==0){
+                            c=1;
+                            System.out.print((b*i)%100);
+                        }else{
+                            System.out.print(" "+(b*i)%100);
+                        }
+                    }
+                }
+            }
+            System.out.println();
+            //System.out.println("aaa");
+            
+        }
+        
+        
+    }
+
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

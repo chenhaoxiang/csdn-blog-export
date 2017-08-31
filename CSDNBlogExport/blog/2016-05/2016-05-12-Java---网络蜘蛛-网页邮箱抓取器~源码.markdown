@@ -1,0 +1,352 @@
+---
+layout: post
+title: "Java---网络蜘蛛-网页邮箱抓取器~源码"
+date: 2016-05-12 04:10:31 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目,----- ----- Java网络编程
+tags: [socket,邮箱,网络,线程池,软件]
+keyword: 陈浩翔, 谙忆
+description: 刚刚学完Socket，迫不及待的做了这个网页邮箱抓取~~~ 
+自己以前做过微商，而且还掏钱买过抓取网络邮箱的软件~现在O(∩_∩)O哈哈~我自己做~当然啦，没有别人做得好~只是功能还是差不多啦~给一个带协议的网站~然后深入网页中查找邮箱~因为博主知识有限~线程池目前还没有学~导致无法控制线程~~~见谅~ 
+还有~就是没有设置停止按钮~也是因为没学线程池~水平够啊~ 
+只能关闭软件来停止程序~pack 
+---
+
+
+刚刚学完Socket，迫不及待的做了这个网页邮箱抓取~~~ 
+自己以前做过微商，而且还掏钱买过抓取网络邮箱的软件~现在O(∩_∩)O哈哈~我自己做~当然啦，没有别人做得好~只是功能还是差不多啦~给一个带协议的网站~然后深入网页中查找邮箱~因为博主知识有限~线程池目前还没有学~导致无法控制线程~~~见谅~ 
+还有~就是没有设置停止按钮~也是因为没学线程池~水平够啊~ 
+只能关闭软件来停止程序~pack
+<!-- more -->
+----------
+
+刚刚学完Socket，迫不及待的做了这个网页邮箱抓取~~~
+自己以前做过微商，而且还掏钱买过抓取网络邮箱的软件~现在O(∩_∩)O哈哈~我自己做~当然啦，没有别人做得好~只是功能还是差不多啦~
+
+给一个带协议的网站~然后深入网页中查找邮箱~
+
+因为博主知识有限~线程池目前还没有学~导致无法控制线程~~~见谅~
+还有~就是没有设置停止按钮~也是因为没学线程池~水平不够啊~
+只能关闭软件来停止程序~
+
+```
+package cn.hncu.bs;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.swing.JOptionPane;
+
+import cn.hncu.thread.RunThread;
+import cn.hncu.threadPool.ThreadPool;
+
+/**
+ * 
+ * @author 陈浩翔
+ * @version 1.0  2016-5-12
+ */
+public class SpiderUi extends javax.swing.JFrame {
+	private String path = SpiderUi.class.getClassLoader().getResource("./").getPath();
+	
+    public SpiderUi() {
+        super("网络蜘蛛1.0-陈浩翔版权所有！");
+        initComponents();
+
+    }
+
+    private void initComponents() {
+
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        tfdUrl = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        tfdTime = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        btnRun = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(400, 400));
+        getContentPane().setLayout(null);
+
+        jLabel1.setFont(new java.awt.Font("Dialog", 1, 24));
+        jLabel1.setForeground(new java.awt.Color(255, 0, 51));
+        jLabel1.setText("\u7f51\u7edc\u8718\u86db-\u7f51\u9875\u90ae\u7bb1\u6293\u53d6\u56681.0");
+        getContentPane().add(jLabel1);
+        jLabel1.setBounds(30, 20, 350, 70);
+
+        jLabel2.setFont(new java.awt.Font("Dialog", 1, 14));
+        jLabel2.setText("\u9012\u5f52\u6df1\u5165\u5c42\u6570:");
+        getContentPane().add(jLabel2);
+        jLabel2.setBounds(20, 190, 110, 30);
+
+        tfdUrl.setFont(new java.awt.Font("Dialog", 1, 12));
+        getContentPane().add(tfdUrl);
+        tfdUrl.setBounds(20, 140, 350, 30);
+
+        jLabel3.setFont(new java.awt.Font("Dialog", 1, 14));
+        jLabel3.setText("\u8d77\u59cbURL:");
+        getContentPane().add(jLabel3);
+        jLabel3.setBounds(20, 100, 70, 30);
+
+        tfdTime.setFont(new java.awt.Font("Dialog", 1, 14));
+        getContentPane().add(tfdTime);
+        tfdTime.setBounds(20, 230, 60, 30);
+
+        jLabel4.setFont(new java.awt.Font("Dialog", 0, 11));
+        jLabel4.setText("\u5373\u641c\u7d22\u7f51\u9875\u90ae\u7bb1\u65f6,\u641c\u7d22\u6df1\u5165\u7684\u5c42\u6570,\u5efa\u8bae200\u5de6\u53f3");
+        getContentPane().add(jLabel4);
+        jLabel4.setBounds(90, 230, 250, 30);
+
+        btnRun.setFont(new java.awt.Font("Dialog", 1, 18));
+        btnRun.setForeground(new java.awt.Color(0, 51, 255));
+        btnRun.setText("\u5f00\u59cb\u6293\u53d6");
+        btnRun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRunActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnRun);
+        btnRun.setBounds(40, 300, 110, 50);
+
+        jButton1.setFont(new java.awt.Font("Dialog", 1, 18));
+        jButton1.setForeground(new java.awt.Color(0, 51, 255));
+        jButton1.setText("\u5e2e\u52a9");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton1);
+        jButton1.setBounds(230, 300, 120, 50);
+
+
+    }
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
+        JOptionPane.showMessageDialog(this, "抓取的邮箱存储在"+path+"/crawlingFile/mail.txt文件中\r\nURL存储在"+path+"/crawlingFile/http.txt文件中");
+    }
+
+    private void btnRunActionPerformed(java.awt.event.ActionEvent evt) {
+        int time;
+        try {
+            time = Integer.parseInt(tfdTime.getText());
+        } catch (NumberFormatException e1) {
+            JOptionPane.showMessageDialog(this, "输入的层数格式错误！应该为整数！");
+            return;
+        }
+
+        try {
+            String inet = tfdUrl.getText();
+            
+            URL url = new URL(inet);
+            
+            File file = new File(path);
+            if (!file.exists()) {
+                file.mkdir();
+            }
+            
+            DataOutputStream dout = new DataOutputStream(
+                    new BufferedOutputStream(new FileOutputStream(
+                    		path+"/crawlingFile/mail.txt", true)));
+            DataOutputStream doutHttp = new DataOutputStream(
+                    new BufferedOutputStream(new FileOutputStream(
+                            path+"/crawlingFile/http.txt", true)));
+            
+            System.out.println(url+","+time+","+dout+","+doutHttp);
+            
+//            RunThread run = ThreadPool.getRunThread(url, time, dout, doutHttp, path);
+//            run.start();
+            
+            new RunThread(url, time, dout, doutHttp,path).start();
+            //System.out.println("主线程线程读取完！");
+            
+        } catch (MalformedURLException e) {
+            JOptionPane.showMessageDialog(this, "请输入正确的URL地址！！");
+            return;
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "请输入正确的URL地址！！");
+            return;
+        }
+    }
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new SpiderUi().setVisible(true);
+            }
+        });
+    }
+
+    private javax.swing.JButton btnRun;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField tfdTime;
+    private javax.swing.JTextField tfdUrl;
+}
+
+
+```
+
+```
+package cn.hncu.thread;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import cn.hncu.threadPool.ThreadPool;
+
+
+public class RunThread extends Thread{
+	private static long num=0;
+    private URL url = null;
+    private int time = 0;
+    private DataOutputStream dout = null;
+    private DataOutputStream doutHttp = null;
+    private String path = null;
+    
+    public RunThread() {
+    }
+
+    public RunThread(URL url, int time, DataOutputStream dout,
+            DataOutputStream doutHttp,String path) {
+    	num++;
+        this.url = url;
+        this.time = time;
+        this.dout = dout;
+        this.doutHttp = doutHttp;
+        this.path = path;
+    }
+
+    @Override
+    public void run() {
+        try {
+            if (time == 0) {
+                return;
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(
+
+            url.openStream()));
+            String regex = "\\w+@\\w+(\\.\\w+)+";
+
+            Pattern p = Pattern.compile(regex);
+
+            Pattern pUrl = Pattern
+                    .compile("http://([\\w-]+\\.)+[\\w-]+(/[\\w- ./?%&=]*)?");
+
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                Matcher m = p.matcher(line);
+
+                Matcher mUrl = pUrl.matcher(line);
+                while (mUrl.find()) {
+                    try {
+                        BufferedReader br2 = new BufferedReader(
+                                new InputStreamReader(new FileInputStream(
+                                		path+"/crawlingFile/http.txt")) );
+                        String s = null;
+                        boolean is = false;
+                        while ((s = br2.readLine()) != null) {
+                            if (s.equals(mUrl.group())) {
+                                is = true;
+                                break;
+                            }
+                        }
+                        if (is) {
+                            continue;
+                        }
+                        if (mUrl.group().endsWith("jpg")) {
+                            continue;
+                        }
+                        if (mUrl.group().endsWith("png")) {
+                            continue;
+                        }
+                        
+                        //输出网页地址
+                        System.out.println(mUrl.group());
+                        
+                        doutHttp.writeBytes(mUrl.group() + "\r\n");
+                        doutHttp.flush();//流刷新缓存
+                        
+//                        RunThread run = ThreadPool.getRunThread(url, time, dout, doutHttp, path);
+//                        run.start();
+                        
+                        new RunThread(new URL(mUrl.group()), time--,dout, doutHttp,path).start();
+                        
+                        //creat(mUrl.group(), new URL(mUrl.group()),time--, dout,doutHttp);
+                    } catch (Exception e) {
+                        //System.out.println("URL错误");
+                        return;
+                    }
+                }
+
+                while (m.find()) {
+                    BufferedReader br2 = new BufferedReader(new InputStreamReader(new FileInputStream(path+"/crawlingFile/mail.txt")));
+                    String s = null;
+                    boolean is = false;
+
+                    while ((s = br2.readLine()) != null) {
+                        if (s.equals(m.group())) {
+                            is = true;
+                            break;
+                        }
+                    }
+
+                    if (is) {
+                        continue;
+
+                    }
+                    dout.writeBytes(m.group() + "\r\n");
+                    dout.flush();
+                    
+                    //输出邮箱
+                    System.out.println(m.group());
+                    
+                }
+                
+            }
+            
+            System.out.println(num+"个程线程读取完！");
+        } catch (FileNotFoundException e) {
+            //System.out.println("文件错误");
+            return;
+        } catch (IOException e) {
+            //System.out.println("URL异常");
+            return;
+        }
+    }
+}
+```
+
+
+程序主界面图：
+
+![](http://img.blog.csdn.net/20160512160952006)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

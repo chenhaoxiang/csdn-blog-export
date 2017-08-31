@@ -1,0 +1,90 @@
+---
+layout: post
+title: "HDOJ  2212 DFS"
+date: 2015-10-31 02:31:09 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-C++,❺ 算法及基础题,----- 阶乘相关
+tags: [HDOJ]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+A DFS(digital factorial sum) number is found by summing the factorial of every digit of a positive integer. For example ,consider the positive integer 145 = 1!+4!+5!, so it’s a DFS 
+---
+
+
+Problem Description 
+A DFS(digital factorial sum) number is found by summing the factorial of every digit of a positive integer. For example ,consider the positive integer 145 = 1!+4!+5!, so it’s a DFS
+<!-- more -->
+----------
+
+Problem Description
+A DFS(digital factorial sum) number is found by summing the factorial of every digit of a positive integer. 
+
+For example ,consider the positive integer 145 = 1!+4!+5!, so it's a DFS number.
+
+Now you should find out all the DFS numbers in the range of int( [1, 2147483647] ).
+
+There is no input for this problem. Output all the DFS numbers in increasing order. The first 2 lines of the output are shown below.
+ 
+
+Input
+no input
+ 
+
+Output
+Output all the DFS number in increasing order. 
+ 
+
+Sample Output
+1
+2
+......
+
+
+分析：9的阶乘为362880， 9！*10  而且由0~9的阶乘组成的最大数就是3628800。
+而且0的阶乘是1，而不是0.
+因为根据阶乘定义 n！=n*（n-1）！；
+1！=1*0！=1；
+所以人为规定了0！=1；
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <iostream>
+int k[10]= {1,1};
+void ff()
+{
+    int i;
+    for(i = 2; i < 10; i ++){
+        k[i] = k[i-1]*i;
+      //  printf("%d\n",k[i]);
+    }
+}
+int main()
+{
+    ff();
+    long i;
+    long a,sum;
+    for(i=1; i<=3628800; i++)
+    {
+        a=i;
+        sum=0;
+        while(a!=0)//a>0
+        {
+            sum+=k[a%10];
+            a=a/10;
+            //printf("%d\n",a);
+        }
+        if(sum==i)
+            printf("%ld\n",i);
+    }
+    return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,95 @@
+---
+layout: post
+title: "HDOJ 2015 偶数求和"
+date: 2015-11-20 08:20:40 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [编程,数据]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+有一个长度为n(n<=100)的数列，该数列定义为从2开始的递增有序偶数，现在要求你按照顺序每m个数求出一个平均值，如果最后不足m个，则以实际数量求平均值。编程输出该平均值序列。Input 
+输入数据有多组，每组占一行，包含两个正整数n和m，n和m的含义如上所述。Output 
+对于每组输入数据，输出一个平均值序列，每组输出占一行。Sample Input 
+---
+
+
+Problem Description 
+有一个长度为n(n<=100)的数列，该数列定义为从2开始的递增有序偶数，现在要求你按照顺序每m个数求出一个平均值，如果最后不足m个，则以实际数量求平均值。编程输出该平均值序列。Input 
+输入数据有多组，每组占一行，包含两个正整数n和m，n和m的含义如上所述。Output 
+对于每组输入数据，输出一个平均值序列，每组输出占一行。Sample Input
+<!-- more -->
+----------
+
+Problem Description
+有一个长度为n(n<=100)的数列，该数列定义为从2开始的递增有序偶数，现在要求你按照顺序每m个数求出一个平均值，如果最后不足m个，则以实际数量求平均值。编程输出该平均值序列。
+ 
+
+Input
+输入数据有多组，每组占一行，包含两个正整数n和m，n和m的含义如上所述。
+
+ 
+
+Output
+对于每组输入数据，输出一个平均值序列，每组输出占一行。
+
+ 
+
+Sample Input
+3 2
+4 2
+ 
+
+Sample Output
+3 6
+3 7
+
+
+```
+import java.util.Scanner;
+class Main{
+   public static void main(String args[]){
+      Scanner sc = new Scanner(System.in);
+      while(sc.hasNext()){
+         int n = sc.nextInt();
+         int m = sc.nextInt();
+         int sum=0;
+         boolean a=true;
+         int b=n%m;
+         //System.out.println("b="+b);
+         for(int i=1;i<=n;i++){
+                sum+=2*i;
+                if(i%m==0){
+                   if(a){
+                      System.out.print(sum/m);
+                      a=false;    
+                   }else{
+                   System.out.print(" "+sum/m);
+                  }
+                   sum=0;
+                }
+                if(b!=0){
+                if(i==(n-b)){
+                    sum=0;
+                    for(i=n-b+1;i<=n;i++){
+                        sum+=i*2;
+                        //System.out.println("i="+i+",sum="+sum);
+                        
+                    }
+                    System.out.print(" "+sum/b);
+                }
+            }
+         }
+       System.out.println();
+      }    
+       
+   }    
+    
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

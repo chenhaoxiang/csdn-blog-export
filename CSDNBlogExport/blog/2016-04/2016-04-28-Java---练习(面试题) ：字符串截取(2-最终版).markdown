@@ -1,0 +1,193 @@
+---
+layout: post
+title: "Java---练习(面试题) ：字符串截取(2-最终版)"
+date: 2016-04-28 01:49:00 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- JavaIO流
+tags: [java,编码,面试题]
+keyword: 陈浩翔, 谙忆
+description: 在java中，字符串“abcd”与字符串“ab你好”的长度是一样，都是四个字符。  
+但对应的字节数不同，一个汉字占两个字节。  
+定义一个方法，按照指定的字节数来取子串。  
+如：对于“ab你好”，如果取三个字节，那么子串就是ab与“你”字的半个，那么半个就要舍弃。如果取四个字节就是“ab你”，取五个字节还是“ab你”。上面给出的是在gbk编码下的截取字符串。  
+下面我写了个代码，可以在utf- 
+---
+
+
+在java中，字符串“abcd”与字符串“ab你好”的长度是一样，都是四个字符。  
+但对应的字节数不同，一个汉字占两个字节。  
+定义一个方法，按照指定的字节数来取子串。  
+如：对于“ab你好”，如果取三个字节，那么子串就是ab与“你”字的半个，那么半个就要舍弃。如果取四个字节就是“ab你”，取五个字节还是“ab你”。上面给出的是在gbk编码下的截取字符串。  
+下面我写了个代码，可以在utf-
+<!-- more -->
+----------
+
+在java中，字符串“abcd”与字符串“ab你好”的长度是一样，都是四个字符。 
+但对应的字节数不同，一个汉字占两个字节。 
+定义一个方法，按照指定的字节数来取子串。 
+如：对于“ab你好”，如果取三个字节，那么子串就是ab与“你”字的半个，那么半个就要舍弃。如果取四个字节就是“ab你”，取五个字节还是“ab你”。
+
+上面给出的是在gbk编码下的截取字符串。 
+下面我写了个代码，可以在utf-8和gbk编码下都能截取字符串。
+
+注意：utf-8下的绝大多数汉字都是3个字节，所以，为了简化，全部当成了3个字节处理。
+
+注意：
+在上一个中，我把题意理解错了，其实题目要求的只是输出第一个n字节的字串就可以了。
+在上一个中我是把一个字符串按照n拆分了。。。。
+
+
+```
+package io.app;
+
+import java.io.IOException;
+
+import org.junit.Test;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-28
+ */
+public class StringCut {
+
+
+	public static void main(String[] args) {
+		
+		String str = "ab你好a琲琲";
+		byte bf[] = str.getBytes();//这里是采用默认编码，可能是GBK，也可能是UTF-8
+		for(int i=0;i<=bf.length;i++){
+			String res;
+			try {
+				res = cutString(str,i);
+				System.out.println(i+" : "+res);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
+		
+	}
+	
+	/**
+	 * 根据传入的字符串，来判断是什么编码的，分别导向不同的方法
+	 * @param str
+	 * @param len
+	 * @return
+	 * @throws IOException 
+	 */
+	private static String cutString(String str, int len) throws IOException {
+		//System.getProperty("file.encoding")---获得系统的编码
+		if(System.getProperty("file.encoding").equalsIgnoreCase("gbk")){
+			return cutStringGbk(str, len);
+		}
+		if(System.getProperty("file.encoding").equalsIgnoreCase("utf-8")){
+			return cutStringUtf8(str, len);
+		}
+		throw new RuntimeException("不支持当前系统的编码");
+	}
+
+	private static String cutStringUtf8(String str, int len) throws IOException {
+		byte buf[] = str.getBytes("utf-8");
+		int count=0;
+		for(int i=len-1;i>=0;i--){
+			if(buf[i]<0){
+				count++;
+			}else{
+				break;
+			}
+		}
+		int x = count%3;
+		return new String(buf,0,len-x,"utf-8");
+	}
+	
+	private static String cutStringGbk(String str, int len) throws IOException {
+		byte buf[] = str.getBytes("gbk");
+		int count=0;
+		for(int i=len-1;i>=0;i--){
+			if(buf[i]<0){
+				count++;
+			}else{
+				break;
+			}
+		}
+		if(count%2==0){
+			return new String(buf,0,len,"gbk");
+		}else{
+			return new String(buf,0,len-1,"gbk");
+		}
+	}
+		
+	
+	@Test
+	/**
+	 * 可以不需要main方法进行运行单个方法！！！！
+	 * @throws IOException
+	 */
+	public void analyze() throws IOException {
+		//String str ="ab你好";
+		String str ="ab你好a琲琲琲";
+		//byte buf[] = str.getBytes("gbk");
+		byte buf[] = str.getBytes("utf-8");
+		for(byte b:buf){
+			System.out.print(b+" ");
+		}
+		System.out.println();
+	}
+	
+	
+}
+
+```
+
+GBK下的运行结果：
+（汉字为2个字节）
+```
+0 : 
+1 : a
+2 : ab
+3 : ab
+4 : ab你
+5 : ab你
+6 : ab你好
+7 : ab你好a
+8 : ab你好a
+9 : ab你好a琲
+10 : ab你好a琲
+11 : ab你好a琲琲
+
+```
+
+UTF-8下的运行结果：
+（汉字理解为3个字节）
+
+```
+0 : 
+1 : a
+2 : ab
+3 : ab
+4 : ab
+5 : ab你
+6 : ab你
+7 : ab你
+8 : ab你好
+9 : ab你好a
+10 : ab你好a
+11 : ab你好a
+12 : ab你好a琲
+13 : ab你好a琲
+14 : ab你好a琲
+15 : ab你好a琲琲
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,115 @@
+---
+layout: post
+title: "HDOJ(HDU) 1860 统计字符"
+date: 2016-04-22 03:35:39 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+统计一个给定字符串中指定的字符出现的次数Input 
+测试输入包含若干测试用例，每个测试用例包含2行，第1行为一个长度不超过5的字符串，第2行为一个长度不超过80的字符串。注意这里的字符串包含空格，即空格也可能是要求被统计的字符之一。当读到’#’时输入结束，相应的结果不要输出。Output 
+对每个测试用例，统计第1行中字符串的每个字符在第2行字符串中出现的 
+---
+
+
+Problem Description 
+统计一个给定字符串中指定的字符出现的次数Input 
+测试输入包含若干测试用例，每个测试用例包含2行，第1行为一个长度不超过5的字符串，第2行为一个长度不超过80的字符串。注意这里的字符串包含空格，即空格也可能是要求被统计的字符之一。当读到’#’时输入结束，相应的结果不要输出。Output 
+对每个测试用例，统计第1行中字符串的每个字符在第2行字符串中出现的
+<!-- more -->
+----------
+
+Problem Description
+统计一个给定字符串中指定的字符出现的次数
+
+ 
+
+Input
+测试输入包含若干测试用例，每个测试用例包含2行，第1行为一个长度不超过5的字符串，第2行为一个长度不超过80的字符串。注意这里的字符串包含空格，即空格也可能是要求被统计的字符之一。当读到'#'时输入结束，相应的结果不要输出。
+ 
+
+Output
+对每个测试用例，统计第1行中字符串的每个字符在第2行字符串中出现的次数，按如下格式输出：
+c0 n0
+c1 n1
+c2 n2
+... 
+其中ci是第1行中第i个字符，ni是ci出现的次数。
+
+ 
+
+Sample Input
+I
+THIS IS A TEST
+i ng
+this is a long test string
+#
+ 
+
+Sample Output
+I 2
+i 3
+  5
+n 2
+g 2 
+注：第2个测试用例中，空格也是被统计的字符之一。 
+
+
+水题。。没多少要说的。
+只是注意：题目有一个坑。
+就是输入：
+aab
+aaaabcd
+输出为：
+a 4
+a 4
+b 1
+重复输出的！！！
+而我开始因为不知道，为了优化，做了防范，WA了一次。。。
+
+
+```
+
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+
+		while (sc.hasNext()) {
+			String str1 = sc.nextLine();
+			if (str1.charAt(0) == '#') {
+				return;
+			}
+
+			int astr1[] = new int[str1.length()];
+
+			String strs = sc.nextLine();
+			for (int j = 0; j < str1.length(); j++) {
+
+				for (int i = 0; i < strs.length(); i++) {
+					if (str1.charAt(j) == strs.charAt(i)) {
+						astr1[j]++;
+					}
+				}
+			}
+			
+			for (int i = 0; i <str1.length(); i++) {
+				System.out.println(str1.charAt(i) + " " + astr1[i]);
+				
+			}
+		}
+
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,108 @@
+---
+layout: post
+title: "HDOJ HDU 2567 寻梦(字符串简单处理)"
+date: 2016-05-18 05:13:00 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题,----- String
+tags: [java,acm,mm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+每个人的童年都可能梦想过自己成为一个英雄，尤其是喜欢武侠的男生，Yifenfei也不例外。 
+童年的他常常梦想自己能成为一个绝世英雄，手拿一把灿灿发亮的宝剑，手挽一位长发飘逸的秀丽气质MM ^_^ ，散步于清幽的泉边小道，微风吹过，飘落两片枫叶。。。。。。 
+正由于成天陶醉于这种脱世的意境之中，导致此人老大不小依旧形单影只，每天只能在人潮中孤单上路。。。。。 
+---
+
+
+Problem Description 
+每个人的童年都可能梦想过自己成为一个英雄，尤其是喜欢武侠的男生，Yifenfei也不例外。 
+童年的他常常梦想自己能成为一个绝世英雄，手拿一把灿灿发亮的宝剑，手挽一位长发飘逸的秀丽气质MM ^_^ ，散步于清幽的泉边小道，微风吹过，飘落两片枫叶。。。。。。 
+正由于成天陶醉于这种脱世的意境之中，导致此人老大不小依旧形单影只，每天只能在人潮中孤单上路。。。。。
+<!-- more -->
+----------
+
+Problem Description
+每个人的童年都可能梦想过自己成为一个英雄，尤其是喜欢武侠的男生，Yifenfei也不例外。
+童年的他常常梦想自己能成为一个绝世英雄，手拿一把灿灿发亮的宝剑，手挽一位长发飘逸的秀丽气质MM ^_^ ，散步于清幽的泉边小道，微风吹过，飘落两片枫叶。。。。。。
+正由于成天陶醉于这种脱世的意境之中，导致此人老大不小依旧形单影只，每天只能在人潮中孤单上路。。。。。。
+现在就让我们为这个可怜的人创造一个机会，权当假设yifenfei现在已经捕获一位MM的芳心，但该MM被邪恶并且极其可恶的大魔头（AC女之杀手 lemon）抓走。为了正义，为了MM，燃烧吧。。。。。。
+
+好了，现在就正式开始我们的行程，接下来将有6关等待着yifenfei,让我们帮助他战胜邪恶的lemon大魔王吧。
+
+来到大魔王居住的千年古墓前，呈现在yifenfei眼前的是墓碑上神秘的字符，经过仔细研究，发现原来这是开启古墓入口的方法。
+墓碑上有2行字符串，其中第一个串的长度为偶数，现在要求把第2个串插入到第一个串的正中央，如此便能开启墓碑进入墓中。
+![](http://img.blog.csdn.net/20160518171125966)
+ 
+
+Input
+输入数据首先给出一个整数n，表示测试数据的组数。
+然后是n组数据，每组数据2行，每行一个字符串，长度大于0，小于50，并且第一个串的长度必为偶数。
+
+ 
+
+Output
+请为每组数据输出一个能开启古墓的字符串，每组输出占一行。
+ 
+
+Sample Input
+2
+HDCM
+UA
+Aw
+CFlo
+ 
+
+Sample Output
+HDUACM
+ACFlow
+
+
+简单的题目~
+String的处理~
+
+public String substring(int beginIndex,int endIndex)返回一个新字符串，
+它是此字符串的一个子字符串。
+该子字符串从指定的 beginIndex 处开始，直到索引 endIndex - 1 处的字符。
+因此，该子字符串的长度为 endIndex-beginIndex。 
+示例： 
+
+ "hamburger".substring(4, 8) returns "urge"
+ "smiles".substring(1, 5) returns "mile"
+
+参数：
+beginIndex - 起始索引（包括）。
+endIndex - 结束索引（不包括）。 
+返回：
+指定的子字符串。 
+
+```
+import java.util.Scanner;
+
+/**
+ * @author 陈浩翔
+ * 2016-5-18
+ */
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			String str = sc.next();
+			String s = sc.next();
+			System.out.print(str.substring(0, str.length()/2));
+			System.out.print(s);
+			System.out.println(str.substring(str.length()/2, str.length()));
+		}
+	}
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

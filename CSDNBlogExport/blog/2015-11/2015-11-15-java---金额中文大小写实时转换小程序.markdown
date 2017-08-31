@@ -1,0 +1,137 @@
+---
+layout: post
+title: "java---金额中文大小写实时转换小程序"
+date: 2015-11-15 09:13:02 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目
+tags: [异常处理,string,应用,文本编辑,对话框]
+keyword: 陈浩翔, 谙忆
+description: 本例演示一个String图形用户界面的完整应用程序，包括输入数据， 
+显示结果，响应事件以及异常处理。 
+输入一个实数表示金额，每次输入时显示该金额的中文大小写形式，运行窗口见最后。 
+在窗口中，“金额”文本行可编辑，作为数据输入编辑框：“中文大写形式” 
+文本仅显示结果，不可以编辑。金额文本行响应文本编辑事件。当输入数据 
+错误时，进行异常处理，弹出一个对话框，给出提示信息。 
+程序如下：pack 
+---
+
+
+本例演示一个String图形用户界面的完整应用程序，包括输入数据， 
+显示结果，响应事件以及异常处理。 
+输入一个实数表示金额，每次输入时显示该金额的中文大小写形式，运行窗口见最后。 
+在窗口中，“金额”文本行可编辑，作为数据输入编辑框：“中文大写形式” 
+文本仅显示结果，不可以编辑。金额文本行响应文本编辑事件。当输入数据 
+错误时，进行异常处理，弹出一个对话框，给出提示信息。 
+程序如下：pack
+<!-- more -->
+----------
+
+本例演示一个String图形用户界面的完整应用程序，包括输入数据，
+显示结果，响应事件以及异常处理。
+输入一个实数表示金额，每次输入时显示该金额的中文大小写形式，运行窗口见最后。
+在窗口中，“金额”文本行可编辑，作为数据输入编辑框：“中文大写形式”
+文本仅显示结果，不可以编辑。金额文本行响应文本编辑事件。当输入数据
+错误时，进行异常处理，弹出一个对话框，给出提示信息。
+程序如下：
+```
+package cn.hncu.gui3;
+
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.Label;
+
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
+
+public class MoneyJFrame extends JFrame implements CaretListener {
+    JTextField tfdMonry,tfdStr;	
+	public MoneyJFrame(String str) {
+		super(str);
+		this.setBounds(300, 240, 500, 140);//(  x位置, y位置  , 宽度，高度)
+		//this.setBackground(java.awt.Color.red);
+		this.getContentPane().setBackground(Color.white);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		Font font = new Font("a",Font.BOLD,20);
+		JLabel lb = new JLabel("金额");
+		lb.setFont(font);
+		this.getContentPane().add(lb);
+		tfdMonry = new JTextField("12345.67",20);
+		tfdMonry.setFont(font);
+		tfdMonry.setHorizontalAlignment(JTextField.RIGHT);
+		this.getContentPane().add(tfdMonry);
+		
+		JLabel lb2 = new JLabel("中文大写形式");
+		lb2.setFont(font);
+		this.getContentPane().add(lb2);
+		tfdStr = new JTextField(20);
+		tfdStr.setFont(font);
+		tfdStr.setHorizontalAlignment(JTextField.RIGHT);
+		tfdStr.setEditable(false);//文本行设为只显示，不可编辑
+		this.getContentPane().add(tfdStr);
+		
+		tfdMonry.addCaretListener(this);
+		//注册文本编辑事件监听器
+		this.setVisible(true);
+	}
+	@Override
+	public void caretUpdate(CaretEvent e) {
+//		System.out.println("kkk");
+		String str = tfdMonry.getText();
+		try {
+			double x = Double.parseDouble(str);
+			tfdStr.setText(RMBtoString(x));
+		} catch (NumberFormatException e1) {
+			JDialog dlg = new JDialog(this,true);
+			dlg.setSize(300,80);
+			
+			dlg.add(new JLabel(str+"不能转换成浮点数，请重新输入！"));
+			int lx = this.getX();
+			int ly = this.getY();
+			dlg.setLocation(lx+20, ly+20);
+			dlg.setVisible(true);
+		}
+		
+	}
+
+	private String RMBtoString(double x) {
+		String digit = "零壹贰叁肆伍陆柒捌玖";
+		String yuan = "亿千百拾万千百拾元角分";
+		
+		String result = "";
+		int y =(int )(x*100+0.5);
+		int i =yuan.length()-1;
+		while(y>0 && i>0){
+			String str = ""+digit.charAt(y%10)+yuan.charAt(i);
+			result = str + result;
+			y=y/10;
+			i--;
+		}
+		//System.out.println("result");
+		return result;
+	}
+
+	public static void main(String[] args) {
+		new MoneyJFrame("金额的中文大写形式");
+	}
+}
+
+```
+正常转换：
+![](http://img.blog.csdn.net/20151115210349600)
+
+出异常处理：
+![](http://img.blog.csdn.net/20151115210359816)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

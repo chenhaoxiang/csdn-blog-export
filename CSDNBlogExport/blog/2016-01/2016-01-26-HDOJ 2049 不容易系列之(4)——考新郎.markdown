@@ -1,0 +1,113 @@
+---
+layout: post
+title: "HDOJ 2049 不容易系列之(4)——考新郎"
+date: 2016-01-26 08:46:54 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 错排
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+国庆期间,省城HZ刚刚举行了一场盛大的集体婚礼,为了使婚礼进行的丰富一些,司仪临时想出了有一个有意思的节目,叫做”考新郎”,具体的操作是这样的:首先,给每位新娘打扮得几乎一模一样,并盖上大大的红盖头随机坐成一排; 
+然后,让各位新郎寻找自己的新娘.每人只准找一个,并且不允许多人找一个. 
+最后,揭开盖头,如果找错了对象就要当众跪搓衣板…看来做新郎也不是容易的 
+---
+
+
+Problem Description 
+国庆期间,省城HZ刚刚举行了一场盛大的集体婚礼,为了使婚礼进行的丰富一些,司仪临时想出了有一个有意思的节目,叫做”考新郎”,具体的操作是这样的:首先,给每位新娘打扮得几乎一模一样,并盖上大大的红盖头随机坐成一排; 
+然后,让各位新郎寻找自己的新娘.每人只准找一个,并且不允许多人找一个. 
+最后,揭开盖头,如果找错了对象就要当众跪搓衣板…看来做新郎也不是容易的
+<!-- more -->
+----------
+
+
+Problem Description
+国庆期间,省城HZ刚刚举行了一场盛大的集体婚礼,为了使婚礼进行的丰富一些,司仪临时想出了有一个有意思的节目,叫做"考新郎",具体的操作是这样的:
+
+
+首先,给每位新娘打扮得几乎一模一样,并盖上大大的红盖头随机坐成一排;
+然后,让各位新郎寻找自己的新娘.每人只准找一个,并且不允许多人找一个.
+最后,揭开盖头,如果找错了对象就要当众跪搓衣板...
+
+看来做新郎也不是容易的事情...
+
+假设一共有N对新婚夫妇,其中有M个新郎找错了新娘,求发生这种情况一共有多少种可能.
+
+ 
+
+Input
+输入数据的第一行是一个整数C,表示测试实例的个数，然后是C行数据，每行包含两个整数N和M(1 < M < = N < = 20)。
+
+ 
+
+Output
+对于每个测试实例，请输出一共有多少种发生这种情况的可能，每个实例的输出占一行。
+
+ 
+
+Sample Input
+2
+2 2
+3 2
+ 
+
+Sample Output
+1
+3
+
+从题意上我们就能看出是一道错排题，但是他在这个基础上，又多了一些要求，从N个新郎，挑M个错排，那么也就是说有 N-M 个 新郎选对了新娘，但是概率的情况上，每一个新郎都是有可能的，所以这其中我们还要用到排列组合中的C，
+因而 最后的公式我们可以得出： s=C(n,n-m)*a[m];  a[m]是错排公式中的值
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		long[] a = new long[21];
+		a[0]=0;
+		a[1]=0;
+		a[2]=1;
+		for(int i=3;i<21;i++){
+			a[i] = (i-1)*(a[i-1]+a[i-2]);
+		}
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int n = sc.nextInt();
+			int m = sc.nextInt();
+			
+			int max = (n-m)>m?(n-m):m;
+			int min = (n-m)<m?(n-m):m;
+			
+			long x =  key(n,max,min);
+			
+			System.out.println(x*a[m]);
+			
+		}
+		
+		
+	}
+
+	private static long key(int n, int max, int min) {
+		long x=1;
+		for(int i=max+1;i<=n;i++){
+			x=x*i;
+		}
+		for(int j=1;j<=min;j++){
+			x=x/j;
+		}
+		return x;
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,1006 @@
+---
+layout: post
+title: "Java-单机版的书店管理系统(练习设计模块和思想_系列 八 )"
+date: 2016-04-20 12:46:09 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块,----- ----- Java书店管理系统
+tags: [设计模块,java,项目]
+keyword: 陈浩翔, 谙忆
+description: 本系列前面博客的链接：Java-单机版的书店管理系统(练习设计模块和思想_系列 七 ) 
+http://blog.csdn.net/qq_26525215/article/details/51190696Java-单机版的书店管理系统(练习设计模块和思想_系列 六 )  
+http://blog.csdn.net/qq_26525215/article/details/51169277Java-单机 
+---
+
+
+本系列前面博客的链接：Java-单机版的书店管理系统(练习设计模块和思想_系列 七 ) 
+http://blog.csdn.net/qq_26525215/article/details/51190696Java-单机版的书店管理系统(练习设计模块和思想_系列 六 )  
+http://blog.csdn.net/qq_26525215/article/details/51169277Java-单机
+<!-- more -->
+----------
+
+本系列前面博客的链接：
+===========
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 七 )
+http://blog.csdn.net/qq_26525215/article/details/51190696
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 六 ) 
+http://blog.csdn.net/qq_26525215/article/details/51169277
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 五 ) 
+http://blog.csdn.net/qq_26525215/article/details/51136848
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 四(2) )： 
+http://blog.csdn.net/qq_26525215/article/details/51117135
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 四(1) )： 
+http://blog.csdn.net/qq_26525215/article/details/51116429
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 三 )： 
+http://blog.csdn.net/qq_26525215/article/details/51099202
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 二 )： 
+http://blog.csdn.net/qq_26525215/article/details/51089734
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 一 )： 
+http://blog.csdn.net/qq_26525215/article/details/51073546
+
+介绍：
+===
+
+完成了销售模块。
+
+因为销售模块和进货模块惊人的相似，
+我就利用代码拷贝技术，直接拷贝进货模块的代码了，只是改了类名和变量名。
+这对于以后在公司开发项目是有好处的，
+能节省大量的时间！而且不容易出错。大家如果以后开发项目可以学学这种拷贝代码，修改代码名称类名来完成功能几乎一样的模块。
+
+
+销售模块源代码：
+========
+
+值对象封装OutMainModel：
+------------------
+
+```
+package cn.hncu.bookStore.out.vo;
+
+import java.io.Serializable;
+
+import cn.hncu.bookStore.util.DateUtil;
+
+/**
+ * 销售管理值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutMainModel implements Serializable, Comparable<OutMainModel>{
+	//销售单编号
+	private String uuid;
+	//销售时间
+	private long outDate;
+	//销售人员编号
+	private String outUserId;
+	
+	/* 
+	   如果某个字段是外键，同时又需要在当前表中相应表现层显示出用户能看得懂
+	 的信息,则需要补一个专用于信息显示(给用户看)的字段。
+	 */
+	private String outUserName;
+	
+	public String getOutUserName() {
+		return outUserName;
+	}
+	
+	public void setOutUserName(String outUserName) {
+		this.outUserName = outUserName;
+	}
+
+	/**
+	 * 
+	 * @return ---返回销售单编号(String型)
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+	
+	/**
+	 * 
+	 * @param uuid---设置销售单编号(String型)
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	/**
+	 * 
+	 * @return---返回销售时间(long型)
+	 */
+	public long getOutDate() {
+		return outDate;
+	}
+	
+	/**
+	 * 
+	 * @param outDate---设置销售时间(long型)
+	 */
+	public void setOutDate(long outDate) {
+		this.outDate = outDate;
+	}
+	
+	/**
+	 * 
+	 * @return---返回销售人员编号(String型)
+	 */
+	public String getOutUserId() {
+		return outUserId;
+	}
+	
+	/**
+	 * 
+	 * @param outUserId---设置销售人员编号(String型)
+	 */
+	public void setOutUserId(String outUserId) {
+		this.outUserId = outUserId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OutMainModel other = (OutMainModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return uuid + ", " + outUserName
+				+ ", " + DateUtil.long2String(outDate);
+	}
+
+	@Override
+	public int compareTo(OutMainModel o) {
+		return Integer.parseInt(uuid)-Integer.parseInt(o.uuid);
+	}
+}
+
+```
+
+值对象查询封装OutMainQueryModel：
+
+```
+package cn.hncu.bookStore.out.vo;
+
+/**
+ * 销售查询值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutMainQueryModel extends OutMainModel {
+	
+	//需要查询的最大时间
+	private long outDate2;
+	
+	/**
+	 * 
+	 * @return---需要查询的最大时间值
+	 */
+	public long getOutDate2() {
+		return outDate2;
+	}
+	
+	/**
+	 * 
+	 * @param outDate2---设置需要查询的最大时间
+	 */
+	public void setOutDate2(long inDate2) {
+		this.outDate2 = outDate2;
+	}
+
+}
+
+```
+
+销售明细值对象封装OutDetailModel：
+
+```
+package cn.hncu.bookStore.out.vo;
+
+import java.io.Serializable;
+
+/**
+ * 销售明细管理的值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutDetailModel implements Serializable{
+	//销售明细编号
+	private String uuid;
+	//销售单编号
+	private String outId;
+	//图书编号
+	private String bookId;
+	//销售数量
+	private int sumNum;
+	//销售总金额
+	private double sumMoney;
+	
+	//为把书名显示给用户看，给bookUuid添加一个bookName属性
+	private String bookName;
+	
+	
+	
+	public String getBookName() {
+		return bookName;
+	}
+	public void setBookName(String bookName) {
+		this.bookName = bookName;
+	}
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getOutId() {
+		return outId;
+	}
+	public void setOutId(String outId) {
+		this.outId = outId;
+	}
+	public String getBookId() {
+		return bookId;
+	}
+	public void setBookId(String bookId) {
+		this.bookId = bookId;
+	}
+	public int getSumNum() {
+		return sumNum;
+	}
+	public void setSumNum(int sumNum) {
+		this.sumNum = sumNum;
+	}
+	public double getSumMoney() {
+		return sumMoney;
+	}
+	public void setSumMoney(double sumMoney) {
+		this.sumMoney = sumMoney;
+	}
+	
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		OutDetailModel other = (OutDetailModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return uuid +", "+bookName + ", " + sumNum
+				+ "本, " + sumMoney + "元";
+	}
+	
+	
+	
+	
+	
+}
+
+```
+
+销售明细查询值对象封装OutDetailQueryModel：
+-------------------------------
+
+```
+package cn.hncu.bookStore.out.vo;
+
+/**
+ * 销售明细查询值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutDetailQueryModel extends OutDetailModel {
+	
+	//需要查询的最大销售数量
+	private int sumNum2;
+	//需要查询的最大销售金额
+	private double sumMoney2;
+	
+	/**
+	 * 
+	 * @return---返回需要查询的最大销售数量
+	 */
+	public int getSumNum2() {
+		return sumNum2;
+	}
+	/**
+	 * 
+	 * @param sumNum2---设置需要查询的最大销售数量
+	 */
+	public void setSumNum2(int sumNum2) {
+		this.sumNum2 = sumNum2;
+	}
+	
+	/**
+	 * 
+	 * @return---返回需要查询的最大销售金额
+	 */
+	public double getSumMoney2() {
+		return sumMoney2;
+	}
+	
+	/**
+	 * 
+	 * @param sumMoney2---设置需要查询的最大销售金额
+	 */
+	public void setSumMoney2(double sumMoney2) {
+		this.sumMoney2 = sumMoney2;
+	}
+
+}
+
+```
+
+
+
+
+数据层接口OutMainDao：
+------
+
+```
+package cn.hncu.bookStore.out.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.out.vo.OutMainModel;
+import cn.hncu.bookStore.out.vo.OutMainQueryModel;
+
+/**
+ * 销售管理数据层接口
+ * 
+ * @author 陈浩翔
+ * 
+ * @version 1.0
+ */
+public interface OutMainDao {
+	
+	/**
+	 * 创建一个销售数据对象
+	 * @param outMain---需要创建的销售数据对象
+	 * @return---true 表示创建成功，false 表示创建失败
+	 */
+	public boolean create(OutMainModel outMain);
+	
+	/**
+	 * 删除一个销售数据对象
+	 * @param uuid---销售单的编号-唯一的
+	 * @return---true表示删除成功， false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	
+	/**
+	 * 修改一个销售数据的对象
+	 * @param outMain---需要修改的销售管理对象
+	 * @return---true表示修改成功，false表示修改失败
+	 */
+	public boolean update(OutMainModel outMain);
+	
+	/**
+	 * 根据销售单编号，得到销售对象的其他信息资料
+	 * @param uuid---销售单编号
+	 * @return---该对象的其他其他信息资料
+	 */
+	public OutMainModel getSingle(String uuid);
+	
+	/**
+	 * 
+	 * @return---所有的销售管理对象信息
+	 */
+	public List<OutMainModel> getAll();
+	
+	/**
+	 * 查找销售管理对象
+	 * @param imqm---查找条件！
+	 * @return---满足查找条件的所有OutMainModel对象
+	 */
+	public List<OutMainModel> getbyCondition(OutMainQueryModel omqm);
+}
+
+```
+
+数据层接口OutDetailDao：
+------------------
+
+```
+package cn.hncu.bookStore.out.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.out.vo.OutDetailModel;
+import cn.hncu.bookStore.out.vo.OutDetailQueryModel;
+
+/**
+ * 销售明细管理数据层接口
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public interface OutDetailDao {
+	/**
+	 * 创建一个销售明细数据对象
+	 * @param outMain---需要创建的销售明细数据对象
+	 * @return---true 表示创建成功，false 表示创建失败
+	 */
+	public boolean create(OutDetailModel outDetail);
+	
+	/**
+	 * 删除一个销售明细数据对象
+	 * @param uuid---销售明细单的编号-唯一的
+	 * @return---true表示删除成功， false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	
+	/**
+	 * 修改一个销售明细数据的对象
+	 * @param outMain---需要修改的销售管理明细对象
+	 * @return---true表示修改成功，false表示修改失败
+	 */
+	public boolean update(OutDetailModel outDetail);
+	
+	/**
+	 * 根据销售明细单编号，得到销售明细对象的其他信息资料
+	 * @param uuid---销售明细单编号
+	 * @return---该对象的其他其他信息资料
+	 */
+	public OutDetailModel getSingle(String uuid);
+	
+	/**
+	 * 
+	 * @return---所有的销售明细管理对象信息
+	 */
+	public List<OutDetailModel> getAll();
+	
+	/**
+	 * 查找销售明细管理对象
+	 * @param omqm---查找条件！
+	 * @return---满足查找条件的所有OutDetailModel对象
+	 */
+	public List<OutDetailModel> getbyCondition(OutDetailQueryModel odqm);
+}
+
+```
+
+数据层实现类OutMainDaoSerImpl：
+------------------------
+
+```
+package cn.hncu.bookStore.out.dao.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.hncu.bookStore.out.dao.dao.OutMainDao;
+import cn.hncu.bookStore.out.vo.OutMainModel;
+import cn.hncu.bookStore.out.vo.OutMainQueryModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+import cn.hncu.bookStore.util.StringComparison;
+
+/**
+ * 销售管理的实现类
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutMainDaoSerImpl implements OutMainDao {
+	
+	private final String FILE_NAME = "OutMain.txt";
+	@Override
+	public boolean create(OutMainModel outMain) {
+		List<OutMainModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		for(OutMainModel model:list){
+			if(model.getUuid().equals(outMain.getUuid())){//存在，则不能添加
+				return false;
+			}
+		}
+		list.add(outMain);
+		FileIoUtil.write2file(list, FILE_NAME);
+		return true;
+	}
+
+	@Override
+	public boolean delete(String uuid) {
+		List<OutMainModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		for(OutMainModel model:list){
+			if(model.getUuid().equals(uuid)){//存在，则删除
+				list.remove(model);
+				FileIoUtil.write2file(list, FILE_NAME);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean update(OutMainModel outMain) {
+		List<OutMainModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		for(int i=0;i<list.size();i++){
+			OutMainModel model = list.get(i);
+			if(model.getUuid().equals(outMain.getUuid())){//存在，则修改
+				list.set(i, outMain);
+				FileIoUtil.write2file(list, FILE_NAME);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public OutMainModel getSingle(String uuid) {
+		List<OutMainModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		for(OutMainModel model:list){
+			if(model.getUuid().equals(uuid)){//存在，则返回
+				return model;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<OutMainModel> getAll() {
+		return FileIoUtil.readFormFile(FILE_NAME);
+	}
+
+	@Override
+	public List<OutMainModel> getbyCondition(OutMainQueryModel omqm) {
+		List<OutMainModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		List<OutMainModel> results = new ArrayList<OutMainModel>();
+		for(OutMainModel model : lists){
+			
+			
+			
+			if(!StringComparison.stringEquals( model.getUuid(),omqm.getUuid())){
+				continue;
+			}
+			
+			if(!StringComparison.stringEquals(model.getOutUserId(), omqm.getOutUserId())){
+				continue;
+			}
+			if(omqm.getOutDate()>0){
+				if(model.getOutDate()<omqm.getOutDate()){
+					continue;
+				}
+			}
+			if(omqm.getOutDate2()>0){
+				if(model.getOutDate()>omqm.getOutDate2()){
+					continue;
+				}
+			}
+			results.add(model);
+		}
+		return results;
+	}
+
+}
+
+```
+
+数据层实现类OutDetailDaoSerImpl：
+--------------------------
+
+```
+package cn.hncu.bookStore.out.dao.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.hncu.bookStore.out.dao.dao.OutDetailDao;
+import cn.hncu.bookStore.out.dao.factory.OutDetailDaoFactory;
+import cn.hncu.bookStore.out.vo.OutDetailModel;
+import cn.hncu.bookStore.out.vo.OutDetailQueryModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+import cn.hncu.bookStore.util.StringComparison;
+
+/**
+ * 销售明细的实现类
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutDetailDaoSerImpl implements OutDetailDao{
+	//销售明细数据的存储的文件名
+	private final String FILE_NAME = "OutDetail.txt";
+	
+	@Override
+	public boolean create(OutDetailModel outDetail) {
+		List<OutDetailModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		
+		for(OutDetailModel model: lists){
+			//已经存在这个Uuid，不能添加
+			if(model.getUuid().equals(outDetail.getUuid())){
+				return false;
+			}
+		}
+		
+		lists.add(outDetail);
+		FileIoUtil.write2file(lists, FILE_NAME);
+		return true;
+	}
+
+	@Override
+	public boolean delete(String uuid) {
+		List<OutDetailModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		for(OutDetailModel model: list){
+			//存在，就删除
+			if(model.getUuid().equals(uuid)){
+				list.remove(model);
+				FileIoUtil.write2file(list, FILE_NAME);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public boolean update(OutDetailModel outDetail) {
+		List<OutDetailModel> list  = FileIoUtil.readFormFile(FILE_NAME);
+		for(int i=0;i<list.size();i++){
+			//找到了，就修改
+			if(list.get(i).getUuid().equals(outDetail.getUuid())){
+				list.set(i, outDetail);
+				FileIoUtil.write2file(list, FILE_NAME);
+				return true;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public OutDetailModel getSingle(String uuid) {
+		List<OutDetailModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		for(OutDetailModel model : list){
+			//找到了，就返回
+			if(model.getUuid().equals(uuid)){
+				return model;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<OutDetailModel> getAll() {
+		return FileIoUtil.readFormFile(FILE_NAME);
+	}
+
+	@Override
+	public List<OutDetailModel> getbyCondition(OutDetailQueryModel odqm) {
+		List<OutDetailModel> lists = getAll();
+		List<OutDetailModel> resulits = new ArrayList<OutDetailModel>();
+		for(OutDetailModel model:lists){
+			
+			if(!StringComparison.stringEquals(model.getUuid(), odqm.getUuid())){
+				continue;
+			}
+			
+			if(!StringComparison.stringEquals(model.getOutId(), odqm.getOutId())){
+				continue;
+			}
+			
+			if(!StringComparison.stringEquals(model.getBookId(), odqm.getBookId())){
+				continue;
+			}
+			
+			if(odqm.getSumNum()>0){
+				if(model.getSumNum()<odqm.getSumNum()){
+					continue;
+				}
+			}
+			if(odqm.getSumNum2()>0){
+				if(model.getSumNum()>odqm.getSumNum2()){
+					continue;
+				}
+			}
+			
+			if(odqm.getSumMoney()>0){
+				if(model.getSumMoney()<odqm.getSumMoney()){
+					continue;
+				}
+			}
+			if(odqm.getSumMoney2()>0){
+				if(model.getSumMoney()>odqm.getSumMoney2()){
+					continue;
+				}
+			}
+			
+			resulits.add(model);
+		}
+		return resulits;
+	}
+
+}
+
+```
+
+数据层工厂类OutMainDaoFactory：
+------------------------
+
+```
+package cn.hncu.bookStore.out.dao.factory;
+
+import cn.hncu.bookStore.out.dao.dao.OutMainDao;
+import cn.hncu.bookStore.out.dao.impl.OutMainDaoSerImpl;
+
+/**
+ * 工厂方法---new 一个销售实现类
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public class OutMainDaoFactory {
+	
+	public static OutMainDao getOutMainDao(){
+		return new OutMainDaoSerImpl();
+	}
+}
+
+```
+
+数据层工厂类OutDetailDaoFactory：
+--------------------------
+
+
+```
+package cn.hncu.bookStore.out.dao.factory;
+
+import cn.hncu.bookStore.out.dao.dao.OutDetailDao;
+import cn.hncu.bookStore.out.dao.impl.OutDetailDaoSerImpl;
+
+/**
+ * 工厂方法----new 一个销售明细的实现类
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutDetailDaoFactory {
+	
+	public static OutDetailDao getOutDetailDao(){
+		return new OutDetailDaoSerImpl();
+	}
+}
+
+```
+
+
+逻辑层接口OutMainEbi：
+----------------
+
+
+```
+package cn.hncu.bookStore.out.business.ebi;
+
+import java.util.List;
+import java.util.Map;
+
+import cn.hncu.bookStore.out.vo.OutMainQueryModel;
+import cn.hncu.bookStore.out.vo.OutDetailModel;
+import cn.hncu.bookStore.out.vo.OutDetailQueryModel;
+import cn.hncu.bookStore.out.vo.OutMainModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public interface OutMainEbi {
+	
+	/**
+	 * 创建一个销售模块数据-
+	 * @param inMain---销售数据
+	 * @param outDetails---销售明细数据
+	 * @return---返回true表示创建成功，false表示创建失败
+	 */
+	public abstract boolean create(OutMainModel inMain,List<OutDetailModel> outDetails);
+	
+	/**
+	 * 
+	 * @return---返回所有的销售模块（包括销售明细）的集合
+	 */
+	public abstract Map<OutMainModel, List<OutDetailModel>> getAll();
+	
+	/**
+	 * 
+	 * @param omqm---销售管理需要查找的条件
+	 * @param idqm---销售明细需要查找的条件
+	 * @return---满足条件的所有销售数据的Map集合
+	 */
+	public abstract Map<OutMainModel, List<OutDetailModel>> getByCondition(OutMainQueryModel omqm,OutDetailQueryModel odqm);
+	
+}
+
+```
+
+逻辑层实现类OutMainEbo：
+-----------------
+
+```
+package cn.hncu.bookStore.out.business.ebo;
+
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+
+import cn.hncu.bookStore.book.business.ebi.BookEbi;
+import cn.hncu.bookStore.book.business.factory.BookEbiFactory;
+import cn.hncu.bookStore.common.UuidModelConstance;
+import cn.hncu.bookStore.common.uuid.dao.dao.UuidDao;
+import cn.hncu.bookStore.common.uuid.dao.factory.UuidDaoFactory;
+import cn.hncu.bookStore.out.business.ebi.OutMainEbi;
+import cn.hncu.bookStore.out.dao.dao.OutDetailDao;
+import cn.hncu.bookStore.out.dao.dao.OutMainDao;
+import cn.hncu.bookStore.out.dao.factory.OutDetailDaoFactory;
+import cn.hncu.bookStore.out.dao.factory.OutMainDaoFactory;
+import cn.hncu.bookStore.out.vo.OutDetailModel;
+import cn.hncu.bookStore.out.vo.OutDetailQueryModel;
+import cn.hncu.bookStore.out.vo.OutMainModel;
+import cn.hncu.bookStore.out.vo.OutMainQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutMainEbo implements OutMainEbi{
+	//注入dao
+	
+	OutMainDao outMainDao = OutMainDaoFactory.getOutMainDao();
+	OutDetailDao outDetailDao = OutDetailDaoFactory.getOutDetailDao();
+	UuidDao uuidDao = UuidDaoFactory.getUuidDao();
+	BookEbi bookEbi = BookEbiFactory.getBookEbi();
+	
+	@Override
+	public boolean create(OutMainModel outMain, List<OutDetailModel> outDetails) {
+		//////////1存储outMain信息///////////
+		//补全outMain中的数据
+		//需要:inUuid,inDate,inUserUuid   已组织:inUserUuid
+		//还缺(需补):inUuid,inDate
+		String outUuid = uuidDao.getNextUuid(UuidModelConstance.OUT_MAIN);
+		outMain.setUuid(outUuid);
+		outMain.setOutDate(System.currentTimeMillis());
+		outMainDao.create(outMain);
+		
+		 //////////2存储inDetail信息///////////
+		for(OutDetailModel model:outDetails){
+			//补全每一个inDetail中的数据
+			//需要:inDetailUuid,outMainUuid,bookUuid,sumNum,sumMoney   已组织:bookUuid,sumNum
+	        //还缺(需补):inDetailUuid,outMainUuid,sumMoney
+			model.setUuid(uuidDao.getNextUuid(UuidModelConstance.OUT_DETAIL));
+			model.setOutId(outUuid);
+			
+			double sumMoney = model.getSumNum() * bookEbi.getSingle(model.getBookId()).getSalePrice();
+			model.setSumMoney(sumMoney);
+			outDetailDao.create(model);
+		}
+		return true;
+	}
+
+	@Override
+	public Map<OutMainModel, List<OutDetailModel>> getAll() {
+		Map<OutMainModel,List<OutDetailModel>> map = new TreeMap<OutMainModel, List<OutDetailModel>>();
+		
+		List<OutMainModel> outMains = outMainDao.getAll();
+		
+		for(OutMainModel outMain: outMains ){
+			//查询条件值对象的创建
+			OutDetailQueryModel odqm = new OutDetailQueryModel();
+			String inUuid = outMain.getUuid();
+			odqm.setOutId(inUuid);
+
+			List<OutDetailModel> details = outDetailDao.getbyCondition(odqm);
+			
+			map.put(outMain, details);
+		}
+		
+		return map;
+	}
+
+	@Override
+	public Map<OutMainModel, List<OutDetailModel>> getByCondition(
+			OutMainQueryModel imqm, OutDetailQueryModel odqm) {
+		Map<OutMainModel, List<OutDetailModel>> map = new TreeMap<OutMainModel, List<OutDetailModel>>();
+		
+		List<OutMainModel> list = outMainDao.getbyCondition(imqm);
+		
+		for(OutMainModel outMain : list){
+			odqm.setOutId(outMain.getUuid());
+			
+			List<OutDetailModel> details = outDetailDao.getbyCondition(odqm);
+			if(details.size()!=0){
+				map.put(outMain, details);
+			}
+		}
+		
+		return map;
+	}
+
+}
+
+```
+
+逻辑层工厂方法OutMainEbiFactory：
+-------------------------
+
+```
+package cn.hncu.bookStore.out.business.factory;
+
+import cn.hncu.bookStore.out.business.ebi.OutMainEbi;
+import cn.hncu.bookStore.out.business.ebo.OutMainEbo;
+
+/**
+ * 工厂方法
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class OutMainEbiFactory {
+	/**
+	 * 
+	 * @return---new一个逻辑层的接口的实例
+	 */
+	public static OutMainEbi getOutMainEbi(){
+		return new OutMainEbo();
+	}
+}
+
+```
+
+表现层的代码我就不直接这样写了。。。
+表现层的大部分代码是自动生成的，只有监听和初始化box是自己写的。
+
+其他所有代码的百度云链接：
+http://pan.baidu.com/s/1jH7RNQu
+
+其他系列也是这样，我在写博客时，我都把我目前写到哪了的所有代码都上传了的。有兴趣的，可以去看看。有bug什么的，欢迎评论。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

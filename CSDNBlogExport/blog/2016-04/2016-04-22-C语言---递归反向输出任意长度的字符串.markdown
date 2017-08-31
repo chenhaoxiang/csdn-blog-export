@@ -1,0 +1,137 @@
+---
+layout: post
+title: "C语言---递归反向输出任意长度的字符串"
+date: 2016-04-22 07:02:58 +0800
+comments: true
+categories:❸ C/C++语言基础,❺ 算法及基础题,----- 递归搜索回溯
+tags: [函数,递归,应用,string]
+keyword: 陈浩翔, 谙忆
+description: (该字符串可以包含空格和回车！) 
+【题目要求】 
+    编写一个递归函数，实现将输入的任意长度的字符串反向输出的功能。 
+例如输入字符串：ABCD，输出字符串：DCBA。【题目分析】 
+    应用递归的思想有时可以很轻松地解决一些看似不太容易实现的功能。 
+    本题就是利用递归方法解决这类问题的一个代表。要将一个字符串反向地输出，一般采用的方法是将该字符串存放到一个数组中，然后将数组元素反 
+---
+
+
+(该字符串可以包含空格和回车！) 
+【题目要求】 
+    编写一个递归函数，实现将输入的任意长度的字符串反向输出的功能。 
+例如输入字符串：ABCD，输出字符串：DCBA。【题目分析】 
+    应用递归的思想有时可以很轻松地解决一些看似不太容易实现的功能。 
+    本题就是利用递归方法解决这类问题的一个代表。要将一个字符串反向地输出，一般采用的方法是将该字符串存放到一个数组中，然后将数组元素反
+<!-- more -->
+----------
+
+(该字符串可以包含空格和回车！)
+【题目要求】
+	编写一个递归函数，实现将输入的任意长度的字符串反向输出的功能。
+例如输入字符串：ABCD，输出字符串：DCBA。
+
+【题目分析】
+	应用递归的思想有时可以很轻松地解决一些看似不太容易实现的功能。
+	本题就是利用递归方法解决这类问题的一个代表。要将一个字符串反向地输出，一般采用的方法是将该字符串存放到一个数组中，然后将数组元素反向地输出即可。
+	这样需要一个存储空间，而且字符串的长度无法自由掌握，因为数组是一种静态数据结构。如果选用动态生成的顺序表或者链表来存放字符串，那么实现起来会比较麻烦，特别是如果把字符串存放到单向链表中，反向输出是非常困难的。
+	如何才能输入任意长度的字符串，然后将其反向输出呢？
+	可以通过一个递归的方法巧妙地实现这个功能。
+	算法描述如下：
+```
+print(){
+	输入字符串的一个字符a：
+	if(a!='#') print();
+	if(a!='#') then 输出该字符a；
+}
+
+```
+
+
+在该算法中，字符串的结束标志为#，并且#不作为字符串中的内容输出。首先输入字符串的一个字符，存放到变量a中：然后递归地调用函数print()，重复上述操作，知道输入字符串结束标志#为止；然后输出字符串中的字符。
+
+	假设从屏幕上输入字符串ABC，并且以#作为结束标志，函数print()的递归过程如下图所示：
+
+![](http://img.blog.csdn.net/20160422182639943)
+
+如上图所示，从屏幕上输入字符串ABC，并以#作为结束标志，然后反向输出该字符串，整个流程沿着图中箭头方向执行。因此输出的字符串与输入的字符串方向相反。
+
+整个实现的C源代码：
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+print(){
+    char a ;
+    scanf("%c",&a);
+    if(a!='#'){
+        print();
+    }
+    if(a!='#'){
+        printf("%c",a);
+    }
+}
+int main()
+{
+    printf("Please input a string ending for '#' :\n");
+    print();
+    return 0;
+}
+```
+
+输出结果：
+![](http://img.blog.csdn.net/20160422182915913)
+
+
+下面的是没实现递归的Java实现这个功能的完整代码：
+而且貌似java也不能从控制端读入单个字符。。。。
+所以并不能实现这个c能实现的递归功能。
+
+```
+package cn.hncu;
+
+import java.util.Scanner;
+
+public class String1 {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String strs = "";
+		while(true){
+			int k=-1;
+			String str = sc.nextLine();
+			for(int i=0;i<str.length();i++){
+				if(str.charAt(i)=='#'){
+					k=i;
+				}
+			}
+			if(k==-1){
+				strs = strs+str+"\r\n";
+			}else{
+				for(int i=0;i<k;i++){
+					strs = strs+str.charAt(i);
+				}
+			}
+			if(k!=-1){
+				break;
+			}
+		}
+		
+		for(int i=strs.length()-1;i>=0;i--){
+			if(strs.charAt(i)=='\n'){
+				System.out.println();
+				i--;
+				continue;
+			}
+			System.out.print(strs.charAt(i));
+		}
+	}
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

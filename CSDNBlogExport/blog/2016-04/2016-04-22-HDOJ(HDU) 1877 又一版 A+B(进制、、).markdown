@@ -1,0 +1,87 @@
+---
+layout: post
+title: "HDOJ(HDU) 1877 又一版 A+B(进制、、)"
+date: 2016-04-22 08:44:31 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 进制相关
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+输入两个不超过整型定义的非负10进制整数A和B(<=231-1)，输出A+B的m (1 < m <10)进制数。Input 
+输入格式：测试输入包含若干测试用例。每个测试用例占一行，给出m和A，B的值。 
+当m为0时输入结束。Output 
+输出格式：每个测试用例的输出占一行，输出A+B的m进制数。Sample Input 
+8 1300 48 
+2 1 7 
+---
+
+
+Problem Description 
+输入两个不超过整型定义的非负10进制整数A和B(<=231-1)，输出A+B的m (1 < m <10)进制数。Input 
+输入格式：测试输入包含若干测试用例。每个测试用例占一行，给出m和A，B的值。 
+当m为0时输入结束。Output 
+输出格式：每个测试用例的输出占一行，输出A+B的m进制数。Sample Input 
+8 1300 48 
+2 1 7
+<!-- more -->
+----------
+
+Problem Description
+输入两个不超过整型定义的非负10进制整数A和B(<=231-1)，输出A+B的m (1 < m <10)进制数。
+
+
+
+
+ 
+
+Input
+输入格式：测试输入包含若干测试用例。每个测试用例占一行，给出m和A，B的值。
+当m为0时输入结束。
+ 
+
+Output
+输出格式：每个测试用例的输出占一行，输出A+B的m进制数。
+ 
+
+Sample Input
+8 1300 48
+2 1 7
+0
+ 
+
+Sample Output
+2504
+1000
+
+
+java强大的Integer.toString方法秒解！
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while(sc.hasNext()){
+			int m  =sc.nextInt();
+			if(m==0){
+				return ;
+			}
+			int a = sc.nextInt();
+			int b = sc.nextInt(); 
+			String s = (a+b)+"";
+			System.out.println( Integer.toString(a+b, m) );
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

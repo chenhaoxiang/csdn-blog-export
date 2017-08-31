@@ -1,0 +1,132 @@
+---
+layout: post
+title: "HDOJ HDU 1256 画8(绞下思维~水题)"
+date: 2016-05-28 03:46:09 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- String
+tags: [java,acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+谁画8画的好,画的快,今后就发的快,学业发达,事业发达,祝大家发,发,发.Input 
+输入的第一行为一个整数N,表示后面有N组数据. 
+每组数据中有一个字符和一个整数,字符表示画笔,整数(>=5)表示高度.Output 
+画横线总是一个字符粗,竖线随着总高度每增长6而增加1个字符宽.当总高度从5增加到6时,其竖线宽度从1增长到2.下圈高度不小于上圈高度,但 
+---
+
+
+Problem Description 
+谁画8画的好,画的快,今后就发的快,学业发达,事业发达,祝大家发,发,发.Input 
+输入的第一行为一个整数N,表示后面有N组数据. 
+每组数据中有一个字符和一个整数,字符表示画笔,整数(>=5)表示高度.Output 
+画横线总是一个字符粗,竖线随着总高度每增长6而增加1个字符宽.当总高度从5增加到6时,其竖线宽度从1增长到2.下圈高度不小于上圈高度,但
+<!-- more -->
+----------
+
+Problem Description
+谁画8画的好,画的快,今后就发的快,学业发达,事业发达,祝大家发,发,发.
+
+ 
+
+Input
+输入的第一行为一个整数N,表示后面有N组数据.
+每组数据中有一个字符和一个整数,字符表示画笔,整数(>=5)表示高度.
+
+ 
+
+Output
+画横线总是一个字符粗,竖线随着总高度每增长6而增加1个字符宽.当总高度从5增加到6时,其竖线宽度从1增长到2.下圈高度不小于上圈高度,但应尽量接近上圈高度,且下圈的内径呈正方形.
+每画一个"8"应空一行,但最前和最后都无空行.
+
+ 
+
+Sample Input
+2
+A 7
+B 8
+ 
+
+Sample Output
+
+```
+  AA
+AA  AA
+AA  AA
+  AA
+AA  AA
+AA  AA
+  AA
+
+  BBB
+BB   BB
+BB   BB
+  BBB
+BB   BB
+BB   BB
+BB   BB
+  BBB
+
+```
+
+
+水题。。多想想就出来了。
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		int f=0;
+		while (t-- > 0) {
+			String s = sc.next();
+			int n = sc.nextInt();
+			if (f!=0) {
+				System.out.println();
+			}
+			int m = (int) n / 6 + 1;
+			// System.out.println(m);//m+2
+			int h = n - 3;
+			h = h / 2 + 1;
+			int p=h;
+			if(n%2!=0){
+				h--;
+			}
+			for (int i = 0; i < n; i++) {
+				if (i == 0 || i == n - 1 || i == p) {
+					for (int k = 0; k < m + h; k++) {
+						if (k < m) {
+							System.out.print(" ");
+						} else {
+							System.out.print(s);
+						}
+					}
+					System.out.println();
+				} else {
+					for (int k = 0; k < 2 * m + h; k++) {
+						if (k < m || k >= m + h) {
+							System.out.print(s);
+						} else {
+							System.out.print(" ");
+						}
+					}
+					System.out.println();
+				}
+			}
+			f=1;
+		}
+	}
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

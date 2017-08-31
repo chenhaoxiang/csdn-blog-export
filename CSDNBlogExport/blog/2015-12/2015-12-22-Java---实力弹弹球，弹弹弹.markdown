@@ -1,0 +1,186 @@
+---
+layout: post
+title: "Java---实力弹弹球，弹弹弹"
+date: 2015-12-22 10:59:23 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 直接上代码了。 
+微调按钮加画布画几个圆，再实现监听。。。package cn.hncu.threadDemo.thread2;import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionL 
+---
+
+
+直接上代码了。 
+微调按钮加画布画几个圆，再实现监听。。。package cn.hncu.threadDemo.thread2;import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionL
+<!-- more -->
+----------
+
+直接上代码了。
+微调按钮加画布画几个圆，再实现监听。。。
+
+```
+package cn.hncu.threadDemo.thread2;
+
+import java.awt.Canvas;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JSpinner;
+import javax.swing.Timer;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+public class BallsJFrame extends JFrame implements ChangeListener{
+	private BallsCanvas ball;
+	private JSpinner spinner;
+	
+	public BallsJFrame(){
+		super("弹弹球");
+		this.setBounds(300, 200, 400, 300);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		Color colors[] = {Color.red,Color.green,Color.blue,Color.magenta,Color.cyan};
+		
+		ball = new BallsCanvas(colors,100);
+		this.getContentPane().add(ball);//默认是CENTER位置
+		
+		JPanel panel = new JPanel();
+		this.getContentPane().add(panel,"South");
+		panel.add(new JLabel("Delay"));
+		spinner = new JSpinner();
+		spinner.setValue(100);
+		
+		panel.add(spinner);
+		
+		spinner.addChangeListener(this);
+		
+		this.setVisible(true);
+	}
+	@Override
+	public void stateChanged(ChangeEvent e) {
+		int value = Integer.parseInt(""+spinner.getValue());
+		ball.setDelay(value);
+	}
+	
+	
+	public static void main(String[] args) {
+		new BallsJFrame();
+	}
+
+}
+
+class BallsCanvas extends Canvas implements ActionListener, FocusListener{
+	private Ball balls[];//存放所有的球
+	private Timer timer;//javax.swing.Timer
+	
+	public BallsCanvas(Color colors[] ,int delay){
+		this.balls = new Ball[colors.length];
+		for(int i=0,x=40;i<colors.length;i++,x+=20){
+			this.balls[i] = new Ball(x,x,colors[i]);
+			
+		}
+		
+		//让当前画布监听 焦点事件
+		this.addFocusListener(this);
+		
+		
+		timer = new Timer(delay,this);
+		timer.start();
+		
+	}
+	
+	public void setDelay(int delay){
+		timer.setDelay(delay);
+	}
+
+
+	@Override
+	public void paint(Graphics g) {
+		for(int i=0;i<this.balls.length;i++){
+			g.setColor(balls[i].color);
+			
+			
+			//让每个球的坐标变化一下---（x坐标）
+			balls[i].x = balls[i].left ? balls[i].x-10:balls[i].x+10;
+			//当球碰壁时，更改球的方向
+			if(balls[i].x<=0||balls[i].x>=this.getWidth()-24){
+				balls[i].left = !balls[i].left;//切换方向
+			}
+			
+			//让每个球的坐标变化一下---（y坐标）
+			balls[i].y = balls[i].up ? balls[i].y-10:balls[i].y+10;
+			//当球碰壁时，更改球的方向
+			if(balls[i].y<=0||balls[i].y>=this.getHeight()-22){
+				balls[i].up = !balls[i].up;//切换方向
+			}
+			
+			
+			
+			g.fillOval(balls[i].x, balls[i].y, 20, 20);
+		}
+	}
+	
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		//System.out.println("aaa");
+		repaint();//刷新画布.调用paint(Graphics g)
+	}
+	
+	
+
+	@Override
+	public void focusGained(FocusEvent e) {
+		timer.stop();
+	}
+
+	@Override
+	public void focusLost(FocusEvent e) {
+		timer.restart();
+		
+	}
+
+	
+	
+	
+	private static class Ball{
+		int x,y;
+		boolean up,left;
+		Color color;
+		public Ball(int x, int y, Color color) {
+			this.x = x;
+			this.y = y;
+			this.color = color;
+			up = left = false;
+		}
+		
+	}
+
+
+	
+
+}
+```  
+![](http://img.blog.csdn.net/20151222225803052)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

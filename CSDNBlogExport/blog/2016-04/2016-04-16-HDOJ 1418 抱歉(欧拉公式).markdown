@@ -1,0 +1,94 @@
+---
+layout: post
+title: "HDOJ 1418 抱歉(欧拉公式)"
+date: 2016-04-16 06:09:10 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+非常抱歉，本来兴冲冲地搞一场练习赛，由于我准备不足，出现很多数据的错误，现在这里换一个简单的题目：前几天在网上查找ACM资料的时候，看到一个中学的奥数题目，就是不相交的曲线段分割平面的问题，我已经发到论坛，并且lxj 已经得到一个结论，这里就不多讲了，下面有一个类似的并且更简单的问题：如果平面上有n个点，并且每个点至少有2条曲线段和它相连，就是说，每条曲线都 
+---
+
+
+Problem Description 
+非常抱歉，本来兴冲冲地搞一场练习赛，由于我准备不足，出现很多数据的错误，现在这里换一个简单的题目：前几天在网上查找ACM资料的时候，看到一个中学的奥数题目，就是不相交的曲线段分割平面的问题，我已经发到论坛，并且lxj 已经得到一个结论，这里就不多讲了，下面有一个类似的并且更简单的问题：如果平面上有n个点，并且每个点至少有2条曲线段和它相连，就是说，每条曲线都
+<!-- more -->
+----------
+
+Problem Description
+非常抱歉，本来兴冲冲地搞一场练习赛，由于我准备不足，出现很多数据的错误，现在这里换一个简单的题目：
+
+前几天在网上查找ACM资料的时候，看到一个中学的奥数题目，就是不相交的曲线段分割平面的问题，我已经发到论坛，并且lxj 已经得到一个结论，这里就不
+
+多讲了，下面有一个类似的并且更简单的问题：
+
+如果平面上有n个点，并且每个点至少有2条曲线段和它相连，就是说，每条曲线都是封闭的，同时，我们规定：
+1）所有的曲线段都不相交；
+2）但是任意两点之间可以有多条曲线段。
+
+如果我们知道这些线段把平面分割成了m份，你能知道一共有多少条曲线段吗？
+
+ 
+
+Input
+输入数据包含n和m，n=0,m=0表示输入的结束，不做处理。
+所有输入数据都在32位整数范围内。
+ 
+
+Output
+输出对应的线段数目。
+ 
+
+Sample Input
+3 2
+0 0
+ 
+
+Sample Output
+3
+
+
+欧拉公式的应用：
+欧拉公式:
+简单多面体的顶点数V、面数F及棱数E间有关系　
+V+F-E=2
+(此题：顶点+面数-2=棱数)
+可以自己推导一下！
+试想一下，n个点围成一个封闭的图形，这个时候正好分成2个面。
+这个时候的线段就是n条。
+如果需要加一个面，则线段需要加一条。
+
+所以呢，输入n个点，分成m个面，就可以推导出，线段就是n-2+m了。
+
+
+注意：n+m是会超int范围的！
+
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		while(sc.hasNext()){
+			long n = sc.nextLong();
+			long m = sc.nextLong();
+			if(n==0&&m==0){
+				return;
+			}
+			System.out.println(n+m-2);
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

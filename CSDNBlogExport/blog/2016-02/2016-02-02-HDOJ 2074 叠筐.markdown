@@ -1,0 +1,152 @@
+---
+layout: post
+title: "HDOJ 2074 叠筐"
+date: 2016-02-02 04:58:01 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+需要的时候，就把一个个大小差一圈的筐叠上去，使得从上往下看时，边筐花色交错。这个工作现在要让计算机来完成，得看你的了。Input 
+输入是一个个的三元组，分别是，外筐尺寸n（n为满足0< n< 80的奇整数），中心花色字符，外筐花色字符，后二者都为ASCII可见字符；Output 
+输出叠在一起的筐图案，中心花色与外筐花色字符从内层起交错相叠，多筐相叠时，最 
+---
+
+
+Problem Description 
+需要的时候，就把一个个大小差一圈的筐叠上去，使得从上往下看时，边筐花色交错。这个工作现在要让计算机来完成，得看你的了。Input 
+输入是一个个的三元组，分别是，外筐尺寸n（n为满足0< n< 80的奇整数），中心花色字符，外筐花色字符，后二者都为ASCII可见字符；Output 
+输出叠在一起的筐图案，中心花色与外筐花色字符从内层起交错相叠，多筐相叠时，最
+<!-- more -->
+----------
+
+Problem Description
+需要的时候，就把一个个大小差一圈的筐叠上去，使得从上往下看时，边筐花色交错。这个工作现在要让计算机来完成，得看你的了。
+ 
+
+Input
+输入是一个个的三元组，分别是，外筐尺寸n（n为满足0< n< 80的奇整数），中心花色字符，外筐花色字符，后二者都为ASCII可见字符；
+ 
+
+Output
+输出叠在一起的筐图案，中心花色与外筐花色字符从内层起交错相叠，多筐相叠时，最外筐的角总是被打磨掉。叠筐与叠筐之间应有一行间隔。
+ 
+
+```
+Sample Input
+11 B A
+5 @ W
+ 
+
+Sample Output
+ AAAAAAAAA 
+ABBBBBBBBBA
+ABAAAAAAABA
+ABABBBBBABA
+ABABAAABABA
+ABABABABABA
+ABABAAABABA
+ABABBBBBABA
+ABAAAAAAABA
+ABBBBBBBBBA
+ AAAAAAAAA 
+
+ @@@ 
+@WWW@
+@W@W@
+@WWW@
+ @@@ 
+
+```
+
+水题一个！不过有点坑，注意输出之间有空行，是之间！
+还有4个角是空格！
+另外，n==1时，需要输出第一个字符！
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        boolean isOne = true;
+        Scanner sc = new Scanner(System.in);
+        while(sc.hasNext()){
+            int n = sc.nextInt();
+            String a1 = sc.next();
+            char[] a = a1.toCharArray();
+            String a2 = sc.next();
+            char[] b = a2.toCharArray();
+            if(isOne){
+                    isOne=false;
+                }else{
+                    System.out.println();
+                }
+                
+            if(n==1){
+                
+                System.out.println(a[0]);
+                continue;
+            }
+            
+            //            System.out.println(a[0]);
+            //            System.out.println(b[0]);
+            char[][] min = new char[n][n];
+
+            if(n/2%2==0){
+                for(int m=0;m<n/2+1;m++){
+                    for(int i=m;i<n-m;i++){
+                        for(int j=m;j<n-m;j++){
+                            if(m%2==0){
+                                min[i][j]=a[0];
+                            }else{
+                                min[i][j]=b[0];
+                            }
+                        }
+                    }
+                }
+            }else{
+                for(int m=0;m<n/2+1;m++){
+                    for(int i=m;i<n-m;i++){
+                        for(int j=m;j<n-m;j++){
+                            if(m%2==0){
+                                min[i][j]=b[0];
+                            }else{
+                                min[i][j]=a[0];
+                            }
+                        }
+                    }
+                }
+            }
+            min[0][0] = ' ';
+            min[0][n-1] = ' ';
+            min[n-1][0] = ' ';
+            min[n-1][n-1] = ' ';
+            
+        
+            
+            
+            for(int i=0;i<n;i++){
+                for(int j=0;j<n;j++){
+                    System.out.print(min[i][j]);
+                }
+                System.out.println();
+            }
+            
+            
+            
+            
+            
+        }
+    }
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,228 @@
+---
+layout: post
+title: "CSS---网络编程"
+date: 2016-05-26 01:12:01 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅,----- ----- HTML/CSS/JS网络编程
+tags: [html,网络编程,css]
+keyword: 陈浩翔, 谙忆
+description: CSS概述CSS是层叠样式表（Cascading Style Sheets）用来定义网页的显示效果。可以解决html代码对样式定义的重复，提高了后期样式代码的可维护性，并增强了网页的显示效果功能。简单一句话：CSS将网页内容和显示样式进行分离，提高了显示功能。 
+那么CSS和HTML是如何在网页代码中相结合的呢？通过四种方式：style属性 、style标签、导入和链接。CSS与HTML相结合的四种 
+---
+
+
+CSS概述CSS是层叠样式表（Cascading Style Sheets）用来定义网页的显示效果。可以解决html代码对样式定义的重复，提高了后期样式代码的可维护性，并增强了网页的显示效果功能。简单一句话：CSS将网页内容和显示样式进行分离，提高了显示功能。 
+那么CSS和HTML是如何在网页代码中相结合的呢？通过四种方式：style属性 、style标签、导入和链接。CSS与HTML相结合的四种
+<!-- more -->
+----------
+
+CSS概述
+=====
+
+CSS是层叠样式表（Cascading Style Sheets）用来定义网页的显示效果。可以解决html代码对样式定义的重复，提高了后期样式代码的可维护性，并增强了网页的显示效果功能。简单一句话：CSS将网页内容和显示样式进行分离，提高了显示功能。
+那么CSS和HTML是如何在网页代码中相结合的呢？通过四种方式：style属性 、style标签、导入和链接。
+
+
+CSS与HTML相结合的四种方式
+================
+
+**☆ 1、style属性方式** 
+这种方式很少用，因为还是和HTML差不多。
+一般用后面3种。
+```
+<p style="background-color:#FF0000; color:#FFFFFF">
+    p标签段落内容。 
+</p>
+```
+
+**☆ 2、style标签方式** 
+```
+<style type=”text/css”>
+    p { color:#FF0000;}
+</style>
+```
+
+**☆ 3、导入方式** 
+```
+<style type="text/css">
+     @import url(myDiv.css)
+</style>
+```
+
+**☆ 4、链接方式** 
+
+```
+<link rel="stylesheet" type="text/css" href="css_3.css" media="screen" /> 
+```
+
+
+相关语法
+====
+
+**☆样式优先级** 
+
+由上到下，由外到内。优先级由低到高。——总之，一般情况是以后加载为主，但还有细节优先级问题（后面会讲到）。
+
+**☆CSS代码格式** 
+
+选择器名称 { 属性名：属性值；属性名：属性值；…….}
+
+属性与属性之间用 分号 隔开
+属性与属性值直接按用 冒号 连接
+如果一个属性有多个值的话，那么多个值用 空格 隔开。
+
+
+选择器
+===
+就是指定CSS要作用的标签，那个标签的名称就是选择器。意为：选择哪个容器（标签本身就是封装数据的容器）。
+
+**☆选择器共有三种：**
+
+1) html标签名选择器。使用的就是html的标签名。
+(也就是直接用html中的标签)
+2) class选择器。其实使用的是标签中的class属性。
+(前面加：# )
+3) id选择器。其实使用的是标签的中的id属性。
+(前面加：. )
+
+每一个标签都定义了class属性和id属性。用于对标签进行标识，方便对标签进行操作。
+在定义的中，多个标签的class属性值可以相同，而id值要唯一，因为JavaScript中经常用。
+
+ **☆选择器的优先级** 
+标签名选择器  <  class选择器  <  id选择器  < style属性 
+
+
+扩展选择器
+=====
+
+**☆关联选择器** 
+
+标签是可以嵌套的，要让相同标签中的不同标签显示不同样式，就可以用此选择器。例如： 
+
+```
+p { color:#00FF00;}
+p b { color:#FF000;}
+<p>P标签<b>湖南城市学院</b>段落样式</p>
+<p>P标签段落</p> 
+```
+设置P标签。
+设置P标签中的b标签。
+
+**☆组合选择器** 
+
+对多个选择器进行相同样式的定义。例如，我们想对“div中的<b>标签”和“类名为cc”的区域设置相同的样式，则可以定义如下的组合选择器： 
+
+```
+.cc, div b{/*不同选择器之间用逗号分开*/
+  background-color:#0000ff;
+  color:#fff;
+} 
+```
+设置id="cc"的标签和div标签下的b标签。
+
+
+**☆伪元素选择器**
+
+其实就在html中预先定义好的一些选择器，称为伪元素。
+
+格式：标签名:伪元素。类名 标签名。类名:伪元素。
+
+
+超链接a标签中的伪元素：
+
+a:link  超链接未点击状态。
+a:visited 被访问后的状态。
+a:hover 光标移到超链接上的状态（未点击）。
+a:active 点击超链接时的状态。
+
+
+段落p标签中的伪元素：
+p:first-line 段落的第一行文本。
+p:first-letter 段落中的第一个字母。
+
+自定义伪元素：
+
+:focus 具有焦点的元素（其实有点类似点击后的监听）
+```
+div:hover{
+    background-color:#f00;
+    color:#fff;
+  }
+```
+
+
+CSS的盒子模型
+========
+
+**◇边框(border)**
+上 border-top
+下 border-bottom
+左 border-left
+右 border-right
+
+**◇内补丁(Paddings)：内边距**
+上  padding-top
+下  padding-bottom
+左  padding-left
+右  padding-right
+
+**◇外补丁(Margins)：外边距**
+上  margin-top
+下  margin-bottom
+左  margin-left
+右  margin-right
+
+
+![](http://img.blog.csdn.net/20160526130237454)
+
+边框(border)---这个元素内容的封闭图形的边界
+内补丁(Paddings)：内边距---自己这个元素边界距离自己内容文字的距离
+外补丁(Margins)：外边距---自己这个元素的边界距离另一个元素的边界（边框）的距离
+
+
+**☆CSS布局——漂浮** 
+
+◇ float : none | left | right
+none :　默认值。对象不飘浮
+left :　文本流向对象的右边
+（本对象流向左边）
+right :　文本流向对象的左边
+（本对象流向右边）
+
+◇ clear : none | left | right | both
+none :　 默认值。允许两边都可以有浮动对象 
+left :　 不允许左边有浮动对象 
+right :　 不允许右边有浮动对象 
+both :　 不允许有浮动对象
+
+（如果不允许浮动对象，且正好有一个对象漂浮过来，需要占这个对象一行位置，则这个对象移动，给那个漂浮过来的对象让出一行位置，让他们不会重叠）
+
+
+**☆CSS布局——定位** 
+◇ position : static | absolute | fixed | relative 
+static :　 默认值。无特殊定位，对象遵循HTML定位规则。 
+absolute : 将对象从文档流中拖出，使用 left ， right ， top ， bottom 等属性相对于其最接近的一个最有定位设置的父对象进行绝对定位。如果不存在这样的父对象，则依据 body 对象。而其层叠通过 z-index 属性定义。
+fixed :　 未支持。对象定位遵从绝对(absolute)方式。但是要遵守一些规范。 
+relative :　对象不可层叠，但将依据 left ， right ， top ， bottom 等属性在正常文档流中偏移位置。
+
+absolute ---绝对定位。
+如果某个对象用了绝对定位，其实就相当于这个对象漂浮在另一个层面（重叠），而原来层面上自己占的位置被其他模块覆盖。
+
+relative ---相对定位。
+如果某个对象用了相对定位，也相当于这个对象漂浮在另一个层面（重叠），但是原来层面上自己占的位置不会被其他模块覆盖。
+
+
+
+☆CSS布局——图文混排 
+☆CSS布局——图像签名 
+（这2个方式的实现其实就是用了盒子模型，绝对定位或相对定位来实现的）
+
+
+CSS还有很多知识点，可以多写写，看看API就熟悉了，基本语法也就这么多~~
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

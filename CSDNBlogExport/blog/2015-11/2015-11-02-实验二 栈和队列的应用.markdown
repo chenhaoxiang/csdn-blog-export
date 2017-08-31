@@ -1,0 +1,246 @@
+---
+layout: post
+title: "实验二 栈和队列的应用"
+date: 2015-11-02 09:37:39 +0800
+comments: true
+categories:❸ C/C++语言基础,----- 数据结构
+tags: [栈,应用,代码,设计,数据]
+keyword: 陈浩翔, 谙忆
+description: 实验目的 
+本次实验的目的在于使学生深入了解栈和队列的特征，掌握在实际问题背景下的灵活运用。 
+实验要求 
+正确设计和实现本程序，记录输出结果。 
+实验内容 
+1．队列的各种基本操作实现。 
+2．十进制数向N进制数据的转换。（栈的应用）附：代码#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define OVERFLOW 0
+# 
+---
+
+
+实验目的 
+本次实验的目的在于使学生深入了解栈和队列的特征，掌握在实际问题背景下的灵活运用。 
+实验要求 
+正确设计和实现本程序，记录输出结果。 
+实验内容 
+1．队列的各种基本操作实现。 
+2．十进制数向N进制数据的转换。（栈的应用）附：代码#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define OVERFLOW 0
+#
+<!-- more -->
+----------
+
+实验目的
+本次实验的目的在于使学生深入了解栈和队列的特征，掌握在实际问题背景下的灵活运用。
+实验要求
+正确设计和实现本程序，记录输出结果。
+实验内容
+1．队列的各种基本操作实现。
+2．十进制数向N进制数据的转换。（栈的应用）
+
+附：代码
+
+```
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#define OVERFLOW 0
+#define OK 1
+#define ERROR 0
+//顺序栈的定义
+#define STACK_INIT_SIZE 100//存储空间初始分配量
+#define STACKINCREMENT 20
+//存储空间分配增量
+typedef int SElemType;
+ //SElemType可以是任何相应的数据类型如int,float或char
+typedef struct{
+        SElemType*base;
+        //*base指向数组向量
+        SElemType*top;
+        int stacksize;
+        //栈的当前可使用的最大容量
+}SqStack;
+//-------------------------
+//初始化顺序栈
+int InitStack(SqStack *S){
+    //在此插入必要的语句
+    S->base=(SElemType *) malloc(STACK_INIT_SIZE*sizeof(SElemType));
+    if(!S->base)
+      exit(OVERFLOW);
+    S->top = S->base;
+    S->stacksize = STACK_INIT_SIZE;
+    return OK;
+}
+//------------------------
+//插入元素e为新的栈顶元素
+void Push(SqStack *S,SElemType e){
+    //栈满，追加存储空间
+    //printf("####%d ",e);
+    if(S->top-S->base>=S->stacksize){
+       S->base=(SElemType *) realloc(S->base , (S->stacksize + STACKINCREMENT)*sizeof(SElemType));
+       if(!S->base)
+          exit(OVERFLOW);
+       S->top = S->base+S->stacksize;
+       S->stacksize = S->stacksize + STACKINCREMENT;
+    }
+    *(S->top)++ = e;
+     //printf("****%d ",e);
+}
+//---------------------
+int Pop(SqStack *S){//若栈不空，则删除S的栈顶元素，并将其值返回。若栈空，返回ERROR
+    //若栈不空，则删除栈顶元素，用e返回其值
+    if(S->top==S->base)
+     return ERROR;
+    return *--(S->top);
+}
+//--------------
+void PrintStack(SqStack *S){//顺序打印栈内元素值
+    int k;
+    for(k=0;k<S->top-S->base;k++)
+    printf("%d",S->base[k]);
+}
+int main(){
+    SqStack *S;
+    int i,e,n;
+    /**(初始化)函数申明
+    int InitStack(SqStack &S);
+    //（进栈）函数申明
+    void Push(SqStack &S,SelemType e);
+    //(出栈)函数申明
+    int Pop(SqStck &s);
+    //(打印站内数据)函数申明
+    void PrintStack(SqStack &S);
+    //初始化栈
+    **/
+    printf("进栈元素数量n\n");
+    int n1;
+    scanf("%d",&n1);
+    n=n1;
+    InitStack(S);
+
+    //欲建立的顺序表长度，调试阶段用指定数据，调试完后改用scanf（）
+    //
+    //scanf("%d",&n);
+    printf("请输入%d个时栈元素值：",n);
+    for(i=1;i<=n;i++){
+        scanf("%d",&e);
+        Push(S,e);
+    }
+    printf("进栈元素依次如下：\n");
+    PrintStack(S);
+    printf("\n");
+    //欲出栈元素个数，调试阶段用指定数据，调试完后赋值
+    n=2;
+    //printf("出栈元素数量n\n");
+    //scanf("%d",&n);
+    printf("\n出栈元素值依次为：\n");
+    for(i=1;i<=n;i++){
+        e=Pop(S);
+        if(e)
+        printf("%d",e);
+    }
+    printf("\n");
+    printf("栈内元素为 : \n");
+    PrintStack(S);
+}
+
+```
+
+
+二进制转换为十进制代码（栈的实现）：
+请用c：
+```
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <math.h>
+#define STACK_INIT_SIZE 20
+#define STACKINCREMENT 10
+typedef char ElemType ;
+typedef struct{
+    ElemType *base;
+    ElemType *top;
+    int stacksize;
+}sqStack;
+
+initStack(sqStack *s){
+    ///内存中开辟一段连续空间作为栈空间，首地址赋值给s->base
+    s->base=(ElemType *)malloc(STACK_INIT_SIZE *sizeof(ElemType));
+    if(!s->base) exit(0);///分配空间失败
+    s->top = s->base; ///最开始，栈顶就是栈底
+    s->stacksize = STACK_INIT_SIZE;
+}
+Push(sqStack *s,ElemType e){
+    if(s->top - s->base >= s->stacksize){
+        ///栈满，追加空间
+        s->base =(ElemType *)realloc(s->base,(s->stacksize+STACKINCREMENT)*sizeof(ElemType));
+        ///分配失败
+        if(!s->base)exit(0);
+        s->top=s->base+s->stacksize;
+        ///设置栈的最大容量
+        s->stacksize=s->stacksize + STACKINCREMENT ;
+        }
+        *(s->top)=e;
+        ///放入数据
+        s->top++;
+        ///top指向下个地址
+}
+int StackLen(sqStack s){
+    return (s.top-s.base);
+}
+Pop(sqStack *s,ElemType *e){
+    if(s->top==s->base) return ;
+    *(s->top--);
+    *e=*(s->top);
+    ///*e=*--s->top;
+}
+DestroyStack(sqStack *s){
+    free(s->base);
+    ///释放掉内存空间
+    s->base = s->top = NULL;
+    ///栈底栈顶指针置NULL
+    s->stacksize = 0;
+    ///设置栈的最大容量为0
+}
+
+int main(){
+    ElemType c;
+    sqStack s;
+    int len,i,sum=0;
+    printf("Please input a Binary digit（输入二进制数，以‘#’结束）：\n");
+    initStack(&s);
+    ///创建一个栈，用来存放二进制字符串
+    ///输入0/1字符表示的二进制数，以#结束
+    scanf("%c",&c);
+    while(c!='#'){
+        Push(&s,c);
+        scanf("%c",&c);
+    }
+    getchar();
+    ///得到栈中的元素个数，即二进制数的长度
+    len = StackLen(s);
+    for(i=0;i<len;i++){
+        Pop(&s,&c);
+        sum+=(c-48)*pow(2,i);
+        ///转换为十进制
+    }
+    printf("Decimal is %d\n",sum);
+    DestroyStack(&s);
+    ///释放栈空间
+    getchar();
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

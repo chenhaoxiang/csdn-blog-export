@@ -1,0 +1,86 @@
+---
+layout: post
+title: "HDOJ 2030 汉字统计"
+date: 2016-01-22 03:29:47 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+统计给定文本文件中汉字的个数。Input 
+输入文件首先包含一个整数n，表示测试实例的个数，然后是n段文本。Output 
+对于每一段文本，输出其中的汉字的个数，每个测试实例的输出占一行。[Hint:]从汉字机内码的特点考虑~Sample Input 
+2 
+WaHaHa! WaHaHa! 今年过节不说话要说只说普通话WaHaHa! WaHaHa! 
+马上就 
+---
+
+
+Problem Description 
+统计给定文本文件中汉字的个数。Input 
+输入文件首先包含一个整数n，表示测试实例的个数，然后是n段文本。Output 
+对于每一段文本，输出其中的汉字的个数，每个测试实例的输出占一行。[Hint:]从汉字机内码的特点考虑~Sample Input 
+2 
+WaHaHa! WaHaHa! 今年过节不说话要说只说普通话WaHaHa! WaHaHa! 
+马上就
+<!-- more -->
+----------
+
+Problem Description
+统计给定文本文件中汉字的个数。
+ 
+
+Input
+输入文件首先包含一个整数n，表示测试实例的个数，然后是n段文本。
+ 
+
+Output
+对于每一段文本，输出其中的汉字的个数，每个测试实例的输出占一行。
+
+[Hint:]从汉字机内码的特点考虑~
+
+
+ 
+
+Sample Input
+2
+WaHaHa! WaHaHa! 今年过节不说话要说只说普通话WaHaHa! WaHaHa!
+马上就要期末考试了Are you ready?
+ 
+
+Sample Output
+14
+9
+ 
+
+```
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String args[]){
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        sc.next();
+        while(n-->0){
+            int m=0;
+            String strs = sc.nextLine();
+            char[] strc = new char[strs.length()];
+            strc = strs.toCharArray();
+            for(int i=0;i<strc.length;i++){
+                if(strc[i]>128){
+                    m++;
+                }
+            }
+            System.out.println(m);
+        }
+    }
+}    
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

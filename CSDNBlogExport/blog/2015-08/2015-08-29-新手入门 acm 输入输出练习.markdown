@@ -1,0 +1,608 @@
+---
+layout: post
+title: "新手入门 acm 输入输出练习"
+date: 2015-08-29 05:20:51 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-C++,----- HDOJ-JAVA,❻ 其他,----- 好文/知识点
+tags: [HDOJ,杭电]
+keyword: 陈浩翔, 谙忆
+description: A + B Problem（1000）
+Time Limit: 2000/1000 MS (Java/Others)   
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 355051    Accepted Submission(s): 110841
+Problem Description
+Calculate 
+---
+
+
+A + B Problem（1000）
+Time Limit: 2000/1000 MS (Java/Others)   
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 355051    Accepted Submission(s): 110841
+Problem Description
+Calculate
+<!-- more -->
+----------
+
+
+<div id="cnblogs_post_body" style="margin:0px 0px 20px; padding:0px; word-break:break-word; color:rgb(73,73,73); font-size:14px; line-height:22px">
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A &#43; B Problem（1000）</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 355051&nbsp;&nbsp;&nbsp; Accepted Submission(s): 110841</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Calculate&nbsp;<span style="margin:0px; padding:0px">A &#43; B</span>.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Each line will contain two integers&nbsp;<span style="margin:0px; padding:0px">A</span>&nbsp;and&nbsp;<span style="margin:0px; padding:0px">B</span>. Process to end of file.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each case, output&nbsp;<span style="margin:0px; padding:0px">A &#43; B</span>&nbsp;in one line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+1 1</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+2</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1000" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1000</a></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+<span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：每一行输入包含两个整数a和b，每个案例输出a&#43;b的&#20540;，在一行；</span></span></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+<span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">详见代码，</span></span></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> a,b,sum;
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;a,&amp;b)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {<br style="margin:0px; padding:0px">　　　　　sum</span>=a&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">b;
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">Sum Problem（1001）</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 1000/500 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 237995&nbsp;&nbsp;&nbsp; Accepted Submission(s): 58229</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Hey, welcome to HDOJ(Hangzhou Dianzi University Online Judge).<br style="margin:0px; padding:0px">
+In this problem, your task is to calculate SUM(n) = 1 &#43; 2 &#43; 3 &#43; ... &#43; n.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">The input will consist of a series of integers n, one integer per line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each case,&nbsp;<span style="margin:0px; padding:0px; color:rgb(0,0,255)">output SUM(n) in one line,</span>&nbsp;<span style="margin:0px; padding:0px; color:rgb(255,0,0)">followed by a blank line.</span>&nbsp;You
+ may assume the result will be in the range of 32-bit signed integer.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">1</div>
+<div style="margin:0px; padding:0px">100</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">1</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">5050</div>
+</div>
+</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1001" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1001</a></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;<span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：每行将输入一个整数n，对于每个案例,输出SUM(n) = 1 &#43; 2 &#43; 3 &#43;&nbsp; ... &#43; n<span style="margin:0px; padding:0px; color:rgb(0,0,255)">&lt;求1到n的和&gt;&nbsp;</span><span style="margin:0px; padding:0px; color:rgb(255,0,0)"><span style="margin:0px; padding:0px; color:rgb(0,0,255)">在一行,</span>紧随其后的是一个空行。</span></span></span></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+&nbsp;</div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+<span style="margin:0px; padding:0px; color:rgb(0,255,255); font-size:14pt"><span style="margin:0px; padding:0px">其他的就没什么可以注意的了。</span></span></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+<span style="margin:0px; padding:0px; color:rgb(0,0,0)"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt">详见代码：</span></span></span></div>
+<div style="margin:0px; padding:0px; font-family:'Courier New',Courier,monospace">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> n,i,sum;
+
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;n)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {
+            </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">for</span>(sum=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span>,i=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span>;i&lt;=n;i&#43;&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">)
+            sum</span>=sum&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">i;
+            printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (I)（1089）</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 68193&nbsp;&nbsp;&nbsp; Accepted Submission(s): 37929</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to Calculate a &#43; b. Too easy?! Of course! I specially designed the problem for acm beginners. You must have found that some problems have the same titles with this one, yes, all these problems
+ were designed for the same aim.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">The input will consist of a series of pairs of integers a and b, separated by a space, one pair of integers per line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each pair of input integers a and b you should output the sum of a and b in one line, and with one line of output for each line in input.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">1 5</div>
+<div style="margin:0px; padding:0px">10 20</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">6</div>
+<div style="margin:0px; padding:0px">30</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：输入整数a和b,用空&#26684;分隔,每行一对整数。对于每一对输入整数a和b你应该输出他们的总和,输入a和b占在一行,输出占一行。</span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">貌&#20284;和1000是一样的，o(∩_∩)o 哈哈！</span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> a,b,sum;
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;a,&amp;b)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {<br style="margin:0px; padding:0px">　　　　 sum</span>=a&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">b;
+    　　printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (II)（1090）</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 51355&nbsp;&nbsp;&nbsp; Accepted Submission(s): 33780</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to Calculate a &#43; b.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Input contains an integer N in the first line, and then N lines follow. Each line consists of a pair of integers a and b, separated by a space, one pair of integers per line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each pair of input integers a and b you should output the sum of a and b in one line, and with one line of output for each line in input.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">2</div>
+<div style="margin:0px; padding:0px">1 5</div>
+<div style="margin:0px; padding:0px">10 20</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">6</div>
+<div style="margin:0px; padding:0px">30</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1090" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1090</a></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：输入包含一个整数N在第一行,然后有N数据。每一行包含一对整数a和b,用空&#26684;分隔,每行一对整数。</span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">&nbsp;&nbsp;&nbsp;&nbsp; 对于每一对输入整数a和b你应该输出的总和,a和b在一行,输出输入各占一行。</span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">比较1089，在1089的基础上多了一个控制输入测试的组数N，其他的一样。有木有。</span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">详见代码；</span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> a,b,t,sum;
+    scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">t);   
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(t--<span style="margin:0px; padding:0px; line-height:1.5!important">)
+    {
+        scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;a,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">b);
+        sum</span>=a&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">b;
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (III)（1091）</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 60600&nbsp;&nbsp;&nbsp; Accepted Submission(s): 31168</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to Calculate a &#43; b.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Input contains multiple test cases. Each test case contains a pair of integers a and b, one pair of integers per line.&nbsp;<span style="margin:0px; padding:0px; color:rgb(255,0,0)">A test case containing
+ 0 0 terminates the input and this test case is not to be processed.</span></div>
+<div class="panel_bottom" style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">&nbsp;</span></div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each pair of input integers a and b you should output the sum of a and b in one line, and with one line of output for each line in input.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">1 5</div>
+<div style="margin:0px; padding:0px">10 20</div>
+<div style="margin:0px; padding:0px">0 0</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">6</div>
+<div style="margin:0px; padding:0px">30</div>
+<div style="margin:0px; padding:0px"><br style="margin:0px; padding:0px">
+ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1091" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1091</a></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：输入包含多个测试用例。每个测试用例包含一对整数a和b,一对整数占一行。<span style="margin:0px; padding:0px; color:rgb(255,0,0)">当输入测试用例为0 0时，终止输入和测试用例是不被处理。</span>对于每一对输入整数a和b你应该输出他们的总和,a和b在一行,输出在一行。</span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">比较1091，不一样的地方就是结束输入的条件不一样，其他的不变，有木有。</span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">详见代码：</span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> a,b,sum;
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;a,&amp;b)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">if</span>(a==<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span>&amp;&amp;b==<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span>)<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">break</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        sum</span>=a&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">b;
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+        
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (IV)</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 53974&nbsp;&nbsp;&nbsp; Accepted Submission(s): 28848</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to Calculate the sum of some integers.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Input contains multiple test cases. Each test case contains a integer N, and then N integers follow in the same line. A test case starting with 0 terminates the input and this test case is not to be
+ processed.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each group of input integers you should output their sum in one line, and with one line of output for each line in input.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">4 1 2 3 4</div>
+<div style="margin:0px; padding:0px">5 1 2 3 4 5</div>
+<div style="margin:0px; padding:0px">0</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">10</div>
+<div style="margin:0px; padding:0px">15</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1092" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1092</a></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：输入包含多个测试用例。每个测试用例包含一个整数N,然后在同一行输入N个整数,。当测试用例是0时，终止输入和测试用例是不被处理。每组输出整数之和占一行,即，一行输入一行输出。</span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">比较前面几题，这题稍微有点区别但变幻不大，N用来控制整数的个数。然后最后以0结束测试，</span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">详见代码：</span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span> a[<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">100</span><span style="margin:0px; padding:0px; line-height:1.5!important">],t,i,sum;
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;t)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">if</span>(t==<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">)
+            </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">break</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        sum</span>=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">for</span>(i=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">1</span>;i&lt;=t;i&#43;&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">)
+        {
+            scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i]);        
+            sum</span>=sum&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i];
+        }
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (V)</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 39483&nbsp;&nbsp;&nbsp; Accepted Submission(s): 26698</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to calculate the sum of some integers.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Input contains an integer N in the first line, and then N lines follow. Each line starts with a integer M, and then M integers follow in the same line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each group of input integers you should output their sum in one line, and with one line of output for each line in input.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">2</div>
+<div style="margin:0px; padding:0px">4 1 2 3 4</div>
+<div style="margin:0px; padding:0px">5 1 2 3 4 5</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">10</div>
+<div style="margin:0px; padding:0px">15</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1093" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1093</a></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0); font-size:14pt"><span style="margin:0px; padding:0px">题意：输入包含一个整数N在第一行,然后有N行测试用例，每一行都始于一个整数M,然后有M整数在同一个行。</span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0); font-size:14pt"><span style="margin:0px; padding:0px">每组输出整数之和且输出占一行,一行输入一行输出。</span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0); font-size:14pt"><span style="margin:0px; padding:0px">反思：是不是前两题的集合体哈，再仔细看看就知道了。有木有！</span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0); font-size:14pt"><span style="margin:0px; padding:0px">详见代码：</span></span></div>
+</div>
+</div>
+</div>
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span> a[<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">100</span><span style="margin:0px; padding:0px; line-height:1.5!important">],t,i,p,sum;
+    scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">p);
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(p--<span style="margin:0px; padding:0px; line-height:1.5!important">)
+    {
+        scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">t);
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">if</span>(t==<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">)
+            </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">break</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        sum</span>=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">for</span>(i=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">1</span>;i&lt;=t;i&#43;&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">)
+        {
+            scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i]);
+            sum</span>=sum&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i];
+        }
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (VI)</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp;
+ Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 37174&nbsp;&nbsp;&nbsp; Accepted Submission(s): 25051</span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to calculate the sum of some integers.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Input contains multiple test cases, and one case one line. Each case starts with an integer N, and then N integers follow in the same line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each test case you should output the sum of N integers in one line, and with one line of output for each line in input.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">4 1 2 3 4</div>
+<div style="margin:0px; padding:0px">5 1 2 3 4 5</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">10</div>
+<div style="margin:0px; padding:0px">15</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1094" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1094</a></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)">这题就不要在啰嗦的在写题意了吧，貌&#20284;和上面的题目太像了，，，，o(∩_∩)o 哈哈</span></span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)">详见代码：</span></span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span> a[<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">100</span><span style="margin:0px; padding:0px; line-height:1.5!important">],t,i,sum;
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;t)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {
+        sum</span>=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">for</span>(i=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">1</span>;i&lt;=t;i&#43;&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">)
+        {
+            scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i]);
+            sum</span>=sum&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i];
+        }
+    　　printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><br style="margin:0px; padding:0px">
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); font-size:14pt"><span style="margin:0px; padding:0px">看到这里我只想说，大家做题时候，代码写的&#26684;式一定要规范，最好就是形式统一，该空的时候就空&#26684;，不然代码都一个水平面就美观了，而且以后比赛的时候你还有2个队友，让他们给你检查错误的话，你的代码又不整洁，那么效率肯定不会高的，而且会有厌烦的心态，那就更好了，所以大家以后写代码尽量规范一点。就是这样了！</span></span></p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (VII)</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,255); font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time
+ Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp; Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 36617&nbsp;&nbsp;&nbsp; Accepted Submission(s): 24438</span></span></span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to Calculate a &#43; b.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">The input will consist of a series of pairs of integers a and b, separated by a space, one pair of integers per line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each pair of input integers a and b you should output the sum of a and b, and followed by a blank line.</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">1 5</div>
+<div style="margin:0px; padding:0px">10 20</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">6</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">30</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1095" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1095</a></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px">题意：输入2个整数a和b,用空&#26684;分隔,每行一对整数。对于每一对输入整数a和b你应该输出他们的总和,a和b,身后跟着<span style="margin:0px; padding:0px; color:rgb(255,0,0)">一个空行。</span></span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,255)"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt">是不是又忘记空行了，输出的时候，这次又是中间再空一行哦，所以做题的时候一定要先看清楚题目的具体要求在动手编程，不然只会白白丢分！</span></span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,255)"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt">详见代码：</span></span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> a,b,sum;
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(scanf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;a,&amp;b)!=<span style="margin:0px; padding:0px; line-height:1.5!important">EOF)
+    {
+        sum</span>=a&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">b;
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><br style="margin:0px; padding:0px">
+<span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0); font-size:14pt">终于快结束了，，，，，，搞得好辛苦，大家一定要认真对待啊！</span></span></span></p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<h1 style="margin:0px; padding:0px; font-size:28px; color:rgb(26,92,200)">A&#43;B for Input-Output Practice (VIII)</h1>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0); font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:green; font-family:Arial; font-size:12px">Time
+ Limit: 2000/1000 MS (Java/Others)&nbsp;&nbsp;&nbsp; Memory Limit: 65536/32768 K (Java/Others) Total Submission(s): 78908&nbsp;&nbsp;&nbsp; Accepted Submission(s): 24263</span></span></span></span></span></span></p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Problem Description</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<div class="panel_content" style="margin:0px; padding:0px">Your task is to calculate the sum of some integers.</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">Input contains an integer N in the first line, and then N lines follow. Each line starts with a integer M, and then M integers follow in the same line.</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Output</div>
+<div class="panel_content" style="margin:0px; padding:0px">For each group of input integers you should output their sum in one line, and you must note that there is a blank line between outputs.</div>
+<div class="panel_content" style="margin:0px; padding:0px">&nbsp;</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Input</div>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">3</div>
+<div style="margin:0px; padding:0px">4 1 2 3 4</div>
+<div style="margin:0px; padding:0px">5 1 2 3 4 5</div>
+<div style="margin:0px; padding:0px">3 1 2 3</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+</div>
+<div class="panel_title" align="left" style="margin:0px; padding:0px">Sample Output</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">10</p>
+<div class="panel_content" style="margin:0px; padding:0px">
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">15</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">6</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0); font-size:14pt"><span style="margin:0px; padding:0px">ps：<a target="_blank" target="_blank" href="http://acm.hdu.edu.cn/showproblem.php?pid=1096" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; font-weight:normal; line-height:normal">http://acm.hdu.edu.cn/showproblem.php?pid=1096</a></span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)">题意：输入包含一个整数N在第一行,然后有N行测试数据。每一行都开始都有一个整数M,然后后面有M个整数在同一行。</span></span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)">每组输出整数之和，输出占一行,<span style="margin:0px; padding:0px; color:rgb(255,0,0)">你必须注意,输出，每行之间有一个空行。</span></span></span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">我只能说这题就是上面几道题目的大集合吧，所以是不是很简单呢。哈哈，所以对于acm的输入输出是不是有所了解了呢，</span></span></span></span></div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">　　对！就是那么简单！so
+ easy！&nbsp;&nbsp;&nbsp; o(∩_∩)o&nbsp;&nbsp;&nbsp; 那么，，，</span></span></span></span></div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+<div style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">还</span></span></span></span><span style="margin:0px; padding:0px; font-size:14pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,0)"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">是先看代码吧，</span></span></span></span></div>
+<div style="margin:0px; padding:0px">
+<div class="cnblogs_code" style="margin:5px 0px; padding:5px; background-color:rgb(245,245,245); border:1px solid rgb(204,204,204); overflow:auto; color:rgb(0,0,0); font-family:'Courier New'!important; font-size:12px!important">
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+<pre style="margin-top:0px; margin-bottom:0px; padding:0px; white-space:pre-wrap; word-wrap:break-word; font-family:'Courier New'!important">#include&lt;stdio.h&gt;
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span><span style="margin:0px; padding:0px; line-height:1.5!important"> main()
+{
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">int</span> a[<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">100</span><span style="margin:0px; padding:0px; line-height:1.5!important">],t,i,p,sum;
+    scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">p);
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">while</span>(p--<span style="margin:0px; padding:0px; line-height:1.5!important">)
+    {
+        scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">t);
+        sum</span>=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">for</span>(i=<span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">1</span>;i&lt;=t;i&#43;&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">)
+        {
+            scanf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span>,&amp;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i]);        
+            sum</span>=sum&#43;<span style="margin:0px; padding:0px; line-height:1.5!important">a[i];
+        }
+        printf(</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">%d\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">,sum);
+        </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">if</span>(p)<span style="margin:0px; padding:0px; color:rgb(0,128,0); line-height:1.5!important">//</span><span style="margin:0px; padding:0px; color:rgb(0,128,0); line-height:1.5!important">中间空行用</span>
+            printf(<span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">\n</span><span style="margin:0px; padding:0px; color:rgb(128,0,0); line-height:1.5!important">&quot;</span><span style="margin:0px; padding:0px; line-height:1.5!important">);
+    }
+    </span><span style="margin:0px; padding:0px; color:rgb(0,0,255); line-height:1.5!important">return</span> <span style="margin:0px; padding:0px; color:rgb(128,0,128); line-height:1.5!important">0</span><span style="margin:0px; padding:0px; line-height:1.5!important">;
+}</span></pre>
+<div class="cnblogs_code_toolbar" style="margin:5px 0px 0px; padding:0px"><span class="cnblogs_code_copy" style="margin:0px; padding:0px 5px 0px 0px; line-height:1.5!important"><a target="_blank" target="_blank" title="复制代码" style="margin:0px; padding:0px; color:rgb(73,73,73); font-family:Arial,Helvetica,sans-serif; font-size:14px; text-decoration:underline; line-height:normal; border:none!important"><img src="http://common.cnblogs.com/images/copycode.gif" alt="复制代码" style="margin:0px; padding:0px; border:none!important"></a></span></div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px">&nbsp;</p>
+</div>
+<div style="margin:0px; padding:0px">&nbsp;</div>
+</div>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><br style="margin:0px; padding:0px">
+<span style="margin:0px; padding:0px; color:rgb(0,0,255); font-size:18pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">到现在为止，你已经学会acm的简单输入输出了，</span>（当然不是所有的输入输出，这个留给以后慢慢学习好了，）<span style="margin:0px; padding:0px; color:rgb(255,0,0)">那么现在你已经可以在杭电上A题了，</span>(为自己鼓掌，哈哈）<span style="margin:0px; padding:0px; color:rgb(255,0,0)">，接下来大家可以从简单题下手，本人建议可以先做11页的题。</span></span></span></p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,255); font-size:18pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">当然不会的题欢迎到群内讨论，QQ群： &nbsp;&lt;主要面向刚刚入门的13级新生！&gt;</span></span></span></p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,255); font-size:18pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">最后还有一个小小的建议：学习贵在坚持！刚刚开始都是比较难的，所以大家要相互鼓励相互监督，共同进步！</span></span></span></p>
+<p style="margin:10px auto; padding-top:0px; padding-bottom:0px"><span style="margin:0px; padding:0px; color:rgb(0,0,255); font-size:18pt"><span style="margin:0px; padding:0px"><span style="margin:0px; padding:0px; color:rgb(255,0,0)">　　　　　　　　　　谢谢你的浏览！o(∩_∩)o</span></span></span></p>
+</div>
+</div>
+</div>
+</div>
+<div class="panel_bottom" style="margin:0px; padding:0px">&nbsp;</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="MySignature" style="margin:0px; padding:0px; color:rgb(73,73,73); font-size:14px; line-height:22px">
+转载请注明出处：http://www.cnblogs.com/yuyixingkong/ 自己命运的掌控着！</div>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

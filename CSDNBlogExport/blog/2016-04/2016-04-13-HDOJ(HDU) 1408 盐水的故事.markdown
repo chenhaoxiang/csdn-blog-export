@@ -1,0 +1,92 @@
+---
+layout: post
+title: "HDOJ(HDU) 1408 盐水的故事"
+date: 2016-04-13 12:28:31 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 模拟/推导/打表
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+挂盐水的时候，如果滴起来有规律，先是滴一滴，停一下；然后滴二滴，停一下；再滴三滴，停一下…，现在有一个问题：这瓶盐水一共有VUL毫升，每一滴是D毫升，每一滴的速度是一秒（假设最后一滴不到D毫升，则花费的时间也算一秒），停一下的时间也是一秒这瓶水什么时候能挂完呢？Input 
+输入数据包含多个测试实例，每个实例占一行，由VUL和D组成，其中 0import j 
+---
+
+
+Problem Description 
+挂盐水的时候，如果滴起来有规律，先是滴一滴，停一下；然后滴二滴，停一下；再滴三滴，停一下…，现在有一个问题：这瓶盐水一共有VUL毫升，每一滴是D毫升，每一滴的速度是一秒（假设最后一滴不到D毫升，则花费的时间也算一秒），停一下的时间也是一秒这瓶水什么时候能挂完呢？Input 
+输入数据包含多个测试实例，每个实例占一行，由VUL和D组成，其中 0import j
+<!-- more -->
+----------
+
+Problem Description
+挂盐水的时候，如果滴起来有规律，先是滴一滴，停一下；然后滴二滴，停一下；再滴三滴，停一下...，现在有一个问题：这瓶盐水一共有VUL毫升，每一滴是D毫升，每一滴的速度是一秒（假设最后一滴不到D毫升，则花费的时间也算一秒），停一下的时间也是一秒这瓶水什么时候能挂完呢？
+
+ 
+
+Input
+输入数据包含多个测试实例，每个实例占一行，由VUL和D组成，其中 0<D<VUL<5000。
+
+ 
+
+Output
+对于每组测试数据，请输出挂完盐水需要的时间，每个实例的输出占一行。
+
+ 
+
+Sample Input
+10 1
+ 
+
+Sample Output
+13
+
+
+注意：体积和每滴的体积都不是整数！！！要用double型来运算！
+
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		
+		while(sc.hasNext()){
+			double v = sc.nextDouble();
+			double d = sc.nextDouble();
+
+			int t=1;
+			int tm=0;
+			while(true){
+				boolean is=false;
+				for(int i=0;i<t;i++){
+					v=v-d;
+					tm++;
+					if(v<0.000001){
+					//精度问题！不能用<0判断
+						is=true;
+						break;
+					}
+				}
+				if(is){
+					break;
+				}
+				t++;
+				tm++;
+			}
+			System.out.println(tm);
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

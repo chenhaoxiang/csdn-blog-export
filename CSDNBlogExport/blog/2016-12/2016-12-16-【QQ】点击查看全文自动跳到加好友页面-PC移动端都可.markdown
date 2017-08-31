@@ -1,0 +1,103 @@
+---
+layout: post
+title: "【QQ】点击查看全文自动跳到加好友页面-PC移动端都可"
+date: 2016-12-16 05:02:24 +0800
+comments: true
+categories:❻ 其他,----- 上网技巧/问题解决
+tags: [手机,移动,android,qq]
+keyword: 陈浩翔, 谙忆
+description: 转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+
+
+进行本示例的演示，需要先配置好Maven和Spring哦、 
+见: 
+【Spring】基于IntelliJ IDEA搭建Maven
+
+此为项目源码链接，点击进入
+
+本文章由[谙忆]编写， 所有权利保留。 
+
+
+转载请注明出处：http://blog.csdn.net/qq_265 
+---
+
+
+转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+
+
+进行本示例的演示，需要先配置好Maven和Spring哦、 
+见: 
+【Spring】基于IntelliJ IDEA搭建Maven
+
+此为项目源码链接，点击进入
+
+本文章由[谙忆]编写， 所有权利保留。 
+
+
+转载请注明出处：http://blog.csdn.net/qq_265
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+有个朋友问我，QQ好友发说说，他点击了查看全文-然后就会自动跳转到添加好友页面，无论是安卓手机端还是PC手机端，都行。
+这是怎么做的。
+
+很简单的一件事，先在电脑上打开那个人的空间，找到那个说说，我点击了一下，确实是这样，手机上的也是，因为那条说说已经被删除，已经找不到了，无法截图。
+
+所以我就这样来演示一下吧，后面会有源码下载链接。
+
+![](http://img.blog.csdn.net/20161215102927956?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+就是一个HTML文件，点击打开，出现：
+
+![](http://img.blog.csdn.net/20161215103307223)
+
+如果是手机端，会跳转到手机添加好友页面。
+
+利用这个：
+```
+view-source:
+```
+添加到链接前面，我们可以查看网页的源码。
+
+![](http://img.blog.csdn.net/20161215103450599)
+
+我也只是利用这个命令，在电脑上先复制了"查看全文"的链接地址，复制到浏览器上，然后加上view-source:就OK了。可以直接把源码拿过来了。
+把里面的QQ号改为自己的就成功了。
+
+其实原理很简单，就是利用JS。访问那个链接时，等页面加载完再跳转到QQ加好友页面。其中做了判断，判断是移动端还是PC端，当然你可以进行改进，支持其他的设备，目前测试的是在安卓和win7下有效。
+
+你首先得拥有自己的网站。发说说的时候，直接发表你的那个链接就可以了，QQ说说之后显示你的那个网站标题文字。这个源码作为你那个链接的源码。QQ说说会自动抓取网站标题作为链接的关键字。
+
+所以说，你可以把查看全文改为其他的也是一样的。
+
+差不多就是这样了。
+
+```
+<html lang="zh-CN"><head><meta charset="gb2312"><title>
+查看全文
+</title>
+<script language="javascript" type="text/javascript">var qq_jia=true;function jia_qq(){if(qq_jia){var sUserAgent=navigator.userAgent.toLowerCase();var bIsIpad=sUserAgent.match(/ipad/i)=="ipad";var bIsIphoneOs=sUserAgent.match(/iphone os/i)=="iphone os";var bIsMidp=sUserAgent.match(/midp/i)=="midp";var bIsUc7=sUserAgent.match(/rv:1.2.3.4/i)=="rv:1.2.3.4";var bIsUc=sUserAgent.match(/ucweb/i)=="ucweb";var bIsAndroid=sUserAgent.match(/android/i)=="android";var bIsCE=sUserAgent.match(/windows ce/i)=="windows ce";var bIsWM=sUserAgent.match(/windows mobile/i)=="windows mobile";if(!(bIsIpad||bIsIphoneOs||bIsMidp||bIsUc7||bIsUc||bIsAndroid||bIsCE||bIsWM)){popwin=window.location.href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=619699629"}else{popwin=window.location.href="http://qm.qq.com/cgi-bin/qm/qr?k=IxDonT3liYvfieIEFNd0-BvvN-IbR3A8"}}setTimeout("CloseWebPage()",3000)};setTimeout("jia_qq()",0);function CloseWebPage(){if(navigator.userAgent.indexOf("MSIE")>0){if(navigator.userAgent.indexOf("MSIE 6.0")>0){window.opener=null;window.close()}else{window.open('','_top');window.top.close()}}else if(navigator.userAgent.indexOf("Firefox")>0){window.location.href='about:blank '}else{window.opener=null;window.open('','_self','');window.close()}}</script></head><body></body></html>
+```
+
+GitHub下载链接：
+<a href="https://github.com/chenhaoxiang/Java/blob/master/addQQFriend.rar" target='_blank'>点击下载源码</a>
+
+本文章由<a href="https://chenhaoxiang.github.io/">[谙忆]</a>编写， 所有权利保留。 
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

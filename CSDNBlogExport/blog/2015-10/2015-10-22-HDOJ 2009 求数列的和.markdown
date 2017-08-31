@@ -1,0 +1,77 @@
+---
+layout: post
+title: "HDOJ 2009 求数列的和"
+date: 2015-10-22 04:14:59 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+数列的定义如下： 
+数列的第一项为n，以后各项为前一项的平方根，求数列的前m项的和。Input 
+输入数据有多组，每组占一行，由两个整数n（n<10000）和m(m<1000)组成，n和m的含义如前所述。Output 
+对于每组输入数据，输出该数列的和，每个测试实例占一行，要求精度保留2位小数。Sample Input 
+81 4 
+2 2Sample Ou 
+---
+
+
+Problem Description 
+数列的定义如下： 
+数列的第一项为n，以后各项为前一项的平方根，求数列的前m项的和。Input 
+输入数据有多组，每组占一行，由两个整数n（n<10000）和m(m<1000)组成，n和m的含义如前所述。Output 
+对于每组输入数据，输出该数列的和，每个测试实例占一行，要求精度保留2位小数。Sample Input 
+81 4 
+2 2Sample Ou
+<!-- more -->
+----------
+
+Problem Description
+数列的定义如下：
+数列的第一项为n，以后各项为前一项的平方根，求数列的前m项的和。
+ 
+
+Input
+输入数据有多组，每组占一行，由两个整数n（n<10000）和m(m<1000)组成，n和m的含义如前所述。
+ 
+
+Output
+对于每组输入数据，输出该数列的和，每个测试实例占一行，要求精度保留2位小数。
+ 
+
+Sample Input
+81 4
+2 2
+ 
+
+Sample Output
+94.73
+3.41
+ 
+
+```
+import java.util.*;
+class Main{
+  public static void main(String args[]){
+    Scanner sc = new Scanner(System.in);
+    while(sc.hasNext()){
+      double n = sc.nextDouble();
+      int m = sc.nextInt();
+      double s=n;
+      for(int i=1;i<m;i++){
+        n =Math.sqrt(n);
+        s += n;
+      }
+      System.out.printf("%.2f",s);
+      System.out.println();
+    }
+  }
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

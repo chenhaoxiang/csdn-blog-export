@@ -1,0 +1,145 @@
+---
+layout: post
+title: "【错误解决】 java.lang.ClassNotFoundException  org.apache.jsp.WEB_002dINF.classes.views.index_jsp"
+date: 2017-02-26 08:48:23 +0800
+comments: true
+categories:❻ 其他,----- 上网技巧/问题解决
+tags: [spring mvc,jsp]
+keyword: 陈浩翔, 谙忆
+description: 转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+今天建立Spring MVC骨架的时候，突然遇到这么一个问题~~HTTP Status 500 - java.lang.ClassNotFoundException: org.apache.jsp.WEB_002dINF.classes.views.index_jsptype Exce 
+---
+
+
+转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+今天建立Spring MVC骨架的时候，突然遇到这么一个问题~~HTTP Status 500 - java.lang.ClassNotFoundException: org.apache.jsp.WEB_002dINF.classes.views.index_jsptype Exce
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+今天建立Spring MVC骨架的时候，突然遇到这么一个问题~~
+
+```
+HTTP Status 500 - java.lang.ClassNotFoundException: org.apache.jsp.WEB_002dINF.classes.views.index_jsp
+
+type Exception report
+
+message java.lang.ClassNotFoundException: org.apache.jsp.WEB_002dINF.classes.views.index_jsp
+
+description The server encountered an internal error that prevented it from fulfilling this request.
+
+exception
+
+org.apache.jasper.JasperException: java.lang.ClassNotFoundException: org.apache.jsp.WEB_002dINF.classes.views.index_jsp
+	org.apache.jasper.servlet.JspServletWrapper.getServlet(JspServletWrapper.java:177)
+	org.apache.jasper.servlet.JspServletWrapper.service(JspServletWrapper.java:369)
+	org.apache.jasper.servlet.JspServlet.serviceJspFile(JspServlet.java:390)
+	org.apache.jasper.servlet.JspServlet.service(JspServlet.java:334)
+	javax.servlet.http.HttpServlet.service(HttpServlet.java:722)
+	org.springframework.web.servlet.view.InternalResourceView.renderMergedOutputModel(InternalResourceView.java:168)
+	org.springframework.web.servlet.view.AbstractView.render(AbstractView.java:303)
+	org.springframework.web.servlet.DispatcherServlet.render(DispatcherServlet.java:1244)
+	org.springframework.web.servlet.DispatcherServlet.processDispatchResult(DispatcherServlet.java:1027)
+	org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:971)
+	org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:893)
+	org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:970)
+```
+![](http://img.blog.csdn.net/20170226201627674?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+当时挺懵逼的，以为是少了哪个类，以为是Servlet类或者是jsp的类少了，结果发现jar包都有啊，没少。
+而且应该是不需要的啊，Tomcact带着有的啊。
+
+后来经过搜索，有很多说是jar包起冲突了：
+![](http://img.blog.csdn.net/20170226201909568?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+![](http://img.blog.csdn.net/20170226203334009?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+有一定道理，然后我将包移出
+
+![](http://img.blog.csdn.net/20170226202026898?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+问题还是存在~
+
+经过一番摸索，搜索之后，问题都没有解决。
+
+然后我看到我的JDK用的是1.8，我想，不会是这个的问题吧。
+在开始建Maven项目的时候我选择 的是1.8：
+![](http://img.blog.csdn.net/20170226202951211?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+因为我另外一个SpringMVC项目用的是1.7的，没有问题，配置什么的都和这个差不多，可是今天搭建SpringMVC的骨架的时候就出问题了。
+
+![](http://img.blog.csdn.net/20170226202529327?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+然后我去改JDK，
+
+![](http://img.blog.csdn.net/20170226203644871?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+注意，我还需要修改pom.xml中的java版本。需要一致！
+
+```
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.3</version>
+                <configuration>
+                    <failOnMissingWebXml>false</failOnMissingWebXml>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+```
+需要修改java.version这个的值。
+
+![](http://img.blog.csdn.net/20170226203828267?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+修改完成后：
+![](http://img.blog.csdn.net/20170226203908450?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+运行。就可以了！
+
+![](http://img.blog.csdn.net/20170226204021410?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+
+Spring MVC的骨架源码，也是这个出问题的源码，现在已经被调试好了，但是如果你将JDK换成1.8的(注意同时修改pom.xml中的java版本)，应该还会出现那个问题。
+
+本篇博客涉及到的源码链接：
+<blockquote cite='陈浩翔'>
+<strong>【<a href='https://github.com/chenhaoxiang/springMVC/tree/master/springMVCFramework' target='_blank'>-&gt;点击访问源码-&copy;CHX</a>】</strong>
+</blockquote>
+
+
+至于为什么换了1.7版本的JDK之后就可以运行了，而换成1.8的JDK却不可以。暂不明白原因！
+
+望知道的在评论区指点一二，谢谢。
+
+本文章由<a href="https://chenhaoxiang.github.io/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,202 @@
+---
+layout: post
+title: "经典算法面试题目-替换字符串的内容（1.5）"
+date: 2016-07-27 10:32:54 +0800
+comments: true
+categories:❺ 算法及基础题,----- 经典面试算法
+tags: [算法,面试题,string]
+keyword: 陈浩翔, 谙忆
+description: 题目Write a method to replace all spaces in a string with ‘%20’.写一个函数，把字符串中所有的空格替换为%20 。解答简单题(有2种方法，一种时间耗费大些，一种空间耗费大点，根据需要去选择就好了)第一种方法：（需要一个多余的空间开销-就是多一个原字符串的开销） 
+先遍历一次字符串，得到空格个数，进而得到将空格转换成%20后的串长度 (每个空格 
+---
+
+
+题目Write a method to replace all spaces in a string with ‘%20’.写一个函数，把字符串中所有的空格替换为%20 。解答简单题(有2种方法，一种时间耗费大些，一种空间耗费大点，根据需要去选择就好了)第一种方法：（需要一个多余的空间开销-就是多一个原字符串的开销） 
+先遍历一次字符串，得到空格个数，进而得到将空格转换成%20后的串长度 (每个空格
+<!-- more -->
+----------
+
+题目
+== 
+
+Write a method to replace all spaces in a string with ‘%20’.
+
+写一个函数，把字符串中所有的空格替换为%20 。
+
+解答
+==
+简单题(有2种方法，一种时间耗费大些，一种空间耗费大点，根据需要去选择就好了)
+
+第一种方法：（需要一个多余的空间开销-就是多一个原字符串的开销）
+先遍历一次字符串，得到空格个数，进而得到将空格转换成%20后的串长度 (每个空格替换为%20需要增加2个字符，x个空格增加2x个字符)。 然后从后向前依次对空格进行替换，非空格原样拷贝。
+
+分析：
+```
+旧字符串：i am hawstein
+旧串索引：   p
+新字符串：i%20am%20hawstein              
+新串索引：     q
+```
+
+
+
+```
+char* replace1(char *c){
+    if(c == NULL) return NULL;
+    int len = strlen(c);
+    if(len == 0) return NULL;
+    int cnt = 0;
+    for(int i=0; i<len; ++i)
+    {
+        if(c[i] == ' ')
+            ++cnt;
+    }
+    char *cc = new char[len+2*cnt+1];//开辟一个新的内存！
+    int p = 0;
+    for(int i=0; i<len; ++i)
+    {
+        if(c[i] == ' ')
+        {
+            cc[p] = '%';
+            cc[p+1] = '2';
+            cc[p+2] = '0';
+            p += 3;
+        }
+        else
+        {
+            cc[p] = c[i];
+            ++p;
+        }
+    }
+    cc[p] = '\0';
+    return cc;
+}
+```
+
+第二种方法：（节约空间-必须确定原串有足够大的空间，能够存储：原字符串+空格个数*2的大小）
+如果原串有足够大的空间， 则替换过程直接在原串上进行， 因为从后向前替换的过程中，新串用到的空间一定是旧串不需要的空间，看图示：
+
+```
+void replace2(char *c){
+    if(c == NULL) return;
+    int len = strlen(c);
+    if(len == 0) return;
+    int cnt = 0;
+    for(int i=0; i<len; ++i)
+    {
+        if(c[i] == ' ')
+            ++cnt;
+    }
+    int p = len + 2*cnt;
+    c[p--] = '\0';//这个是字符串的结束符！必须要有
+    //从后面往前面遍历！遇到空格，就给c的那3个位置附上%20然后  p指针位置-3
+    for(int i=len-1; i>=0; --i)
+    {
+        if(c[i] == ' ')
+        {
+            c[p] = '0';
+            c[p-1] = '2';
+            c[p-2] = '%';
+            p -= 3;
+        }
+        else
+        {
+            c[p] = c[i];
+            --p;
+        }
+    }
+}
+```
+
+
+
+整体代码演示：
+=========
+
+```
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+char* replace1(char *c){
+    if(c == NULL) return NULL;
+    int len = strlen(c);
+    if(len == 0) return NULL;
+    int cnt = 0;
+    for(int i=0; i<len; ++i)
+    {
+        if(c[i] == ' ')
+            ++cnt;
+    }
+    char *cc = new char[len+2*cnt+1];//开辟一个新的内存！
+    int p = 0;
+    for(int i=0; i<len; ++i)
+    {
+        if(c[i] == ' ')
+        {
+            cc[p] = '%';
+            cc[p+1] = '2';
+            cc[p+2] = '0';
+            p += 3;
+        }
+        else
+        {
+            cc[p] = c[i];
+            ++p;
+        }
+    }
+    cc[p] = '\0';
+    return cc;
+}
+
+void replace2(char *c){
+    if(c == NULL) return;
+    int len = strlen(c);
+    if(len == 0) return;
+    int cnt = 0;
+    for(int i=0; i<len; ++i)
+    {
+        if(c[i] == ' ')
+            ++cnt;
+    }
+    int p = len + 2*cnt;
+    c[p--] = '\0';//这个是字符串的结束符！必须要有
+    //从后面往前面遍历！遇到空格，就给c的那3个位置附上%20然后  p指针位置-3
+    for(int i=len-1; i>=0; --i)
+    {
+        if(c[i] == ' ')
+        {
+            c[p] = '0';
+            c[p-1] = '2';
+            c[p-2] = '%';
+            p -= 3;
+        }
+        else
+        {
+            c[p] = c[i];
+            --p;
+        }
+    }
+}
+int main(){
+    const int len = 100;
+    char c[len] = "asdsad dd d aaa aaa  ";
+    cout<<replace1(c)<<endl;
+    replace2(c);
+    cout<<c<<endl;
+    return 0;
+}
+
+```
+
+输出结果：
+=======
+
+![](http://img.blog.csdn.net/20160727223228327)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

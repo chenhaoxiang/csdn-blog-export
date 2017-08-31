@@ -1,0 +1,69 @@
+---
+layout: post
+title: "诗词—《蝶恋花·相思何谓情》"
+date: 2015-12-17 10:49:56 +0800
+comments: true
+categories:❻ 其他,----- 诗词
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 《蝶恋花·相思何谓情》 
+风吹月色水越岭。望过秋冬，赏尽青山景。潇潇风声夜静静。醉入心声你住梦。 
+笑尽世间几点情。难过一生，有情心最痛。独坐青苔谁让停。相思无药却是病。 
+—流水似梦 
+毕竟是程序员，现在上代码： 
+package cn.hncu.shi; 
+/** 
+* @author hncu_chx 
+* 
+*/ 
+public class shi_1 { 
+public static vo 
+---
+
+
+《蝶恋花·相思何谓情》 
+风吹月色水越岭。望过秋冬，赏尽青山景。潇潇风声夜静静。醉入心声你住梦。 
+笑尽世间几点情。难过一生，有情心最痛。独坐青苔谁让停。相思无药却是病。 
+—流水似梦 
+毕竟是程序员，现在上代码： 
+package cn.hncu.shi; 
+/** 
+* @author hncu_chx 
+* 
+*/ 
+public class shi_1 { 
+public static vo
+<!-- more -->
+----------
+
+《蝶恋花·相思何谓情》
+风吹月色水越岭。望过秋冬，赏尽青山景。潇潇风声夜静静。醉入心声你住梦。
+笑尽世间几点情。难过一生，有情心最痛。独坐青苔谁让停。相思无药却是病。
+—流水似梦
+毕竟是程序员，现在上代码：
+
+```
+package cn.hncu.shi;
+/**
+* @author hncu_chx
+*
+*/
+public class shi_1 {
+public static void main(String[] args) {
+int strString[] ={34678,24651,33457,183,30456,24605,20309,35859,24773,39118,21561,26376,33394,27700,36234,23725,12290,26395,36807,31179,20908,65292,36175,23613,38738,23665,26223,12290,28487,28487,39118,22768,22812,38745,38745,12290,37257,20837,24515,22768,20320,20303,26790,12290,31505,23613,19990,38388,20960,28857,24773,12290,38590,36807,19968,29983,65292,26377,24773,24515,26368,30171,12290,29420,22352,38738,33492,35841,35753,20572,12290,30456,24605,26080,33647,21364,26159,30149,12290,8212,27969,27700,20284,26790,46,25935};
+for(int i=0;i<strString.length;i++){
+System.out.print((char)strString[i]);
+if((char)strString[i]=='。'||i==8){
+System.out.println();
+}
+}
+}
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

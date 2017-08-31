@@ -1,0 +1,157 @@
+---
+layout: post
+title: "经典算法面试题目-判断两个字符串是否是变位词（1.4）"
+date: 2016-07-23 11:30:19 +0800
+comments: true
+categories:❺ 算法及基础题,----- 经典面试算法
+tags: [函数,面试题,算法]
+keyword: 陈浩翔, 谙忆
+description: 题目Write a method to decide if two strings are anagrams or not.写一个函数判断两个字符串是否是变位词。解答变位词(anagrams)指的是组成两个单词的字符相同，但位置不同的单词。比如说， abbcd和abcdb就是一对变位词。 
+也就是说，2个字符串，不管排列顺序如何，只要全部的单个字符能对应上，就是一对变位词！该题目有两种做法：时间复杂 
+---
+
+
+题目Write a method to decide if two strings are anagrams or not.写一个函数判断两个字符串是否是变位词。解答变位词(anagrams)指的是组成两个单词的字符相同，但位置不同的单词。比如说， abbcd和abcdb就是一对变位词。 
+也就是说，2个字符串，不管排列顺序如何，只要全部的单个字符能对应上，就是一对变位词！该题目有两种做法：时间复杂
+<!-- more -->
+----------
+
+题目
+==
+Write a method to decide if two strings are anagrams or not.
+
+写一个函数判断两个字符串是否是变位词。
+
+解答
+==
+
+变位词(anagrams)指的是组成两个单词的字符相同，但位置不同的单词。
+
+比如说， abbcd和abcdb就是一对变位词。
+也就是说，2个字符串，不管排列顺序如何，只要全部的单个字符能对应上，就是一对变位词！
+
+该题目有两种做法：
+
+时间复杂度为O(nlogn)的解法
+-----------
+
+由于组成变位词的字符是一模一样的，所以按照字典序排序后，两个字符串也就相等了。 因此我们可以用O(nlogn)的时间去排序，然后用O(n)的时间比较它们是否相等即可。
+
+代码如下：
+
+```
+//需要头文件#include<algorithm>
+
+bool isAnagram1(string s, string t){
+    if(s=="" || t=="") return false;
+    if(s.length() != t.length()) return false;
+
+    //sort(s,s+s.length);//如果s是字符数组，就这样调用
+    sort(&s[0], &s[0]+s.length());
+    sort(&t[0], &t[0]+t.length());
+    if(s == t) return true;
+    else return false;
+}
+```
+
+时间复杂度为O(n)的解法
+-------------
+
+由于组成变位词的字符是一模一样的， 因此我们可以先统计每个字符串中各个字符出现的次数， 然后看这两个字符串中各字符出现次数是否一样。如果是，则它们是一对变位词。 这需要开一个辅助数组来保存各字符的出现次数。我们可以开一个大小是256的整数数组(ascii码范围内的字符)， 遍历第一个字符串时，将相应字符出现的次数加1；遍历第二个字符串时， 将相应字符出现的次数减1。最后如果数组中256个数都为0，说明两个字符串是一对变位词。 (第1个字符串中出现的字符都被第2个字符串出现的字符抵消了)， 如果数组中有一个不为0，说明它们不是一对变位词。
+
+代码如下：
+
+```
+//必须有头文件：#include <cstring>
+
+bool isAnagram2(string s, string t){
+    if(s=="" || t=="") return false;
+    if(s.length() != t.length()) return false;
+
+    int len = s.length();
+    int c[256];
+    memset(c, 0, sizeof(c));
+    for(int i=0; i<len; ++i){
+        ++c[(int)s[i]];
+        --c[(int)t[i]];
+    }
+
+    for(int i=0; i<256; ++i)
+        if(c[i] != 0)
+            return false;
+    return true;
+}
+```
+
+全部代码：
+=====
+
+```
+#include <iostream>
+#include <algorithm>//用sort函数必须加的头文件
+#include <cstring>
+using namespace std;
+
+bool isAnagram1(string s, string t){
+    if(s=="" || t=="") return false;
+    if(s.length() != t.length()) return false;
+
+    //sort(s,s+s.length);//如果s是字符数组，就这样调用
+    sort(&s[0], &s[0]+s.length());
+    sort(&t[0], &t[0]+t.length());
+    if(s == t) return true;
+    else return false;
+}
+
+bool isAnagram2(string s, string t){
+    if(s=="" || t=="") return false;
+    if(s.length() != t.length()) return false;
+
+    int len = s.length();
+    int c[256];
+    memset(c, 0, sizeof(c));
+    for(int i=0; i<len; ++i){
+        ++c[(int)s[i]];
+        --c[(int)t[i]];
+    }
+
+    for(int i=0; i<256; ++i)
+        if(c[i] != 0)
+            return false;
+    return true;
+}
+
+int main()
+{
+    string s="asdfghj";
+    string t="jhgfdsa";
+    bool bo = isAnagram1(s,t);
+    cout<<bo<<endl;//输出结果为1
+
+    s="asdfghj";
+    t="jhgfdss";
+    bo = isAnagram1(s,t);
+    cout<<bo<<endl;//输出结果为0
+
+    s="asdfghj";
+    t="jhgfdsa";
+    bo = isAnagram2(s,t);
+    cout<<bo<<endl;//输出结果为1
+
+    s="asdfghj";
+    t="jhgfdss";
+    bo = isAnagram2(s,t);
+    cout<<bo<<endl;//输出结果为0
+    return 0;
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

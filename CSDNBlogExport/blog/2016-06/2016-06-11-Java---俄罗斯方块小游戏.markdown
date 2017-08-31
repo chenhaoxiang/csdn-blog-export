@@ -1,0 +1,423 @@
+---
+layout: post
+title: "Java---俄罗斯方块小游戏"
+date: 2016-06-11 03:22:51 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目
+tags: [俄罗斯方块,俄罗斯,游戏,java]
+keyword: 陈浩翔, 谙忆
+description: 去年就已经学了这个技术了，一直没去写，现在抽个时间写了个俄罗斯方块游戏。 
+只有简单的新游戏，暂停，继续，积分功能。简单的实现了俄罗斯的经典功能。 
+不介绍了，有兴趣的自己运行一下，后面贴出了图片。代码：package cn.hncu;import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java. 
+---
+
+
+去年就已经学了这个技术了，一直没去写，现在抽个时间写了个俄罗斯方块游戏。 
+只有简单的新游戏，暂停，继续，积分功能。简单的实现了俄罗斯的经典功能。 
+不介绍了，有兴趣的自己运行一下，后面贴出了图片。代码：package cn.hncu;import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.
+<!-- more -->
+----------
+
+去年就已经学了这个技术了，一直没去写，现在抽个时间写了个俄罗斯方块游戏。
+只有简单的新游戏，暂停，继续，积分功能。简单的实现了俄罗斯的经典功能。
+不介绍了，有兴趣的自己运行一下，后面贴出了图片。
+
+
+代码：
+===
+
+```
+package cn.hncu;
+
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.Timer;
+
+public class Tetris extends JFrame{
+	public static void main(String[] args) {
+		Tetris te = new Tetris();
+		te.setVisible(true);
+		//如果在界面中添加了编辑框等会抢占焦点的控件，则需要用下面的代码
+		//te.requestFocus(true);//让游戏面板获得焦点--抢到键盘的监听
+	}
+	private TetrisPanel tp;
+	JMenuItem itemPause;
+	JMenuItem itemContinue;
+	
+	public Tetris() {
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLocation(700, 200);
+		this.setSize(220, 275);
+		this.setResizable(false);
+		tp = new TetrisPanel();
+		this.getContentPane().add(tp);
+		
+		//添加菜单
+		JMenuBar menubar = new JMenuBar();
+		this.setJMenuBar(menubar);
+		JMenu menuGame = new JMenu("游戏");
+		menubar.add(menuGame);
+		
+		JMenuItem itemNew = new JMenuItem("新游戏");
+		itemNew.setActionCommand("new");
+		itemPause = new JMenuItem("暂停");
+		itemPause.setActionCommand("pause");
+		
+		itemContinue = new JMenuItem("继续");
+		itemContinue.setActionCommand("continue");
+		itemContinue.setEnabled(false);
+		
+		menuGame.add(itemNew);
+		menuGame.add(itemPause);
+		menuGame.add(itemContinue);
+		
+		MenuListener menuListener = new MenuListener();
+		itemNew.addActionListener(menuListener);
+		itemPause.addActionListener(menuListener);
+		itemContinue.addActionListener(menuListener);
+		
+		
+		//让整个JFrame添加键盘监听
+		this.addKeyListener( tp.listener );
+	}
+	class MenuListener implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			//玩新游戏
+			if(e.getActionCommand().equals("new")){
+				tp.newGame();
+			}
+			if(e.getActionCommand().equals("pause")){
+				timer.stop();
+				itemContinue.setEnabled(true);
+				itemPause.setEnabled(false);
+			}
+			if(e.getActionCommand().equals("continue")){
+				timer.restart();
+				itemContinue.setEnabled(false);
+				itemPause.setEnabled(true);
+			}
+		}
+	}
+	
+	private Timer timer;
+	
+	class TetrisPanel extends JPanel{
+		// 方块的形状：
+				// 第一维代表方块类型(包括7种:S、Z、L、J、I、O、T)
+				// 第二维代表旋转次数
+				// 第三四维代表方块矩阵
+		        // shapes[type][turnState][i] i--> block[i/4][i%4]
+				int shapes[][][] = new int[][][] {
+				/*
+				 * 模板 { {0,0,0,0,0,0,0,0, 0,0,0,0, 0,0,0,0}, {0,0,0,0,0,0,0,0, 0,0,0,0,
+				 * 0,0,0,0}, {0,0,0,0,0,0,0,0, 0,0,0,0, 0,0,0,0}, {0,0,0,0,0,0,0,0,
+				 * 0,0,0,0, 0,0,0,0} }
+				 */
+						// I (※把版本1中的横条从第1行换到第2行)
+						{ { 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 },
+								{ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0 } },
+						// S
+						{ { 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0 },
+								{ 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0 } },
+						// Z
+						{ { 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 } },
+						// J
+						{ { 0, 1, 0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
+								{ 1, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+						// O
+						{ { 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+						// L
+						{ { 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+								{ 0, 0, 1, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
+						// T
+						{ { 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0 },
+								{ 1, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
+								{ 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 0, 0, 0, 0, 0, 0 } }
+								};
+				
+		private int blockType;//方块类型
+		private int turnState;//旋转状态
+		private int x;//方块的位置x--列的位置--列号
+		private int y;//方块的位置y--行的位置--行号
+		
+		private int map[][]=new int[13][23];//地图：12列22行。为防止越界，数组开成：13列23行
+		
+		
+		private int delay=1000;
+		public TimerKeyLister listener=new TimerKeyLister(); 
+		
+		private int score=0;//分数
+		
+		public TetrisPanel(){
+			newGame();
+			nextBlock();
+			//timer = new Timer(delay,listener);
+			//timer.start();
+		}
+		
+		public void newGame() {
+			blockType = (int)(Math.random()*1000)%7;
+			turnState = (int)(Math.random()*1000)%4;
+			x=4;
+			y=0;
+			
+			for( int i=0;i<12;i++){//走列
+				for(int j=0;j<21;j++){//走行
+					if(i==0 || i==11){//3为界面边框的格
+						map[i][j]=3;//按理只要用0和1以外的整数就可以，但这里用3有特殊作用--后面用
+					}else{
+						map[i][j]=0;
+					}
+				}
+				map[i][21]=3;//3为界面边框的格
+			}
+			
+			if(timer!=null){
+				timer.stop();
+			}
+			
+			delay=1000;
+			timer = new Timer(delay,listener);
+			timer.start();
+		}
+		
+	    private void nextBlock() {
+			blockType = (int)(Math.random()*1000)%7;
+			turnState = (int)(Math.random()*1000)%4;
+			x=4;
+			y=0;
+			//game Over
+			if(crash(x,y,blockType,turnState)==0){
+				timer.stop();
+				int option = JOptionPane.showConfirmDialog(this,
+						"Game Over!!，还敢来吗...");
+				if (option == JOptionPane.OK_OPTION) {
+					newGame();
+				} else if (option == JOptionPane.NO_OPTION) {
+					System.exit(0);
+				}
+			}
+		}
+	    
+	    private void down() {
+	    	if( crash(x,y+1,blockType,turnState)==0 ){//注意，这里用y+1，是判断块往下掉一格后，map中对应位置是否为堆积块或框架
+	    		add(x,y,blockType,turnState);//把当前方块的信息保存到地图
+	    		nextBlock();
+	    	}else{
+	    		y++;
+	    	}
+	    	repaint();
+	    }
+	    private void left() {
+	    	if(x>=0){
+	    		x -= crash(x-1,y,blockType,turnState);
+	    	}
+	    	repaint();
+	    }
+	    private void right() {
+	    	if(x<8){
+	    		x += crash(x+1,y,blockType,turnState);
+	    	}
+	    	repaint();
+	    }
+	    private void turn() {
+	    	if(crash(x,y,blockType,(turnState+1)%4)==1 ){
+	    		turnState = (turnState+1)%4;
+	    	}
+	    	repaint();
+	    }
+		
+	    private void add(int x, int y, int blockType, int turnState) {
+	    	for( int a=0; a<4; a++){
+	    		for(int b=0; b<4; b++){
+	    			if( shapes[blockType][turnState][a*4+b] ==1 ){
+	    				map[x+b+1][y+a] = 1;
+	    			}
+	    		}
+	    	}
+	    	tryDelLine();
+		}
+
+	    //消行
+	    private void tryDelLine(){
+	    	for(int b=0;b<21;b++){
+	    		int c=1;
+	    		for(int a=0;a<12;a++){
+	    			c &= map[a][b];//全部是1，c的结果才是1
+	    		}
+	    		if(c==1){//有一行需要消
+	    			//依次往下移动一行
+	    			for(int d=b; d>0; d--){
+	    				for(int e=0;e<11;e++){
+	    					map[e][d] = map[e][d-1];
+	    				}
+	    			}
+	    			//加分
+	    			score +=100;
+	    			delay /=1.05;
+	    			timer.setDelay(delay);
+	    		}
+	    	}
+	    	
+	    }
+	    
+		//参数例子: 4,3,2,3
+	    //判断有无碰撞
+	    private int crash(int x, int y, int blockType, int turnState){
+	    	for( int a=0; a<4; a++){
+	    		for(int b=0; b<4; b++){
+//	    			if( (shapes[blockType][turnState][a*4+b]==1 && map[x+b+1][y+a] ==1) ||
+//	    					(shapes[blockType][turnState][a*4+b]==1 && map[x+b+1][y+a] ==3 ) ){
+//	    			}
+	    			if( (shapes[blockType][turnState][a*4+b] & map[x+b+1][y+a]) ==1 ){
+	    				return 0;//碰撞
+	    			}
+	    		}
+	    	}
+	    	return 1;//没有碰撞
+	    }
+
+		@Override
+		public void paint(Graphics g) {
+//			blockType =6;
+//			turnState = 3;
+//			x=4;
+//			y=6;
+			super.paint(g);//消除残影
+			
+			g.setColor(new Color(153,51,205));
+			//画当前方块
+			for(int j=0;j<16;j++){
+				if(shapes[blockType][turnState][j]==1){
+					g.fillRect((j%4+x+1)*10, (j/4+y)*10, 10, 10);
+					g.setColor(Color.cyan);
+					g.drawRect((j%4+x+1)*10, (j/4+y)*10, 10, 10);
+					g.setColor(new Color(153,51,205));
+				}
+			}
+			
+			//画界面框架 以及 堆积块---整个地图
+			g.setColor(Color.red);
+			for( int i=0;i<12;i++){//走列
+				for(int j=0;j<22;j++){//走行
+					if(map[i][j]==3){
+						g.drawRect(i*10, j*10, 10, 10);
+					}else if(map[i][j]==1){
+						g.fillRect(i*10, j*10, 10, 10);
+						g.setColor(Color.GREEN);
+						g.drawRect(i*10, j*10, 10, 10);
+						g.setColor(Color.red);
+					}
+				}
+			}
+			
+			//显示分数，同时为版面美观，在界面上再加点东西
+			// 画方块区右侧部分
+			g.setColor(Color.red);
+			g.setFont(new Font("aa", Font.BOLD, 11));
+			g.drawString("score=" + score, 130, 20);
+			
+			g.setFont(new Font("aa", Font.PLAIN, 13));
+			g.setColor(Color.blue);
+			g.drawString("拒绝盗版游戏，", 125, 70);
+			g.drawString("注意自我保护。", 125, 90);
+			g.drawString("谨防受骗上当。", 125, 110);
+			g.drawString("适度游戏益脑，", 125, 130);
+			g.drawString("沉迷游戏伤身。", 125, 150);
+			g.drawString("合理安排时间，", 125, 170);
+			g.drawString("享受健康生活。", 125, 190);
+			
+		}
+		
+		class TimerKeyLister extends KeyAdapter implements ActionListener{
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				down();
+			}
+
+			@Override
+			public void keyPressed(KeyEvent e) {
+				switch(e.getKeyCode()){
+				    case KeyEvent.VK_DOWN:
+				    	down(); break;
+				    case KeyEvent.VK_LEFT:
+				    	left();break;
+				    case KeyEvent.VK_RIGHT:
+				    	right();break;
+				    case KeyEvent.VK_UP:
+				    	turn();break;
+				    case KeyEvent.VK_F1:
+				    	plug();
+				    case KeyEvent.VK_F2:
+				    	time();
+				}
+			}
+			
+		}
+
+		public void plug() {
+			score+=100;
+		}
+
+		public void time() {
+			delay =1000;
+			timer.setDelay(delay);
+		}
+
+	}
+
+
+}
+
+```
+
+
+运行界面：
+=====
+
+![](http://img.blog.csdn.net/20160611152216374)
+
+![](http://img.blog.csdn.net/20160611152225015)
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

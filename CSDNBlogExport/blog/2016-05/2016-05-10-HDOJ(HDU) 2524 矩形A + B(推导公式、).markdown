@@ -1,0 +1,91 @@
+---
+layout: post
+title: "HDOJ(HDU) 2524 矩形A + B(推导公式、)"
+date: 2016-05-10 04:16:51 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 数论相关/树
+tags: [数据,网格]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+给你一个高为n ，宽为m列的网格，计算出这个网格中有多少个矩形，下图为高为2，宽为4的网格.Input 
+第一行输入一个t, 表示有t组数据，然后每行输入n,m,分别表示网格的高和宽 ( n < 100 , m < 100).Output 
+每行输出网格中有多少个矩形.Sample Input 
+2 
+1 2 
+2 4Sample Output 
+3 
+30 
+---
+
+
+Problem Description 
+给你一个高为n ，宽为m列的网格，计算出这个网格中有多少个矩形，下图为高为2，宽为4的网格.Input 
+第一行输入一个t, 表示有t组数据，然后每行输入n,m,分别表示网格的高和宽 ( n < 100 , m < 100).Output 
+每行输出网格中有多少个矩形.Sample Input 
+2 
+1 2 
+2 4Sample Output 
+3 
+30
+<!-- more -->
+----------
+
+Problem Description
+给你一个高为n ，宽为m列的网格，计算出这个网格中有多少个矩形，下图为高为2，宽为4的网格.
+
+ ![](http://img.blog.csdn.net/20160510041422769)
+
+Input
+第一行输入一个t, 表示有t组数据，然后每行输入n,m,分别表示网格的高和宽 ( n < 100 , m < 100).
+
+ 
+
+Output
+每行输出网格中有多少个矩形.
+ 
+
+Sample Input
+2
+1 2
+2 4
+ 
+
+Sample Output
+3
+30
+
+
+此方格其实就是求其中所有格子数，如果按宽度来算的话，1,2,3,...m,种情况，对每一种情况，有（1+2+3+...+n）个，所以归纳起来应该是（1+2+3+...+m）*(1+2+3+...+n)个，所以有了上面的代码，属于简单的数论题
+
+有n行和m列。  
+如果只看一行的话，它有多少个矩形呢？单个地数有m个，两个地数有m-1个……，m个地数有1个。  
+每一行就有：1+2+3+……+m个=m * (m + 1) / 2。  
+我们把每一行抽象成一个矩形，也就只剩一列了。一列的话，有:1+2+……+n=n * (n + 1) / 2个。  
+总结起来，就有：（1+m）* m/2 * (1+n)*n/2那么多个了。  
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		int t=sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			int m =sc.nextInt();
+			System.out.println(n*m*(n+1)*(m+1)/4);
+		}
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

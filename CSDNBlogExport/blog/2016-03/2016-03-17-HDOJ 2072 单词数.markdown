@@ -1,0 +1,108 @@
+---
+layout: post
+title: "HDOJ 2072 单词数"
+date: 2016-03-17 08:29:04 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- String
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+lily的好朋友xiaoou333最近很空，他想了一件没有什么意义的事情，就是统计一篇文章里不同单词的总数。下面你的任务是帮助xiaoou333解决这个问题。Input 
+有多组数据，每组一行，每组就是一篇小文章。每篇小文章都是由小写字母和空格组成，没有标点符号，遇到#时表示输入结束。Output 
+每组只输出一个整数，其单独成行，该整数代表一篇文章里不同单 
+---
+
+
+Problem Description 
+lily的好朋友xiaoou333最近很空，他想了一件没有什么意义的事情，就是统计一篇文章里不同单词的总数。下面你的任务是帮助xiaoou333解决这个问题。Input 
+有多组数据，每组一行，每组就是一篇小文章。每篇小文章都是由小写字母和空格组成，没有标点符号，遇到#时表示输入结束。Output 
+每组只输出一个整数，其单独成行，该整数代表一篇文章里不同单
+<!-- more -->
+----------
+
+Problem Description
+lily的好朋友xiaoou333最近很空，他想了一件没有什么意义的事情，就是统计一篇文章里不同单词的总数。下面你的任务是帮助xiaoou333解决这个问题。
+ 
+
+Input
+有多组数据，每组一行，每组就是一篇小文章。每篇小文章都是由小写字母和空格组成，没有标点符号，遇到#时表示输入结束。
+ 
+
+Output
+每组只输出一个整数，其单独成行，该整数代表一篇文章里不同单词的总数。
+ 
+
+Sample Input
+you are my friend
+#
+ 
+
+Sample Output
+4
+
+我的思路是先按照空格来分配单词。
+用String数组。
+最后来比较有多少个相等的单词。
+相等就减一。
+我用了一个boolean型的数组来判断当前单词是否已经被比较了。
+
+```
+
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			String str = sc.nextLine();
+			if(str.charAt(0)=='#'){
+				return ;
+			}
+			
+			String[] strs = new String[str.length()];
+			for(int i=0;i<strs.length;i++){
+				strs[i] = "";
+			}
+			int count =0;
+			for(int i=0;i<str.length();i++){
+				if(str.charAt(i)!=' '){
+					//System.out.println("--- "+str.charAt(i));
+					strs[count]=strs[count]+str.charAt(i);
+				}else{
+					count++;
+				}
+			}
+			
+//			for(int i=0;i<count;i++){
+//				System.out.println(strs[i]);
+//			}
+			
+			int number =strs.length-1;
+			boolean iscp[] = new boolean[strs.length];
+			for(int i=0;i<iscp.length;i++){
+				iscp[i]=false;
+			}
+			for(int i=0;i<strs.length-1;i++){
+				for(int j=i+1;j<strs.length;j++){
+					if(strs[i].equals(strs[j])&&!iscp[j]){
+						number--;
+						iscp[j]=true;
+					}
+				}
+			}
+			
+			System.out.println(number);
+			
+			
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

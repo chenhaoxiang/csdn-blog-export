@@ -1,0 +1,97 @@
+---
+layout: post
+title: "HDOJ 1215 七夕节"
+date: 2016-02-28 09:52:28 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+七夕节那天,月老来到数字王国,他在城门上贴了一张告示,并且和数字王国的人们说:”你们想知道你们的另一半是谁吗?那就按照告示上的方法去找吧!” 
+人们纷纷来到告示前,都想知道谁才是自己的另一半.告示如下:数字N的因子就是所有比N小又能被N整除的所有正整数,如12的因子有1,2,3,4,6. 
+你想知道你的另一半吗?Input 
+输入数据的第一行是一个数字T(1 
+---
+
+
+Problem Description 
+七夕节那天,月老来到数字王国,他在城门上贴了一张告示,并且和数字王国的人们说:”你们想知道你们的另一半是谁吗?那就按照告示上的方法去找吧!” 
+人们纷纷来到告示前,都想知道谁才是自己的另一半.告示如下:数字N的因子就是所有比N小又能被N整除的所有正整数,如12的因子有1,2,3,4,6. 
+你想知道你的另一半吗?Input 
+输入数据的第一行是一个数字T(1
+<!-- more -->
+----------
+
+Problem Description
+七夕节那天,月老来到数字王国,他在城门上贴了一张告示,并且和数字王国的人们说:"你们想知道你们的另一半是谁吗?那就按照告示上的方法去找吧!"
+人们纷纷来到告示前,都想知道谁才是自己的另一半.告示如下:
+
+![](http://img.blog.csdn.net/20160228213433766)
+
+
+
+
+数字N的因子就是所有比N小又能被N整除的所有正整数,如12的因子有1,2,3,4,6.
+你想知道你的另一半吗?
+
+ 
+
+Input
+输入数据的第一行是一个数字T(1<=T<=500000),它表明测试数据的组数.然后是T组测试数据,每组测试数据只有一个数字N(1<=N<=500000).
+
+ 
+
+Output
+对于每组测试数据,请输出一个代表输入数据N的另一半的编号.
+
+ 
+
+Sample Input
+3
+2
+10
+20
+ 
+
+Sample Output
+1
+8
+22
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+		while(t-->0){
+			int n = sc.nextInt();
+			int sum=0;
+			int m=n;
+			for(int i=2;i<m;i++){
+				if(n%i==0){
+					sum+=i;
+					if(i!=n/i)
+					{
+						sum+=n/i;
+						m=n/i;
+					}
+				}
+			}
+			sum++;
+			System.out.println(sum);
+			
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

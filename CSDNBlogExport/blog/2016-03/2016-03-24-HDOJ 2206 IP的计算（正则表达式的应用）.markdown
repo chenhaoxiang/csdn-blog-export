@@ -1,0 +1,86 @@
+---
+layout: post
+title: "HDOJ 2206 IP的计算（正则表达式的应用）"
+date: 2016-03-24 01:29:20 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,----- ----- Java正则表达式,❺ 算法及基础题,----- ③、Java知识点及应用
+tags: [正则表达式,java,acm,ipv4]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+在网络课程上，我学到了很多有关IP的知识。IP全称叫网际协议，有时我们又用IP来指代我们的IP网络地址，现在IPV4下用一个32位无符号整数来表示，一般用点分方式来显示，点将IP地址分成4个部分，每个部分为8位，表示成一个无符号整数（因此不需要用正号出现），如192.168.100.16，是我们非常熟悉的IP地址，一个IP地址串中没有空格出现（因为要表示成一 
+---
+
+
+Problem Description 
+在网络课程上，我学到了很多有关IP的知识。IP全称叫网际协议，有时我们又用IP来指代我们的IP网络地址，现在IPV4下用一个32位无符号整数来表示，一般用点分方式来显示，点将IP地址分成4个部分，每个部分为8位，表示成一个无符号整数（因此不需要用正号出现），如192.168.100.16，是我们非常熟悉的IP地址，一个IP地址串中没有空格出现（因为要表示成一
+<!-- more -->
+----------
+
+Problem Description
+在网络课程上，我学到了很多有关IP的知识。IP全称叫网际协议，有时我们又用IP来指代我们的IP网络地址，现在IPV4下用一个32位无符号整数来表示，一般用点分方式来显示，点将IP地址分成4个部分，每个部分为8位，表示成一个无符号整数（因此不需要用正号出现），如192.168.100.16，是我们非常熟悉的IP地址，一个IP地址串中没有空格出现（因为要表示成一个32数字）。
+但是粗心的我，常常将IP地址写错，现在需要你用程序来判断。
+
+ 
+
+Input
+输入有多个case，每个case有一行，不超过100个字符。
+ 
+
+Output
+对于每个case，判断输入的IP是否正确，如果正确输入YES，否则NO。
+ 
+
+Sample Input
+192.168.100.16
+ 
+
+Sample Output
+YES
+
+
+首先看下IPv4的格式：
+![](http://img.blog.csdn.net/20160324132724548)
+
+用JAVA的正则表达式很容易就写出来了。
+不过需要注意的一点是”.“号的转义。
+
+部分正则表达式符号的解释：
+X? (  X一次或一次也没有)
+X* ( X，零次或多次 )
+X+ ( X，一次或多次 )
+X{n} ( X，恰好 n 次 )
+X{n,}( X，至少 n 次 )
+X{n,m}  (X，至少 n 次，但是不超过 m 次 )
+X|Y (X 或 Y )
+[abc] ( a、b 或 c（简单类） )
+\d (数字：[0-9] )
+
+```
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			String str = sc.nextLine();
+			
+			if(str.matches("(((25[0-5])|(2[0-4]\\d)|([01]?\\d\\d?))\\.){3}(25[0-5]|2[0-4]\\d|[01]?\\d\\d?)")){
+				System.out.println("YES");
+			}else{
+				System.out.println("NO");
+			}
+		}
+		
+	}
+
+}
+
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,95 @@
+---
+layout: post
+title: "HDOJ 2200 Eddy's AC难题（数学组合概率题）"
+date: 2016-03-24 06:31:43 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Eddy是个ACMer,他不仅喜欢做ACM题,而且对于Ranklist中每个人的ac数量也有一定的研究,他在无聊时经常在纸上把Ranklist上每个人的ac题目的数量摘录下来，然后从中选择一部分人(或者全部)按照ac的数量分成两组进行比较，他想使第一组中的最小ac数大于第二组中的最大ac数，但是这样的情况会有很多，聪明的你知道这样的情况有多少种吗?特别说明： 
+---
+
+
+Problem Description 
+Eddy是个ACMer,他不仅喜欢做ACM题,而且对于Ranklist中每个人的ac数量也有一定的研究,他在无聊时经常在纸上把Ranklist上每个人的ac题目的数量摘录下来，然后从中选择一部分人(或者全部)按照ac的数量分成两组进行比较，他想使第一组中的最小ac数大于第二组中的最大ac数，但是这样的情况会有很多，聪明的你知道这样的情况有多少种吗?特别说明：
+<!-- more -->
+----------
+
+**Problem Description**
+Eddy是个ACMer,他不仅喜欢做ACM题,而且对于Ranklist中每个人的ac数量也有一定的研究,他在无聊时经常在纸上把Ranklist上每个人的ac题目的数量摘录下来，然后从中选择一部分人(或者全部)按照ac的数量分成两组进行比较，他想使第一组中的最小ac数大于第二组中的最大ac数，但是这样的情况会有很多，聪明的你知道这样的情况有多少种吗?
+
+特别说明：为了问题的简化，我们这里假设摘录下的人数为n人，而且每个人ac的数量不会相等，最后结果在64位整数范围内.
+
+ 
+
+**Input**
+输入包含多组数据，每组包含一个整数n,表示从Ranklist上摘录的总人数。
+
+ 
+
+**Output**
+对于每个实例，输出符合要求的总的方案数，每个输出占一行。
+
+ 
+
+**Sample Input**
+2
+4
+ 
+
+**Sample Output**
+1
+17
+
+**分析思路：**
+可以这么想，假设n个人的ac数量按从小到大排列，可以从中任选i个人(n=>i>=2)，（C(n,i)）种。
+再把这i个人分2组(每个人都要分组)，要是满足最小ac数大于最大ac数，只需要在i个人中插板即可。例如： 
+i个人假如分别为 ： 
+1，2，3，4，......i-1，i(i个人的ac数从小到大排列) 
+只需在任意位置插板就可分为符合要求的2组： 
+1，2，3......t， || t+1...i-1，i (1<=t< i) 
+则 1，2，3......t 为一组 
+t+1，t+2，......i-1，i 为一组 
+很明显这样分组符合要求，在这i人中共有i-1种分法(t取不同值) 
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new  Scanner(System.in);
+		while(sc.hasNext()){
+			double n = sc.nextDouble();
+			double sum = 0;
+			for(int i=2;i<=n;i++){
+				sum = sum+(i-1)*zs(n,i);
+			}
+			System.out.println((long)(sum+0.5));
+		}
+		
+	}
+
+	private static double zs(double n, double i) {
+		return (jc(n)/jc(i))/jc(n-i);
+	}
+
+	private static double jc(double n) {
+		double sum = 1;
+		for(int i=1;i<=n;i++){
+			sum=sum*i;
+		}
+		return sum;
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,125 @@
+---
+layout: post
+title: "【错误解决】本地计算机上的mysql服务启动停止后 某些服务在未由其他服务或程序使用时将自动停止"
+date: 2016-12-01 05:49:26 +0800
+comments: true
+categories:❷ Java大学之行,----- ⑤、数据库,❻ 其他,----- 上网技巧/问题解决
+tags: [mysql,计算机]
+keyword: 陈浩翔, 谙忆
+description: 转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+在启动mysql服务时出现该错误: 
+本地计算机上的mysql服务启动停止后,某些服务在未由其他服务或程序使用时将自动停止。mysql 版本 5.7.14 
+系统 win 7后来经过一系列的百度，谷歌，总算是解决了。首先，你需要把原来的服务删除：mysqld --remove mysq 
+---
+
+
+转载请注明出处：http://blog.csdn.net/qq_26525215
+本文源自【大学之旅_谙忆的博客】
+在启动mysql服务时出现该错误: 
+本地计算机上的mysql服务启动停止后,某些服务在未由其他服务或程序使用时将自动停止。mysql 版本 5.7.14 
+系统 win 7后来经过一系列的百度，谷歌，总算是解决了。首先，你需要把原来的服务删除：mysqld --remove mysq
+<!-- more -->
+----------
+
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+在启动mysql服务时出现该错误:
+本地计算机上的mysql服务启动停止后,某些服务在未由其他服务或程序使用时将自动停止。
+
+![](http://img.blog.csdn.net/20161201173209162)
+
+mysql 版本 5.7.14
+系统 win 7
+
+后来经过一系列的百度，谷歌，总算是解决了。
+
+首先，你需要把原来的服务删除：
+```
+mysqld --remove mysql
+```
+
+![](http://img.blog.csdn.net/20161201174209208)
+
+注意:mysql为你的服务名称，自己可以随便定义的。
+此命令需要进入mysql安装目录下的bin目录运行！
+
+mysql的根目录下：
+你需要清空data目录。
+
+如果没有data目录，请自行创建一个空目录，起名为data！
+
+然后在bin目录下运行命令:
+```
+mysqld --initialize-insecure --user=mysql
+```
+初始化！
+
+![](http://img.blog.csdn.net/20161201174219473)
+
+接着运行:
+
+```
+mysqld --install mysql --defaults-file=d:\mysql-5.7.14-winx64\my.ini
+```
+后面的路径记得改成自己的！
+这是注册mysql服务！
+
+![](http://img.blog.csdn.net/20161201174239270)
+嗯，这里有个小瑕疵，mysql我少打了个l。
+不过没事，这个名字是自定义的！
+
+我按照没打错的情况来解释哈。
+
+接下来就是启动服务:
+请以管理员权限运行！
+```
+net start mysql
+```
+
+![](http://img.blog.csdn.net/20161201174501007)
+我这里打的是mysq，是因为前面我定义的名字是mysq了、、、
+
+然后就OK了！
+
+我不知道那个是不是生成随机密码的。
+
+大家可以去data目录下找.err后缀的日志。
+
+![](http://img.blog.csdn.net/20161201174637100)
+
+打开文件:
+
+![](http://img.blog.csdn.net/20161201174658366)
+
+会告诉你密码的！
+
+用户名是:root
+
+接下来就是登陆:
+```
+mysql -u root -p
+```
+因为我这里的密码为空，直接再空格就OK了。
+
+![](http://img.blog.csdn.net/20161201174758385)
+
+问题完美解决！
+
+
+本文章由<a href="https://chenhaoxiang.github.io/">[谙忆]</a>编写， 所有权利保留。 
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://blog.csdn.net/qq_26525215'><font color="green">http://blog.csdn.net/qq_26525215</font></a><br><br>
+本文源自<strong>【<a href='http://blog.csdn.net/qq_26525215' target='_blank'>大学之旅_谙忆的博客</a>】</strong></p>
+</blockquote>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,111 @@
+---
+layout: post
+title: "HDOJ 2073 无限的路"
+date: 2016-02-04 08:38:09 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+甜甜从小就喜欢画图画，最近他买了一支智能画笔，由于刚刚接触，所以甜甜只会用它来画直线，于是他就在平面直角坐标系中画出如下的图形： 
+甜甜的好朋友蜜蜜发现上面的图还是有点规则的，于是他问甜甜：在你画的图中，我给你两个点，请你算一算连接两点的折线长度（即沿折线走的路线长度）吧。Input 
+第一个数是正整数N（≤100）。代表数据的组数。 
+每组数据由四个非负整 
+---
+
+
+Problem Description 
+甜甜从小就喜欢画图画，最近他买了一支智能画笔，由于刚刚接触，所以甜甜只会用它来画直线，于是他就在平面直角坐标系中画出如下的图形： 
+甜甜的好朋友蜜蜜发现上面的图还是有点规则的，于是他问甜甜：在你画的图中，我给你两个点，请你算一算连接两点的折线长度（即沿折线走的路线长度）吧。Input 
+第一个数是正整数N（≤100）。代表数据的组数。 
+每组数据由四个非负整
+<!-- more -->
+----------
+
+Problem Description
+甜甜从小就喜欢画图画，最近他买了一支智能画笔，由于刚刚接触，所以甜甜只会用它来画直线，于是他就在平面直角坐标系中画出如下的图形：
+![](http://img.blog.csdn.net/20160204203652287)
+
+
+
+
+甜甜的好朋友蜜蜜发现上面的图还是有点规则的，于是他问甜甜：在你画的图中，我给你两个点，请你算一算连接两点的折线长度（即沿折线走的路线长度）吧。
+ 
+
+Input
+第一个数是正整数N（≤100）。代表数据的组数。
+每组数据由四个非负整数组成x1，y1，x2，y2；所有的数都不会大于100。
+
+ 
+
+Output
+对于每组数据，输出两点(x1,y1),(x2,y2)之间的折线距离。注意输出结果精确到小数点后3位。
+ 
+
+Sample Input
+5
+0 0 0 1
+0 0 1 0
+2 3 3 1
+99 99 9 9
+5 5 5 5
+ 
+
+Sample Output
+1.000
+2.414
+10.646
+54985.047
+0.000
+
+
+求出（x1,y1）到（0,0）的距离，
+求出（x2，y2）到（0，0）的距离，
+相减取绝对值！
+
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		
+		int t = sc.nextInt();
+		while(t-->0){
+			int x1 = sc.nextInt();
+			int y1 = sc.nextInt();
+			int x2 = sc.nextInt();
+			int y2 = sc.nextInt();
+			
+			double numbers =Math.abs( answer(x1,y1)-answer(x2,y2)  );
+			
+			System.out.printf("%.3f",numbers);
+			System.out.println();
+			
+		}
+	}
+
+	private static double answer(int x, int y) {
+		double t = Math.sqrt(2);
+		double ans = 0.0;
+		for(int i=1;i<x+y;i++)
+			ans+=t*i;
+		ans =ans+t*x;
+		for(int i=0;i<x+y;i++)
+			ans =ans+Math.sqrt(i*i+(i+1)*(i+1));
+		
+		return ans;
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,226 @@
+---
+layout: post
+title: "Web---JS-返回上一页并刷新代码整理"
+date: 2016-07-25 12:40:01 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅,----- ----- HTML/CSS/JS网络编程
+tags: [web开发,javascript]
+keyword: 陈浩翔, 谙忆
+description: 返回上一页并刷新在此功能有利于用户的体验,是每一个web开发人员所必备的一项，长话短说，今天介绍实现此功能的一个方法，需要了解的朋友可以参考下:一：JS 重载页面，本地刷新,返回上一页  
+代码如下:<a href="javascript:history.go(-1)">返回上一页</a> 
+<a href="javascript:location.reload()">重载页面，本地刷新</a> 
+---
+
+
+返回上一页并刷新在此功能有利于用户的体验,是每一个web开发人员所必备的一项，长话短说，今天介绍实现此功能的一个方法，需要了解的朋友可以参考下:一：JS 重载页面，本地刷新,返回上一页  
+代码如下:<a href="javascript:history.go(-1)">返回上一页</a> 
+<a href="javascript:location.reload()">重载页面，本地刷新</a>
+<!-- more -->
+----------
+
+返回上一页并刷新在此功能有利于用户的体验,是每一个web开发人员所必备的一项，长话短说，今天介绍实现此功能的一个方法，需要了解的朋友可以参考下:
+
+一：JS 重载页面，本地刷新,返回上一页 
+代码如下:
+
+```
+<a href="javascript:history.go(-1)">返回上一页</a> 
+<a href="javascript:location.reload()">重载页面，本地刷新</a> 
+<a href="javascript:history.go(-1);location.reload()">返回上一页重载页面，本地刷新</a> 
+```
+
+返回前二页并刷新的JS代码应该怎样写。 
+代码如下:
+
+```
+history.go(-2); 
+location.reload(); 
+```
+
+二：js 方法 
+
+代码如下:
+
+```
+<a href="#" onclick="self.location=document.referrer;">返回</a> 
+```
+
+
+asp自动返回并刷新的方法： 
+
+代码如下:
+
+
+```
+response.Write("<script language=javascript>self.location=document.referrer;</script>") 
+```
+一般用于向一个页面提交action后返回前一页并刷新！ 
+
+1. Javascript 返回上一页history.go(-1), 返回两个页面: history.go(-2);
+2. history.back().
+3. window.history.forward()返回下一页
+4. window.history.go(返回第几页,也可以使用访问过的URL) 
+
+例:
+
+```
+<a href="javascript:history.go(-1);">向上一页</a>
+```
+
+```
+response.Write("<script language=javascript>")
+response.Write("if(!confirm('完成任务?')){history.back();}")
+response.Write("</script>")
+response.Write("<script language=javascript>history.go(-1);</script>")
+```
+
+```
+<a href="javascript:history.go(-1);">向上一页</a>
+
+页面跳转:onclick="window.location.href='list.aspx'" 
+```
+
+P.S.
+小技巧(JS引用JS):
+
+```
+<script type=text/javascript>
+<!--
+if (typeof SWFObject == "undefined") {
+document.write('<scr' + 'ipt type="text/javascript" src="/scripts/swfobject-1.5.js"></scr' + 'ipt>');}
+//-->
+</script> 
+```
+
+Javascript刷新页面的几种方法：
+
+```
+1    history.go(0)
+2    location.reload()
+3    location=location
+4    location.assign(location)
+5    document.execCommand('Refresh')
+6    window.navigate(location)
+7    location.replace(location)
+8    document.URL=location.href 
+```
+
+自动刷新页面的方法:
+1.页面自动刷新：把如下代码加入<head>区域中
+
+```
+<meta http-equiv="refresh" content="20">  
+```
+
+其中20指每隔20秒刷新一次页面.
+
+2.页面自动跳转：把如下代码加入`<head>`区域中
+
+```
+<meta http-equiv="refresh" content="20;url=http://chenhaoxiang.github.io">  
+```
+
+其中20指隔20秒后跳转到http://chenhaoxiang.github.io页面
+
+3.页面自动刷新js版
+
+```
+<script language="JavaScript">
+function myrefresh()
+{
+       window.location.reload();
+}
+setTimeout('myrefresh()',1000); //指定1秒刷新一次
+</script> 
+```
+
+ASP.NET如何输出刷新父窗口脚本语句
+
+```
+1.   this.response.write("<script>opener.location.reload();</script>");
+2.   this.response.write("<script>opener.window.location.href = opener.window.location.href;</script>");
+3.   Response.Write("<script language=javascript>opener.window.navigate(''你要刷新的页.asp'');</script>") 
+```
+
+JS刷新框架的脚本语句 
+
+```
+//如何刷新包含该框架的页面用
+<script language=JavaScript>
+   parent.location.reload();
+</script>
+
+//子窗口刷新父窗口
+<script language=JavaScript>
+    self.opener.location.reload();
+</script>
+(　或　<a href="javascript:opener.location.reload()">刷新</a>   )
+
+//如何刷新另一个框架的页面用
+<script language=JavaScript>
+   parent.另一FrameID.location.reload();
+</script>
+```
+
+如果想关闭窗口时刷新或者想开窗时刷新的话，在<body>中调用以下语句即可。
+
+```
+<body onload="opener.location.reload()"> 开窗时刷新
+<body onUnload="opener.location.reload()"> 关闭时刷新
+
+<script language="javascript">
+window.opener.document.location.reload()
+</script> 
+```
+
+三：在ASP中利用JS实现返回上一页并刷新 
+在ASP中利用JS实现返回上一页并刷新我想是利用ASP开发网站的时候经常使用的。但写法也有几种，但目的都是一样的。 
+
+复制代码 代码如下:
+
+
+```
+<% 
+response.write("<font color=""red"" font-size=""12px"">已经删除成功！font>") 
+%> 
+<div align="center">[<a href="/"onClick="javascript :window.history.go(-1);return false;" class=fontsize14><span style="color: #CC0033">返回</span></a>]</div> 
+```
+
+这段代码实现的功能是告知用户要是实现的功能已经达到，但在返回的时候最好是刷新一下原来的页面让新信息显示出来或者是让删除的东西不在显示。但这段代码却不能在返回的时候刷新原来的网页。 
+所以需要在原来的页面加上这样一段代码： 
+
+```
+<script> 
+if(window.name != "Bencalie"){ 
+//如果页面的 name 属性不是指定的名称就刷新它 
+location.reload(); 
+window.name = "Bencalie"; 
+} 
+else{ 
+//如果页面的 name 属性是指定的名称就什么都不做，避免不断的刷新
+window.name = ""; 
+} 
+</script> 
+```
+
+这样就可以达到我们的目的了--返回上一页并刷新。 
+当然还有比这个要简单的代码,
+
+```
+response.write("<script>alert('删除成功！');window.location='原来的页面';</script>"); 
+```
+
+
+
+
+
+
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

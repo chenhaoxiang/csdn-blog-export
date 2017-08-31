@@ -1,0 +1,81 @@
+---
+layout: post
+title: "HDOJ 2071 Max Num"
+date: 2016-01-28 08:52:46 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+There are some students in a class, Can you help teacher find the highest student .Input 
+There are some cases. The first line contains an integer t, indicate the cases; Each case 
+---
+
+
+Problem Description 
+There are some students in a class, Can you help teacher find the highest student .Input 
+There are some cases. The first line contains an integer t, indicate the cases; Each case
+<!-- more -->
+----------
+
+Problem Description
+There are some students in a class, Can you help teacher find the highest student .
+ 
+
+Input
+There are some cases. The first line contains an integer t, indicate the cases; Each case have an integer n ( 1 ≤ n ≤ 100 ) , followed n students’ height.
+ 
+
+Output
+For each case output the highest height, the height to two decimal plases;
+ 
+
+Sample Input
+2
+3 170.00 165.00 180.00
+4 165.00 182.00 172.00 160.00
+ 
+
+Sample Output
+180.00
+182.00
+
+
+![](http://img.blog.csdn.net/20160128205040014)
+![](http://img.blog.csdn.net/20160128205055962)
+同一个代码！这个运行时间正好是在超时的边界！~
+
+```
+import java.util.Scanner;
+public class Main {
+
+    static Scanner sc=new Scanner(System.in);
+    public static void main(String[] args) {
+        int n=sc.nextInt();
+        while(n-->0){
+                int m=sc.nextInt();
+                double[] a=new double[m];
+                double max=a[0]=sc.nextDouble();
+                for(int i=1;i<a.length;i++){
+                    a[i]=sc.nextDouble();
+                    if(max<a[i]){
+                        max=a[i];
+                    }    
+                }
+                System.out.printf("%.2f",max);
+                System.out.println();
+            }
+        
+    }
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

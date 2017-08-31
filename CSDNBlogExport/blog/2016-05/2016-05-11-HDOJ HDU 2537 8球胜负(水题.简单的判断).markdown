@@ -1,0 +1,102 @@
+---
+layout: post
+title: "HDOJ HDU 2537 8球胜负(水题.简单的判断)"
+date: 2016-05-11 02:43:18 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+8球是一种台球竞赛的规则。台面上有7个红球、7个黄球以及一个黑球，当然还有一个白球。对于本题，我们使用如下的简化规则：红、黄两名选手轮流用白球击打各自颜色的球，如果将该颜色的7个球全部打进，则这名选手可以打黑球，如果打进则算他胜。如果在打进自己颜色的所有球之前就把黑球打进，则算输。如果选手不慎打进了对手的球，入球依然有效。 
+现在给出打进的球（白球除外）的顺 
+---
+
+
+Problem Description 
+8球是一种台球竞赛的规则。台面上有7个红球、7个黄球以及一个黑球，当然还有一个白球。对于本题，我们使用如下的简化规则：红、黄两名选手轮流用白球击打各自颜色的球，如果将该颜色的7个球全部打进，则这名选手可以打黑球，如果打进则算他胜。如果在打进自己颜色的所有球之前就把黑球打进，则算输。如果选手不慎打进了对手的球，入球依然有效。 
+现在给出打进的球（白球除外）的顺
+<!-- more -->
+----------
+
+Problem Description
+8球是一种台球竞赛的规则。台面上有7个红球、7个黄球以及一个黑球，当然还有一个白球。对于本题，我们使用如下的简化规则：红、黄两名选手轮流用白球击打各自颜色的球，如果将该颜色的7个球全部打进，则这名选手可以打黑球，如果打进则算他胜。如果在打进自己颜色的所有球之前就把黑球打进，则算输。如果选手不慎打进了对手的球，入球依然有效。
+现在给出打进的球（白球除外）的顺序，以及黑球由哪方打进，你的任务是判定哪方是胜者。
+假设不会有一杆同时打进一颗黑球和其他彩球。
+![](http://img.blog.csdn.net/20160511024153680)
+
+ 
+
+Input
+输入包含多组数据。每组数据第一行是一个整数N(1<=N<=15)，表示打进的球的个数，N=0表示结束。随后有一行，包含N个字符，依序表示打进的是何种球。如果是’B’，表示是红方打进的黑球，如果是’L’，表示是黄方打进的黑球。如果是’Y’则表示是黄球，’R’表示红球。字符间没有空格。
+所有输入都满足如下条件：最后一颗球打进时这局比赛正好结束，而且打进的红球和黑球都不超过7个。
+
+ 
+
+Output
+对每组数据，输出一行。如果红方胜，输出’Red’；黄方胜，输出’Yellow’。
+ 
+
+Sample Input
+5
+RYRRB
+9
+RRRRYRRRB
+0
+ 
+
+Sample Output
+Yellow
+Red
+
+
+简单题~先看最后打进那个黑球的是谁，再看他是不是把黄球或者红球已经全部打进去了~~~
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		Scanner sc= new Scanner(System.in);
+		while(sc.hasNext()){
+			int n =sc.nextInt();
+			if(n==0){
+				break;
+			}
+			String str = sc.next();
+			int r=0;
+			int y=0;
+			for(int i=0;i<str.length()-1;i++){
+				if(str.charAt(i)=='R'){
+					r++;
+				}
+				if(str.charAt(i)=='Y'){
+					y++;
+				}
+			}
+			if(str.charAt(str.length()-1)=='B'){
+				if(r==7){
+					System.out.println("Red");
+				}else{
+					System.out.println("Yellow");
+				}
+			}else{
+				if(y==7){
+					System.out.println("Yellow");
+				}else{
+					System.out.println("Red");
+				}
+			}
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

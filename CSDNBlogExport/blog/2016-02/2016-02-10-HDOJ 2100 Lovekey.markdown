@@ -1,0 +1,178 @@
+---
+layout: post
+title: "HDOJ 2100 Lovekey"
+date: 2016-02-10 04:08:51 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 大数问题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+XYZ-26进制数是一个每位都是大写字母的数字。 A、B、C、…、X、Y、Z 分别依次代表一个0 ~ 25 的数字，一个 n 位的26进制数转化成是10进制的规则如下 
+A0A1A2A3…An-1 的每一位代表的数字为a0a1a2a3…an-1 ，则该XYZ-26进制数的10进制值就为 m ＝ a0 * 26^(n-1) + a1 * 26^(n-2) + 
+---
+
+
+Problem Description 
+XYZ-26进制数是一个每位都是大写字母的数字。 A、B、C、…、X、Y、Z 分别依次代表一个0 ~ 25 的数字，一个 n 位的26进制数转化成是10进制的规则如下 
+A0A1A2A3…An-1 的每一位代表的数字为a0a1a2a3…an-1 ，则该XYZ-26进制数的10进制值就为 m ＝ a0 * 26^(n-1) + a1 * 26^(n-2) +
+<!-- more -->
+----------
+
+Problem Description
+XYZ-26进制数是一个每位都是大写字母的数字。 A、B、C、…、X、Y、Z 分别依次代表一个0 ~ 25 的数字，一个 n 位的26进制数转化成是10进制的规则如下
+A0A1A2A3…An-1 的每一位代表的数字为a0a1a2a3…an-1 ，则该XYZ-26进制数的10进制值就为 
+
+m ＝ a0 * 26^(n-1) + a1 * 26^(n-2) + … + an-3* 26^2 + an-2*26 + an-1 
+
+一天vivi忽然玩起了浪漫，要躲在学校的一个教室，让枫冰叶子去找，当然，她也知道枫冰叶子可不是路痴，于是找到了XYZ的小虾和水域浪子帮忙，他们会在vivi藏的教室的门口，分别写上一个XYZ-26进制数，分别为 a 和 b，并且在门锁上设置了密码。显然，只有找到密码才能打开锁，顺利进入教室。这组密码被XYZ的成员称为lovekey。庆幸的是，枫冰叶子知道lovekey是 a的10进制值与b的10进制值的和的XYZ-26进制形式。当然小虾和水域浪子也不想难为枫冰叶子，所以a 和 b 的位数都不会超过200位。
+例如第一组测试数据 
+a = 0 * 26^5+0* 26^4+ 0* 26^3+ 0 *26^2 + 3*26 + 7 = 85
+b = 1*26^2 + 2*26 + 4 = 732
+则 a + b = 817 = BFL
+ 
+
+Input
+题目有多组测试数据。
+每组测试数据包含两个值均为的XYZ－26进制数，每个数字的每位只包含大写字母，并且每个数字不超过200位。
+ 
+
+Output
+输出XYZ的lovekey，每组输出占一行。
+ 
+
+Sample Input
+AAAADH  BCE
+DRW  UHD
+D  AAAAA
+ 
+
+Sample Output
+BFL
+XYZ
+D
+
+
+注意必须是大数！！！！！！！
+可以利用java中的大数来做：
+java.math.BigDecimal和java.math.BigInteger
+AC代码：
+
+```
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        final char A[] =new char[26];
+        for(int i=0;i<26;i++){
+            A[i]=(char)(i+65);
+        }
+        final char B[] =new char[26];
+//        System.out.println((int)('0'));
+        for(int i=0;i<10;i++){
+            B[i]=(char)(i+48);
+        }
+        for(int i=10;i<26;i++){
+            B[i]=(char)(i+87);
+        }
+        
+//        for(int i=0;i<26;i++){
+//            System.out.println(A[i]);
+//        }
+//        for(int i=0;i<26;i++){
+//            System.out.println(B[i]);
+//        }
+        
+        while(sc.hasNext()){
+            String a = sc.next();
+            String b = sc.next();
+//            System.out.println(a);
+//            System.out.println(b);
+            BigInteger sumNumber = new BigInteger("0");
+            BigDecimal p1 = new BigDecimal(1);
+            BigDecimal aBig = new BigDecimal(0);
+            BigDecimal bBig = new BigDecimal(0);
+            int k=0;
+            //System.out.println(aNumber.toString(10));
+            //System.out.println(bNumber.toString(10));
+            
+            for(int i=0;i<a.length();i++){
+                for(int j=0;j<A.length;j++){
+                    if(a.charAt(i)==A[j]){
+                        k=j;
+                        break;
+                    }
+                }
+                BigDecimal p =p1;
+                for(int h=0;h<a.length()-i-1;h++){
+                    p = p.multiply(new BigDecimal(26));
+                }
+                p = p.multiply(new BigDecimal(k));
+                //System.out.println("p="+p);
+                
+                
+                aBig = aBig.add(p);
+                
+            }
+            
+            
+            for(int i=0;i<b.length();i++){
+                for(int j=0;j<A.length;j++){
+                    if(b.charAt(i)==A[j]){
+                        k=j;
+                        break;
+                    }
+                }
+                BigDecimal p =p1;
+                for(int h=0;h<b.length()-i-1;h++){
+                    p = p.multiply(new BigDecimal(26));
+                }
+                p = p.multiply(new BigDecimal(k));
+                //System.out.println("p="+p);
+                
+                
+                bBig = bBig.add(p);
+                
+            }
+            //System.out.println(aBig);
+            //System.out.println(bBig);
+            
+            aBig = aBig.add(bBig);
+            
+            String m= aBig.toPlainString();
+            
+            sumNumber = new BigInteger(m,10);
+            
+            
+            String sumString = sumNumber.toString(26);
+            
+            //System.out.println(sumString);
+            
+            for(int i=0;i<sumString.length();i++){
+                for(int j=0;j<B.length;j++){
+                    if(sumString.charAt(i)==B[j]){
+                        k=j;
+                        break;
+                    }
+                }
+                System.out.print(A[k]);
+                
+            }
+            System.out.println();
+            
+        }
+        
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,712 @@
+---
+layout: post
+title: "Java---网络编程(3)-TCP-互传文件和图片"
+date: 2016-05-10 02:25:21 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java网络编程
+tags: [网络编程,socket,io流,服务器]
+keyword: 陈浩翔, 谙忆
+description: ☆ TCP建立连接，形成传输数据的通道。 
+在连接中进行大数据量传输 
+通过三次握手完成连接，是可靠协议 
+必须建立连接，效率会稍低Socket 和 
+ServerSocket类TCP传输TCP Socket：IP地址和端口，套接字Socket和ServerSocket 
+建立客户端和服务器端 
+建立连接后，通过Socket中的IO流进行数据的传输 
+关闭socket          同样，客户端 
+---
+
+
+☆ TCP建立连接，形成传输数据的通道。 
+在连接中进行大数据量传输 
+通过三次握手完成连接，是可靠协议 
+必须建立连接，效率会稍低Socket 和 
+ServerSocket类TCP传输TCP Socket：IP地址和端口，套接字Socket和ServerSocket 
+建立客户端和服务器端 
+建立连接后，通过Socket中的IO流进行数据的传输 
+关闭socket          同样，客户端
+<!-- more -->
+----------
+
+☆ TCP
+=====
+
+建立连接，形成传输数据的通道。
+在连接中进行大数据量传输
+通过三次握手完成连接，是可靠协议
+必须建立连接，效率会稍低
+
+Socket 和  
+ServerSocket类
+
+
+TCP传输
+-----
+
+TCP Socket：IP地址和端口，套接字
+
+Socket和ServerSocket
+建立客户端和服务器端
+建立连接后，通过Socket中的IO流进行数据的传输
+关闭socket          
+
+同样，客户端与服务器端是两个独立的应用程序。
+
+![](http://img.blog.csdn.net/20160510124518870)
+
+
+
+TCP传输编程
+-------
+
+
+☆基本思路（客户端）
+
+客户端需要明确服务器的ip地址以及端口，这样才可以去试着建立连接，如果连接失败，会出现异常。
+连接成功，说明客户端与服务端建立了通道，那么通过IO流就可以进行数据的传输，而Socket对象已经提供了输入流和输出流对象，通过getInputStream(), getOutputStream()获取即可。
+与服务端通讯结束后，关闭Socket。
+
+☆基本思路（服务器端）
+
+服务端需要明确它要处理的数据是从哪个端口进入的。
+当有客户端访问时，要明确是哪个客户端，可通过accept()获取已连接的客户端对象，并通过该对象与客户端通过IO流进行数据传输。
+当该客户端访问结束，关闭该客户端。
+
+基于TCP的Socket通信流程
+----------------
+
+![](http://img.blog.csdn.net/20160510124626387)
+
+
+TCP传输编程代码：
+-------
+
+☆客户端
+
+通过Socket建立对象并指定要连接的服务端主机以及端口。
+
+```
+Socket s = new Socket(“192.168.1.1”,9999);
+OutputStream out = s.getOutputStream();
+out.write(“hello”.getBytes());
+s.close();
+```
+
+☆服务器端
+
+建立服务端需要监听一个端口
+
+```
+ServerSocket ss = new ServerSocket(9999);
+Socket s = ss.accept ();
+InputStream in = s.getInputStream();
+byte[] buf = new byte[1024];
+int num = in.read(buf);
+String str = new String(buf,0,num);
+System.out.println(s.getInetAddress().toString()+”:”+str);
+s.close();
+ss.close();
+```
+
+最简单的TCP演示实例：
+------------
+
+
+客户端代码：
+
+```
+package cn.hncu.tcp;
+
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+/**
+ * 客户端
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class MyClientSocket {
+
+	public static void main(String[] args) {
+		try {
+			//因为是在自己本机上演示，IP就直接填写本机10.30.7.95的了。
+			//这个端口和IP都是服务器端的(自己可以改的)
+			Socket s = new Socket("10.30.7.95", 9999);
+			//和服务器进行三次握手，若失败则出异常，否则返回和对方通讯的socket
+			
+			OutputStream os = s.getOutputStream();
+			//发送数据
+			os.write("你好，服务器！".getBytes());
+			
+			//接收服务器端的反馈
+			InputStream in = s.getInputStream();
+			
+			DataInputStream din = new DataInputStream(in);
+			
+			System.out.println(din.readUTF());
+			
+			s.close();
+			din.close();
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+
+```
+
+
+服务器端代码：
+
+```
+package cn.hncu.tcp;
+
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * 服务器端
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class MyServerSocket {
+
+	public static void main(String[] args) {
+		
+		try {
+			ServerSocket server = new ServerSocket(9999);
+			while(true){
+				
+				System.out.println("准备接收一个数据...");
+				Socket s = server.accept();//阻塞式方法
+				System.out.println("接收了一个数据...");
+				
+				//读--从客户端读数据
+				InputStream in =  s.getInputStream();
+				byte buf[] = new byte[1024];
+				in.read(buf);
+				System.out.println("read info: "+new String(buf));
+				
+				//写--应答客户端--向他写数据
+				OutputStream out = s.getOutputStream();
+				DataOutputStream dout = new DataOutputStream(out);
+				dout.writeUTF("你好，"+s.getInetAddress().getHostAddress()+"  ,你的信息已收到。");
+				dout.close();
+				s.close();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	
+	}
+
+}
+
+```
+
+客户端运行结果：
+
+```
+你好，10.30.7.95  ,你的信息已收到。
+
+```
+
+服务器端运行结果：
+
+![](http://img.blog.csdn.net/20160510130644729)
+
+
+
+
+☆思考
+
+      对于Web服务器而言，当有多个客户端同时访问服务器时，服务端又如何提供服务呢？
+
+☆TCP传输最容易出现的问题
+
+客户端连接上服务端，两端都在等待，没有任何数据传输。
+通过例程分析：
+因为read方法或者readLine方法是阻塞式。
+解决办法：
+自定义结束标记(必须定义传输文件中没有这个这个字符串的，不然会出现接收数据不完整)
+使用shutdownInput，shutdownOutput方法。
+
+
+
+
+
+编程练习
+====
+
+☆上传文本文件
+-------
+
+读取一个本地文本文件，将数据发送到服务端，服务器端对数据进行存储。 存储完毕后，给客户端一个提示。
+
+文本文件发送的客户端
+----------
+
+```
+package cn.hncu.tcp.upload;
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+/**
+ * 文本文件发送的客户端
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class UploadTextClient {
+
+	public static void main(String[] args) {
+		
+		try {
+			Socket s = new Socket("", 10006);
+			
+			//思路：把本地文件的数据读取出来通过 s.getOutputStream()获得的out对象发送出去
+			BufferedReader bf = new BufferedReader(new FileReader("tempfiles\\client.txt"));
+			
+			OutputStream out = s.getOutputStream();//这里的输出流 对应的是服务器端的输入流
+			PrintWriter pw = new PrintWriter(out,true);//建议不要用BufferedWriter
+			//!!!!!!!!!!!!!!!!!这个true不要忘了！---自动刷新
+			//现在大家写网络传输文件，一般是用PrintWriter
+			
+			String str=null;
+			while((str=bf.readLine())!=null){
+				pw.println(str);
+			}
+			
+			//给服务器发送结束标记---上传结束，要加结束标记，
+			//否则服务器在数据接收完毕时再调用read()或readLine()时会出异常
+			//法1：pw.println("over#$@#@$");//不能出现文件中存在的结束关键字---搞特殊一点
+			//法2---建议采用该种方式---由socket内部来指定结束标记
+			s.shutdownOutput();
+			bf.close();
+			
+			//接收服务器端反馈
+			
+			InputStream in = s.getInputStream();
+			DataInputStream din = new DataInputStream(in);
+			System.out.println("server应答:"+din.readUTF());
+			s.close();
+			din.close();
+			
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+
+}
+
+```
+
+文本文件接收的服务器端
+-----------
+
+```
+package cn.hncu.tcp.upload;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * 文本文件接收的服务器端
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class UploadTextServer {
+
+	public static void main(String[] args) {
+		try {
+			ServerSocket server = new ServerSocket(10006);
+			
+			Socket s = server.accept();
+			System.out.println(s.getInetAddress().getHostAddress()+"...发送消息来");
+			
+			//读取客户端上传过来的文本文件
+			//源 ---socket(字节流)---额外：需要转换成字符流  ，缓存流
+			InputStream in  = s.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			//目的 ---硬盘字符流 FileWriter---额外：打印流
+			PrintWriter pw = new PrintWriter(new FileWriter("tempfiles\\server.txt"),true);
+			String line = null;
+			while((line=br.readLine())!=null){
+//				if("over#$@#@$".equals(line)){//自己定义的结束标志
+//				break;
+//			}
+				pw.println(line);
+			}
+			
+			pw.close();
+			
+			//上传成功，给客户端一个提示信息
+			
+			OutputStream out = s.getOutputStream();
+			DataOutputStream dout = new DataOutputStream(out);
+			dout.writeUTF("文件上传成功！");
+			s.close();
+			server.close();
+			dout.close();
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+	}
+
+}
+
+```
+
+测试通过！
+
+
+☆上传图片文件
+-------
+
+客户端需求：把一个图片文件发送到服务端并读取回馈信息。要求判断文件是否存在及格式是否为jpg或gif并要求文件小于2M。
+服务端需求：接收客户端发送过来的图片数据。进行存储后，回馈一个 上传成功字样。**支持多用户的并发访问。** 
+
+图片文件的发送-客户端
+-----------
+
+```
+package cn.hncu.tcp.upload;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+import javax.swing.JOptionPane;
+
+/**
+ * 图片文件的发送-客户端
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class UploadPicClient {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		System.out.println("请输入图片路径：");
+		String str = sc.next();
+		
+		File file = new File(str);
+		if(!(file.exists()&& file.isFile())){
+			JOptionPane.showMessageDialog(null, "文件不存在！");
+			return ;
+		}
+		
+		if(!(file.getName().endsWith(".jpg")||file.getName().endsWith(".gif"))){
+			JOptionPane.showMessageDialog(null, "文件格式不对,文件扩展名必须是jpg或gif！");
+			return ;
+		}
+		if( file.length()>=1024*1024*2){
+			JOptionPane.showMessageDialog(null, "文件过大，不应超过2M，请重新上传！");
+			return;
+		}
+		
+		//上传
+		try {
+			Socket s = new Socket("10.30.7.95", 10007);
+			
+			BufferedInputStream bin = new BufferedInputStream(new FileInputStream(str));
+			
+			OutputStream out = s.getOutputStream();
+			
+			byte buf[] = new byte[1024];
+			int len=0;
+			while((len=bin.read(buf))!=-1){
+				out.write(buf, 0, len);
+			}
+			
+			s.shutdownOutput();//告诉服务器，文件上传完毕
+			
+			//读取服务器的回馈信息
+			InputStream in = s.getInputStream();
+			byte buf2[] = new byte[1024];
+			int len2 = in.read(buf2);
+			System.out.println(new String(buf2, 0, len2));
+			
+			//关流
+			out.close();
+			bin.close();
+			s.close();
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+
+```
+
+
+图片文件接收-服务器端
+-----------
+
+```
+package cn.hncu.tcp.upload;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * 图片文件接收-服务器端
+ * @author 陈浩翔
+ *
+ * 2016-5-10
+ */
+public class UploadPicServer {
+
+	public static void main(String[] args) {
+		
+		try {
+			ServerSocket server = new ServerSocket(10007);
+			while(true){
+				Socket s = server.accept();//阻塞方法
+				//只负责和客户端进行握手
+				new Thread(new  UploadThread(s) ).start();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+}
+
+class UploadThread implements Runnable{
+	private Socket s;
+	public UploadThread(Socket s) {
+		this.s = s;
+	}
+
+	@Override
+	public void run() {
+		
+		String ip = s.getInetAddress().getHostAddress();
+		System.out.println(ip+"...发来图片");
+		
+		try {
+			BufferedInputStream bin = new BufferedInputStream(s.getInputStream());
+			
+			File dir = new File("g:\\mypic");
+			
+			if(!dir.exists()){
+				dir.mkdir();//文件夹不存在,创建mypic文件夹
+			}
+			
+			int count=1;
+			//我觉得这里的后缀名，需要通过发送方也发过来的
+			File file = new File(dir, ip+".jpg");
+			
+			while(file.exists()){
+				file = new File(dir,ip+"("+(count++) +")"+".jpg"); //带号的文件名
+			}
+			
+			FileOutputStream fout = new FileOutputStream(file);
+			
+			//从socket流中读取数据，存储到本地文件。相当于对拷
+			byte buf[] = new byte[1024];
+			int len=0;
+			while( (len=bin.read(buf))!=-1){
+				fout.write(buf, 0, len);
+			}
+			//图片接收完毕
+			
+			//向客户端发送回馈信息
+			OutputStream out = s.getOutputStream();
+			out.write( "上传成功".getBytes() );
+			
+			fout.close();
+			s.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+}
+
+```
+
+有一个小bug。是服务端接收的，因为我把后缀名统一为jpg了，gif的图片可以上传，只是变成静图了（jpg）。可以通过改后缀名，再把这图片改回去动图。还有一种方法，在上传的时候，把后缀名也上传，再通过服务器解析就可以解决这个问题。
+因为时间问题，我就不写了，这个很简单的。
+只是多发送了一个后缀名过去而已。
+
+我还是把那个后缀名的解决办法写了下：
+
+在客户端：修改的代码如下：
+
+```
+//上传
+		try {
+			Socket s = new Socket("10.30.7.95", 10007);
+			
+			BufferedInputStream bin = new BufferedInputStream(new FileInputStream(str));
+			
+			//上传文件后缀###########增加的
+			OutputStream out = s.getOutputStream();
+			String fileName = file.getName();
+			out.write(fileName.substring(fileName.length()-4, fileName.length()).getBytes());
+			
+			byte buf[] = new byte[1024];
+			int len=0;
+			while((len=bin.read(buf))!=-1){
+				out.write(buf, 0, len);
+			}
+			
+			s.shutdownOutput();//告诉服务器，文件上传完毕
+			
+			//读取服务器的回馈信息
+			InputStream in = s.getInputStream();
+			byte buf2[] = new byte[1024];
+			int len2 = in.read(buf2);
+			System.out.println(new String(buf2, 0, len2));
+			
+			//关流
+			out.close();
+			bin.close();
+			s.close();
+			
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+```
+
+
+服务器端：
+
+```
+@Override
+	public void run() {
+		
+		String ip = s.getInetAddress().getHostAddress();
+		System.out.println(ip+"...发来图片");
+		
+		try {
+			
+			
+			BufferedInputStream bin = new BufferedInputStream(s.getInputStream());
+			
+			File dir = new File("g:\\mypic");
+			
+			if(!dir.exists()){
+				dir.mkdir();//文件夹不存在,创建mypic文件夹
+			}
+			
+			
+			//读取上传过来的图片后缀是什么！#########
+			char cbuf[] = new char[4];
+			InputStreamReader insr = new InputStreamReader(bin);
+			insr.read(cbuf);
+			String str = new String(cbuf);
+			
+			int count=1;
+			//我觉得这里的后缀名，需要通过发送方也发过来的
+			File file = new File(dir, ip+str);
+			
+			while(file.exists()){
+				file = new File(dir,ip+"("+(count++) +")"+str); //带号的文件名
+			}
+			
+			FileOutputStream fout = new FileOutputStream(file);
+			
+			//从socket流中读取数据，存储到本地文件。相当于对拷
+			byte buf[] = new byte[1024];
+			int len=0;
+			//#########必须有这一句
+			bin.read(buf, 0, 8);
+			while( (len=bin.read(buf))!=-1){
+				fout.write(buf, 0, len);
+			}
+			//图片接收完毕
+			
+			//向客户端发送回馈信息
+			OutputStream out = s.getOutputStream();
+			out.write( "上传成功".getBytes() );
+			
+			fout.close();
+			s.close();
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+	}
+```
+好了，基本上就是这样的，如果想要更好，做个图形界面就好看了。自己动下手吧~~
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

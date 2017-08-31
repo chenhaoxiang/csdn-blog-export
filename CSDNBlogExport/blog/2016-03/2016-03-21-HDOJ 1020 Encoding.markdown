@@ -1,0 +1,115 @@
+---
+layout: post
+title: "HDOJ 1020 Encoding"
+date: 2016-03-21 10:51:46 +0800
+comments: true
+categories:----- HDOJ-JAVA
+tags: [string,acm,java]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Given a string containing only ‘A’ - ‘Z’, we could encode it using the following method: 
+Each sub-string containing k same characters should be encoded to “kX” where “X” is the on 
+---
+
+
+Problem Description 
+Given a string containing only ‘A’ - ‘Z’, we could encode it using the following method: 
+Each sub-string containing k same characters should be encoded to “kX” where “X” is the on
+<!-- more -->
+----------
+
+Problem Description
+Given a string containing only 'A' - 'Z', we could encode it using the following method: 
+
+1. Each sub-string containing k same characters should be encoded to "kX" where "X" is the only character in this sub-string.
+
+2. If the length of the sub-string is 1, '1' should be ignored.
+
+ 
+
+Input
+The first line contains an integer N (1 <= N <= 100) which indicates the number of test cases. The next N lines contain N strings. Each string consists of only 'A' - 'Z' and the length is less than 10000.
+
+ 
+
+Output
+For each test case, output the encoded string in a line.
+
+ 
+
+Sample Input
+2
+ABC
+ABBCCC
+ 
+
+Sample Output
+ABC
+A2B3C
+
+题意：按照字符串的顺序，输出字符的个数和字符。
+如果字符出现次数为1次，只要输出原字符。
+如果输入为：ABBCCCBBB
+输出为：A2B3C3B
+而不是：A5B3C
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t = sc.nextInt();
+
+		while (t-- > 0) {
+			String strs = sc.next();
+			// System.out.println(strs+"=strs");
+			boolean isSee[] = new boolean[strs.length()];
+			for (int i = 1; i < isSee.length; i++) {
+				isSee[i] = false;
+			}
+			int sum = 0;
+			boolean isLast=false;
+			for (int i = 0; i < strs.length()-1; i++) {
+				if(strs.charAt(i)==strs.charAt(i+1)) {
+					isSee[i]=true;
+					isSee[i+1]=true;
+					sum=sum+1;
+				}else{
+					sum=sum+1;
+					isSee[i]=false;
+				}
+				
+				if(!isSee[i]){
+					if(sum==1){
+						System.out.print(strs.charAt(i));
+					}else{
+						System.out.print(""+sum+strs.charAt(i));
+					}
+				}
+				
+				if(!isSee[i]){
+					sum=0;
+				}
+
+			}
+			
+			if(isSee[strs.length()-1]){
+				System.out.print(""+(sum+1)+strs.charAt(strs.length()-1));
+			}else{
+				System.out.print(strs.charAt(strs.length()-1));
+			}
+			System.out.println();
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,85 @@
+---
+layout: post
+title: "HDOU HDU 2548 两军交锋(看你的思维~)"
+date: 2016-05-16 12:05:41 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [java,acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+话说辽军与MCA相峙多年,终于在一个秋日的早晨爆发了一次大规模的冲突.情况是这样子的,当天上午,由耶律-Pacision领军的辽军忽然带领数万人马浩浩荡荡向MCA山杀来,而这时候驻扎在MCA防守前线的是久经沙场的老将纪哥.纪哥得知这个消息,立刻召集手下精英,前往阻击辽军.现已知辽军前进速度 U 米/秒 ,纪哥 速度 V 米 /秒 ,两军一开始相距L米,战地记 
+---
+
+
+Problem Description 
+话说辽军与MCA相峙多年,终于在一个秋日的早晨爆发了一次大规模的冲突.情况是这样子的,当天上午,由耶律-Pacision领军的辽军忽然带领数万人马浩浩荡荡向MCA山杀来,而这时候驻扎在MCA防守前线的是久经沙场的老将纪哥.纪哥得知这个消息,立刻召集手下精英,前往阻击辽军.现已知辽军前进速度 U 米/秒 ,纪哥 速度 V 米 /秒 ,两军一开始相距L米,战地记
+<!-- more -->
+----------
+
+Problem Description
+话说辽军与MCA相峙多年,终于在一个秋日的早晨爆发了一次大规模的冲突.情况是这样子的,当天上午,由耶律-Pacision领军的辽军忽然带领数万人马浩浩荡荡向MCA山杀来,而这时候驻扎在MCA防守前线的是久经沙场的老将纪哥.纪哥得知这个消息,立刻召集手下精英,前往阻击辽军.现已知辽军前进速度 U 米/秒 ,纪哥 速度 V 米 /秒 ,两军一开始相距L米,战地记者从两军刚开始进军就立刻开始以 W 米/秒的速度马不停蹄地往返于两军之间作第一时间的报道,即一到达一方,立刻返回前往另一方.问,当两军交锋之时,战地记者总共走的路程.
+
+ 
+
+Input
+首先输入一个t,表示有t组数据，跟着t行：
+每行有四个实数 u ,v , w , l 分别表示辽军速度,纪哥速度,记者速度,以及起始的距离.
+
+ 
+
+Output
+输出一行实数表示总的路程.精确到小数点后3位.
+
+ 
+
+Sample Input
+1
+10 20 30 100
+ 
+
+Sample Output
+100.000
+
+
+这个题目很简单~~忽略记者跑来跑去的这个过程~我们可以先计算出2军多久相遇~
+再根据记者的速度*时间~就是记者跑的总路程了~
+
+
+```
+import java.util.Scanner;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * 2016-5-16
+ */
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			double u =sc.nextDouble();
+			double v =sc.nextDouble();
+			double w =sc.nextDouble();
+			double l =sc.nextDouble();
+			double time = l/(u+v);
+			System.out.printf("%.3f",time*w);
+			System.out.println();
+		}
+		
+	}
+
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

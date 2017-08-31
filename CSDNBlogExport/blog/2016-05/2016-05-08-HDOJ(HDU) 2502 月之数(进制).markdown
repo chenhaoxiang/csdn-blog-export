@@ -1,0 +1,132 @@
+---
+layout: post
+title: "HDOJ(HDU) 2502 月之数(进制)"
+date: 2016-05-08 06:06:23 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-C++,----- HDOJ-JAVA,❺ 算法及基础题,----- 进制相关
+tags: [二进制,计算机]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+当寒月还在读大一的时候，他在一本武林秘籍中（据后来考证，估计是计算机基础，狂汗-ing），发现了神奇的二进制数。 
+如果一个正整数m表示成二进制，它的位数为n（不包含前导0），寒月称它为一个n二进制数。所有的n二进制数中，1的总个数被称为n对应的月之数。 
+例如，3二进制数总共有4个，分别是4（100）、5（101）、6（110）、7（111），他们中1的个 
+---
+
+
+Problem Description 
+当寒月还在读大一的时候，他在一本武林秘籍中（据后来考证，估计是计算机基础，狂汗-ing），发现了神奇的二进制数。 
+如果一个正整数m表示成二进制，它的位数为n（不包含前导0），寒月称它为一个n二进制数。所有的n二进制数中，1的总个数被称为n对应的月之数。 
+例如，3二进制数总共有4个，分别是4（100）、5（101）、6（110）、7（111），他们中1的个
+<!-- more -->
+----------
+
+Problem Description
+当寒月还在读大一的时候，他在一本武林秘籍中（据后来考证，估计是计算机基础，狂汗-ing），发现了神奇的二进制数。
+如果一个正整数m表示成二进制，它的位数为n（不包含前导0），寒月称它为一个n二进制数。所有的n二进制数中，1的总个数被称为n对应的月之数。
+例如，3二进制数总共有4个，分别是4（100）、5（101）、6（110）、7（111），他们中1的个数一共是1＋2＋2＋3=8，所以3对应的月之数就是8。
+
+ 
+
+Input
+给你一个整数T，表示输入数据的组数，接下来有T行，每行包含一个正整数 n（1<=n<=20）。
+
+ 
+
+Output
+对于每个n ，在一行内输出n对应的月之数。
+
+ 
+
+Sample Input
+3
+1
+2
+3
+ 
+
+Sample Output
+1
+3
+8
+
+这个题目。。用Java来计算会超时0.0
+
+n位二进制数一共有x=2^(n-1)个数，然后举几个例子就可以看出来了：
+例如：
+输入4，则一共有如下这么多4位二进制数:
+1 0 0 0
+1 0 0 1
+1 0 1 0
+1 0 1 1
+1 1 0 0
+1 1 0 1
+1 1 1 0
+1 1 1 1
+第一列有x个1，以后每列都有x/2个1，然后一共有s=x+(n-1)*x/2个1
+
+JavaAC:
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc= new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			int cont =0;
+			int x = (int)Math.pow(2, n-1);
+			//int x = (int)Math.pow(2, n)-(int)Math.pow(2, n-1);//一样的
+			cont+=x*(n-1)/2;
+			System.out.println(cont+x);
+		}
+	}
+}
+
+```
+
+C模拟输出：
+（这个用Java会超时）
+
+```
+#include <iostream>
+#include <stdio.h>
+#include<math.h>
+
+using namespace std;
+
+int main()
+{
+
+		int t ;
+		scanf("%d",&t);
+		while(t-->0){
+			int n ;
+			int cont =0;
+			int x;
+			scanf("%d",&n);
+			for(int i=pow(2, n-1);i<=pow(2, n)-1;i++){
+				x=i;
+				while(x>0)
+				{
+					if((x%2)==1)
+						cont++;
+					x/=2;
+				}
+
+			}
+			printf("%d\n",cont);
+		}
+	}
+
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

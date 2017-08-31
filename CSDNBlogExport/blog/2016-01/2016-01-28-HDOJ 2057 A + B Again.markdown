@@ -1,0 +1,84 @@
+---
+layout: post
+title: "HDOJ 2057 A + B Again"
+date: 2016-01-28 08:40:43 +0800
+comments: true
+categories:----- HDOJ-JAVA
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+There must be many A + B problems in our HDOJ , now a new one is coming. 
+Give you two hexadecimal integers , your task is to calculate the sum of them,and print it in hexadecimal 
+---
+
+
+Problem Description 
+There must be many A + B problems in our HDOJ , now a new one is coming. 
+Give you two hexadecimal integers , your task is to calculate the sum of them,and print it in hexadecimal
+<!-- more -->
+----------
+
+Problem Description
+There must be many A + B problems in our HDOJ , now a new one is coming.
+Give you two hexadecimal integers , your task is to calculate the sum of them,and print it in hexadecimal too.
+Easy ? AC it !
+ 
+
+Input
+The input contains several test cases, please process to the end of the file.
+Each case consists of two hexadecimal integers A and B in a line seperated by a blank.
+The length of A and B is less than 15.
+ 
+
+Output
+For each test case,print the sum of A and B in hexadecimal in one line.
+
+ 
+
+Sample Input
++A -A
++1A 12
+1A -9
+-1A -12
+1A -AA
+ 
+
+Sample Output
+0
+2C
+11
+-2C
+-90
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			long str1 = sc.nextLong(16);
+			long str2 = sc.nextLong(16);
+			long a = str1+str2;
+			if(a<0){
+				//System.out.println(a);
+				a=-a;
+				//System.out.println(a);
+				System.out.println("-"+Long.toHexString(a).toUpperCase());
+			}else{
+				System.out.println(Long.toHexString(a).toUpperCase());
+			}
+		}
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

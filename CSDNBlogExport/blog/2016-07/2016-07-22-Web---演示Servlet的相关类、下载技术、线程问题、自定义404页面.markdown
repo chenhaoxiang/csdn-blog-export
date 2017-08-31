@@ -1,0 +1,850 @@
+---
+layout: post
+title: "Web---演示Servlet的相关类、下载技术、线程问题、自定义404页面"
+date: 2016-07-22 02:14:04 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅
+tags: [servlet,线程,技术,web]
+keyword: 陈浩翔, 谙忆
+description: Servlet的其他相关类： 
+ServletConfig – 代表Servlet的初始化配置参数。 
+ServletContext – 代表整个Web项目。 
+ServletRequest – 代表用户的请求。 
+ServletResponse – 代表用户的响应。 
+HttpSession – 代表用户的一次会话。 
+本篇博客演示：ServletConfig类 和 ServletContext 
+---
+
+
+Servlet的其他相关类： 
+ServletConfig – 代表Servlet的初始化配置参数。 
+ServletContext – 代表整个Web项目。 
+ServletRequest – 代表用户的请求。 
+ServletResponse – 代表用户的响应。 
+HttpSession – 代表用户的一次会话。 
+本篇博客演示：ServletConfig类 和 ServletContext
+<!-- more -->
+----------
+
+Servlet的其他相关类：
+ServletConfig – 代表Servlet的初始化配置参数。
+ServletContext – 代表整个Web项目。
+ServletRequest – 代表用户的请求。
+ServletResponse – 代表用户的响应。
+HttpSession – 代表用户的一次会话。
+本篇博客演示：ServletConfig类 和 ServletContext 类(网页点击量统计，留言板和图片下载技术（其他类型文件类似））
+
+
+ServletConfig:
+==============
+
+
+它包含了Servlet的初始化参数。
+它还与ServletContext对像关联。
+方法：
+getInitParameter   //获取单个配置的参数
+getInitParameterNames  //获取所有配置的名称集合
+getServletContext   //获取ServletContext(代表本项目)对像
+
+web.xml:
+--------
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+  <display-name></display-name>
+  <servlet>
+    <description>演示ServletConfig类的用法</description>
+    <servlet-name>ConfigServletDemo</servlet-name>
+    <servlet-class>cn.hncu.servlets.ConfigServletDemo</servlet-class>
+    <init-param>
+    	<param-name>name</param-name>
+    	<param-value>jack</param-value>
+    </init-param>
+    <init-param>
+    	<param-name>age</param-name>
+    	<param-value>23</param-value>
+    </init-param>
+    
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>ConfigServletDemo</servlet-name>
+    <url-pattern>/conf</url-pattern>
+  </servlet-mapping>	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
+
+```
+
+index.jsp:
+----------
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="utf-8" %>
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+  <head>
+  </head>
+  
+  <body>
+    <h1>演示Servlet的相关类</h1>
+    <a href="conf">演示ServletConfig类的用法</a>
+  </body>
+</html>
+
+```
+
+ConfigServletDemo.java
+----------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Enumeration;
+
+import javax.servlet.ServletConfig;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ConfigServletDemo extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		//Servlet初始化参数
+		//在web.xml中给<init-param>标签中配置参数和值
+		
+		//读取Servlet初始化参数--法一--通过getServletConfig()获得conf对象--这种方法是死的
+		ServletConfig conf = this.getServletConfig();
+		String name = conf.getInitParameter("name");
+		String age = conf.getInitParameter("age");
+		out.print("法一： "+name+" , "+age+"</br>");
+		out.print("<hr/>");
+		
+		//读取servlet初始化参数--法二--直接通过当前servlet类的getInitParameter()方法--这个方法还是死的
+		String name2 =this.getInitParameter("name");
+		String age2 = this.getInitParameter("age");
+		out.print("法二： "+name2+" , "+age2+" </br>");
+		out.print("<hr/>");
+		
+		//在不知道参数名字的情况下，去遍历
+		//读取servlet初始化参数--法三--通过getServletConfig()或当前servlet类的getInitParameterNames()动态获取所有参数名
+		ServletConfig conf2 = this.getServletConfig();
+		Enumeration<String> en = conf2.getInitParameterNames();
+		while(en.hasMoreElements()){
+			String paramName = en.nextElement();
+			String value = conf2.getInitParameter(paramName);
+			out.print("法三： "+paramName+" , "+value+" </br>");
+		}
+		
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+}
+
+```
+
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160721131651194)
+
+小小的总结：
+------
+ServletConfig获取初始化参数:
+```
+<!-- 在Servlet的配置初始化参数 -->
+  <init-param>
+  	<param-name>name</param-name>
+  	<param-value>jack</param-value>
+  </init-param>
+```
+
+servletConfig.getInitParameter(“name”); //即可以获取name
+                                                                   对应的值jack
+
+方法：
+getInitParameter   //获取单个配置的参数
+getInitParameterNames  //获取所有配置的名称集合
+
+
+演示ServletContext类的用法--网页点击量1:
+============================
+
+index.jsp:
+----------
+
+```
+<a href="count1">演示ServletContext类的用法--网页点击量1</a>
+```
+
+web.xml
+-------
+
+```
+ <servlet>
+    <description>演示统计网页访问量</description>
+    <servlet-name>ServletContextDemo</servlet-name>
+    <servlet-class>cn.hncu.servlets.ServletContextDemo</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ServletContextDemo</servlet-name>
+    <url-pattern>/count1</url-pattern>
+  </servlet-mapping>	
+```
+
+ServletContextDemo.java:
+------------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ServletContextDemo extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		
+		ServletContext context = this.getServletContext();
+		Integer count = (Integer) context.getAttribute("count");
+		if(count==null){
+			count=1;
+		}else{
+			count++;
+		}
+		getServletContext().setAttribute("count", count);
+		out.print("网站访问量："+getServletContext().getAttribute("count"));
+		
+		
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+}
+
+```
+
+
+每一个web应用，拥有一个唯一的ServletContext,当应用启动时创建，当应用关闭时销毁。
+ServletContext可用于在同一个Web项目中，共享资源。
+
+
+演示结果：
+-----
+
+刷新一次，访问量就增加1，这个不好。
+![](http://img.blog.csdn.net/20160721162155995)
+
+演示ServletContext类的用法--网页点击量2
+============================
+
+和网页一共用一个浏览量，因为在一个项目中！！！
+
+index.jsp:
+----------
+
+```
+<a href="count2">演示ServletContext类的用法--网页点击量2</a><br/>
+```
+
+web.xml:
+--------
+
+```
+<servlet>
+    <description>演示ServletConfig类的用法</description>
+    <servlet-name>CountServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.CountServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CountServlet</servlet-name>
+    <url-pattern>/count2</url-pattern>
+  </servlet-mapping>	
+```
+
+ServletContextDemo.java:
+------------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ServletContextDemo extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		
+		ServletContext context = this.getServletContext();
+		Integer count = (Integer) context.getAttribute("count");
+		if(count==null){
+			count=1;
+		}else{
+			count++;
+		}
+		getServletContext().setAttribute("count", count);
+		out.print("网站访问量："+getServletContext().getAttribute("count"));
+		
+		
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+}
+
+```
+
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160721164854565)
+
+![](http://img.blog.csdn.net/20160721164905303)
+
+
+
+演示ServletContext类的用法---留言板
+==========================
+
+index.jsp:
+----------
+
+```
+<a href="chat">演示ServletContext类的用法---留言板</a><br/>
+```
+
+web.xml:
+--------
+
+```
+<display-name></display-name>
+  
+  <context-param>
+  	<param-name>charset</param-name>
+  	<param-value>utf-8</param-value>
+  </context-param>
+	<servlet>
+    <description>演示ServletConfig类的用法</description>
+    <servlet-name>ChatServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.ChatServlet</servlet-class>
+  </servlet>
+   <servlet-mapping>
+    <servlet-name>ChatServlet</servlet-name>
+    <url-pattern>/chat</url-pattern>
+  </servlet-mapping>	
+```
+
+ChatServlet.java
+----------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ChatServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		
+		//显示留言板
+		//读取当前用户的留言
+		//request.setCharacterEncoding("utf-8");
+		//获取servletCOnttext的初始化参数。注意，用this.getInitParameter()获取到的是servlet的初始化参数。
+		String charset = getServletContext().getInitParameter("charset");
+		request.setCharacterEncoding(charset);
+		
+		//记得读取留言之前必须要获取留言者的ip
+		String ip = request.getRemoteAddr();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+		//用给定的模式和默认语言环境的日期格式符号构造 SimpleDateFormat。
+		String time = sdf.format(new Date());
+		// format(Object obj)格式化一个对象以生成一个字符串。这等效于 
+		//format(obj, new StringBuffer(), new FieldPosition(0)).toString(); 
+		
+		String msg = request.getParameter("msg");
+		String msgs = (String) getServletContext().getAttribute("msgs");
+		
+		if(msg!=null && !msg.trim().equals("") ){
+			//把msg放到servletContext当中
+			if(msgs==null){
+				msgs = time+"&nbsp;&nbsp;留言者:<br/>"+ip+": "+msg;
+			}else{
+				msgs = msgs+"<br/>"+time+"&nbsp;&nbsp;留言者:<br/>"+ip+" :"+msg;
+			}
+			getServletContext().setAttribute("msgs", msgs);
+		}
+		
+		//留言板-设置大小~
+		
+		String div = "<div style='border:1px solid red;width:800px;height:400px;overfow:auto'>"+
+					msgs+" </div>";
+		//overflow 设置或获取表明当内容超出对象高度或宽度时如何管理对象内容的值。 
+		//auto：在必需时对象内容才会被裁切或显示滚动条；
+		//scroll：总是显示滚动条。
+		if(msgs!=null){
+			out.print(div);
+		}
+		
+		//当前用户的留言表单
+		out.print("<hr/>");
+		out.print("<hr/>");
+		String form = "<form action='chat' method='post'>"+
+						"留言:<input type='text' name='msg'/>"+
+						"<input type='submit' value='提交'/>"+
+						"</form>";
+		out.print(form);
+		
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+}
+
+```
+
+
+演示结果：
+-----
+
+只要服务器没关，只要在这个网站的留言全部都会在这里的：
+
+![](http://img.blog.csdn.net/20160721235919304)
+
+
+
+
+获取服务器目录中的绝对路径--遍历图片浏览
+=====================
+
+index.jsp:
+----------
+
+```
+<a href="showImgs">演示ServletContext类的用法---获取服务器目录中的绝对路径--图片浏览</a><br/>
+```
+
+web.xml:
+--------
+
+```
+<servlet>
+    <description>演示ServletConfig类的用法-图片显示</description>
+    <servlet-name>ShowImgsServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.ShowImgsServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ShowImgsServlet</servlet-name>
+    <url-pattern>/showImgs</url-pattern>
+  </servlet-mapping>	
+```
+
+
+ShowImgsServlet.java:
+---------------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ShowImgsServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		
+		//获取服务器项目根目录下的imgs文件夹下的所有图片文件名
+		String realPath = getServletContext().getRealPath("/imgs");//参数是：项目根目录下的imgs文件夹
+		//上一句返回的是：资源的绝对路径，即带盘符的路径：D:\apache-tomcat-7.0.30\webapps\myServletDemo2\imgs
+		//System.out.println(realPath);
+		
+		File file = new File(realPath);
+		//防护一下 file.isDirectory() 测试此抽象路径名表示的文件是否是一个目录。
+		if(!file.exists() || !file.isDirectory() ){
+			return;
+		}
+		
+		String fileNames[] = file.list();//返回一个字符串数组，这些字符串指定此抽象路径名表示的目录中的文件和目录。
+		for(String fileName:fileNames){
+			//例：<img width=200 height=200 src='img/a.jpg'/>
+			String img = "<img width=200 height=200 src='imgs/"+fileName+"'/>";
+			out.print(img);
+		}
+		
+
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+}
+
+```
+
+
+演示结果：
+-----
+
+中文的路径不能显示图片！
+
+![](http://img.blog.csdn.net/20160722011151758)
+
+
+图片下载：
+=====
+
+本来一开始火狐的文件名有乱码的，百度了一下，原来火狐和IE等其他浏览器不同，于是写了判断浏览器的类型：
+request.getHeader("User-Agent")中有含有浏览器操作系统等信息。
+解决了这个问题。
+
+index.jsp:
+----------
+
+```
+ <a href="down">图片下载</a>
+```
+
+web.xml:
+--------
+
+```
+<servlet>
+    <description>演示文件下载</description>
+    <servlet-name>DownServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.DownServlet</servlet-class>
+  </servlet>
+<servlet-mapping>
+    <servlet-name>DownServlet</servlet-name>
+    <url-pattern>/down</url-pattern>
+  </servlet-mapping>	
+```
+
+DownServlet.java:
+-----------------
+
+```
+package cn.hncu.servlets;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.URLEncoder;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+/**
+ * 演示文件下载
+ * @author 陈浩翔
+ *
+ * 2016-7-22
+ */
+public class DownServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		//设置响应头--内容接收程序--浏览器看到这个响应头，就会把它认为的下载程序打开
+		//(如果识别迅雷那么就会自动打开迅雷，如果没有则会打开一个“文件另存为”的对话框)
+		response.setContentType("application/force-download;charset=utf-8");
+		
+		//设置响应头--告诉浏览器：文件名+文件类型
+		String fileName = "湖南欢迎你2swenjia名.jpg";//这个是用户下载时，自动填写的下载名字
+		
+		
+		String agent = request.getHeader("User-Agent");
+		System.out.println(agent);
+		if(agent.indexOf("Mozilla")!=-1){//火狐浏览器
+			response.setHeader("Content-Disposition", "attachment;filename="+ new String(fileName.getBytes("GB2312"),"ISO-8859-1"));
+		}else{
+			//解决中文乱码问题（只要用下面一句对文件名进行编码就行了）
+			fileName = URLEncoder.encode(fileName, "utf-8");//使用指定的编码机制将字符串转换为 application/x-www-form-urlencoded 格式。
+			response.setHeader("Content-Disposition", "attachment;filename=\""+fileName+"\"");
+			//注意：“cttachment;”不能少，否则浏览器会直接在新窗口中打开
+		}
+		
+		
+		//向浏览器发送要下载的文件数据
+		String realPath = getServletContext().getRealPath("/imgs/1.jpg");//真正下载的文件数据路径在这里
+		InputStream in = new FileInputStream(realPath);
+		OutputStream out = response.getOutputStream();
+		byte[] buf = new byte[1024];
+		int len=0;
+		while( (len=in.read(buf))!=-1 ){
+			out.write(buf, 0, len);
+		}
+		out.close();
+		in.close();
+	}
+
+}
+
+```
+
+
+演示结果：
+-----
+
+![](http://img.blog.csdn.net/20160722015142619)
+
+![](http://img.blog.csdn.net/20160722015156931)
+
+![](http://img.blog.csdn.net/20160722015204404)
+
+
+
+两个小知识点：
+=======
+
+1、servlet池~servlet在Tomcat中是单例
+-----------------------------
+
+
+web.xml:
+
+```
+<servlet>
+    <servlet-name>ThreadServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.ThreadServlet</servlet-class>
+  </servlet>
+ <servlet-mapping>
+    <servlet-name>ThreadServlet</servlet-name>
+    <url-pattern>/thread</url-pattern>
+  </servlet-mapping>	
+```
+
+ThreadServlet.java:
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class ThreadServlet extends HttpServlet {
+	private String name;
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		name = request.getParameter("name");
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {
+			throw new RuntimeException(e);
+		}
+		response.getWriter().print(name);
+	}
+
+}
+
+```
+
+演示结果：
+
+注意看地址栏，和页面输出！！！！360浏览器先访问，在3s内再用火狐访问！
+
+![](http://img.blog.csdn.net/20160722020110515)
+
+
+本例(通过两个浏览器分别发一个上传用户名的请求)输出结果,可会出现：第一个请求显示出的name是第二个请求上传的参数值。
+本例告诉我们，servlet在Tomcat中其实是单例，多个请求其实是共享servlet池中的同一个对象，因此该对象中的成员变量是共享的，容易出现串数据。
+尤其是servlet功能比较复杂的时候，可能会写多个方法，然后以要共用变量，很可能会想到把它定义成成员变量，这时就是一个坑！！！-----应该通过别的办法去解决，如通过方法参数传递，，数据库等等
+
+
+
+2、自定义404页面，就是自己网站没有这个网址时，进入自己写的404页面中！
+--------------------------------------
+
+默认Servlet，当请求的路径在web.xml中没有匹配上，那么就导向该servlet，避免客户端出现404这些找不到资源的错误。注意，它可能会屏蔽掉我们放在安全目录以外的有效的资源(因为这些路径没有在web.xml中配置)
+	  默认Servlet通过只会在项目正式发布时配置，测试阶段一般不会，因为我们无法看到具体的出错信息。
+
+
+web.xml:
+
+```
+<servlet>
+    <servlet-name>DefaultServlet</servlet-name>
+    <servlet-class>cn.hncu.servlets.DefaultServlet</servlet-class>
+  </servlet>
+<servlet-mapping>
+    <servlet-name>DefaultServlet</servlet-name>
+    <url-pattern>/</url-pattern>
+  </servlet-mapping>	
+```
+
+关键就是这句：`<url-pattern>/</url-pattern>`
+
+
+DefaultServlet.java:
+
+```
+package cn.hncu.servlets;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class DefaultServlet extends HttpServlet {
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\">");
+		out.println("<HTML>");
+		out.println("  <HEAD><TITLE>A Servlet</TITLE></HEAD>");
+		out.println("  <BODY>");
+		
+		String str="<h1><font color=\"red\">404,找不到页面啦，主人！</font></h1>";
+		out.print(str);
+		
+		out.println("  </BODY>");
+		out.println("</HTML>");
+		out.flush();
+		out.close();
+	}
+
+
+}
+
+```
+
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

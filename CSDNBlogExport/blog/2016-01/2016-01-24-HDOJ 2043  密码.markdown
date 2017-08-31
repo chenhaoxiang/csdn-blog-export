@@ -1,0 +1,130 @@
+---
+layout: post
+title: "HDOJ 2043  密码"
+date: 2016-01-24 11:15:07 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 加密解密
+tags: [class]
+keyword: 陈浩翔, 谙忆
+description: Problem Description网上流传一句话:”常在网上飘啊，哪能不挨刀啊～”。其实要想能安安心心地上网其实也不难，学点安全知识就可以。首先，我们就要设置一个安全的密码。那什么样的密码才叫安全的呢？一般来说一个比较安全的密码至少应该满足下面两个条件：(1).密码长度大于等于8，且不要超过16。 
+(2).密码中的字符应该来自下面“字符类别”中四组中的至少三组。这四个字符类别分别为： 
+1.大 
+---
+
+
+Problem Description网上流传一句话:”常在网上飘啊，哪能不挨刀啊～”。其实要想能安安心心地上网其实也不难，学点安全知识就可以。首先，我们就要设置一个安全的密码。那什么样的密码才叫安全的呢？一般来说一个比较安全的密码至少应该满足下面两个条件：(1).密码长度大于等于8，且不要超过16。 
+(2).密码中的字符应该来自下面“字符类别”中四组中的至少三组。这四个字符类别分别为： 
+1.大
+<!-- more -->
+----------
+
+Problem Description
+
+网上流传一句话:"常在网上飘啊，哪能不挨刀啊～"。其实要想能安安心心地上网其实也不难，学点安全知识就可以。
+
+首先，我们就要设置一个安全的密码。那什么样的密码才叫安全的呢？一般来说一个比较安全的密码至少应该满足下面两个条件：
+
+(1).密码长度大于等于8，且不要超过16。
+(2).密码中的字符应该来自下面“字符类别”中四组中的至少三组。
+
+这四个字符类别分别为：
+1.大写字母：A,B,C...Z;
+2.小写字母：a,b,c...z;
+3.数字：0,1,2...9;
+4.特殊符号：~,!,@,#,$,%,^;
+
+给你一个密码，你的任务就是判断它是不是一个安全的密码。
+
+ 
+
+Input
+输入数据第一行包含一个数M，接下有M行，每行一个密码（长度最大可能为50），密码仅包括上面的四类字符。
+ 
+
+Output
+对于每个测试实例，判断这个密码是不是一个安全的密码，是的话输出YES，否则输出NO。
+ 
+
+Sample Input
+3
+a1b2c3d4
+Linle@ACM
+^~^@^@!%
+ 
+
+Sample Output
+NO
+YES
+NO
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        char strNames[] = { '~','!', '@', '#','$','%','^'};
+        int n = sc.nextInt();
+        
+        //sc.nextLine();
+        
+        while (n-->0) {
+            
+            String strs = sc.next();
+            int[] times = new int[4];
+            
+            if(!(strs.length()>=8&&strs.length()<=16)){
+                System.out.println("NO");
+                continue;
+            }
+            //注意这个密码的长度，我就被坑了！！！！
+            
+//            System.out.println("strs="+strs);
+            
+            
+            for (int i = 0; i < strs.length(); i++) {
+                if ('A' <= strs.charAt(i) && strs.charAt(i) <= 'Z') {
+                    times[0] = 1;continue;
+                }else
+                if ('a' <= strs.charAt(i) && strs.charAt(i) <= 'z') {
+                    times[1] = 1;continue;
+                }else
+                if ('0' <= strs.charAt(i) && strs.charAt(i) <= '9') {
+                    times[2] = 1;continue;
+                }else
+                for (int j = 0; j < strNames.length; j++) {
+                    if (strs.charAt(i) ==strNames[j]) {
+                        times[3] = 1;
+                    }
+                }
+            }
+            
+            int m=0;
+            for(int i=0;i<times.length;i++){
+                m+=times[i];
+            }
+            
+            
+            if(m>=3){
+                System.out.println("YES");
+            }else{
+                System.out.println("NO");
+            }
+            
+            
+        }
+
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

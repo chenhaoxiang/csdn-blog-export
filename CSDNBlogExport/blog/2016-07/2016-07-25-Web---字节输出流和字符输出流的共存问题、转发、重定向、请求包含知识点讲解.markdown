@@ -1,0 +1,668 @@
+---
+layout: post
+title: "Web---字节输出流和字符输出流的共存问题、转发、重定向、请求包含知识点讲解"
+date: 2016-07-25 05:49:39 +0800
+comments: true
+categories:❷ Java大学之行,----- ④、Web学习之旅
+tags: [servlet,请求包含,转发,重定向]
+keyword: 陈浩翔, 谙忆
+description: 本章博客的知识点：1、字节输出流和字符输出流的共存问题 
+2、转发时，两个servlet都输出信息的问题 
+详细知识，见OneServlet和TwoServlet源代码中的注释 
+转发：传参，访问顺序(doGet还是doPost)  
+3、重定向：传参，访问顺序(doGet还是doPost) 
+4、请求包含：传参，访问顺序(doGet还是doPost)有些演示，不怎么好分段用博客写处理，如果想加深理 
+---
+
+
+本章博客的知识点：1、字节输出流和字符输出流的共存问题 
+2、转发时，两个servlet都输出信息的问题 
+详细知识，见OneServlet和TwoServlet源代码中的注释 
+转发：传参，访问顺序(doGet还是doPost)  
+3、重定向：传参，访问顺序(doGet还是doPost) 
+4、请求包含：传参，访问顺序(doGet还是doPost)有些演示，不怎么好分段用博客写处理，如果想加深理
+<!-- more -->
+----------
+
+本章博客的知识点：
+=========
+
+1、字节输出流和字符输出流的共存问题
+2、转发时，两个servlet都输出信息的问题
+详细知识，见OneServlet和TwoServlet源代码中的注释
+转发：传参，访问顺序(doGet还是doPost) 
+3、重定向：传参，访问顺序(doGet还是doPost)
+4、请求包含：传参，访问顺序(doGet还是doPost)
+
+有些演示，不怎么好分段用博客写处理，如果想加深理解的，最好自己取写一遍。
+
+
+1、字节输出流和字符输出流的共存问题
+==================
+
+index.jsp:
+----------
+
+```
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+</head>
+
+<body>
+	<!--   1、字节输出流和字符输出流的共存问题---不能共存(跟get或post方式没关系)。即
+
+		：在同一个servlet响应中，不能同时采两种输出流。
+        另外：如果要用字节流输出中文，用write(byte[])方法 -->
+	<a href="servlet/OutServlet">字节输出流和字符输出流的共存问题</a>
+	<form action="servlet/OutServlet" method="post">
+		<input type="text" name="name" /><br /> 
+		<input type="submit"value="提交" />
+	</form>
+
+</body>
+</html>
+
+```
+
+web.xml:
+--------
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <display-name></display-name>
+  <servlet>
+    <servlet-name>OutServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.OutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>OutServlet</servlet-name>
+    <url-pattern>/servlet/OutServlet</url-pattern>
+  </servlet-mapping>	
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
+
+```
+
+
+
+OutServlet.java:
+----------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class OutServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		response.setContentType("text/html;charset=utf-8");
+		//1、用字节输出流向客户端写信息
+		ServletOutputStream out = response.getOutputStream();//获取字节输出流
+		
+		out.print("HELLO--doGet");//全部写英文是没有问题的
+		//out.print("你好");//500错误。出异常，因为内部是用iso8859-1读取，已经写死了，因此中文不行
+		out.write("你好".getBytes("utf-8"));//如果中文要用字节流输出，用write(byte[])方法,而且最好给编码方式
+		
+		
+		//2、同时用字符输出流向客户端写信息-也是出现500错误。
+		PrintWriter out2 = response.getWriter();
+		out2.print("hello,你好");
+		
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		//1、用字节输出流向客户端写信息
+		ServletOutputStream out = response.getOutputStream();//获取字节输出流
+		
+		out.print("HELLO--doGet");//全部写英文是没有问题的
+		//out.print("你好");//500错误。出异常，因为内部是用iso8859-1读取，已经写死了，因此中文不行
+		out.write("你好".getBytes("utf-8"));//如果中文要用字节流输出，用write(byte[])方法,而且最好给编码方式
+		
+		
+		//2、同时用字符输出流向客户端写信息-也是出现500错误。
+		PrintWriter out2 = response.getWriter();
+		out2.print("hello,你好");
+		
+	}
+
+}
+
+```
+
+
+小总结：
+----
+
+大家自己写的时候，注意知道把哪里注释了，同时写了response.getOutputStream();//获取字节输出流和response.getWriter();-是不能共存的，也就是说，只能写其中一个！！！
+
+
+
+
+2、转发时，两个servlet都输出信息的问题、传参，访问顺序(doGet还是doPost)
+==============================================
+
+详细知识，见OneServlet和TwoServlet源代码中的注释
+
+index.jsp:
+----------
+
+```
+	<a href="servlet/OneServlet">转发时，两个servlet都输出信息的问题、传参问题、访问顺序问题</a><br /> 
+	<form action="servlet/OneServlet" method="post">
+		<input type="text" name="name" /><br /> 
+		<input type="submit"value="提交" />
+	</form>
+```
+
+web.xml:
+--------
+
+```
+<servlet>
+    <servlet-name>OneServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.OneServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>TwoServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.TwoServlet</servlet-class>
+  </servlet>
+<servlet-mapping>
+    <servlet-name>OneServlet</servlet-name>
+    <url-pattern>/servlet/OneServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>TwoServlet</servlet-name>
+    <url-pattern>/servlet/TwoServlet</url-pattern>
+  </servlet-mapping>	
+```
+
+OneServlet.java:
+----------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class OneServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("你好...OneServlet...");
+		
+		//out.flush();
+//Tomcat对于同response，只输出一次(把缓存中的内容刷出去)。刷了(close也一样)，流就关闭了,下面的转发就无法进行了，因为此时response已经提交了(整个转发链只会响应一次，即提交了)
+		
+		//传参---设置属性(只要key不同，随便存几个)---放入request对象中
+		request.setAttribute("age", "23-OneServlet");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/servlet/TwoServlet");
+		rd.forward(request, response);
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("你好...OneServlet...");
+		
+		//out.flush();
+//Tomcat对于同response，只输出一次(把缓存中的内容刷出去)。刷了(close也一样)，流就关闭了,下面的转发就无法进行了，因为此时response已经提交了(整个转发链只会响应一次，即提交了)
+		
+		//传参---设置属性(只要key不同，随便存几个)---放入request对象中
+		request.setAttribute("age", "23-OneServlet");
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/servlet/TwoServlet");
+		rd.forward(request, response);
+		
+	}
+
+}
+
+```
+
+TwoServlet.java:
+----------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class TwoServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");//如果前一个转发过来的Servlet已经设了，可以不用再写
+		
+		PrintWriter out = response.getWriter();
+		out.println("get...<br/>");
+		out.print("周末愉快。。。<br/>");
+		//第二个servlet会先把缓存中之前的内容情空，然后再把当前servlet的输出内容写入缓存，刷出去。
+		
+		String name = (String) request.getAttribute("age");
+		out.print("name:"+name+"<br/>");
+		out.flush();//写在这里是没有什么影响的
+		
+	}
+
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");//如果前一个转发过来的Servlet已经设了，可以不用再写
+		
+		PrintWriter out = response.getWriter();
+		out.println("post...<br/>");
+		out.print("周末愉快。。。<br/>");
+		//第二个servlet会先把缓存中之前的内容情空，然后再把当前servlet的输出内容写入缓存，刷出去。
+		
+		String name = (String) request.getAttribute("age");
+		out.print("name:"+name+"<br/>");
+		out.flush();//写在这里是没有什么影响的
+		
+	}
+
+}
+
+```
+
+小总结：
+----
+转发时，两个servlet都输出信息的问题
+                  详细知识，见OneServlet和TwoServlet源代码中的注释
+传参，访问顺序(doGet还是doPost) ---转发是共享同一个request和同一个response对象的
+         1)第一个是doGet，第二个走的也是doGet
+         2)第一个是doPost，第二个走的也是doPost
+         (因为request传过来的参数一样，访问方式也是一样的)
+         3)传参：可以通过request.setAttribute()设置，通过request.getAttribute()获取 ---doGet或doPost都一样
+      
+
+
+3、重定向：传参，访问顺序(doGet还是doPost)
+============================
+
+index.jsp:
+----------
+
+```
+<a href="servlet/RedirOneServlet">重定向时，两个servlet都输出信息的问题、传参问题、访问顺序问题</a><br /> 
+	<form action="servlet/RedirOneServlet" method="post">
+		<input type="text" name="name" /><br /> 
+		<input type="submit"value="提交" />
+	</form>
+
+```
+
+web.xml:
+--------
+
+```
+<servlet>
+    <servlet-name>RedirOneServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.RedirOneServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RedirTwoServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.RedirTwoServlet</servlet-class>
+  </servlet>
+<servlet-mapping>
+    <servlet-name>RedirOneServlet</servlet-name>
+    <url-pattern>/servlet/RedirOneServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RedirTwoServlet</servlet-name>
+    <url-pattern>/servlet/RedirTwoServlet</url-pattern>
+  </servlet-mapping>
+```
+
+RedirOneServlet.java:
+---------------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class RedirOneServlet extends HttpServlet {
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("11111111111");//这是一个无效的输出，我们看不到！！
+		
+		response.sendRedirect("/myServletDemo4/servlet/RedirTwoServlet");
+	}
+
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("11111111111");//这是一个无效的输出，我们看不到！！
+		//out.flush();
+		//如果刷了，后面就不能故去了。
+		String name = request.getParameter("name");
+		System.out.println("11111para-name:"+name);//这个也只有这里能接收到，如果想要传过去，得通过 地址栏+?+name= 的方式，如最后一行
+		request.setAttribute("age", 23);//这一句是没用的，对方收不到！
+		
+		//response.sendRedirect("/myServletDemo4/servlet/RedirTwoServlet");
+		response.sendRedirect("/myServletDemo4/servlet/RedirTwoServlet?name="+name+"&age=23");
+	}
+
+}
+
+```
+
+RedirTwoServlet.java:
+---------------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class RedirTwoServlet extends HttpServlet {
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("doget........22222222<br/>");
+		
+		String name = request.getParameter("name");
+		out.print("2222para-name:"+name);
+		String age = request.getParameter("age");
+		out.print("<br/>2222para-age:"+age);
+		//得到地址栏?号后的属性值
+		
+		Integer age2 = (Integer) request.getAttribute("age");
+		out.print("<br>attr-age:"+age2);//null. web.xml 中没有设置
+		
+	}
+
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("doget........22222222<br/>");
+	}
+
+}
+
+```
+
+小总结：
+----
+两个servlet都输出信息的问题，这里和转发的情况其实可以理解是相同的，你第一个servlet如果out调用flush()，一样的，不会再重定向到后面的第二个servlet中去了。
+
+1)无论第一个是doGet还是doPost，第二个走的都是doGet
+(可以理解成：通过地址栏访问的)
+2)传参：第二个servlet中的request和第一个是完全不同的对象，因此无法通过：request.setAttribute()和request.getAttribute() 实现传参。
+
+3)第二个servlet中是无法通过request.getParameter()的方式获取页面提交的参数数据
+
+4)重定向方式下，如果要进行传参，可采用：在地址栏的url后添加类似如下的格式传参：?name=Jack&age=23
+
+ 注意，采用地址栏url传参的方式，在浏览器地址栏是能够看到的，因此要注意隐私(安全)问题---如果有隐私参数，那么要加密!!!
+5)转发只能在站内进行(路径默认在项目内，即路径不用带项目名)，重定向可以在站外进行(如果是站外路径要带“http://”开头，站内路径要带项目名)。如果非要项目之间(站外)进行跳转，那么必须要选择重定向。
+      
+
+4、请求包含：传参，访问顺序(doGet还是doPost)
+=============================
+
+index.jsp:
+----------
+
+```
+<a href="servlet/IncludeOneServlet">请求包含时，两个servlet都输出信息的问题、传参问题、访问顺序问题</a><br /> 
+	<form action="servlet/IncludeOneServlet" method="post">
+		<input type="text" name="name" /><br /> 
+		<input type="submit"value="提交" />
+	</form>
+```
+
+
+web.xml:
+--------
+
+```
+ <servlet>
+    <servlet-name>IncludeOneServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.IncludeOneServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>IncludeTwoServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.IncludeTwoServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>IncludeOneServlet</servlet-name>
+    <url-pattern>/servlet/IncludeOneServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>IncludeTwoServlet</servlet-name>
+    <url-pattern>/servlet/IncludeTwoServlet</url-pattern>
+  </servlet-mapping>	
+```
+
+IncludeOneServlet.java:
+-----------------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class IncludeOneServlet extends HttpServlet {
+
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("<html><body>");
+		out.print("Include111111..doGet...");
+		
+		//传参，和转发时一样的！
+		request.setAttribute("age", 25);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/servlet/IncludeTwoServlet");
+		rd.include(request, response);
+		//它的机制可理解成函数调用。相当于把第二个servlet的doGet()方法中的代码拷到这里来运行。
+		
+		//后面的还可以继续运行！！！
+		out.print("<br/>Include11111...daGet...请求包含之后！");
+		
+		out.print("</body></html>");
+		
+		
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.print("<html><body>");
+		out.print("Include111111..doPost...");
+		
+		//传参，和转发时一样的！
+		request.setAttribute("age", 25);
+		
+		RequestDispatcher rd = request.getRequestDispatcher("/servlet/IncludeTwoServlet");
+		rd.include(request, response);
+		//它的机制可理解成函数调用。相当于把第二个servlet的doPost()方法中的代码拷到这里来运行。
+		
+		//后面的还可以继续运行！！！
+		out.print("<br/>Include11111...doPost...请求包含之后！");
+		
+		out.print("</body></html>");
+		
+		
+	}
+
+}
+
+```
+
+
+IncludeTwoServlet.java
+----------------------
+
+```
+package cn.hncu.servlet;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+public class IncludeTwoServlet extends HttpServlet {
+
+	
+	public void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		
+		response.setContentType("text/html;charset=utf-8");
+		//因为上一个servlet已经设过，这里可以不设
+		PrintWriter out = response.getWriter();
+		//out.print("<html><body>");
+		
+		out.print("<br/>Include222222中文...doGet");
+		
+		//接参
+		Integer age = (Integer) request.getAttribute("age");
+		
+		out.print("<br/>Include222222...doGet...:"+age);
+		
+		//下面这两句会导致无穷递归
+		//RequestDispatcher rd = request.getRequestDispatcher("/servlet/IncludeOneServlet");
+		//rd.include(request, response);
+		
+		
+		
+		//out.print("</body></html>");
+		
+	}
+
+	
+	public void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		response.setContentType("text/html;charset=utf-8");
+		//因为上一个servlet已经设过，这里可以不设
+		PrintWriter out = response.getWriter();
+		//
+		
+		out.print("<br/>Include222222中文...doPost");
+		
+		//接参
+		Integer age = (Integer) request.getAttribute("age");
+		
+		out.print("<br/>Include222222...doPost...:"+age);
+		
+	}
+
+}
+
+```
+
+小总结：
+----
+ 1)两个servlet的输出都有效!---中途调用flush，流不会关闭,后续的输出都会执行。如果在第一个servlet中执行了out.close()，那么后续的输出(无论是第一还是第二个servlet)都不会执行，但程序不会出异常!!!!
+         2)第一个是doGet，第二个走的也是doGet
+         3)第一个是doPost，第二个走的也是doPost
+         4)对于请求包含，第二个servlet在执行完之后，还会回到第一个servlet的rd.include()这行代码之后。
+         5)传参方面，和转发是完全一样的，因为都是共享同一个request和同一个response.
+         6)页面输出时，注意html标签不要输出冲突，如：在第一个servlet中输出了“`<html><body>`”和“`</body></html>`”，同时在第二个servlet中也输出这些标记。这样会出现html标记嵌套冲突！！
+     ※重定向和转发：跳转之后不会回到原来的那个servlet中。
+         而“请求转发”在跳转之后会回到原来servlet的“rd.include()”这句代码之后继续执行。
+
+
+
+
+演示：
+---
+
+![](http://img.blog.csdn.net/20160725173805146)
+
+可以看到，客户端只请求了一次！！！转发是请求两次的。
+
+如果2个服务器都向客户端输出了`<html><body> </body></html>`
+
+会出现：
+![](http://img.blog.csdn.net/20160725174553218)
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

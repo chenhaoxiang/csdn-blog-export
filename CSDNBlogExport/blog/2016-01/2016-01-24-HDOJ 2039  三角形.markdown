@@ -1,0 +1,99 @@
+---
+layout: post
+title: "HDOJ 2039  三角形"
+date: 2016-01-24 02:08:38 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [JAVA,acm]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+给定三条边，请你判断一下能不能组成一个三角形。Input 
+输入数据第一行包含一个数M，接下有M行，每行一个实例，包含三个正数A,B,C。其中A,B,C <1000;Output 
+对于每个测试实例，如果三条边长A,B,C能组成三角形的话，输出YES，否则NO。 Sample Input 
+2 
+1 2 3 
+2 2 2Sample Output 
+NO 
+---
+
+
+Problem Description 
+给定三条边，请你判断一下能不能组成一个三角形。Input 
+输入数据第一行包含一个数M，接下有M行，每行一个实例，包含三个正数A,B,C。其中A,B,C <1000;Output 
+对于每个测试实例，如果三条边长A,B,C能组成三角形的话，输出YES，否则NO。 Sample Input 
+2 
+1 2 3 
+2 2 2Sample Output 
+NO
+<!-- more -->
+----------
+
+Problem Description
+给定三条边，请你判断一下能不能组成一个三角形。
+ 
+
+Input
+输入数据第一行包含一个数M，接下有M行，每行一个实例，包含三个正数A,B,C。其中A,B,C <1000;
+ 
+
+Output
+对于每个测试实例，如果三条边长A,B,C能组成三角形的话，输出YES，否则NO。 
+ 
+
+Sample Input
+2
+1 2 3
+2 2 2
+ 
+
+Sample Output
+NO
+YES
+
+
+三角形的判定：
+2边之和大于第三边。
+
+```
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        while(n-->0){
+            double a = sc.nextDouble();
+            double b = sc.nextDouble();
+            double c = sc.nextDouble();
+            
+            if(a+b<=c){
+                System.out.println("NO");
+                continue;
+            }
+            if(a+c<=b){
+                System.out.println("NO");
+                continue;
+            }
+            if(b+c<=a){
+                System.out.println("NO");
+                continue;
+            }
+            System.out.println("YES");
+            
+        }
+        
+        
+        
+    }
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

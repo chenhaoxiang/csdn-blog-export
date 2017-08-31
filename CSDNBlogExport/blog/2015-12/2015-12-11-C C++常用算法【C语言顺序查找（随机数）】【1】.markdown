@@ -1,0 +1,86 @@
+---
+layout: post
+title: "C C++常用算法【C语言顺序查找（随机数）】【1】"
+date: 2015-12-11 02:44:19 +0800
+comments: true
+categories:❸ C/C++语言基础,----- 数据结构
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 这是我学习唐峻，李淳的《C/C++常用算法第一天》 
+1.8.1.  查找数字： 
+程序随机生成一个拥有20个整数数据的数组，然后输入要查找的数据。接着，可以采用醉简单的逐个对比的方法进行查找，也就是顺序查找的方法，下面给出该算法完整的C语言代码：#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>#define N 20int main( 
+---
+
+
+这是我学习唐峻，李淳的《C/C++常用算法第一天》 
+1.8.1.  查找数字： 
+程序随机生成一个拥有20个整数数据的数组，然后输入要查找的数据。接着，可以采用醉简单的逐个对比的方法进行查找，也就是顺序查找的方法，下面给出该算法完整的C语言代码：#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>#define N 20int main(
+<!-- more -->
+----------
+
+这是我学习唐峻，李淳的《C/C++常用算法第一天》
+1.8.1.  查找数字：
+程序随机生成一个拥有20个整数数据的数组，然后输入要查找的数据。接着，可以采用醉简单的逐个对比的方法进行查找，也就是顺序查找的方法，下面给出该算法完整的C语言代码：
+
+```
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+#define N 20
+
+int main(){
+    int arr[N],x,n,i;
+    int f=-1;
+
+    srand(time(NULL));///随机数种子
+    ///printf("%lf",time(NULL));
+    for(i=0;i<N;i++){
+        arr[i]=rand()%50;///产生数据范围在50以内的数组。
+        //printf("%d ",arr[i]);
+    }
+
+    printf("输入要查找的整数：");
+    scanf("%d",&x);///输入要查找的数字。
+
+    for(i=0;i<N;i++){///顺序查找
+        if(x==arr[i]){///找到数据
+            f=i;
+            break;
+        }
+    }
+
+    printf("\n随机生成的数据序列：\n");
+    for(i=0;i<N;i++){
+        printf("%d ",arr[i]);///输出序列
+    }
+    printf("\n\n");
+
+    ///输出查找结果
+    if(f<0){
+        printf("没有找到数据：%d\n",x);
+    }else{
+        printf("数据:%d位于数组的第%d个元素处.\n",x,f+1);
+    }
+
+    system("pause");
+
+    return 0;
+
+}
+
+```
+在该程序中，main()函数生成20个（0—49以内）随机数，然后使用for语句和if
+语句进行顺序查找。当查找到该第一个数据时，便退出查找，输出该
+数据的位置，否则输出没找到的数据。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,1969 @@
+---
+layout: post
+title: "Java-单机版的书店管理系统(练习设计模块和思想_系列 四(2) )"
+date: 2016-04-11 12:36:28 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块,----- ----- Java书店管理系统
+tags: [设计,管理,博客,class]
+keyword: 陈浩翔, 谙忆
+description: 说明：本博客为补全上篇-Java-单机版的书店管理系统(练习设计模块和思想_系列 四(1) )的，所以如果不懂，请先看上一篇。 
+本系列都是我一步一步学习来的， 
+所以，可能比较适合初学设计模块的人来学。现在补全我目前写的所以代码:公共类：用户类型枚举：UserTypeEnum类package cn.hncu.bookStore.common;/**
+ * 功能:用户类型的枚举！<br/>
+ * 定 
+---
+
+
+说明：本博客为补全上篇-Java-单机版的书店管理系统(练习设计模块和思想_系列 四(1) )的，所以如果不懂，请先看上一篇。 
+本系列都是我一步一步学习来的， 
+所以，可能比较适合初学设计模块的人来学。现在补全我目前写的所以代码:公共类：用户类型枚举：UserTypeEnum类package cn.hncu.bookStore.common;/**
+ * 功能:用户类型的枚举！<br/>
+ * 定
+<!-- more -->
+----------
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 四(1) )：
+http://blog.csdn.net/qq_26525215/article/details/51116429
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 三 )：
+http://blog.csdn.net/qq_26525215/article/details/51099202
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 二 )：
+http://blog.csdn.net/qq_26525215/article/details/51089734
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 一 )：
+http://blog.csdn.net/qq_26525215/article/details/51073546
+
+说明：
+---
+本博客为补全上篇-Java-单机版的书店管理系统(练习设计模块和思想_系列 四(1) )的，所以如果不懂，请先看上一篇。
+本系列都是我一步一步学习来的，
+所以，可能比较适合初学设计模块的人来学。
+
+现在补全我目前写的所以代码:
+
+公共类：
+====
+
+用户类型枚举：UserTypeEnum类
+---
+
+```
+package cn.hncu.bookStore.common;
+
+/**
+ * 功能:用户类型的枚举！<br/>
+ * 定义在公共模块。<br/>
+ * 变量：<br/>
+ *  ADMIN(1,"超级管理员"),<br/>
+ *	BOOK(2,"图书管理员"),<br/>
+ *	IN(3,"进货管理员"),<br/>
+ *	OUT(4,"销售管理员"),<br/>
+ *  STOCK(5,"库存管理员");<br/>
+ * @author chx
+ * @version 1.0
+ */
+public enum UserTypeEnum {
+	ADMIN(1,"超级管理员"),
+	BOOK(2,"图书管理员"),
+	IN(3,"进货管理员"),
+	OUT(4,"销售管理员"),
+	STOCK(5,"库存管理员");
+	
+	private final int type;
+	private final String name;
+	
+	/**
+	 * 初始化枚举变量名字
+	 * @param type---枚举变量对应的整型数字
+	 * @param name---枚举变量对应的String型名字
+	 */
+	private UserTypeEnum(int type, String name) {
+		this.type=type;
+		this.name=name;
+	}
+	
+	/**
+	 * 得到当前枚举变量的数字
+	 * @return---type-编号
+	 */
+	public int getType() {
+		return type;
+	}
+	
+	/**
+	 * 得到当前枚举变量的中文名字
+	 * @return---name-中文名字
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * 根据枚举变量的int数字得到数字对应的枚举变量的中文名字
+	 * @param type---需要传入的int型参数
+	 * @return ---如果存在这样的数字对应的枚举变量，就返回这个枚举变量的中文名字。
+	 *    <br/>---如果不存在这样的数字对应的枚举变量，就抛出一个异常信息。
+	 */
+	public static String getNameByType(int type){
+		for(UserTypeEnum userType:UserTypeEnum.values()){
+			if(userType.getType()==type){
+				return userType.getName();
+			}
+		}
+		throw new IllegalArgumentException("枚举中没有对应的用户类型:"+type);
+	}
+	
+	/**
+	 * 根据枚举变量的name中文名字得到name对应的枚举变量的int型type
+	 * @param name---需要传入的String型名字
+	 * @return ---如果存在这样的名字对应的枚举变量，就返回这个枚举变量对应的type-int
+	 *   <br/> ---如果不存在这样的名字对应的枚举变量，就抛出一个异常信息
+	 */ 
+	public static int getTypeByName(String name){
+		for(UserTypeEnum userType:UserTypeEnum.values()){
+			if(userType.getName().equals(name)){
+				return userType.getType();
+			}
+		}
+		throw new IllegalArgumentException("枚举中没有对应的用户类型:"+name);
+	}
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+UuidModelConstance--uuidModel枚举
+------------------
+
+```
+package cn.hncu.bookStore.common;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public enum UuidModelConstance {
+	USER("UserMedel"),
+	BOOK("BookMedel"),
+	IN_MAIN("InMainMedel"),
+	OUT_MAIN("OutMainModel"),
+	IN_DETAIL("InDetailModel"),
+	OUT_DETAIL("OutDetailModel");
+	
+	private final String name;
+	private UuidModelConstance(String name){
+		this.name=name;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+}
+
+```
+
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+UuidDao模块：数据层
+=======
+
+接口：UuidDao 
+---
+
+```
+package cn.hncu.bookStore.common.uuid.dao.dao;
+
+import cn.hncu.bookStore.common.UuidModelConstance;
+
+/**
+ * Uuid模块的数据接口
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public interface UuidDao {
+	/**
+	 * 
+	 * @param uuidEnum---传入的模块名称
+	 * @return ---根据传入的模块名称来分别返回下一个内部生成的Uuid
+	 */
+	public String getNextUuid(UuidModelConstance uuidEnum);
+}
+
+```
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+接口的具体实现：UuidDaoSerImpl
+----------------------
+
+```
+package cn.hncu.bookStore.common.uuid.dao.impl;
+
+import java.util.List;
+
+import cn.hncu.bookStore.common.UuidModelConstance;
+import cn.hncu.bookStore.common.uuid.dao.dao.UuidDao;
+import cn.hncu.bookStore.common.uuid.vo.UuidModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+/**
+ * uuid的具体实现类：采用唱票模式
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class UuidDaoSerImpl implements UuidDao {
+	
+	private final String FILE_NAME = "Uuid.txt";
+	
+	@Override
+	public String getNextUuid(UuidModelConstance uuidEnum) {
+		String modelName = uuidEnum.getName();
+		
+		//1反序列化，把所有的记录读取出来
+		List<UuidModel> lists = FileIoUtil.readFormFile(FILE_NAME);
+		
+		//2遍历，找当前modelName所对应的 uuid
+		for(UuidModel list : lists){
+			if(list.getModelName().equals(modelName)){
+				//3把当前的uuid返回出去，同时把uuid+1存储到数据库中
+				int result = list.getCurrentNum();
+				list.setCurrentNum(list.getCurrentNum()+1);
+				FileIoUtil.write2file(lists, FILE_NAME);
+				return String.valueOf(result);
+			}
+		}
+		//4若数据库中不存在该modelName所对应的uuid，则新建一条记录(类似添加模块的功能),存储且返回1
+		int result =1;
+		UuidModel uuid = new UuidModel();
+		uuid.setModelName(modelName);
+		uuid.setCurrentNum(result+1);
+		lists.add(uuid);
+		FileIoUtil.write2file(lists, FILE_NAME);
+		return String.valueOf(result);
+	}
+
+}
+
+```
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+工厂方法：UuidDaoFactory
+-------------------
+
+```
+package cn.hncu.bookStore.common.uuid.dao.factory;
+
+import cn.hncu.bookStore.common.uuid.dao.dao.UuidDao;
+import cn.hncu.bookStore.common.uuid.dao.impl.UuidDaoSerImpl;
+
+/**
+ * 工厂方法
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public class UuidDaoFactory {
+	/**
+	 * 
+	 * @return new一个UuidDao的具体实现类
+	 */
+	public static UuidDao getUuidDao(){
+		return new UuidDaoSerImpl();
+	}
+}
+
+```
+
+
+Uuid模块的值对象封装：UuidModel 
+=============
+
+```
+package cn.hncu.bookStore.common.uuid.vo;
+
+import java.io.Serializable;
+
+/**
+ * Uuid的值对象封装
+ * 一个模块名称和一个uuid
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class UuidModel implements Serializable{//用对象流读取，必须实现的接口
+	private String modelName;
+	private int currentNum;
+	
+	/**
+	 * 
+	 * @return 返回模块的名称
+	 */
+	public String getModelName() {
+		return modelName;
+	}
+	
+	/**
+	 * 
+	 * @param modelName---要设置的模块的名称
+	 */
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+	
+	/**
+	 * 
+	 * @return ---返回当前的值
+	 */
+	public int getCurrentNum() {
+		return currentNum;
+	}
+	
+	/**
+	 * 
+	 * @param currentNum--设置当前的值
+	 */
+	public void setCurrentNum(int currentNum) {
+		this.currentNum = currentNum;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((modelName == null) ? 0 : modelName.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UuidModel other = (UuidModel) obj;
+		if (modelName == null) {
+			if (other.modelName != null)
+				return false;
+		} else if (!modelName.equals(other.modelName))
+			return false;
+		return true;
+	}
+	
+	
+}
+
+```
+
+用户模块值对象
+==
+
+UserModel
+---------
+
+```
+package cn.hncu.bookStore.user.vo;
+
+import java.io.Serializable;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+
+/**
+ * @author 陈浩翔
+ * @version 1.0
+ * 
+ * <br/>
+ * 用于保存用户信息的值对象<br/>
+ * 1、可序列化<br/>
+ * 2、私有化所有变量成员，补setter-getters方法<br/>
+ * 3、写equals和hashCode方法----用主键(uuid)唯一标识码<br/>
+ * 4、toString方法<br/>
+ * 5,空参构造方法<br/>
+ */
+
+public class UserModel implements Serializable{
+	private String uuid;//用户唯一标识码
+	private String name;//用户名
+	private int type;//用户类型
+	private String pwd;//用户密码
+	public UserModel() {
+	}
+	
+	/**
+	 * 功能：得到uuid-用户唯一的标识码
+	 * 
+	 * @return 返回uuid-用户唯一的标识码
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+	
+	/**
+	 * 功能：设置uuid-用户唯一的标识码
+	 * @param uuid-用户唯一的标识码-String型参数
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	/**
+	 * 功能：得到用户的用户名
+	 * @return---name-用户名
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * 功能：设置用户的用户名
+	 * 
+	 * @param name--用户设置的用户名，String型参数
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * 功能：得到用户的类型：
+	 *  1——表示为admin，可以进行全部操作
+     *	2——表示为能操作图书模块的人员
+	 *	3——表示为能操作进货模块的人员
+	 *	4——表示为能操作销售模块的人员
+	 *	5——表示为能操作库存模块的人员
+	 * @return 用户的类型
+	 */
+	public int getType() {
+		return type;
+	}
+	
+	/**
+	 *  功能：设置用户的类型：
+	 *  1——表示为admin，可以进行全部操作
+     *	2——表示为能操作图书模块的人员
+	 *	3——表示为能操作进货模块的人员
+	 *	4——表示为能操作销售模块的人员
+	 *	5——表示为能操作库存模块的人员
+	 * @param type--用户的类型-int型参数
+	 */
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	/**
+	 *功能：得到用户的密码
+	 * @return String型，用户的密码
+	 */
+	public String getPwd() {
+		return pwd;
+	}
+	
+	/**
+	 * 功能：设置用户的密码
+	 * @param pwd--String型参数
+	 */
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserModel other = (UserModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return uuid + "," + name + "," + UserTypeEnum.getNameByType(type);
+	}
+	
+}
+
+```
+|||||||||||||||||||||||||||||||||||||||||||||||
+
+UserQueryModel
+--------------
+
+```
+package cn.hncu.bookStore.user.vo;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class UserQueryModel extends UserModel{
+	
+}
+
+```
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+用户模块的数据层
+==
+
+UserDao接口：
+----------
+
+```
+package cn.hncu.bookStore.user.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ * 用户模块的数据层接口
+ */
+public interface UserDao {
+	/**
+	 * 功能：创建一个用户
+	 * 
+	 * @param userModel---将要创建的用户数据
+	 * @return---true表示创建成功，false表示创建失败
+	 */
+	public boolean create(UserModel user);
+	
+	/**
+	 * 功能：根据用户的唯一标识码uuid删除一个用户
+	 * 
+	 * @param uuid---用户唯一的标识码，每个用户都不会相同
+	 * @return---true表示删除成功，false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	 
+	/**
+	 * 功能：修改用户的数据资料
+	 * 
+	 * @param user---需要修改的用户数据参数名
+	 * @return 返回true-表示修改成功了，返回false-表示修改失败
+	 */
+	public boolean update(UserModel user);
+	
+	/**
+	 * 功能：得到所有的用户数据
+	 * 
+	 * @return---一个UserModel集合，也就是用户的数据
+	 */
+	public List<UserModel> getAll();
+	
+	/**
+	 * 功能：按照一定的查找条件进行查找，
+	 * <br/>
+	 * 把满足查找条件的用户数据返回。
+	 * 
+	 * @param uqm---被封装的查找条件
+	 * @return---满足查找条件的用户数据集合
+	 */
+	public List<UserModel> getbyCondition(UserQueryModel uqm);
+	
+	/**
+	 * 功能：得到一个确定的用户的数据资料
+	 * 
+	 * @param uuid---用户唯一标识码
+	 * @return ---返回按这个唯一标识码找到的用户数据
+	 */
+	public UserModel getSingle(String uuid);
+	
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||
+
+实现类：UserDaoSerImpl 
+----
+
+```
+package cn.hncu.bookStore.user.dao.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.dao.dao.UserDao;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+
+/**
+ * <br/>
+ * 对用户数据处理的具体实现类 ----实现了UserDao接口
+ * 
+ * @author 陈浩翔
+ * 
+ * @version 1.0
+ */
+public class UserDaoSerImpl implements UserDao {
+
+	private static final String FILE_NAME = "User.txt";
+
+	@Override
+	public boolean create(UserModel user) {
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		// 2判断该用户是否已经存在，再决定是否创建
+		for (UserModel userModel : list) {
+			// 如果2个用户的uuid相等，用户就是相同的
+			if (userModel.getUuid().equals(user.getUuid())) {
+				return false;// 用户已经存在了，返回false
+			}
+		}
+		// 3如果用户不存在，就创建
+		list.add(user);
+		FileIoUtil.write2file(list, FILE_NAME);
+		return true;// 创建成功，返回true
+	}
+
+	@Override
+	public boolean delete(String uuid) {
+
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+
+		// 2判断该用户是否已经存在，再决定是否删除
+
+		// for(int i=0;i<list.size();i++){
+		// if(list.get(i).getUuid().equals(uuid)){
+		// list.remove(i);
+		// FileIoUtil.write2file(list, FILE_NAME);
+		// return true;
+		// }
+		// }
+
+		for (UserModel userModel : list) {
+			// 如果2个用户的uuid相等，用户就是相同的
+			if (userModel.getUuid().equals(uuid)) {
+				list.remove(userModel);
+				FileIoUtil.write2file(list, FILE_NAME);
+				// 删除成功，返回true
+				return true;
+			}
+		}
+		// 3用户不存在
+		// 删除失败，返回false
+		return false;
+	}
+
+	@Override
+	public boolean update(UserModel user) {
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+
+		// 2判断该用户是否已经存在，再决定是否创建
+		for (int i = 0; i < list.size(); i++) {
+			// uuid是不能改的，通过uuid来找到那个用户数据，再修改就ok了
+			if (list.get(i).getUuid().equals(user.getUuid())) {
+				// 将找到的用户修改成user
+				list.set(i, user);
+				FileIoUtil.write2file(list, FILE_NAME);
+				// 找到用户，返回true
+				return true;
+			}
+		}
+		// 3若该用户不存在，则修改失败
+		return false;
+	}
+
+	@Override
+	public List<UserModel> getAll() {
+		return FileIoUtil.readFormFile(FILE_NAME);
+	}
+
+	@Override
+	public List<UserModel> getbyCondition(UserQueryModel uqm) {
+		List<UserModel> list = UserEbiFactory.getUserEbi().getAll();
+		List<UserModel> results = new ArrayList<UserModel>();
+		
+		for(UserModel user : list){
+			//反逻辑，卫条件: 外层判断用户输入是否是查询条件;内层判断该对象是否符合查询条件
+			if(uqm.getUuid()!=null&&uqm.getUuid().trim().length()>0){//外层判断
+				if(!user.getUuid().equals(uqm.getUuid())){//内层判断--精确查询
+					continue;
+				}
+			}
+			
+			if(uqm.getName()!=null&&uqm.getName().trim().length()>0){//外层判断
+				if(user.getName().indexOf(uqm.getName())==-1){//内层判断--模糊查询
+					continue;
+				}
+			}
+			
+			if(uqm.getType()>0){//外层判断
+					if(user.getType()!=uqm.getType()){//内层判断--精确查询
+						continue;
+				}
+			}
+			
+			results.add(user);
+		}
+		
+		return results;
+	}
+
+	@Override
+	public UserModel getSingle(String uuid) {
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+
+		// 2判断该用户是否已经存在,存在就返回那个用户
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getUuid().equals(uuid)) {
+				return list.get(i);
+			}
+		}
+		
+		// 3若该用户不存在,返回null
+		return null;
+	}
+
+}
+
+```
+|||||||||||||||||||||||||||||||||||||||||||||||||
+
+工厂方法：UserDaoFactory 
+-----
+
+```
+package cn.hncu.bookStore.user.dao.factory;
+
+import cn.hncu.bookStore.user.dao.dao.UserDao;
+import cn.hncu.bookStore.user.dao.impl.UserDaoSerImpl;
+/**
+ * 工厂方法<br/>
+ * new 一个dao的实例
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ * 
+ */
+public class UserDaoFactory {
+	public static UserDao getUserDao(){
+		return new UserDaoSerImpl();
+	}
+}
+
+```
+
+
+用户模块逻辑层：
+========
+
+UserEbi 接口：
+-----------
+
+```
+package cn.hncu.bookStore.user.business.ebi;
+
+import java.util.List;
+
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+/**
+ * 逻辑层的接口
+ *
+ * @author chx
+ * @version 1.0
+ */
+public interface UserEbi {
+	
+	/**
+	 * 功能：创建一个用户
+	 * 
+	 * @param userModel---将要创建的用户数据
+	 * @return---true表示创建成功，false表示创建失败
+	 */
+	public boolean create(UserModel user);
+	
+	/**
+	 * 功能：根据用户的唯一标识码uuid删除一个用户
+	 * 
+	 * @param uuid---用户唯一的标识码，每个用户都不会相同
+	 * @return---true表示删除成功，false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	 
+	/**
+	 * 功能：修改用户的数据资料
+	 * 
+	 * @param user---需要修改的用户数据参数名
+	 * @return 返回true-表示修改成功了，返回false-表示修改失败
+	 */
+	public boolean update(UserModel user);
+	
+	/**
+	 * 功能：得到所有的用户数据
+	 * 
+	 * @return---一个UserModel集合，也就是用户的数据
+	 */
+	public List<UserModel> getAll();
+	
+	/**
+	 * 功能：按照一定的查找条件进行查找，
+	 * <br/>
+	 * 把满足查找条件的用户数据返回。
+	 * 
+	 * @param uqm---被封装的查找条件
+	 * @return---满足查找条件的用户数据集合
+	 */
+	public List<UserModel> getbyCondition(UserQueryModel uqm);
+	
+	/**
+	 * 功能：得到一个确定的用户的数据资料
+	 * 
+	 * @param uuid---用户唯一标识码
+	 * @return ---返回按这个唯一标识码找到的用户数据
+	 */
+	public UserModel getSingle(String uuid);
+}
+
+```
+||||||||||||||||||||||||||||||||||||||||||||||||||
+
+具体实现类：UserEbo 
+------
+
+```
+package cn.hncu.bookStore.user.business.ebo;
+
+import java.util.List;
+
+import cn.hncu.bookStore.common.UuidModelConstance;
+import cn.hncu.bookStore.common.uuid.dao.factory.UuidDaoFactory;
+import cn.hncu.bookStore.common.uuid.vo.UuidModel;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.dao.dao.UserDao;
+import cn.hncu.bookStore.user.dao.factory.UserDaoFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+/**
+ * 逻辑层的实现类
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public class UserEbo implements UserEbi{
+	//注入
+	private UserDao dao = UserDaoFactory.getUserDao();
+	
+	@Override
+	public boolean create(UserModel user) {
+		//如果表现层中对user对象的数据没有封装完整，那么在这里要为它补全
+		//调用uuid模块的dao层来自动获取当前user对象的uuid
+		String uuid = UuidDaoFactory.getUuidDao().getNextUuid(UuidModelConstance.USER);
+		user.setUuid(uuid);
+		
+		return dao.create(user);
+	}
+
+	@Override
+	public boolean delete(String uuid) {
+		return dao.delete(uuid);
+	}
+
+	@Override
+	public boolean update(UserModel user) {
+		return dao.update(user);
+	}
+
+	@Override
+	public List<UserModel> getAll() {
+		return dao.getAll();
+	}
+
+	@Override
+	public List<UserModel> getbyCondition(UserQueryModel uqm) {
+		return dao.getbyCondition(uqm);
+	}
+
+	@Override
+	public UserModel getSingle(String uuid) {
+		return dao.getSingle(uuid);
+	}
+}
+
+```
+||||||||||||||||||||||||||||||||||||||||||||
+
+工厂方法：UserEbiFactory 
+-----
+
+
+```
+package cn.hncu.bookStore.user.business.factory;
+
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.ebo.UserEbo;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class UserEbiFactory {
+	public static UserEbi getUserEbi(){
+		return new UserEbo();
+	}
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||
+
+用户模块表现层：
+========
+
+用户列表：ListPanel 
+-----
+
+```
+/*
+ * ListPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import java.util.List;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+
+/**
+ * 表现层-用户列表面板
+ * 
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public class ListPanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+
+	/** Creates new form ListPanel */
+	public ListPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+
+	public ListPanel(JFrame mainFrame, List<UserModel> results) {
+		this.mainFrame = mainFrame;
+		initComponents();
+
+		userLists.setListData(results.toArray());
+	}
+
+	/**
+	 * 读取所有用户并添加进列表
+	 */
+	private void myInitData() {
+		UserEbi user = UserEbiFactory.getUserEbi();
+		List<UserModel> list = user.getAll();
+		userLists.setListData(list.toArray());
+	}
+
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jScrollPane1 = new javax.swing.JScrollPane();
+		userLists = new javax.swing.JList();
+		jLabel1 = new javax.swing.JLabel();
+		btnToAdd = new javax.swing.JButton();
+		btnToDelete = new javax.swing.JButton();
+		btnToUpdate = new javax.swing.JButton();
+		btnToQuery = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		userLists.setModel(new javax.swing.AbstractListModel() {
+			String[] strings = { "" };
+
+			public int getSize() {
+				return strings.length;
+			}
+
+			public Object getElementAt(int i) {
+				return strings[i];
+			}
+		});
+		jScrollPane1.setViewportView(userLists);
+
+		add(jScrollPane1);
+		jScrollPane1.setBounds(170, 80, 480, 230);
+
+		jLabel1.setFont(new java.awt.Font("Dialog", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 51));
+		jLabel1.setText("\u7528\u6237\u5217\u8868");
+		add(jLabel1);
+		jLabel1.setBounds(300, 0, 260, 80);
+
+		btnToAdd.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnToAdd.setForeground(new java.awt.Color(0, 102, 102));
+		btnToAdd.setText("\u6dfb\u52a0\u7528\u6237");
+		btnToAdd.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnToAddActionPerformed(evt);
+			}
+		});
+		add(btnToAdd);
+		btnToAdd.setBounds(160, 350, 150, 50);
+
+		btnToDelete.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnToDelete.setForeground(new java.awt.Color(0, 102, 102));
+		btnToDelete.setText("\u5220\u9664\u7528\u6237");
+		btnToDelete.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnToDeleteActionPerformed(evt);
+			}
+		});
+		add(btnToDelete);
+		btnToDelete.setBounds(510, 350, 150, 50);
+
+		btnToUpdate.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnToUpdate.setForeground(new java.awt.Color(0, 102, 102));
+		btnToUpdate.setText("\u4fee\u6539\u7528\u6237");
+		btnToUpdate.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnToUpdateActionPerformed(evt);
+			}
+		});
+		add(btnToUpdate);
+		btnToUpdate.setBounds(160, 450, 150, 50);
+
+		btnToQuery.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnToQuery.setForeground(new java.awt.Color(0, 102, 102));
+		btnToQuery.setText("\u67e5\u627e\u7528\u6237");
+		btnToQuery.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnToQueryActionPerformed(evt);
+			}
+		});
+		add(btnToQuery);
+		btnToQuery.setBounds(510, 450, 150, 50);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnToQueryActionPerformed(java.awt.event.ActionEvent evt) {
+		mainFrame.setContentPane(new QueryPanel(mainFrame));
+		mainFrame.validate();
+
+	}
+
+	private void btnToUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+		UserModel user = (UserModel) userLists.getSelectedValue();
+
+		if (user == null) {
+			JOptionPane.showMessageDialog(mainFrame, "请选择要修改的用户!");
+			return;
+		}
+
+		String uuid = user.getUuid();
+
+		mainFrame.setContentPane(new UpdatePanel(mainFrame, uuid));
+		mainFrame.validate();
+	}
+
+	private void btnToDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+		UserModel user = (UserModel) userLists.getSelectedValue();
+
+		if (user == null) {
+			JOptionPane.showMessageDialog(mainFrame, "请选择要删除的用户!");
+			return;
+		}
+
+		String uuid = user.getUuid();
+
+		mainFrame.setContentPane(new DeletePanel(mainFrame, uuid));
+		mainFrame.validate();
+	}
+
+	private void btnToAddActionPerformed(java.awt.event.ActionEvent evt) {
+		mainFrame.setContentPane(new AddPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnToAdd;
+	private javax.swing.JButton btnToDelete;
+	private javax.swing.JButton btnToQuery;
+	private javax.swing.JButton btnToUpdate;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JScrollPane jScrollPane1;
+	private javax.swing.JList userLists;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+|||||||||||||||||||||||||||||||||||||||||
+
+添加用户：AddPanel 
+-----
+
+```
+/*
+ * AddPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+
+/**
+ *
+ * @author  陈浩翔
+ */
+public class AddPanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+
+	/** Creates new form AddPanel */
+	public AddPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+
+	private void myInitData() {
+		for (UserTypeEnum type : UserTypeEnum.values()) {
+			combType.addItem(type.getName());
+		}
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		tfdName = new javax.swing.JTextField();
+		jLabel4 = new javax.swing.JLabel();
+		tfdPwd2 = new javax.swing.JPasswordField();
+		jLabel5 = new javax.swing.JLabel();
+		jLabel6 = new javax.swing.JLabel();
+		combType = new javax.swing.JComboBox();
+		tfdPwd = new javax.swing.JPasswordField();
+		btnAdd = new javax.swing.JButton();
+		btnBack = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("微软雅黑", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+		jLabel1.setText("\u6dfb\u52a0\u7528\u6237");
+		add(jLabel1);
+		jLabel1.setBounds(270, 30, 230, 80);
+
+		jLabel2.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel2.setText("\u7528\u6237\u7c7b\u578b:");
+		add(jLabel2);
+		jLabel2.setBounds(370, 190, 90, 30);
+
+		tfdName.setFont(new java.awt.Font("Dialog", 1, 18));
+		tfdName.setAutoscrolls(false);
+		add(tfdName);
+		tfdName.setBounds(180, 190, 120, 30);
+
+		jLabel4.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel4.setText("\u59d3\u540d:");
+		add(jLabel4);
+		jLabel4.setBounds(120, 190, 50, 30);
+
+		tfdPwd2.setFont(new java.awt.Font("宋体", 1, 18));
+		add(tfdPwd2);
+		tfdPwd2.setBounds(470, 300, 170, 30);
+
+		jLabel5.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel5.setText("\u5bc6\u7801:");
+		add(jLabel5);
+		jLabel5.setBounds(120, 300, 50, 30);
+
+		jLabel6.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel6.setText("\u786e\u8ba4\u5bc6\u7801:");
+		add(jLabel6);
+		jLabel6.setBounds(380, 300, 90, 30);
+
+		combType.setFont(new java.awt.Font("Dialog", 1, 18));
+		combType.setForeground(new java.awt.Color(51, 51, 255));
+		combType.setModel(new javax.swing.DefaultComboBoxModel(
+				new String[] { "请选择..." }));
+		add(combType);
+		combType.setBounds(470, 190, 160, 30);
+
+		tfdPwd.setFont(new java.awt.Font("宋体", 1, 18));
+		add(tfdPwd);
+		tfdPwd.setBounds(190, 300, 160, 30);
+
+		btnAdd.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnAdd.setForeground(new java.awt.Color(0, 204, 204));
+		btnAdd.setText("\u6dfb\u52a0");
+		btnAdd.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnAddActionPerformed(evt);
+			}
+		});
+		add(btnAdd);
+		btnAdd.setBounds(190, 430, 120, 60);
+
+		btnBack.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnBack.setForeground(new java.awt.Color(0, 204, 204));
+		btnBack.setText("\u8fd4\u56de");
+		btnBack.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnBackActionPerformed(evt);
+			}
+		});
+		add(btnBack);
+		btnBack.setBounds(520, 430, 120, 60);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void back() {
+		mainFrame.setContentPane(new ListPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	/**
+	 *监听返回按钮
+	 * @param 返回按钮的点击监听
+	 */
+	private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+		back();
+	}
+
+	private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {
+		//1收集参数
+		String name = tfdName.getText();
+		String pwd = new String(tfdPwd.getPassword());
+		String pwd2 = new String(tfdPwd2.getPassword());
+
+		if (name.equals("") || name.equals(null)) {
+			JOptionPane.showMessageDialog(mainFrame, "用户名为空，请重新输入！");
+			return;
+		}
+
+		if (!pwd.equals(pwd2) || pwd.equals("") || pwd.equals(null)
+				|| pwd2.equals("") || pwd2.equals(null)) {
+			JOptionPane.showMessageDialog(mainFrame, "两次密码输入不一致或密码为空，请重新输入！");
+			return;
+		}
+		int type = 0;
+
+		try {
+			type = UserTypeEnum.getTypeByName(combType.getSelectedItem()
+					.toString());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(mainFrame, "请指定用户类型!");
+			return;
+		}
+
+		//2组织参数
+		UserModel user = new UserModel();
+		user.setName(name);
+		user.setPwd(pwd);
+		user.setType(type);
+
+		//3调用逻辑层
+		UserEbi ebi = UserEbiFactory.getUserEbi();
+
+		//4根据调用返回结果导向不同页面
+		if (ebi.create(user)) {
+			back();
+		} else {
+			JOptionPane.showMessageDialog(null, "该用户已经存在!");
+		}
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnAdd;
+	private javax.swing.JButton btnBack;
+	private javax.swing.JComboBox combType;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6;
+	private javax.swing.JTextField tfdName;
+	private javax.swing.JPasswordField tfdPwd;
+	private javax.swing.JPasswordField tfdPwd2;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+删除用户：DeletePanel
+----------------
+
+```
+/*
+ * DeletePanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class DeletePanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+	private String uuid = null;
+
+	/** Creates new form DeletePanel 
+	 * @param uuid */
+	public DeletePanel(JFrame mainFrame, String uuid) {
+		this.mainFrame = mainFrame;
+		this.uuid = uuid;
+		initComponents();
+		myInitData();
+	}
+
+	private void myInitData() {
+		UserEbi user = UserEbiFactory.getUserEbi();
+		UserModel userModel = user.getSingle(uuid);
+		tfdName.setText(userModel.getName());
+		tfdUuid.setText(userModel.getUuid());
+		tfdPwd.setText(userModel.getPwd());
+		tfdType.setText(UserTypeEnum.getNameByType(userModel.getType()));
+
+		tfdName.setEditable(false);
+		tfdPwd.setEditable(false);
+		tfdType.setEditable(false);
+		tfdUuid.setEditable(false);
+
+	}
+
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		tfdName = new javax.swing.JTextField();
+		jLabel3 = new javax.swing.JLabel();
+		tfdUuid = new javax.swing.JTextField();
+		jLabel4 = new javax.swing.JLabel();
+		jLabel5 = new javax.swing.JLabel();
+		tfdPwd = new javax.swing.JTextField();
+		tfdType = new javax.swing.JTextField();
+		btnBack = new javax.swing.JButton();
+		btnDelete = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("微软雅黑", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+		jLabel1.setText("\u5220\u9664\u7528\u6237");
+		add(jLabel1);
+		jLabel1.setBounds(260, 30, 230, 80);
+
+		jLabel2.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel2.setText("\u7528\u6237\u7c7b\u578b:");
+		add(jLabel2);
+		jLabel2.setBounds(100, 310, 90, 30);
+
+		tfdName.setFont(new java.awt.Font("Dialog", 1, 18));
+		tfdName.setAutoscrolls(false);
+		add(tfdName);
+		tfdName.setBounds(480, 160, 120, 30);
+
+		jLabel3.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel3.setText("uuid:");
+		add(jLabel3);
+		jLabel3.setBounds(130, 160, 50, 30);
+
+		tfdUuid.setFont(new java.awt.Font("Dialog", 0, 11));
+		add(tfdUuid);
+		tfdUuid.setBounds(200, 160, 110, 30);
+
+		jLabel4.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel4.setText("\u59d3\u540d:");
+		add(jLabel4);
+		jLabel4.setBounds(420, 160, 50, 30);
+
+		jLabel5.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel5.setText("\u5bc6\u7801:");
+		add(jLabel5);
+		jLabel5.setBounds(130, 240, 50, 30);
+
+		tfdPwd.setFont(new java.awt.Font("Tahoma", 1, 12));
+		add(tfdPwd);
+		tfdPwd.setBounds(200, 240, 160, 30);
+
+		tfdType.setFont(new java.awt.Font("Dialog", 1, 12));
+		add(tfdType);
+		tfdType.setBounds(200, 310, 160, 30);
+
+		btnBack.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnBack.setForeground(new java.awt.Color(0, 204, 204));
+		btnBack.setText("\u8fd4\u56de");
+		btnBack.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnBackActionPerformed(evt);
+			}
+		});
+		add(btnBack);
+		btnBack.setBounds(540, 450, 120, 60);
+
+		btnDelete.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnDelete.setForeground(new java.awt.Color(0, 204, 204));
+		btnDelete.setText("\u5220\u9664");
+		btnDelete.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnDeleteActionPerformed(evt);
+			}
+		});
+		add(btnDelete);
+		btnDelete.setBounds(210, 450, 120, 60);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
+		//3调用逻辑层
+		if (UserEbiFactory.getUserEbi().delete(uuid)) {
+			back();
+		} else {
+			JOptionPane.showMessageDialog(mainFrame, "该用户已经不存在!");
+		}
+
+		//4根据调用返回结果导向不同页面
+
+	}
+
+	private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+		back();
+	}
+
+	private void back() {
+		mainFrame.setContentPane(new ListPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnBack;
+	private javax.swing.JButton btnDelete;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JTextField tfdName;
+	private javax.swing.JTextField tfdPwd;
+	private javax.swing.JTextField tfdType;
+	private javax.swing.JTextField tfdUuid;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+|||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+查找用户：QueryPanel
+---------------
+
+```
+/*
+ * QueryPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.swing.JFrame;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class QueryPanel extends javax.swing.JPanel {
+
+	private JFrame mainFrame = null;
+
+	/** Creates new form QueryPanel 
+	 * @param mainFrame */
+	public QueryPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+
+	private void myInitData() {
+		for(UserTypeEnum type:UserTypeEnum.values()){
+			combType.addItem(type.getName());
+		}
+		
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		tfdName = new javax.swing.JTextField();
+		jLabel3 = new javax.swing.JLabel();
+		tfdUuid = new javax.swing.JTextField();
+		jLabel4 = new javax.swing.JLabel();
+		combType = new javax.swing.JComboBox();
+		btnQuery = new javax.swing.JButton();
+		btnBack = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("微软雅黑", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+		jLabel1.setText("\u67e5\u627e\u7528\u6237");
+		add(jLabel1);
+		jLabel1.setBounds(250, 20, 230, 80);
+
+		jLabel2.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel2.setText("\u7528\u6237\u7c7b\u578b:");
+		add(jLabel2);
+		jLabel2.setBounds(90, 310, 90, 30);
+
+		tfdName.setFont(new java.awt.Font("Dialog", 1, 18));
+		tfdName.setAutoscrolls(false);
+		add(tfdName);
+		tfdName.setBounds(180, 230, 140, 32);
+
+		jLabel3.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel3.setText("uuid:");
+		add(jLabel3);
+		jLabel3.setBounds(120, 160, 50, 30);
+
+		tfdUuid.setFont(new java.awt.Font("Dialog", 1, 12));
+		add(tfdUuid);
+		tfdUuid.setBounds(180, 160, 110, 30);
+
+		jLabel4.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel4.setText("\u59d3\u540d:");
+		add(jLabel4);
+		jLabel4.setBounds(120, 230, 50, 30);
+
+		combType.setFont(new java.awt.Font("Dialog", 1, 18));
+		combType.setForeground(new java.awt.Color(51, 51, 255));
+		combType.setModel(new javax.swing.DefaultComboBoxModel(
+				new String[] { "请选择..." }));
+		add(combType);
+		combType.setBounds(180, 310, 160, 30);
+
+		btnQuery.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnQuery.setForeground(new java.awt.Color(0, 204, 204));
+		btnQuery.setText("\u67e5\u627e");
+		btnQuery.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnQueryActionPerformed(evt);
+			}
+		});
+		add(btnQuery);
+		btnQuery.setBounds(150, 440, 120, 60);
+
+		btnBack.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnBack.setForeground(new java.awt.Color(0, 204, 204));
+		btnBack.setText("\u8fd4\u56de");
+		btnBack.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnBackActionPerformed(evt);
+			}
+		});
+		add(btnBack);
+		btnBack.setBounds(520, 430, 120, 60);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	protected void btnQueryActionPerformed(ActionEvent evt) {
+		//1收集参数
+		String name = tfdName.getText();
+		String uuid = tfdUuid.getText();
+		
+		int type =0;
+		if(combType.getSelectedIndex()>0){
+			type = UserTypeEnum.getTypeByName(combType.getSelectedItem().toString());
+		}
+		
+		//2组织参数
+		UserQueryModel uqm = new UserQueryModel();
+		uqm.setName(name);
+		uqm.setUuid(uuid);
+		uqm.setType(type);
+		
+		//3调用逻辑层
+		UserEbi ebi = UserEbiFactory.getUserEbi();
+		List<UserModel> results = ebi.getbyCondition(uqm);
+		
+		//4返回到不同的结果页面
+		
+		mainFrame.setContentPane(new ListPanel(mainFrame,results));
+		mainFrame.validate();
+		
+	}
+
+	private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+		back();
+	}
+
+	private void back() {
+		mainFrame.setContentPane(new ListPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnBack;
+	private javax.swing.JButton btnQuery;
+	private javax.swing.JComboBox combType;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JTextField tfdName;
+	private javax.swing.JTextField tfdUuid;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+||||||||||||||||||||||||||||||||||||||||||||||
+
+修改用户：UpdatePanel
+----------------
+
+```
+/*
+ * UpdatePanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class UpdatePanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+	private String uuid = null;
+
+	/**
+	 * Creates new form UpdatePanel
+	 * 
+	 * @param uuid
+	 * @param mainFrame
+	 */
+	public UpdatePanel(JFrame mainFrame, String uuid) {
+		this.mainFrame = mainFrame;
+		this.uuid = uuid;
+		initComponents();
+		myInitData();
+	}
+
+	private void myInitData() {
+		UserEbi ebi = UserEbiFactory.getUserEbi();
+		UserModel user = ebi.getSingle(uuid);
+		tfdUuid.setText(user.getUuid());
+		tfdUuid.setEditable(false);
+
+		tfdName.setText(user.getName());
+		tfdPwd.setText(user.getPwd());
+		tfdPwd2.setText(user.getPwd());
+
+		combType.removeAllItems();
+		String usert = UserTypeEnum.getNameByType(user.getType());
+		combType.addItem(usert);
+		for (UserTypeEnum userType : UserTypeEnum.values()) {
+			if (!userType.getName().equals(usert)) {
+				combType.addItem(userType.getName());
+			}
+		}
+
+	}
+
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		tfdName = new javax.swing.JTextField();
+		jLabel3 = new javax.swing.JLabel();
+		tfdUuid = new javax.swing.JTextField();
+		jLabel4 = new javax.swing.JLabel();
+		tfdPwd2 = new javax.swing.JPasswordField();
+		jLabel5 = new javax.swing.JLabel();
+		jLabel6 = new javax.swing.JLabel();
+		tfdPwd = new javax.swing.JPasswordField();
+		combType = new javax.swing.JComboBox();
+		btnBack = new javax.swing.JButton();
+		btnUpdate = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("微软雅黑", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+		jLabel1.setText("\u4fee\u6539\u7528\u6237");
+		add(jLabel1);
+		jLabel1.setBounds(250, 30, 230, 80);
+
+		jLabel2.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel2.setText("\u7528\u6237\u7c7b\u578b:");
+		add(jLabel2);
+		jLabel2.setBounds(90, 310, 90, 30);
+
+		tfdName.setFont(new java.awt.Font("Dialog", 1, 18));
+		tfdName.setAutoscrolls(false);
+		add(tfdName);
+		tfdName.setBounds(470, 160, 120, 30);
+
+		jLabel3.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel3.setText("uuid:");
+		add(jLabel3);
+		jLabel3.setBounds(120, 160, 50, 30);
+
+		tfdUuid.setFont(new java.awt.Font("Dialog", 1, 12));
+		add(tfdUuid);
+		tfdUuid.setBounds(190, 160, 110, 30);
+
+		jLabel4.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel4.setText("\u59d3\u540d:");
+		add(jLabel4);
+		jLabel4.setBounds(410, 160, 50, 30);
+
+		tfdPwd2.setFont(new java.awt.Font("Dialog", 1, 18));
+		add(tfdPwd2);
+		tfdPwd2.setBounds(470, 240, 170, 30);
+
+		jLabel5.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel5.setText("\u5bc6\u7801:");
+		add(jLabel5);
+		jLabel5.setBounds(120, 240, 50, 30);
+
+		jLabel6.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel6.setText("\u786e\u8ba4\u5bc6\u7801:");
+		add(jLabel6);
+		jLabel6.setBounds(380, 240, 90, 30);
+
+		tfdPwd.setFont(new java.awt.Font("宋体", 1, 18));
+		add(tfdPwd);
+		tfdPwd.setBounds(190, 240, 160, 30);
+
+		combType.setFont(new java.awt.Font("Dialog", 1, 12));
+		combType.setForeground(new java.awt.Color(51, 0, 255));
+		combType.setModel(new javax.swing.DefaultComboBoxModel(
+				new String[] { "" }));
+		add(combType);
+		combType.setBounds(190, 310, 170, 30);
+
+		btnBack.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnBack.setForeground(new java.awt.Color(0, 204, 204));
+		btnBack.setText("\u8fd4\u56de");
+		btnBack.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnBackActionPerformed(evt);
+			}
+		});
+		add(btnBack);
+		btnBack.setBounds(500, 430, 120, 60);
+
+		btnUpdate.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnUpdate.setForeground(new java.awt.Color(0, 204, 204));
+		btnUpdate.setText("\u4fee\u6539");
+		btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnUpdateActionPerformed(evt);
+			}
+		});
+		add(btnUpdate);
+		btnUpdate.setBounds(170, 430, 120, 60);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+		// 1收集参数
+		String uuid = tfdUuid.getText();
+		String name = tfdName.getText();
+		String pwd = new String(tfdPwd.getPassword());
+		String pwd2 = new String(tfdPwd2.getPassword());
+
+		if (uuid.equals("") || uuid.equals(null)) {
+			JOptionPane.showMessageDialog(mainFrame, "用户ID为空，请重新输入！");
+			return;
+		}
+
+		if (name.equals("") || name.equals(null)) {
+			JOptionPane.showMessageDialog(mainFrame, "用户名为空，请重新输入！");
+			return;
+		}
+
+		if (!pwd.equals(pwd2) || pwd.equals("") || pwd.equals(null)
+				|| pwd2.equals("") || pwd2.equals(null)) {
+			JOptionPane.showMessageDialog(mainFrame, "两次密码输入不一致或密码为空，请重新输入！");
+			return;
+		}
+		int type = 0;
+
+		try {
+			type = UserTypeEnum.getTypeByName(combType.getSelectedItem()
+					.toString());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(mainFrame, "请指定用户类型!");
+			return;
+		}
+
+		// 2组织参数
+		UserModel user = new UserModel();
+		user.setName(name);
+		user.setPwd(pwd);
+		user.setType(type);
+		user.setUuid(uuid);
+
+		// 3调用逻辑层
+		UserEbi ebi = UserEbiFactory.getUserEbi();
+
+		// 4根据调用返回结果导向不同页面
+		if (ebi.update(user)) {
+			back();
+		} else {
+			JOptionPane.showMessageDialog(null, "该用户已经不存在!");
+		}
+
+	}
+
+	private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+		back();
+	}
+
+	private void back() {
+		mainFrame.setContentPane(new ListPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnBack;
+	private javax.swing.JButton btnUpdate;
+	private javax.swing.JComboBox combType;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6;
+	private javax.swing.JTextField tfdName;
+	private javax.swing.JPasswordField tfdPwd;
+	private javax.swing.JPasswordField tfdPwd2;
+	private javax.swing.JTextField tfdUuid;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+主界面的图片：
+最后，我把那个主界面的图片上传一下：(我随便弄的一张图片)
+
+名字为：shudian.png
+![](http://img.blog.csdn.net/20160411003451695)
+
+
+如果软件现在有什么bug，欢迎在评论中指出，谢谢了。
+软件持续连载中。。。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

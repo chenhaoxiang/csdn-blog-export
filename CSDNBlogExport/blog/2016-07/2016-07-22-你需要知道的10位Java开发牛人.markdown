@@ -1,0 +1,109 @@
+---
+layout: post
+title: "你需要知道的10位Java开发牛人"
+date: 2016-07-22 02:24:06 +0800
+comments: true
+categories:❻ 其他,----- 好文/知识点
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 1、James Gosling
+
+
+
+　
+　1983 年，Gosling 获得了加州大学的计算机科学学士学位。1990 年，他获得了卡内基梅隆大学的计算机科学博士学位，师从 BobSproull。在攻读博士期间，他自己开发了一款 emacs，叫 Gosling Emacs(Gosmacs)，在大学的这段时间，他还开发了一个多处理器版本的 Unix，以及数个编译器和邮件系统，之后才加入 S 
+---
+
+
+1、James Gosling
+
+
+
+　
+　1983 年，Gosling 获得了加州大学的计算机科学学士学位。1990 年，他获得了卡内基梅隆大学的计算机科学博士学位，师从 BobSproull。在攻读博士期间，他自己开发了一款 emacs，叫 Gosling Emacs(Gosmacs)，在大学的这段时间，他还开发了一个多处理器版本的 Unix，以及数个编译器和邮件系统，之后才加入 S
+<!-- more -->
+----------
+
+
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+1、James Gosling</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIojfDD0O9MpGPFEwmVVdBOHATLnhMicKsCJAmMlhgibtk1PiaiatMACNmspQ/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　1983 年，Gosling 获得了加州大学的计算机科学学士学位。1990 年，他获得了卡内基梅隆大学的计算机科学博士学位，师从 BobSproull。在攻读博士期间，他自己开发了一款 emacs，叫 Gosling Emacs(Gosmacs)，在大学的这段时间，他还开发了一个多处理器版本的 Unix，以及数个编译器和邮件系统，之后才加入 Sun 公司。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　1984 到 2010 年间，Gosling 一直在 Sun 公司工作。他被公认为 Java 之父。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　Oracle刚收购了 Sun 之后，在 2010 年 4 月 2 日，Gosling 离开了 Sun <br>
+公司。当问及为何要离开时，Gosling <br>
+认为，他的待遇，职级和决策权都受到了削减，同时角色也发生了转变，并面临道德上的压力。此后他在采访中一直对Oracle公司持批评态度，并指出”在 Sun 和 Oracle的合并会议上，当我们正为 Sun 和 Google 的专利问题发愁，却看到 Oracle的律师&#30524;睛里都放着光&quot;。随后，在 Oracle 和 Google 关于 Andriod 的诉讼中，他澄清了自己的立场：&quot;Sun公司虽然没有专利诉讼的基因，这不意味着我们会任人宰割。虽然我与 Oracle 公司存在分歧，但在这个问题上我认为他们做的很对。Google
+ 把Sun 压榨得太不像话了，我们大家都被惹怒了。这也包括 Jonathan [Schwartz]，他想唱红脸让这事就这么过去，这让原Sun公司的员工都很不爽。&quot;<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　2011 年 3 月 28 日,James Gosling 在博客上宣布加入 Google 公司。但 5 个月后，他又加入了一家叫 Liquid Robotics 的初创公司。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　Gosling 同时还是 TypeSafe 公司的顾问，该公司成立于 2011 年，致力于 Scala 开发。 <br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　2、Joshua Bloch ——Collections 框架</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIoulueK4Q6Hz5swXE2ZYtevGzgO4ZtXEfLITFCoSRobHL5wYo1JKTvqw/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　3、Doug Lea —— 并发</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIot7MQ1XgicHeUOXgq4N8sTibl2YWSmE4a7O8mSnhNBnZiaRLa84FiciaSp2A/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　倍受欢迎的 java.util.concurrent 包就是出自这位大师之手。Doug Lea 是纽约州立大学 Oswego分校的计算机教授，他主要研究的是并发编程以及并发数据结构的设计。他是 JCP(Java CommunityProcess)执行委员会委员，并主持编写了 JSR 166(J.U.C 的技术规范)，把并发工具库引入到 Java 语言中。2010 年 10月 22 日，Doug Lea 向 JCP 执行委员会表明自己将不再继续连任。2012 年，Doug 再次当选为 OpenJDK 理事会成员。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　他著有 Concurrent Programming in Java 一书，这是最早关于并发编程的书籍之一。该书现在已经出版了第二版。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　4、Gavin King - Hibernate</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIo2avbiaUt0HvGDXXbLLibQAhiaX6zOTUhJqIdq31TQvUp1BoqEWUhPIcvA/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　他是 Java 著名的对象/关系持久化存储方案 Hibernate 项目的创始人，同时也是 Java EE 5 应用程序框架 Seam 的创建者。不仅如此，他还为 EJB3.0 和 JPA 的设计做出了巨大的贡献。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　5、Rod Johnson —— Spring 创始人</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIoRvRqa4GAvHIuwcndl3ibaxrZzncepldUwOu3J56QzMGu1ia3LEHtodBQ/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　他是 Spring 框架的创始人，同时也是 SpringSource 的联合创始人。Spring <br>
+是面向切面编程(AOP)和控制反转(IoC)的容器框架。Rod 的畅销书Expert One-on-One J2EE Design and Development(2002 年出版)是迄今为止 J2EE 领域最具影响力的书之一。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　6、Craig Mcclanahan —— Struts 创始人</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIor0sH2yEI2oqMJ0flzPYnuFmXObv9nt0k4y8N7taFNY0vvibdJPS8ALg/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　Craig R. Mcclanahan 是一名程序员，同时也是 Apache Struts 项目的创始人，Struts是一款非常流行的用于构建 JavaWEB 应用的开源 MVC 框架。他是 servlet2.2，2.3，JSP1.1规范制定专家组的成员之一。同时他也是 Tomcat 的 servlet 容器 Catalina 的架构师。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　7、Andy Rubin —— Android</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIoniaD8dutbmfAfWvPRev3wfI5HmsDQLL2xdZwABe6nHBnsIND0OntFSg/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　Andrew E. Rubin 是 Dangert 和 Android 公司的联合创始人及前 CEO。2013 年之前，他曾担任Google移动及数字内容的高级副总裁，负责研发一款开源的智能手机操作系统——Android。Rubin名下拥有四项发明专利，据说他的身家价&#20540;上亿美金。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　2013 年 3 月 13，Larry Page 在博客中透露，Andy Rubin 将调离 Android 事业部，去负责Google的一些新项目。Sundar Pichai 将接替他的工作，同时仍旧兼任 Google Chrome 事业部的老大。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　8、James Duncan Davidson ——Tomcat 和 Ant</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIosVUXLtWZn5Lfe7lIVRAk726RJEfm99E9xHAdDgLibey8Noq0vhh1RiaA/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　James Duncan Davidson(1970年7月29日出生于得克萨斯州的卢博克市)是美国的一个摄影师，曾经是一名软件工程师。他在担任 Sun 公司软件工程师期间(1997-2001)，开发出了Java 的 web 服务器 Tomcat 以及构建工具 Ant。在 2005 到 2006 年间，Duncan开发的兴趣和注意力转向了Ruby on Rails。他和 Rails 领域的著名大师 Mike Clark 一起合作，Davidson设计及开发了一些相当复杂且健壮性佳的 Rails 应用。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　2005 年开始， Duncan把摄影作为了自己的副业。他现在是几个知名科技会议的首席摄影师。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　他现在是波兰一个叫 Luma Labs 的小公司的联合创始人及所有者，专注于生产高质量的相机配件。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　9 Marc Fleury —— JBoss<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIoJYnU4KRLkuLZO4MicWCSXClm4FMfypJ7IvV9vTmiaG8YouMibMbiaIxZtQ/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　Marc Fleury 在 2011 年创建了一个名为 JBoss 的开源 Java 应用服务器项目，这个可以说是 Java WEB 应用部署的事实标准。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　Marc 研究的兴趣主要集中在中间件开发，他于 1999 年启动了 JBoss 项目。2001 年，他在亚特兰大成立了 JBoss Group 有限责任公司，JBoss 正式成为公司的名字则是在 2004 年。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　把公司卖给 Red Hat 后，Fleury 成为 JBoss 部门的高级副总裁和总经理。然而从 2007年1月开始 Fleury <br>
+休起了陪产假，计划至同年的 3 月 15 日结束，但此时有谣言称他可能将离开 Red Hat。2007年 2 月，Red Hat <br>
+公司正式公布他离职的消息，并称他“决定离开 Red Hat 以便追求一些别的个人爱好，比如教书，进行生物研究，玩音乐，陪伴家人”。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　10、Kent Beck——JUnit 创始人</p>
+<p style="margin-top:0px; margin-bottom:0px; padding-top:0px; padding-bottom:0px; font-size:16px; max-width:100%; clear:both; min-height:1em; white-space:pre-wrap; color:rgb(62,62,62); font-family:'Helvetica Neue',Helvetica,'Hiragino Sans GB','Microsoft YaHei',Arial,sans-serif; line-height:25.6000003814697px; word-wrap:break-word!important">
+<img src="http://mmbiz.qpic.cn/mmbiz/kiavCQlH8PE4DuEr6DadsqBdC3xUv7YIoWf24kY0t51TlujGhdwPeRWLOEReSALojpEFuY3QuIA8ibMoY7g3uFWw/640?wx_fmt=jpeg&amp;&amp;wxfrom=5&amp;wx_lazy=1" alt="" style="border:none; vertical-align:middle; max-width:100%; height:auto; margin:0px; padding:0px; word-wrap:break-word; width:auto; visibility:visible"><br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　　Kent Beck 率先提出了极限编程和测试驱动开发的概念，这个也被称为敏捷式开发。Beck是一名来自美国的软件工程师，他是 2001 年最早签名发起敏捷宣言的 17 人之一。<br style="margin:0px; padding:0px; max-width:100%; word-wrap:break-word!important">
+　<br>
+　1979 年至 1987 年，Beck在大学进修，获得了计算机科学的学士和硕士学位。他是软件设计模式的先驱，倡导测试驱动开发的模式，并率先使用 Smalltalk来开发商业应用。他和 Ward Cunningham 一道推广了 CRC 建模的方法，并和 Erich Gamma 共同创建了 JUnit 测试框架。</p>
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

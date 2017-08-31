@@ -1,0 +1,102 @@
+---
+layout: post
+title: "排序算法：冒泡排序"
+date: 2016-03-05 11:37:45 +0800
+comments: true
+categories:----- 排序相关,❺ 算法及基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 冒泡排序算法的运作如下：（从后往前）​1.比较相邻的元素。如果第一个比第二个大，就交换他们两个。2.对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。3.针对所有的元素重复以上的步骤，除了最后一个。4.持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。若记录序列的初始状态为”正序”，则冒泡排序过程只需进行一趟排序，在排序过程中只需进 
+---
+
+
+冒泡排序算法的运作如下：（从后往前）​1.比较相邻的元素。如果第一个比第二个大，就交换他们两个。2.对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。3.针对所有的元素重复以上的步骤，除了最后一个。4.持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。若记录序列的初始状态为”正序”，则冒泡排序过程只需进行一趟排序，在排序过程中只需进
+<!-- more -->
+----------
+
+冒泡排序算法的运作如下：（从后往前）
+
+​1.比较相邻的元素。如果第一个比第二个大，就交换他们两个。
+
+2.对每一对相邻元素作同样的工作，从开始第一对到结尾的最后一对。在这一点，最后的元素应该会是最大的数。
+
+3.针对所有的元素重复以上的步骤，除了最后一个。
+
+4.持续每次对越来越少的元素重复上面的步骤，直到没有任何一对数字需要比较。
+
+若记录序列的初始状态为"正序"，则冒泡排序过程只需进行一趟排序，在排序过程中只需进行n-1次比较，且不移动记录；反之，若记录序列的初始状态为"逆序"，则需进行n(n-1）/2次比较和记录移动。因此冒泡排序总的时间复杂度为O(n*n)。
+
+```
+package cn.hncu;
+
+import java.sql.Timestamp;
+
+public class bubbleSort {
+	public static void main(String[] args) {
+		int[] a = new int[10000];
+		for(int i=0;i<a.length;i++){
+			a[i] = (int)(Math.random()*a.length);
+		}
+		long startTime = System.currentTimeMillis();//返回以毫秒为单位的当前时间。
+		//1 冒泡排序
+		bubbleSort1(a);
+		//1.1 优化后的冒泡排序
+		//bubbleSort2(a);
+		
+		print(a);
+		long endTime = System.currentTimeMillis();//返回以毫秒为单位的当前时间。
+		System.out.println("程序运行时间: "+(endTime-startTime)+"ms");
+		
+		
+	}
+
+	private static void bubbleSort2(int[] a) {
+		for(int i=0;i<a.length-1;i++){
+			boolean flag = false;
+			for(int j=0;j<a.length-1-i;j++){
+				if(a[j]>a[j+1]){
+					a[j]  =a[j]^a[j+1];
+					a[j+1]=a[j]^a[j+1];
+					a[j]  =a[j]^a[j+1];
+					flag = true;
+				}
+			}
+			if(!flag){
+				break;
+			}
+		}
+	}
+
+	private static void bubbleSort1(int a[]) {
+		for(int i=0;i<a.length-1;i++){
+			for(int j=0;j<a.length-1-i;j++){
+				if(a[j]>a[j+1]){
+					a[j]  =a[j]^a[j+1];
+					a[j+1]=a[j]^a[j+1];
+					a[j]  =a[j]^a[j+1];
+				}
+			}
+		}
+	}
+
+	private static void print(int[] a) {
+		for(int i=0;i<a.length;i++){
+			System.out.print(a[i]+" ");
+		}
+		System.out.println();
+	}
+
+}
+
+```
+
+冒泡排序法的优化方法：
+在排序过程中，执行完最后的排序后，虽然数据已全部排序完备，但程序无法判断是否完成排序，为了解决这一不足，可设置一个标志位flag，将其初始值设置为非0，表示被排序的表是一个无序的表，每一次排序开始前设置flag值为0，在进行数据交换时，修改flag为非0。在新一轮排序开始时，检查此标志，若此标志为0，表示上一次没有做过交换数据，则结束排序；否则进行排序；
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

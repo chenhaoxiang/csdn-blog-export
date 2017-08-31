@@ -1,0 +1,266 @@
+---
+layout: post
+title: "HDOJ(HDU) 1862 EXCEL排序(类对象的快排)"
+date: 2016-04-22 08:32:03 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 排序相关
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Excel可以对一组纪录按任意指定列排序。现请你编写程序实现类似功能。Input 
+测试输入包含若干测试用例。每个测试用例的第1行包含两个整数 N (<=100000) 和 C，其中 N 是纪录的条数，C 是指定排序的列号。以下有 N  
+行，每行包含一条学生纪录。每条学生纪录由学号（6位数字，同组测试中没有重复的学号）、姓名（不超过8位且不包含空格的字符串 
+---
+
+
+Problem Description 
+Excel可以对一组纪录按任意指定列排序。现请你编写程序实现类似功能。Input 
+测试输入包含若干测试用例。每个测试用例的第1行包含两个整数 N (<=100000) 和 C，其中 N 是纪录的条数，C 是指定排序的列号。以下有 N  
+行，每行包含一条学生纪录。每条学生纪录由学号（6位数字，同组测试中没有重复的学号）、姓名（不超过8位且不包含空格的字符串
+<!-- more -->
+----------
+
+Problem Description
+Excel可以对一组纪录按任意指定列排序。现请你编写程序实现类似功能。
+ 
+
+Input
+测试输入包含若干测试用例。每个测试用例的第1行包含两个整数 N (<=100000) 和 C，其中 N 是纪录的条数，C 是指定排序的列号。以下有 N 
+行，每行包含一条学生纪录。每条学生纪录由学号（6位数字，同组测试中没有重复的学号）、姓名（不超过8位且不包含空格的字符串）、成绩（闭区间[0, 100]内的整数）组成，每个项目间用1个空格隔开。当读到 N=0 时，全部输入结束，相应的结果不要输出。
+
+ 
+
+Output
+对每个测试用例，首先输出1行“Case i:”，其中 i 是测试用例的编号（从1开始）。随后在 N 行中输出按要求排序后的结果，即：当 C=1 时，按学号递增排序；当 C=2时，按姓名的非递减字典序排序；当 C=3 
+时，按成绩的非递减排序。当若干学生具有相同姓名或者相同成绩时，则按他们的学号递增排序。
+
+ 
+
+Sample Input
+3 1
+000007 James 85
+000010 Amy 90
+000001 Zoe 60
+4 2
+000007 James 85
+000010 Amy 90
+000001 Zoe 60
+000002 James 98
+4 3
+000007 James 85
+000010 Amy 90
+000001 Zoe 60
+000002 James 90
+0 0
+ 
+
+Sample Output
+Case 1:
+000001 Zoe 60
+000007 James 85
+000010 Amy 90
+Case 2:
+000010 Amy 90
+000002 James 98
+000007 James 85
+000001 Zoe 60
+Case 3:
+000001 Zoe 60
+000007 James 85
+000002 James 90
+000010 Amy 90
+
+
+
+这个题目难度不大，但是不能用普通的排序，不然会超时。
+一定要用快排！
+以前我对java的import java.util.Arrays的：（
+sort(T[] a,Comparator< ? super T> c)根据指定比较器产生的顺序对指定对象数组进行排序。数组中的所有元素都必须是通过指定比较器可相互比较的（也就是说，对于数组中的任何 e1 和 e2 元素而言，c.compare(e1, e2) 不得抛出 ClassCastException）。
+保证此排序是稳定的：不会因调用 sort 方法而对相等的元素进行重新排序。
+
+该排序算法是一个经过修改的合并排序算法（其中，如果低子列表中的最高元素小于高子列表中的最低元素，则忽略合并）。此算法提供可保证的 n*log(n) 性能。 
+
+参数：
+a - 要排序的数组
+c - 确定数组顺序的比较器。null 值指示应该使用元素的自然顺序。 ）
+不怎么理解怎么用比较器，现在完全明白了，O(∩_∩)O哈哈~、、、
+
+
+```
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Scanner;
+
+public class Main{
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int time = 1;
+		while (sc.hasNext()) {
+			int n = sc.nextInt();
+			int m = sc.nextInt();
+			if (n == 0 && m == 0) {
+				break;
+			}
+			// System.out.println(n+" "+m);
+
+			student[] s = new student[n];
+			for (int i = 0; i < n; i++) {
+				s[i] = new student();
+				s[i].no = sc.nextInt();
+				s[i].name = sc.next();
+				s[i].results = sc.nextInt();
+			}
+			System.out.println("Case " + (time++) + ":");
+			if (m == 1) {
+				sort1(s);
+				for (int i = 0; i < s.length; i++) {
+					int t = Integer.toString(s[i].no).length();
+					for (int k = 6; k > t; k--) {
+						System.out.print(0);
+					}
+					System.out.println(s[i].no + " " + s[i].name + " "
+							+ s[i].results);
+				}
+				continue;
+			}
+			if (m == 2) {
+				sort2(s);
+				for (int i = 0; i < s.length; i++) {
+					int t = Integer.toString(s[i].no).length();
+					for (int k = 6; k > t; k--) {
+						System.out.print(0);
+					}
+					System.out.println(s[i].no + " " + s[i].name + " "
+							+ s[i].results);
+				}
+				continue;
+			}
+			if (m == 3) {
+				sort3(s);
+				for (int i = 0; i < s.length; i++) {
+					int t = Integer.toString(s[i].no).length();
+					for (int k = 6; k > t; k--) {
+						System.out.print(0);
+					}
+					System.out.println(s[i].no + " " + s[i].name + " "
+							+ s[i].results);
+				}
+				continue;
+			}
+
+		}
+	}
+
+	private static void sort3(student[] s) {
+		Arrays.sort(s,new Comparator<student>() {
+			@Override
+			public int compare(student o1, student o2) {
+				if(o1.results==o2.results){
+					if(o1.no>o2.no){
+						return 1; 
+					}else{
+						return -1;
+					}
+				}
+				if(o1.results>o2.results){
+					return 1;
+				}
+				return -1;
+			}
+		});
+	}
+
+	private static void sort2(student[] s) {
+		Arrays.sort(s, new Comparator<student>() {
+			@Override
+			public int compare(student o1, student o2) {
+
+				if (o1.name.equals(o2.name)) {
+					if (o1.no > o2.no) {
+						return 1;
+						//返回1，就是交换位置！！！
+					} else {
+						return -1;
+					}
+				} else {
+					if (o1.name.length() > o2.name.length()) {
+						for (int i = 0; i < o2.name.length(); i++) {
+							if (o1.name.charAt(i) > o2.name.charAt(i)) {
+								return 1;
+							} 
+							if (o1.name.charAt(i) < o2.name.charAt(i))
+							{
+								return -1;
+							}
+						}
+						return 1;
+					} else if (o1.name.length() < o2.name.length()) {
+						for (int i = 0; i < o1.name.length(); i++) {
+							if (o1.name.charAt(i) > o2.name.charAt(i)) {
+								return 1;
+							} 
+							if (o1.name.charAt(i) < o2.name.charAt(i))
+							{
+								return -1;
+							}
+						}
+						return -1;
+					} else {
+						for (int i = 0; i < o1.name.length(); i++) {
+							if (o1.name.charAt(i) > o2.name.charAt(i)) {
+								return 1;
+							} 
+							if (o1.name.charAt(i) < o2.name.charAt(i))
+							{
+								return -1;
+							}
+						}
+					}
+				}
+				return 0;
+			}
+
+		});
+	}
+
+	private static void sort1(student[] s) {
+		Arrays.sort(s, new Comparator<student>() {
+			@Override
+			public int compare(student o1, student o2) {
+				// 按照no的大小 s从小到大排序
+				if (o1.no > o2.no) {
+					return 1;
+				} else {
+					return -1;
+				}
+			}
+
+		});
+		// for(int i=0;i<s.length-1;i++){
+		// for(int j=i+1;j<s.length;j++){
+		// if(s[i].no>s[j].no){
+		// student tm = s[i];
+		// s[i] = s[j];
+		// s[j]=tm;
+		// }
+		// }
+		// }
+	}
+}
+
+class student {
+	public int no;
+	public String name;
+	public int results;
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

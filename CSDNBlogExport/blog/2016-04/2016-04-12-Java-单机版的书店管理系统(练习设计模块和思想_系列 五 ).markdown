@@ -1,0 +1,530 @@
+---
+layout: post
+title: "Java-单机版的书店管理系统(练习设计模块和思想_系列 五 )"
+date: 2016-04-12 08:54:04 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块,----- ----- Java书店管理系统
+tags: [设计,管理,数据,java,模块设计]
+keyword: 陈浩翔, 谙忆
+description: 经过前几次的发博客。。 
+我发现这样发代码太费劲了。。所以我把目前我完成的源代码上传到百度云里面去了。 
+百度云链接： 
+http://pan.baidu.com/s/1o7X1Kk6 
+链接如果失效了，请评论。。看到立刻补！本次增加进货模块， 
+进货明细面板做出来了。 
+完成了进货管理的数据层接口和进货管理明细的数据层接口。 
+在用户的逻辑层接口增加了一个方法，能获得所有进货人员的方法， 
+get 
+---
+
+
+经过前几次的发博客。。 
+我发现这样发代码太费劲了。。所以我把目前我完成的源代码上传到百度云里面去了。 
+百度云链接： 
+http://pan.baidu.com/s/1o7X1Kk6 
+链接如果失效了，请评论。。看到立刻补！本次增加进货模块， 
+进货明细面板做出来了。 
+完成了进货管理的数据层接口和进货管理明细的数据层接口。 
+在用户的逻辑层接口增加了一个方法，能获得所有进货人员的方法， 
+get
+<!-- more -->
+----------
+
+本系列前面博客的链接：
+-----------
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 四(2) )：
+http://blog.csdn.net/qq_26525215/article/details/51117135
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 四(1) )：
+http://blog.csdn.net/qq_26525215/article/details/51116429
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 三 )：
+http://blog.csdn.net/qq_26525215/article/details/51099202
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 二 )：
+http://blog.csdn.net/qq_26525215/article/details/51089734
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 一 )：
+http://blog.csdn.net/qq_26525215/article/details/51073546
+
+介绍：
+---
+
+经过前几次的发博客。。
+我发现这样发代码太费劲了。。
+后面写了的部分代码：
+
+所以我把目前我完成的所有源代码上传到CSDN里面去了。
+链接：
+http://download.csdn.net/detail/qq_26525215/9489109
+
+
+本次增加进货模块，
+进货明细面板做出来了。
+完成了进货管理的数据层接口和进货管理明细的数据层接口。
+![](http://img.blog.csdn.net/20160412202611301)
+
+在用户的逻辑层接口增加了一个方法，能获得所有进货人员的方法，
+getAllIn();
+![](http://img.blog.csdn.net/20160412202500074)
+
+进货的值对象，进货明细的值对象，
+以及这2个的查询值对象，全部做出来了，
+![](http://img.blog.csdn.net/20160412202534909)
+
+
+In.vo：进货模块的值对象封装
+======
+
+InMainModel类：
+------------
+
+```
+package cn.hncu.bookStore.in.vo;
+
+/**
+ * 进货管理值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class InMainModel {
+	//进货单编号
+	private String uuid;
+	//进货时间
+	private long inDate;
+	//进货人员编号
+	private String inUserId;
+	
+	/**
+	 * 
+	 * @return ---返回进货单编号(String型)
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+	
+	/**
+	 * 
+	 * @param uuid---设置进货单编号(String型)
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	/**
+	 * 
+	 * @return---返回进货时间(long型)
+	 */
+	public long getInDate() {
+		return inDate;
+	}
+	
+	/**
+	 * 
+	 * @param inDate---设置进货时间(long型)
+	 */
+	public void setInDate(long inDate) {
+		this.inDate = inDate;
+	}
+	
+	/**
+	 * 
+	 * @return---返回进货人员编号(String型)
+	 */
+	public String getInUserId() {
+		return inUserId;
+	}
+	
+	/**
+	 * 
+	 * @param inUserId---设置进货人员编号(String型)
+	 */
+	public void setInUserId(String inUserId) {
+		this.inUserId = inUserId;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InMainModel other = (InMainModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return uuid + ", " + inDate
+				+ ", " + inUserId;
+	}
+
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||
+
+InMainQueryModel类：
+------------------
+
+```
+package cn.hncu.bookStore.in.vo;
+
+/**
+ * 进货查询值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class InMainQueryModel extends InMainModel {
+	
+	//需要查询的最大时间
+	private long inDate2;
+	
+	/**
+	 * 
+	 * @return---需要查询的最大时间值
+	 */
+	public long getInDate2() {
+		return inDate2;
+	}
+	
+	/**
+	 * 
+	 * @param inDate2---设置需要查询的最大时间
+	 */
+	public void setInDate2(long inDate2) {
+		this.inDate2 = inDate2;
+	}
+
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||||
+
+InDetailModel类：
+---------------
+
+```
+package cn.hncu.bookStore.in.vo;
+
+/**
+ * 进货明细管理的值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class InDetailModel {
+	//进货明细编号
+	private String uuid;
+	//进货单编号
+	private String inId;
+	//图书编号
+	private String bookId;
+	//进货数量
+	private int sumNum;
+	//进货总金额
+	private double sumMoney;
+	
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public String getInId() {
+		return inId;
+	}
+	public void setInId(String inId) {
+		this.inId = inId;
+	}
+	public String getBookId() {
+		return bookId;
+	}
+	public void setBookId(String bookId) {
+		this.bookId = bookId;
+	}
+	public int getSumNum() {
+		return sumNum;
+	}
+	public void setSumNum(int sumNum) {
+		this.sumNum = sumNum;
+	}
+	public double getSumMoney() {
+		return sumMoney;
+	}
+	public void setSumMoney(double sumMoney) {
+		this.sumMoney = sumMoney;
+	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		InDetailModel other = (InDetailModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return "InDetailModel [uuid=" + uuid + ", inId=" + inId + ", bookId="
+				+ bookId + ", sumNum=" + sumNum + ", sumMoney=" + sumMoney
+				+ "]";
+	}
+
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+InDetailQueryMode类：
+-------------------
+
+```
+package cn.hncu.bookStore.in.vo;
+
+/**
+ * 进货明细查询值对象封装
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class InDetailQueryModel extends InDetailModel {
+	
+	//需要查询的最大进货数量
+	private int sumNum2;
+	//需要查询的最大进货金额
+	private double sumMoney2;
+	
+	/**
+	 * 
+	 * @return---返回需要查询的最大进货数量
+	 */
+	public int getSumNum2() {
+		return sumNum2;
+	}
+	/**
+	 * 
+	 * @param sumNum2---设置需要查询的最大进货数量
+	 */
+	public void setSumNum2(int sumNum2) {
+		this.sumNum2 = sumNum2;
+	}
+	
+	/**
+	 * 
+	 * @return---返回需要查询的最大进货金额
+	 */
+	public double getSumMoney2() {
+		return sumMoney2;
+	}
+	
+	/**
+	 * 
+	 * @param sumMoney2---设置需要查询的最大进货金额
+	 */
+	public void setSumMoney2(double sumMoney2) {
+		this.sumMoney2 = sumMoney2;
+	}
+
+}
+
+```
+
+||||||||||||||||||||||||||||
+
+Dao：进货模块数据层代码：
+==============
+
+InDetailDao接口：
+--------------
+
+
+```
+package cn.hncu.bookStore.in.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.in.vo.InDetailModel;
+import cn.hncu.bookStore.in.vo.InDetailQueryModel;
+
+/**
+ * 进货明细管理数据层接口
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public interface InDetailDao {
+	/**
+	 * 创建一个进货明细数据对象
+	 * @param inMain---需要创建的进货明细数据对象
+	 * @return---true 表示创建成功，false 表示创建失败
+	 */
+	public boolean create(InDetailModel inDetail);
+	
+	/**
+	 * 删除一个进货明细数据对象
+	 * @param uuid---进货明细单的编号-唯一的
+	 * @return---true表示删除成功， false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	
+	/**
+	 * 修改一个进货明细数据的对象
+	 * @param inMain---需要修改的进货管理明细对象
+	 * @return---true表示修改成功，false表示修改失败
+	 */
+	public boolean update(InDetailModel inDetail);
+	
+	/**
+	 * 根据进货明细单编号，得到进货明细对象的其他信息资料
+	 * @param uuid---进货明细单编号
+	 * @return---该对象的其他其他信息资料
+	 */
+	public InDetailModel getSingle(String uuid);
+	
+	/**
+	 * 
+	 * @return---所有的进货明细管理对象信息
+	 */
+	public List<InDetailModel> getAll();
+	
+	/**
+	 * 查找进货明细管理对象
+	 * @param imqm---查找条件！
+	 * @return---满足查找条件的所有InDetailModel对象
+	 */
+	public List<InDetailModel> getbyCondition(InDetailQueryModel idqm);
+}
+
+```
+
+||||||||||||||||||||||||||||||||||||||||
+
+InMainDao接口：
+------------
+
+```
+package cn.hncu.bookStore.in.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.in.vo.InMainModel;
+import cn.hncu.bookStore.in.vo.InMainQueryModel;
+
+/**
+ * 进货管理数据层接口
+ * 
+ * @author 陈浩翔
+ * 
+ * @version 1.0
+ */
+public interface InMainDao {
+	
+	/**
+	 * 创建一个进货数据对象
+	 * @param inMain---需要创建的进货数据对象
+	 * @return---true 表示创建成功，false 表示创建失败
+	 */
+	public boolean create(InMainModel inMain);
+	
+	/**
+	 * 删除一个进货数据对象
+	 * @param uuid---进货单的编号-唯一的
+	 * @return---true表示删除成功， false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	
+	/**
+	 * 修改一个进货数据的对象
+	 * @param inMain---需要修改的进货管理对象
+	 * @return---true表示修改成功，false表示修改失败
+	 */
+	public boolean update(InMainModel inMain);
+	
+	/**
+	 * 根据进货单编号，得到进货对象的其他信息资料
+	 * @param uuid---进货单编号
+	 * @return---该对象的其他其他信息资料
+	 */
+	public InMainModel getSingle(String uuid);
+	
+	/**
+	 * 
+	 * @return---所有的进货管理对象信息
+	 */
+	public List<InMainModel> getAll();
+	
+	/**
+	 * 查找进货管理对象
+	 * @param imqm---查找条件！
+	 * @return---满足查找条件的所有INMainModel对象
+	 */
+	public List<InMainModel> getbyCondition(InMainQueryModel imqm);
+}
+
+```
+
+|||||||||||||||||||||||||||||||||||||||||||||
+
+
+
+运行的部分图片：
+========
+
+下面看运行的图片吧：
+
+![](http://img.blog.csdn.net/20160412202131680)
+
+![](http://img.blog.csdn.net/20160412202148180)
+
+![](http://img.blog.csdn.net/20160412202212665)
+
+![](http://img.blog.csdn.net/20160412202224728)
+
+![](http://img.blog.csdn.net/20160412202236154)
+
+
+具体的进货实现功能在下一系列实现。
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

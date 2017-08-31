@@ -1,0 +1,1343 @@
+---
+layout: post
+title: "Java-单机版的书店管理系统(练习设计模块和思想_系列 二 )"
+date: 2016-04-07 09:40:36 +0800
+comments: true
+categories:❷ Java大学之行,----- ②、Java设计模块,----- ----- Java书店管理系统
+tags: [界面,管理,java,模块设计,app]
+keyword: 陈浩翔, 谙忆
+description: 今天对前面的代码有了小小的修改，让代码更加完善了一点。 
+至于用户唯一标识码uuid，会在以后修改成程序内部生成的， 
+现在的uuid还是由用户自己设置。今天对这个程序，添加了用户界面的表现层的一部分，增加了公共类 枚举， 
+下面贴出目前我写的这个程序的全部代码：我会逐渐的写完这个程序的，请大家放心！（需要实现的功能在这个书店管理系统的系列一可以找到，我为这个系列的文章已经分类了，方便大家寻找） 
+---
+
+
+今天对前面的代码有了小小的修改，让代码更加完善了一点。 
+至于用户唯一标识码uuid，会在以后修改成程序内部生成的， 
+现在的uuid还是由用户自己设置。今天对这个程序，添加了用户界面的表现层的一部分，增加了公共类 枚举， 
+下面贴出目前我写的这个程序的全部代码：我会逐渐的写完这个程序的，请大家放心！（需要实现的功能在这个书店管理系统的系列一可以找到，我为这个系列的文章已经分类了，方便大家寻找）
+<!-- more -->
+----------
+
+Java-单机版的书店管理系统(练习设计模块和思想_系列 一 )：
+http://blog.csdn.net/qq_26525215/article/details/51073546
+
+## 介绍 ##
+小提示：上面一点有一个目录，可以快速定位到自己需要看的类。
+今天对前面的代码有了小小的修改，让代码更加完善了一点。
+至于用户唯一标识码uuid，会在以后修改成程序内部生成的，
+现在的uuid还是由用户自己设置。
+
+今天对这个程序，添加了用户界面的表现层的一部分，增加了公共类 枚举，
+下面贴出目前我写的这个程序的全部代码：我会逐渐的写完这个程序的，请大家放心！（需要实现的功能在这个书店管理系统的系列一可以找到，我为这个系列的文章已经分类了，方便大家寻找）
+这个系列的博客是不会断的。
+
+现在的代码分层：
+![](http://img.blog.csdn.net/20160407212215603)
+
+![](http://img.blog.csdn.net/20160407212223463)
+
+
+## 现在的程序运行后的图片： ##
+
+|
+|
+我按照从目录上面到下面的顺序贴出代码：
+请注意！这个代码顺序并不是我写代码的顺序！
+如果你们要参考我的写，请不要按照我贴的代码的顺序。
+应该先写公共类，工具类。
+再次：数据层类--->逻辑层类--->表现层类
+|
+现在程序运行后的部分图片：
+![](http://img.blog.csdn.net/20160407213911001)
+
+|
+|
+![](http://img.blog.csdn.net/20160407213921095)
+|
+|
+|
+
+
+----------
+
+## UserTypeEnum类： ##
+
+**cn.hncu.bookStore.common;**
+**UserTypeEnum类：**
+```
+package cn.hncu.bookStore.common;
+
+/**
+ * 功能:用户类型的枚举！<br/>
+ * 定义在公共模块。<br/>
+ * 变量：<br/>
+ *  ADMIN(1,"超级管理员"),<br/>
+ *	BOOK(2,"图书管理员"),<br/>
+ *	IN(3,"进货管理员"),<br/>
+ *	OUT(4,"销售管理员"),<br/>
+ *  STOCK(5,"库存管理员");<br/>
+ * @author chx
+ * @version 1.0
+ */
+public enum UserTypeEnum {
+	ADMIN(1,"超级管理员"),
+	BOOK(2,"图书管理员"),
+	IN(3,"进货管理员"),
+	OUT(4,"销售管理员"),
+	STOCK(5,"库存管理员");
+	
+	private final int type;
+	private final String name;
+	
+	/**
+	 * 初始化枚举变量名字
+	 * @param type---枚举变量对应的整型数字
+	 * @param name---枚举变量对应的String型名字
+	 */
+	private UserTypeEnum(int type, String name) {
+		this.type=type;
+		this.name=name;
+	}
+	
+	/**
+	 * 得到当前枚举变量的数字
+	 * @return---type-编号
+	 */
+	public int getType() {
+		return type;
+	}
+	
+	/**
+	 * 得到当前枚举变量的中文名字
+	 * @return---name-中文名字
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * 根据枚举变量的int数字得到数字对应的枚举变量的中文名字
+	 * @param type---需要传入的int型参数
+	 * @return ---如果存在这样的数字对应的枚举变量，就返回这个枚举变量的中文名字。
+	 *    <br/>---如果不存在这样的数字对应的枚举变量，就抛出一个异常信息。
+	 */
+	public static String getNameByType(int type){
+		for(UserTypeEnum userType:UserTypeEnum.values()){
+			if(userType.getType()==type){
+				return userType.getName();
+			}
+		}
+		throw new IllegalArgumentException("枚举中没有对应的用户类型:"+type);
+	}
+	
+	/**
+	 * 根据枚举变量的name中文名字得到name对应的枚举变量的int型type
+	 * @param name---需要传入的String型名字
+	 * @return ---如果存在这样的名字对应的枚举变量，就返回这个枚举变量对应的type-int
+	 *   <br/> ---如果不存在这样的名字对应的枚举变量，就抛出一个异常信息
+	 */ 
+	public static int getTypeByName(String name){
+		for(UserTypeEnum userType:UserTypeEnum.values()){
+			if(userType.getName().equals(name)){
+				return userType.getType();
+			}
+		}
+		throw new IllegalArgumentException("枚举中没有对应的用户类型:"+name);
+	}
+}
+
+```
+
+
+----------
+## UserEbi接口： ##
+
+|
+|
+|
+
+**cn.hncu.bookStore.user.business.ebi;**
+**UserEbi接口：**
+```
+package cn.hncu.bookStore.user.business.ebi;
+
+import java.util.List;
+
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+/**
+ * 逻辑层的接口
+ *
+ * @author chx
+ * @version 1.0
+ */
+public interface UserEbi {
+	
+	/**
+	 * 功能：创建一个用户
+	 * 
+	 * @param userModel---将要创建的用户数据
+	 * @return---true表示创建成功，false表示创建失败
+	 */
+	public boolean create(UserModel user);
+	
+	/**
+	 * 功能：根据用户的唯一标识码uuid删除一个用户
+	 * 
+	 * @param uuid---用户唯一的标识码，每个用户都不会相同
+	 * @return---true表示删除成功，false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	 
+	/**
+	 * 功能：修改用户的数据资料
+	 * 
+	 * @param user---需要修改的用户数据参数名
+	 * @return 返回true-表示修改成功了，返回false-表示修改失败
+	 */
+	public boolean update(UserModel user);
+	
+	/**
+	 * 功能：得到所有的用户数据
+	 * 
+	 * @return---一个UserModel集合，也就是用户的数据
+	 */
+	public List<UserModel> getAll();
+	
+	/**
+	 * 功能：按照一定的查找条件进行查找，
+	 * <br/>
+	 * 把满足查找条件的用户数据返回。
+	 * 
+	 * @param uqm---被封装的查找条件
+	 * @return---满足查找条件的用户数据集合
+	 */
+	public List<UserModel> getbyCondition(UserQueryModel uqm);
+	
+	/**
+	 * 功能：得到一个确定的用户的数据资料
+	 * 
+	 * @param uuid---用户唯一标识码
+	 * @return ---返回按这个唯一标识码找到的用户数据
+	 */
+	public UserModel getSingle(String uuid);
+}
+
+```
+
+
+----------
+## UserEbo类： ##
+
+|
+|
+|
+
+**cn.hncu.bookStore.user.business.ebo;**
+**UserEbo类：**
+```
+package cn.hncu.bookStore.user.business.ebo;
+
+import java.util.List;
+
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.dao.dao.UserDao;
+import cn.hncu.bookStore.user.dao.factory.UserDaoFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+
+public class UserEbo implements UserEbi{
+	private UserDao dao = UserDaoFactory.getUserDao();
+	
+	@Override
+	public boolean create(UserModel user) {
+		return dao.create(user);
+	}
+
+	@Override
+	public boolean delete(String uuid) {
+		return dao.delete(uuid);
+	}
+
+	@Override
+	public boolean update(UserModel user) {
+		return dao.update(user);
+	}
+
+	@Override
+	public List<UserModel> getAll() {
+		return dao.getAll();
+	}
+
+	@Override
+	public List<UserModel> getbyCondition(UserQueryModel uqm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserModel getSingle(String uuid) {
+		return dao.getSingle(uuid);
+	}
+}
+
+```
+
+
+----------
+## UserEbiFactory类： ##
+
+|
+|
+|
+**cn.hncu.bookStore.user.business.factory;**
+**UserEbiFactory类：**
+
+```
+package cn.hncu.bookStore.user.business.factory;
+
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.ebo.UserEbo;
+
+public class UserEbiFactory {
+	public static UserEbi getUserEbi(){
+		return new UserEbo();
+	}
+}
+
+```
+
+
+----------
+## UserDao接口： ##
+
+|
+|
+|
+**cn.hncu.bookStore.user.dao.dao;**
+**UserDao接口：**
+```
+package cn.hncu.bookStore.user.dao.dao;
+
+import java.util.List;
+
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ * 用户模块的数据层接口
+ */
+public interface UserDao {
+	/**
+	 * 功能：创建一个用户
+	 * 
+	 * @param userModel---将要创建的用户数据
+	 * @return---true表示创建成功，false表示创建失败
+	 */
+	public boolean create(UserModel user);
+	
+	/**
+	 * 功能：根据用户的唯一标识码uuid删除一个用户
+	 * 
+	 * @param uuid---用户唯一的标识码，每个用户都不会相同
+	 * @return---true表示删除成功，false表示删除失败
+	 */
+	public boolean delete(String uuid);
+	 
+	/**
+	 * 功能：修改用户的数据资料
+	 * 
+	 * @param user---需要修改的用户数据参数名
+	 * @return 返回true-表示修改成功了，返回false-表示修改失败
+	 */
+	public boolean update(UserModel user);
+	
+	/**
+	 * 功能：得到所有的用户数据
+	 * 
+	 * @return---一个UserModel集合，也就是用户的数据
+	 */
+	public List<UserModel> getAll();
+	
+	/**
+	 * 功能：按照一定的查找条件进行查找，
+	 * <br/>
+	 * 把满足查找条件的用户数据返回。
+	 * 
+	 * @param uqm---被封装的查找条件
+	 * @return---满足查找条件的用户数据集合
+	 */
+	public List<UserModel> getbyCondition(UserQueryModel uqm);
+	
+	/**
+	 * 功能：得到一个确定的用户的数据资料
+	 * 
+	 * @param uuid---用户唯一标识码
+	 * @return ---返回按这个唯一标识码找到的用户数据
+	 */
+	public UserModel getSingle(String uuid);
+	
+}
+
+```
+
+
+----------
+## UserDaoFactory类： ##
+
+|
+|
+|
+**cn.hncu.bookStore.user.dao.factory;**
+**UserDaoFactory类：**
+```
+package cn.hncu.bookStore.user.dao.factory;
+
+import cn.hncu.bookStore.user.dao.dao.UserDao;
+import cn.hncu.bookStore.user.dao.impl.UserDaoSerImpl;
+/**
+ * 工厂方法<br/>
+ * new 一个dao的实例
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ * 
+ */
+public class UserDaoFactory {
+	public static UserDao getUserDao(){
+		return new UserDaoSerImpl();
+	}
+}
+
+```
+
+
+----------
+## UserDaoSerImpl类：##
+
+|
+|
+|
+**cn.hncu.bookStore.user.dao.impl;**
+**UserDaoSerImpl类：**
+```
+package cn.hncu.bookStore.user.dao.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.hncu.bookStore.user.dao.dao.UserDao;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.user.vo.UserQueryModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+
+/**
+ * <br/>
+ * 对用户数据处理的具体实现类 ----实现了UserDao接口
+ * 
+ * @author 陈浩翔
+ * 
+ * @version 1.0
+ */
+public class UserDaoSerImpl implements UserDao {
+
+	private static final String FILE_NAME = "User.txt";
+
+	@Override
+	public boolean create(UserModel user) {
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+		// 2判断该用户是否已经存在，再决定是否创建
+		for (UserModel userModel : list) {
+			// 如果2个用户的uuid相等，用户就是相同的
+			if (userModel.getUuid().equals(user.getUuid())) {
+				return false;// 用户已经存在了，返回false
+			}
+		}
+		// 3如果用户不存在，就创建
+		list.add(user);
+		FileIoUtil.write2file(list, FILE_NAME);
+		return true;// 创建成功，返回true
+	}
+
+	@Override
+	public boolean delete(String uuid) {
+
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+
+		// 2判断该用户是否已经存在，再决定是否删除
+
+		// for(int i=0;i<list.size();i++){
+		// if(list.get(i).getUuid().equals(uuid)){
+		// list.remove(i);
+		// FileIoUtil.write2file(list, FILE_NAME);
+		// return true;
+		// }
+		// }
+
+		for (UserModel userModel : list) {
+			// 如果2个用户的uuid相等，用户就是相同的
+			if (userModel.getUuid().equals(uuid)) {
+				list.remove(userModel);
+				FileIoUtil.write2file(list, FILE_NAME);
+				// 删除成功，返回true
+				return true;
+			}
+		}
+		// 3用户不存在
+		// 删除失败，返回false
+		return false;
+	}
+
+	@Override
+	public boolean update(UserModel user) {
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+
+		// 2判断该用户是否已经存在，再决定是否创建
+		for (int i = 0; i < list.size(); i++) {
+			// uuid是不能改的，通过uuid来找到那个用户数据，再修改就ok了
+			if (list.get(i).getUuid().equals(user.getUuid())) {
+				// 将找到的用户修改成user
+				list.set(i, user);
+				FileIoUtil.write2file(list, FILE_NAME);
+				// 找到用户，返回true
+				return true;
+			}
+		}
+		// 3若该用户不存在，则修改失败
+		return false;
+	}
+
+	@Override
+	public List<UserModel> getAll() {
+		return FileIoUtil.readFormFile(FILE_NAME);
+	}
+
+	@Override
+	public List<UserModel> getbyCondition(UserQueryModel uqm) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public UserModel getSingle(String uuid) {
+		// 1先把已有的数据反序列化(读)出来
+		List<UserModel> list = FileIoUtil.readFormFile(FILE_NAME);
+
+		// 2判断该用户是否已经存在,存在就返回那个用户
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getUuid().equals(uuid)) {
+				return list.get(i);
+			}
+		}
+		
+		// 3若该用户不存在,返回null
+		return null;
+	}
+
+}
+
+```
+
+
+----------
+## AddPanel类： ##
+
+|
+|
+|
+**cn.hncu.bookStore.user.ui;**
+**AddPanel类：**
+```
+/*
+ * AddPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+import cn.hncu.bookStore.util.FileIoUtil;
+
+/**
+ *
+ * @author  陈浩翔
+ */
+public class AddPanel extends javax.swing.JPanel {
+
+	private JFrame mainFrame = null;
+
+	/** Creates new form AddPanel */
+	public AddPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+
+	private void myInitData() {
+		for (UserTypeEnum type : UserTypeEnum.values()) {
+			combType.addItem(type.getName());
+		}
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jLabel1 = new javax.swing.JLabel();
+		jLabel2 = new javax.swing.JLabel();
+		tfdName = new javax.swing.JTextField();
+		jLabel3 = new javax.swing.JLabel();
+		tfdUuid = new javax.swing.JTextField();
+		jLabel4 = new javax.swing.JLabel();
+		tfdPwd2 = new javax.swing.JPasswordField();
+		jLabel5 = new javax.swing.JLabel();
+		jLabel6 = new javax.swing.JLabel();
+		combType = new javax.swing.JComboBox();
+		tfdPwd = new javax.swing.JPasswordField();
+		btnAdd = new javax.swing.JButton();
+		btnBack = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		jLabel1.setFont(new java.awt.Font("微软雅黑", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 0));
+		jLabel1.setText("\u6dfb\u52a0\u7528\u6237");
+		add(jLabel1);
+		jLabel1.setBounds(270, 30, 230, 80);
+
+		jLabel2.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel2.setText("\u7528\u6237\u7c7b\u578b:");
+		add(jLabel2);
+		jLabel2.setBounds(40, 310, 90, 30);
+
+		tfdName.setFont(new java.awt.Font("Dialog", 1, 18));
+		tfdName.setAutoscrolls(false);
+		add(tfdName);
+		tfdName.setBounds(420, 160, 120, 30);
+
+		jLabel3.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel3.setText("uuid:");
+		add(jLabel3);
+		jLabel3.setBounds(70, 160, 50, 30);
+
+		tfdUuid.setFont(new java.awt.Font("Dialog", 0, 11));
+		add(tfdUuid);
+		tfdUuid.setBounds(140, 160, 110, 30);
+
+		jLabel4.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel4.setText("\u59d3\u540d:");
+		add(jLabel4);
+		jLabel4.setBounds(360, 160, 50, 30);
+		add(tfdPwd2);
+		tfdPwd2.setBounds(420, 240, 170, 30);
+
+		jLabel5.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel5.setText("\u5bc6\u7801:");
+		add(jLabel5);
+		jLabel5.setBounds(70, 240, 50, 30);
+
+		jLabel6.setFont(new java.awt.Font("微软雅黑", 0, 18));
+		jLabel6.setText("\u786e\u8ba4\u5bc6\u7801:");
+		add(jLabel6);
+		jLabel6.setBounds(330, 240, 90, 30);
+
+		combType.setFont(new java.awt.Font("Dialog", 1, 18));
+		combType.setForeground(new java.awt.Color(51, 51, 255));
+		combType.setModel(new javax.swing.DefaultComboBoxModel(
+				new String[] { "请选择..." }));
+		add(combType);
+		combType.setBounds(140, 310, 160, 30);
+
+		tfdPwd.setFont(new java.awt.Font("宋体", 1, 18));
+		add(tfdPwd);
+		tfdPwd.setBounds(140, 240, 160, 30);
+
+		btnAdd.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnAdd.setForeground(new java.awt.Color(0, 204, 204));
+		btnAdd.setText("\u6dfb\u52a0");
+		btnAdd.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnAddActionPerformed(evt);
+			}
+		});
+		add(btnAdd);
+		btnAdd.setBounds(140, 430, 120, 60);
+
+		btnBack.setFont(new java.awt.Font("Dialog", 1, 24));
+		btnBack.setForeground(new java.awt.Color(0, 204, 204));
+		btnBack.setText("\u8fd4\u56de");
+		btnBack.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnBackActionPerformed(evt);
+			}
+		});
+		add(btnBack);
+		btnBack.setBounds(470, 430, 120, 60);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void back() {
+		mainFrame.setContentPane(new ListPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	/**
+	 *监听返回按钮
+	 * @param 返回按钮的点击监听
+	 */
+	private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+		back();
+	}
+
+	private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {
+		//1收集参数
+		String uuid = tfdUuid.getText();
+		String name = tfdName.getText();
+		String pwd = new String(tfdPwd.getPassword());
+		String pwd2 = new String(tfdPwd2.getPassword());
+
+		if (!pwd.equals(pwd2)) {
+			JOptionPane.showMessageDialog(null, "两次密码输入不一致，请重新输入！");
+			return;
+		}
+		int type = 0;
+
+		try {
+			type = UserTypeEnum.getTypeByName(combType.getSelectedItem()
+					.toString());
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "请指定用户类型!");
+			return;
+		}
+
+		//2组织参数
+		UserModel user = new UserModel();
+		user.setName(name);
+		user.setPwd(pwd);
+		user.setType(type);
+		user.setUuid(uuid);
+
+		//3调用逻辑层
+		UserEbi ebi = UserEbiFactory.getUserEbi();
+
+		//4根据调用返回结果导向不同页面
+		if (ebi.create(user)) {
+			back();
+		} else {
+			JOptionPane.showMessageDialog(null, "该用户已经存在!");
+		}
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnAdd;
+	private javax.swing.JButton btnBack;
+	private javax.swing.JComboBox combType;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JLabel jLabel2;
+	private javax.swing.JLabel jLabel3;
+	private javax.swing.JLabel jLabel4;
+	private javax.swing.JLabel jLabel5;
+	private javax.swing.JLabel jLabel6;
+	private javax.swing.JTextField tfdName;
+	private javax.swing.JPasswordField tfdPwd;
+	private javax.swing.JPasswordField tfdPwd2;
+	private javax.swing.JTextField tfdUuid;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+
+----------
+## ListPanel类： ##
+
+|
+|
+|
+**cn.hncu.bookStore.user.ui;**
+**ListPanel类：**
+```
+/*
+ * ListPanel.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore.user.ui;
+
+import java.util.List;
+
+import javax.swing.JFrame;
+
+import cn.hncu.bookStore.user.business.ebi.UserEbi;
+import cn.hncu.bookStore.user.business.factory.UserEbiFactory;
+import cn.hncu.bookStore.user.vo.UserModel;
+
+/**
+ * 表现层-用户列表面板
+ * 
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public class ListPanel extends javax.swing.JPanel {
+	private JFrame mainFrame = null;
+
+	/** Creates new form ListPanel */
+	public ListPanel(JFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		initComponents();
+		myInitData();
+	}
+
+	/**
+	 * 读取所有用户并添加进列表
+	 */
+	private void myInitData() {
+		UserEbi user = UserEbiFactory.getUserEbi();
+		List<UserModel> list = user.getAll();
+		userLists.setListData(list.toArray());
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		jScrollPane1 = new javax.swing.JScrollPane();
+		userLists = new javax.swing.JList();
+		jLabel1 = new javax.swing.JLabel();
+		btnToAdd = new javax.swing.JButton();
+
+		setMinimumSize(new java.awt.Dimension(800, 600));
+		setLayout(null);
+
+		userLists.setModel(new javax.swing.AbstractListModel() {
+			String[] strings = { "" };
+
+			public int getSize() {
+				return strings.length;
+			}
+
+			public Object getElementAt(int i) {
+				return strings[i];
+			}
+		});
+		jScrollPane1.setViewportView(userLists);
+
+		add(jScrollPane1);
+		jScrollPane1.setBounds(150, 150, 480, 230);
+
+		jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48));
+		jLabel1.setForeground(new java.awt.Color(204, 0, 51));
+		jLabel1.setText("User List");
+		add(jLabel1);
+		jLabel1.setBounds(270, 30, 260, 80);
+
+		btnToAdd.setFont(new java.awt.Font("Dialog", 1, 18));
+		btnToAdd.setText("\u6dfb\u52a0\u7528\u6237");
+		btnToAdd.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				btnToAddActionPerformed(evt);
+			}
+		});
+		add(btnToAdd);
+		btnToAdd.setBounds(60, 420, 150, 50);
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void btnToAddActionPerformed(java.awt.event.ActionEvent evt) {
+		mainFrame.setContentPane(new AddPanel(mainFrame));
+		mainFrame.validate();
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JButton btnToAdd;
+	private javax.swing.JLabel jLabel1;
+	private javax.swing.JScrollPane jScrollPane1;
+	private javax.swing.JList userLists;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+
+----------
+## UserModel类： ##
+
+|
+|
+|
+
+**cn.hncu.bookStore.user.vo;**
+**UserModel类：**
+用户值对象模块：
+```
+package cn.hncu.bookStore.user.vo;
+
+import java.io.Serializable;
+
+import cn.hncu.bookStore.common.UserTypeEnum;
+
+/**
+ * @author 陈浩翔
+ * @version 1.0
+ * 
+ * <br/>
+ * 用于保存用户信息的值对象<br/>
+ * 1、可序列化<br/>
+ * 2、私有化所有变量成员，补setter-getters方法<br/>
+ * 3、写equals和hashCode方法----用主键(uuid)唯一标识码<br/>
+ * 4、toString方法<br/>
+ * 5,空参构造方法<br/>
+ */
+
+public class UserModel implements Serializable{
+	private String uuid;//用户唯一标识码
+	private String name;//用户名
+	private int type;//用户类型
+	private String pwd;//用户密码
+	public UserModel() {
+	}
+	
+	/**
+	 * 功能：得到uuid-用户唯一的标识码
+	 * 
+	 * @return 返回uuid-用户唯一的标识码
+	 */
+	public String getUuid() {
+		return uuid;
+	}
+	
+	/**
+	 * 功能：设置uuid-用户唯一的标识码
+	 * @param uuid-用户唯一的标识码-String型参数
+	 */
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	
+	/**
+	 * 功能：得到用户的用户名
+	 * @return---name-用户名
+	 */
+	public String getName() {
+		return name;
+	}
+	
+	/**
+	 * 功能：设置用户的用户名
+	 * 
+	 * @param name--用户设置的用户名，String型参数
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * 功能：得到用户的类型：
+	 *  1——表示为admin，可以进行全部操作
+     *	2——表示为能操作图书模块的人员
+	 *	3——表示为能操作进货模块的人员
+	 *	4——表示为能操作销售模块的人员
+	 *	5——表示为能操作库存模块的人员
+	 * @return 用户的类型
+	 */
+	public int getType() {
+		return type;
+	}
+	
+	/**
+	 *  功能：设置用户的类型：
+	 *  1——表示为admin，可以进行全部操作
+     *	2——表示为能操作图书模块的人员
+	 *	3——表示为能操作进货模块的人员
+	 *	4——表示为能操作销售模块的人员
+	 *	5——表示为能操作库存模块的人员
+	 * @param type--用户的类型-int型参数
+	 */
+	public void setType(int type) {
+		this.type = type;
+	}
+	
+	/**
+	 *功能：得到用户的密码
+	 * @return String型，用户的密码
+	 */
+	public String getPwd() {
+		return pwd;
+	}
+	
+	/**
+	 * 功能：设置用户的密码
+	 * @param pwd--String型参数
+	 */
+	public void setPwd(String pwd) {
+		this.pwd = pwd;
+	}
+	
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((uuid == null) ? 0 : uuid.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserModel other = (UserModel) obj;
+		if (uuid == null) {
+			if (other.uuid != null)
+				return false;
+		} else if (!uuid.equals(other.uuid))
+			return false;
+		return true;
+	}
+	@Override
+	public String toString() {
+		return uuid + "," + name + "," + UserTypeEnum.getNameByType(type);
+	}
+	
+}
+
+```
+
+
+----------
+## UserQueryModel类： ##
+
+|
+|
+|
+
+**cn.hncu.bookStore.user.vo;**
+**UserQueryModel类：**
+虽然没有代码，但不能不写！这是查找用户时需要的。
+原因我在系列一写了。
+```
+package cn.hncu.bookStore.user.vo;
+/**
+ * 
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class UserQueryModel extends UserModel{
+	
+}
+
+```
+
+
+----------
+## FileIoUtil类： ##
+
+|
+|
+|
+
+**cn.hncu.bookStore.util;**
+**FileIoUtil类：**
+```
+package cn.hncu.bookStore.util;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+
+/**
+ * 用户的公用数据读取写入类
+ * @author 陈浩翔
+ *
+ * @version 1.0
+ */
+public class FileIoUtil {
+
+	public FileIoUtil() {
+	}
+	
+	
+	/**
+	 *  从数据库中读取所有的数据并返回出来
+	 *  
+	 * @param fileName：(数据表对应的文件名字)
+	 * @return 所有表的记录！
+	 */
+	@SuppressWarnings("unchecked")//压警告
+	public static<E> List<E> readFormFile(String fileName){
+		List<E> list = new ArrayList<E>();
+		final File file = new File(fileName);
+		
+		ObjectInputStream in =null;
+		if(!file.exists()){
+			//JOptionPane.showMessageDialog(null, "数据表不存在！");
+			return list;
+		}
+		try {
+			in = new ObjectInputStream(new FileInputStream(fileName));
+			try {
+				list = (List<E>) in.readObject();
+				
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if(in!=null){
+				try {
+					in.close();
+				} catch (IOException e) {
+					throw new RuntimeException("数据库关闭失败");
+				}
+			}
+		}
+		return list;
+	}
+	
+	
+	/**
+	 * 写入一个list集合进入数据文件fileName
+	 * 
+	 * @param list(需要存储的数据集合)
+	 * @param fileName(写入到哪个文件的文件名字)
+	 */
+	public static<E> void write2file(List<E> list, String fileName){
+		ObjectOutputStream out = null;
+		
+		try {
+			out = new ObjectOutputStream(new FileOutputStream(fileName));
+			out.writeObject(list);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}finally{
+			if(out!=null){
+				try {
+					out.close();
+				} catch (IOException e) {
+					throw new RuntimeException("数据库关闭失败!");
+				}
+			}
+		}
+	}
+	
+}
+
+```
+
+
+----------
+## BookStore类：(含main方法) ##
+
+|
+|
+|
+**cn.hncu.bookStore;**
+**BookStore类：**
+用户模块的main方法在这个类中：
+```
+/*
+ * BookStore.java
+ *
+ * Created on __DATE__, __TIME__
+ */
+
+package cn.hncu.bookStore;
+
+import cn.hncu.bookStore.user.ui.ListPanel;
+
+/**
+ *
+ * @author  陈浩翔
+ */
+public class BookStore extends javax.swing.JFrame {
+
+	/** Creates new form BookStore */
+	public BookStore() {
+		initComponents();
+		this.setContentPane(new ListPanel(this));
+		this.setResizable(false);//不能缩放
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+	}
+
+	/** This method is called from within the constructor to
+	 * initialize the form.
+	 * WARNING: Do NOT modify this code. The content of this method is
+	 * always regenerated by the Form Editor.
+	 */
+	//GEN-BEGIN:initComponents
+	// <editor-fold defaultstate="collapsed" desc="Generated Code">
+	private void initComponents() {
+
+		menuBar = new javax.swing.JMenuBar();
+		fileMenu = new javax.swing.JMenu();
+		openMenuItem = new javax.swing.JMenuItem();
+		saveMenuItem = new javax.swing.JMenuItem();
+		saveAsMenuItem = new javax.swing.JMenuItem();
+		exitMenuItem = new javax.swing.JMenuItem();
+		editMenu = new javax.swing.JMenu();
+		cutMenuItem = new javax.swing.JMenuItem();
+		copyMenuItem = new javax.swing.JMenuItem();
+		pasteMenuItem = new javax.swing.JMenuItem();
+		deleteMenuItem = new javax.swing.JMenuItem();
+		helpMenu = new javax.swing.JMenu();
+		contentsMenuItem = new javax.swing.JMenuItem();
+		aboutMenuItem = new javax.swing.JMenuItem();
+
+		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		setMinimumSize(new java.awt.Dimension(800, 600));
+
+		fileMenu.setText("File");
+
+		openMenuItem.setText("Open");
+		fileMenu.add(openMenuItem);
+
+		saveMenuItem.setText("Save");
+		fileMenu.add(saveMenuItem);
+
+		saveAsMenuItem.setText("Save As ...");
+		fileMenu.add(saveAsMenuItem);
+
+		exitMenuItem.setText("Exit");
+		exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				exitMenuItemActionPerformed(evt);
+			}
+		});
+		fileMenu.add(exitMenuItem);
+
+		menuBar.add(fileMenu);
+
+		editMenu.setText("Edit");
+
+		cutMenuItem.setText("Cut");
+		editMenu.add(cutMenuItem);
+
+		copyMenuItem.setText("Copy");
+		editMenu.add(copyMenuItem);
+
+		pasteMenuItem.setText("Paste");
+		editMenu.add(pasteMenuItem);
+
+		deleteMenuItem.setText("Delete");
+		editMenu.add(deleteMenuItem);
+
+		menuBar.add(editMenu);
+
+		helpMenu.setText("Help");
+
+		contentsMenuItem.setText("Contents");
+		helpMenu.add(contentsMenuItem);
+
+		aboutMenuItem.setText("About");
+		helpMenu.add(aboutMenuItem);
+
+		menuBar.add(helpMenu);
+
+		setJMenuBar(menuBar);
+
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
+				getContentPane());
+		getContentPane().setLayout(layout);
+		layout.setHorizontalGroup(layout.createParallelGroup(
+				javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400,
+				Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(
+				javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 279,
+				Short.MAX_VALUE));
+
+		pack();
+	}// </editor-fold>
+	//GEN-END:initComponents
+
+	private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+		System.exit(0);
+	}//GEN-LAST:event_exitMenuItemActionPerformed
+
+	/**
+	 * @param args the command line arguments
+	 */
+	public static void main(String args[]) {
+		java.awt.EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				new BookStore().setVisible(true);
+			}
+		});
+	}
+
+	//GEN-BEGIN:variables
+	// Variables declaration - do not modify
+	private javax.swing.JMenuItem aboutMenuItem;
+	private javax.swing.JMenuItem contentsMenuItem;
+	private javax.swing.JMenuItem copyMenuItem;
+	private javax.swing.JMenuItem cutMenuItem;
+	private javax.swing.JMenuItem deleteMenuItem;
+	private javax.swing.JMenu editMenu;
+	private javax.swing.JMenuItem exitMenuItem;
+	private javax.swing.JMenu fileMenu;
+	private javax.swing.JMenu helpMenu;
+	private javax.swing.JMenuBar menuBar;
+	private javax.swing.JMenuItem openMenuItem;
+	private javax.swing.JMenuItem pasteMenuItem;
+	private javax.swing.JMenuItem saveAsMenuItem;
+	private javax.swing.JMenuItem saveMenuItem;
+	// End of variables declaration//GEN-END:variables
+
+}
+```
+
+今天就写到这里的，未完待续。。。
+目前的添加有一个小bug，就是添加用户时，什么都不输入，
+只选择用户类型，也能创建！下次我会修复的。
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

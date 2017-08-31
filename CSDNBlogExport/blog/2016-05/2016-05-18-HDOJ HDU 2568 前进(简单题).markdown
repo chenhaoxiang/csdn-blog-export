@@ -1,0 +1,96 @@
+---
+layout: post
+title: "HDOJ HDU 2568 前进(简单题)"
+date: 2016-05-18 11:25:47 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+轻松通过墓碑，进入古墓后，才发现里面别有洞天。 
+突然，Yifenfei发现自己周围是黑压压的一群蝙蝠，个个扇动翅膀正准备一起向他发起进攻！ 
+形势十分危急！ 
+好在此时的yifenfei已经不是以前那个经常被lemon抢走MM的菜鸟了！面对众多蝙蝠的嗜血狂攻，只见yifenfei使出轻灵的剑法，刷，刷，刷，瞬间搞定…… 
+现已知yifenfei使用了2招（ 
+---
+
+
+Problem Description 
+轻松通过墓碑，进入古墓后，才发现里面别有洞天。 
+突然，Yifenfei发现自己周围是黑压压的一群蝙蝠，个个扇动翅膀正准备一起向他发起进攻！ 
+形势十分危急！ 
+好在此时的yifenfei已经不是以前那个经常被lemon抢走MM的菜鸟了！面对众多蝙蝠的嗜血狂攻，只见yifenfei使出轻灵的剑法，刷，刷，刷，瞬间搞定…… 
+现已知yifenfei使用了2招（
+<!-- more -->
+----------
+
+Problem Description
+轻松通过墓碑，进入古墓后，才发现里面别有洞天。
+突然，Yifenfei发现自己周围是黑压压的一群蝙蝠，个个扇动翅膀正准备一起向他发起进攻！
+形势十分危急！
+好在此时的yifenfei已经不是以前那个经常被lemon抢走MM的菜鸟了！面对众多蝙蝠的嗜血狂攻，只见yifenfei使出轻灵的剑法，刷，刷，刷，瞬间搞定……
+现已知yifenfei使用了2招（剑招A和剑招B）：剑招A，一招能杀死一半的蝙蝠。但是如果当前的蝙蝠数为奇数，那么就必须先出一招剑招B杀死其中任意一个，使蝙蝠数为偶数，再出剑招A。
+现在请问：杀死n只蝙蝠需要使出多少招剑招B？
+ ![](http://img.blog.csdn.net/20160518232447772)
+ 
+
+Input
+输入数据首先给出一个整数C，表示测试组数。
+然后是C组数据，每组包含一个正整数n (n<2^31)。
+
+
+ 
+
+Output
+对应每组数据，请输出一个整数，表示yifenfei使用的剑招B的数目，每组输出占一行。
+ 
+
+Sample Input
+2
+1
+5
+ 
+
+Sample Output
+1
+2
+
+
+水题一个~~~直接看代码吧~
+
+```
+import java.util.Scanner;
+
+/**
+ * @author 陈浩翔
+ * @version 1.0
+ */
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		int t =sc.nextInt();
+		while(t-->0){
+			int n =sc.nextInt();
+			int num=1;
+			while(n>1){
+				if(n%2==0){
+					n=n/2;
+				}else{
+					n=n-1;
+					num++;
+				}
+			}
+			System.out.println(num);
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

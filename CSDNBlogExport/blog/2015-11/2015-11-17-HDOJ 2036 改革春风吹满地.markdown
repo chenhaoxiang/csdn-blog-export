@@ -1,0 +1,113 @@
+---
+layout: post
+title: "HDOJ 2036 改革春风吹满地"
+date: 2015-11-17 10:06:15 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-C++
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+“ 改革春风吹满地, 
+不会AC没关系; 
+实在不行回老家， 
+还有一亩三分地。 
+谢谢!（乐队奏乐）”话说部分学生心态极好，每天就知道游戏，这次考试如此简单的题目，也是云里雾里，而且，还竟然来这么几句打油诗。 
+好呀，老师的责任就是帮你解决问题，既然想种田，那就分你一块。 
+这块田位于浙江省温州市苍南县灵溪镇林家铺子村，多边形形状的一块地，原本是linle 
+---
+
+
+Problem Description 
+“ 改革春风吹满地, 
+不会AC没关系; 
+实在不行回老家， 
+还有一亩三分地。 
+谢谢!（乐队奏乐）”话说部分学生心态极好，每天就知道游戏，这次考试如此简单的题目，也是云里雾里，而且，还竟然来这么几句打油诗。 
+好呀，老师的责任就是帮你解决问题，既然想种田，那就分你一块。 
+这块田位于浙江省温州市苍南县灵溪镇林家铺子村，多边形形状的一块地，原本是linle
+<!-- more -->
+----------
+
+Problem Description
+“ 改革春风吹满地,
+不会AC没关系;
+实在不行回老家，
+还有一亩三分地。
+谢谢!（乐队奏乐）”
+
+话说部分学生心态极好，每天就知道游戏，这次考试如此简单的题目，也是云里雾里，而且，还竟然来这么几句打油诗。
+好呀，老师的责任就是帮你解决问题，既然想种田，那就分你一块。
+这块田位于浙江省温州市苍南县灵溪镇林家铺子村，多边形形状的一块地，原本是linle 的，现在就准备送给你了。不过，任何事情都没有那么简单，你必须首先告诉我这块地到底有多少面积，如果回答正确才能真正得到这块地。
+发愁了吧？就是要让你知道，种地也是需要AC知识的！以后还是好好练吧...
+
+ 
+
+Input
+输入数据包含多个测试实例，每个测试实例占一行，每行的开始是一个整数n(3<=n<=100)，它表示多边形的边数（当然也是顶点数），然后是按照逆时针顺序给出的n个顶点的坐标（x1, y1, x2, y2... xn, yn）,为了简化问题，这里的所有坐标都用整数表示。
+输入数据中所有的整数都在32位整数范围内，n=0表示数据的结束，不做处理。
+
+ 
+
+Output
+对于每个测试实例，请输出对应的多边形面积，结果精确到小数点后一位小数。
+每个实例的输出占一行。
+
+ 
+
+Sample Input
+3 0 0 1 0 0 1
+4 1 0 0 1 -1 0 0 -1
+0
+ 
+
+Sample Output
+0.5
+2.0
+
+利用叉乘求三角形面积来做：
+![](http://img.blog.csdn.net/20151117100558101)
+
+设A（x1,y1）,B（x2,y2）,C（x3,y3）在坐标系中中顺序为三点按逆时针排列
+S=1/2[(x1y2-x2y1)+(x2y3-x3y2)+(x3y1-x1y3)]
+已知三角形3顶点坐标,求三角形面积最直接的公式
+
+```
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+#include <stdlib.h>
+typedef struct San{
+  double x;
+  double y;
+}San;
+int main()
+{
+    San a[101];
+    int i,n;
+    double sum;
+    double x1,x2,y1,y2;
+    while(~scanf("%d",&n)&&n!=0){
+        sum=0;
+        for(i=0;i<n;i++){
+            scanf("%lf%lf",&a[i].x,&a[i].y);
+        }
+        for(i=1;i<n-1;i++){
+            x1=a[i].x-a[0].x;
+            y1=a[i].y-a[0].y;
+            x2=a[i+1].x-a[0].x;
+            y2=a[i+1].y-a[0].y;
+            sum=sum+(x1*y2-x2*y1)/2;
+        }
+        printf("%.1lf\n",fabs(sum));
+    }
+    return 0;
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

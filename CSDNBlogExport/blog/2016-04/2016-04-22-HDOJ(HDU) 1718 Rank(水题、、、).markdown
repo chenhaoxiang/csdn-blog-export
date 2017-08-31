@@ -1,0 +1,95 @@
+---
+layout: post
+title: "HDOJ(HDU) 1718 Rank(水题、、、)"
+date: 2016-04-22 12:36:11 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+Jackson wants to know his rank in the class. The professor has posted a list of student numbers and marks. Compute Jackson’s rank in class; that is, if he has the top mark(or is ti 
+---
+
+
+Problem Description 
+Jackson wants to know his rank in the class. The professor has posted a list of student numbers and marks. Compute Jackson’s rank in class; that is, if he has the top mark(or is ti
+<!-- more -->
+----------
+
+Problem Description
+Jackson wants to know his rank in the class. The professor has posted a list of student numbers and marks. Compute Jackson’s rank in class; that is, if he has the top mark(or is tied for the top mark) his rank is 1; if he has the second best mark(or is tied) his rank is 2, and so on.
+
+ 
+
+Input
+The input consist of several test cases. Each case begins with the student number of Jackson, an integer between 10000000 and 99999999. Following the student number are several lines, each containing a student number between 10000000 and 99999999 and a mark between 0 and 100. A line with a student number and mark of 0 terminates each test case. There are no more than 1000 students in the class, and each has a unique student number.
+
+ 
+
+Output
+For each test case, output a line giving Jackson’s rank in the class.
+ 
+
+Sample Input
+20070101
+20070102 100
+20070101 33
+20070103 22
+20070106 33
+0 0
+ 
+
+Sample Output
+2
+
+
+其实就是统计按成绩排名，第一个输入的是学号，这个学号对应的成绩可以排第几！！！
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+	public static void main(String[] args) {
+		Scanner sc  =new Scanner(System.in);
+		while(sc.hasNext()){
+			long[] a = new long[1005];
+			long[] b = new long[1005];
+			long n = sc.nextLong();
+			int k=0;
+			int num=0;
+			for(int i=0;;i++){
+				a[i]=sc.nextLong();
+				b[i]=sc.nextLong();
+				if(a[i]==0){
+					num=i;
+					break;
+				}
+				if(a[i]==n){
+					k=i;
+				}
+			}
+			int tm=1;
+			for(int i=0;i<num;i++){
+				//System.out.println(a[i]);
+				if(b[i]>b[k]){
+					tm++;
+				}
+			}
+			
+			System.out.println(tm);
+			
+		}
+		
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

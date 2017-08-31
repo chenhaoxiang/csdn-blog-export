@@ -1,0 +1,187 @@
+---
+layout: post
+title: "最大子段和详解"
+date: 2015-11-01 07:51:07 +0800
+comments: true
+categories:❺ 算法及基础题,----- 动态规划（DP）,----- 好文/知识点
+tags: []
+keyword: 陈浩翔, 谙忆
+description: 最大子段和问题(Maximum Interval Sum)（有时也称LIS）经典的动态规划问题，几乎所有的算法教材都会提到.本文将分析最大子段和问题的几种不同效率的解法，以及最大子段和问题的扩展和运用.一.问题描述 
+给定长度为n的整数序列，a[1…n], 求[1,n]某个子区间[i , j]使得a[i]+…+a[j]和最大.或者求出最大的这个和.例如(-2,11,-4,13,-5,2)的最大子段和 
+---
+
+
+最大子段和问题(Maximum Interval Sum)（有时也称LIS）经典的动态规划问题，几乎所有的算法教材都会提到.本文将分析最大子段和问题的几种不同效率的解法，以及最大子段和问题的扩展和运用.一.问题描述 
+给定长度为n的整数序列，a[1…n], 求[1,n]某个子区间[i , j]使得a[i]+…+a[j]和最大.或者求出最大的这个和.例如(-2,11,-4,13,-5,2)的最大子段和
+<!-- more -->
+----------
+
+最大子段和问题(Maximum Interval Sum)
+
+（有时也称LIS）
+
+经典的动态规划问题，几乎所有的算法教材都会提到.本文将分析最大子段和问题的几种不同效率的解法，以及最大子段和问题的扩展和运用.
+
+一.问题描述
+给定长度为n的整数序列，a[1...n], 求[1,n]某个子区间[i , j]使得a[i]+…+a[j]和最大.或者求出最大的这个和.例如(-2,11,-4,13,-5,2)的最大子段和为20,所求子区间为[2,4].
+二. 问题分析
+1.穷举法
+穷举应当是每个人都要学会的一种方式，这里实际上是要穷举所有的[1,n]之间的区间，所以我们用两重循环，可以很轻易地做到遍历所有子区间，一个表示起始位置，一个表示终点位置.代码如下:
+
+```
+int start = 0;//起始位置  
+int end = 0;  //结束位置  
+int max = 0;  
+for(int i = 1; i <= n; ++i)  
+{  
+    for(int j = i; j <= n;++j)  
+    {  
+        int sum = 0;  
+        for(int k = i; k <=j; ++k)  
+            sum += a[k];  
+        if(sum > max)  
+        {  
+           start = i;  
+           end = j;  
+           max = sum;  
+        }  
+    }  
+}   
+```
+
+这个算法是几乎所有人都能想到的，它所需要的计算时间是O(n^3).当然，这个代码还可以做点优化，实际上我们并不需要每次都重新从起始位置求和加到终点位置.可以充分利用之前的计算结果.
+
+或者我们换一种穷举思路,对于起点 i，我们遍历所有长度为1,2,…,n-i+1的子区间和，以求得和最大的一个.这样也遍历了所有的起点的不同长度的子区间，同时，对于相同起点的不同长度的子区间，可以利用前面的计算结果来计算后面的.
+
+比如，i为起点长度为2的子区间和就等于长度为1的子区间的和+a[i+1]即可，这样就省掉了一个循环，计算时间复杂度减少到了O(n^2).代码如下:
+
+```
+int start = 0;//起始位置  
+int end = 0;//结束位置  
+int max = 0;  
+for(int i = 1; i <= n; ++i)  
+{  
+    int sum = 0;  
+    for(int j = i; j <= n;++j)  
+    {  
+        sum += a[j];  
+        if(sum > max)  
+        {  
+           start = i;  
+           end = j;  
+           max = sum;  
+        }  
+    }  
+}   
+
+ 
+```
+
+2.分治法
+求子区间及最大和，从结构上是非常适合分治法的，因为所有子区间[start, end]只可能有以下三种可能性:
+
+在[1, n/2]这个区域内
+在[n/2+1, n]这个区域内
+起点位于[1,n/2],终点位于[n/2+1,n]内
+以上三种情形的最大者，即为所求. 前两种情形符合子问题递归特性，所以递归可以求出. 对于第三种情形，则需要单独处理. 第三种情形必然包括了n/2和n/2+1两个位置，这样就可以利用第二种穷举的思路求出:
+
+以n/2为终点，往左移动扩张，求出和最大的一个left_max
+以n/2+1为起点，往右移动扩张，求出和最大的一个right_max
+left_max+right_max是第三种情况可能的最大值
+示例：
+
+```
+int maxInterval(int *a, int left, int right)  
+ {  
+    if(right==left)  
+      return a[left]>0?a[left]:0;  
+   
+    int center = (left+right)/2;  
+    //左边区间的最大子段和  
+    int leftMaxInterval = maxInterval(a,left,center);  
+    //右边区间的最大子段和  
+    int rightMaxInterval= maxInterval(a,center+1,right);  
+   
+    //以下求端点分别位于不同部分的最大子段和  
+   
+    //center开始向左移动  
+    int sum = 0;  
+    int left_max = 0;  
+    for(int i = center; i >= left; –i)  
+    {  
+       sum += a[i];  
+       if(sum > left_max)  
+          left_max = sum;  
+    }  
+    //center+1开始向右移动  
+    sum = 0;  
+    int right_max = 0;  
+    for(int i = center+1; i <= right; ++i)  
+    {  
+       sum += a[i];  
+       if(sum > right_max)  
+         right_max = sum;  
+    }  
+    int ret = left_max+right_max;  
+    if(ret < leftMaxInterval)  
+        ret = leftMaxInterval;  
+    if(ret < rightMaxInterval)  
+        ret = rightMaxInterval;  
+    return ret;  
+ }   
+
+ 
+
+```
+
+分治法的难点在于第三种情形的理解，这里应该抓住第三种情形的特点，也就是中间有两个定点，然后分别往两个方向扩张，以遍历所有属于第三种情形的子区间，求的最大的一个，如果要求得具体的区间，稍微对上述代码做点修改即可. 分治法的计算时间复杂度为O(nlogn).
+
+3.动态规划法
+动态规划的基本原理这里不再赘述，主要讨论这个问题的建模过程和子问题结构.时刻记住一个前提，这里是连续的区间
+
+令b[j]表示以位置 j 为终点的所有子区间中和最大的一个
+子问题:如j为终点的最大子区间包含了位置j-1,则以j-1为终点的最大子区间必然包括在其中
+如果b[j-1] >0, 那么显然b[j] = b[j-1] + a[j]，用之前最大的一个加上a[j]即可，因为a[j]必须包含
+如果b[j-1]<=0,那么b[j] = a[j] ,因为既然最大，前面的负数必然不能使你更大
+对于这种子问题结构和最优化问题的证明，可以参考算法导论上的“剪切法”，即如果不包括子问题的最优解，把你假设的解粘帖上去，会得出子问题的最优化矛盾.证明如下：
+
+令a[x,y]表示a[x]+…+a[y] , y>=x
+假设以j为终点的最大子区间 [s, j] 包含了j-1这个位置，以j-1为终点的最大子区间[ r, j-1]并不包含其中
+即假设[r,j-1]不是[s,j]的子区间
+存在s使得a[s, j-1]+a[j]为以j为终点的最大子段和,这里的 r != s 
+由于[r, j -1]是最优解, 所以a[s,j-1]<a[r, j-1],所以a[s,j-1]+a[j]<a[r, j-1]+a[j]
+与[s,j]为最优解矛盾.
+实例：
+
+```
+
+int max = 0;  
+int b[n+1];  
+int start = 0;  
+int end = 0;  
+memset(b,0,n+1);  
+for(int i = 1; i <= n; ++i)  
+ {  
+   if(b[i-1]>0)  
+   {  
+     b[i] = b[i-1]+a[i];  
+   }else{  
+     b[i] = a[i];  
+   }  
+   if(b[i]>max)  
+     max = b[i];  
+ }   
+```
+
+动态规划法的计算时间复杂度为O(n),是最优的解。做几道题加深理解
+
+最直白的LIS题：http://acm.hdu.edu.cn/showproblem.php?pid=1087
+
+最大子段和升级版，最大M段和：http://acm.hdu.edu.cn/showproblem.php?pid=1024
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

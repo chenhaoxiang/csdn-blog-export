@@ -1,0 +1,548 @@
+---
+layout: post
+title: "Java---多线程的加强(1)"
+date: 2016-04-21 01:15:00 +0800
+comments: true
+categories:❷ Java大学之行,----- ③、Java知识点及应用,----- ----- Java多线程
+tags: [多线程,应用,java]
+keyword: 陈浩翔, 谙忆
+description: 简单应用：首先来看一个简单的例子： 
+两个线程，分别实现对1-100内的奇数，偶数的输出。第一种方法：通过接口MyRun类：package thread.hello;
+/**
+ * 通过实现Runnable接口来实现多线程
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-21
+ */
+public class MyRun implements Runnable { 
+---
+
+
+简单应用：首先来看一个简单的例子： 
+两个线程，分别实现对1-100内的奇数，偶数的输出。第一种方法：通过接口MyRun类：package thread.hello;
+/**
+ * 通过实现Runnable接口来实现多线程
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-21
+ */
+public class MyRun implements Runnable {
+<!-- more -->
+----------
+
+简单应用：
+=====
+
+首先来看一个简单的例子：
+两个线程，分别实现对1-100内的奇数，偶数的输出。
+
+第一种方法：通过接口
+----------
+
+MyRun类：
+```
+package thread.hello;
+/**
+ * 通过实现Runnable接口来实现多线程
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-21
+ */
+public class MyRun implements Runnable {
+	private int first;
+	/**
+	 * 构造传参---实现对奇数和偶数的控制
+	 * @param first
+	 */
+	public MyRun(int first) {
+		this.first = first;
+	}
+	@Override
+	public void run() {
+		for(int i=first;i<100;i+=2){
+			System.out.print(i+" ");
+		}
+		System.out.println();
+	}
+}
+
+```
+
+MyThread2类：
+
+```
+package thread.hello;
+/**
+ * new一个实现Runnable接口的类<br/>
+ * new两个线程--奇偶线程
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-21
+ */
+public class MyThread2 {
+
+	public static void main(String[] args) {
+		MyRun run1 = new MyRun(1);
+		Thread t1 = new Thread(run1);
+		t1.start();
+		
+		MyRun run2 = new MyRun(2);
+		Thread t2 = new Thread(run2);
+		t2.start();
+	}
+
+}
+
+```
+
+
+第二种方法：通过继承
+----------
+
+```
+package thread.hello;
+/**
+ * 通过继承Thread来实现多线程
+ * @author 陈浩翔
+ *
+ * @version 1.0  2016-4-21
+ */
+public class MyThread extends Thread{
+	private int first;
+	public MyThread(int first) {
+		this.first = first;
+	}
+	@Override
+	public void run() {
+		for(int i=first;i<100;i+=2){
+			System.out.print(i+" ");
+		}
+		System.out.println();
+	}
+	public static void main(String[] args) {
+		MyThread t1 = new MyThread(1);
+		t1.start();
+		MyThread t2 = new MyThread(2);
+		t2.start();
+	}
+
+}
+
+```
+
+
+这个是多线程的最简单的应用了。。。。
+
+线程互斥加强(互斥锁)
+===========
+
+★多窗口卖票
+------
+
+利用多线程互斥共享“基本数据类型数据”资源：
+
+看第一种方法，利用构造传参可以输出是哪个窗口在“卖票”的。
+
+v1中，整个while()都加互斥锁了，因此只能整个while循环执行完才会释放锁，所以一个窗口会把所有的票都卖完，其它窗口线程才能抢到互斥锁。应该把互斥锁加在while()内部，这样就可以多窗口同时卖了
+
+SaleTicket类：
+```
+package thread.ticket.v1;
+
+public class SaleTicket {
+
+	public static void main(String[] args) {
+		TicketWindow tw1 = new TicketWindow("窗口1");
+		Thread t1 = new Thread( tw1 );
+		t1.start();//窗口1开始售票
+		
+		TicketWindow tw2 = new TicketWindow("窗口2");
+		Thread t2 = new Thread( tw2 );
+		t2.start();//窗口2开始售票
+		
+		TicketWindow tw3 = new TicketWindow("窗口3");
+		Thread t3 = new Thread( tw3 );
+		t3.start();//窗口3开始售票
+		
+		TicketWindow tw4 = new TicketWindow("窗口4");
+		Thread t4 = new Thread( tw4 );
+		t4.start();//窗口4开始售票
+		
+	}
+
+}
+
+```
+TicketWindow类:实现Runnable接口
+```
+package thread.ticket.v1;
+
+public class TicketWindow implements Runnable {
+	//由于基本数据类型的资源无法用作对象锁，且它是类的静态成员，因此可新建一个与共享的"基本数据类型"资源平行的对象，来代替它来做对象锁
+	private static int num=200;
+	private static Object obj = new Object();
+	//此obj对象和num的生存期是一样的！！！
+	
+	private String WinName;
+	public TicketWindow(String WinName) {
+		this.WinName = WinName;
+	}
+	@Override
+	public void run() {
+		while(true){
+		    //不能用this来代替obj
+		    //因为obj是静态成员和this所处的内存空间不同，生存期不同
+			synchronized (obj) {//同步块---基本数据类型的变量不能当作互斥锁。因为互斥锁是对象锁
+				if(num>0){
+				   System.out.println(WinName+":"+num--);
+				}else{
+					break;
+				}
+			}
+		}
+	}
+}
+
+```
+
+
+第二种方法：不能直接输出哪个窗口在“卖票”。
+SaleTicket类：
+```
+package thread.ticket.v2;
+
+public class SaleTicket {
+
+	public static void main(String[] args) {
+		TicketWindow tw1 = new TicketWindow();
+		Thread t1 = new Thread( tw1 );
+		t1.start();//窗口1开始售票
+		
+		Thread t2 = new Thread( tw1 );
+		t2.start();//窗口2开始售票
+		
+		Thread t3 = new Thread( tw1 );
+		t3.start();//窗口3开始售票
+		
+		Thread t4 = new Thread( tw1 );
+		t4.start();//窗口4开始售票
+		
+	}
+
+}
+
+```
+TicketWindow类：
+```
+package thread.ticket.v2;
+
+public class TicketWindow implements Runnable {
+	//由于基本数据类型的资源无法用作对象锁，如果是类的非静态成员，可直接用this对象来代替
+	private int num=200;
+	//private Object obj = new Object();
+	
+	@Override
+	public void run() {
+		while(true){
+			//synchronized (obj){
+			synchronized (this) {//同步块---基本数据类型的变量不能当作互斥锁。因为互斥锁是对象锁
+				if(num>0){
+				   System.out.println(Thread.currentThread().getName()+":"+num--);
+				}else{
+					break;
+				}
+			}
+		}
+	}
+}
+
+```
+
+★带互斥的共享栈
+--------
+
+多线程互斥共享“栈”资源
+
+
+```
+package thread.stack;
+
+public class MyStack {
+   private int idx=0;
+   private char[] data = new char[6];
+   
+   //本例虽然采用的是两种不同的同步方式，但由于对象锁都是this对象，因此push和pop方法是互斥的
+   public  void push(char c){
+	   synchronized (this) {
+		data[idx] = c;
+		System.out.println("push:" + c);
+		idx++;
+	}
+   }
+   
+   public synchronized char pop(){
+	   idx--;
+	   char ch = data[idx];
+	   System.out.println("pop:"+ch);
+	   return ch;
+   }
+   
+}
+
+```
+
+
+```
+package thread.stack;
+
+public class PushThread extends Thread {
+	private MyStack stack=null;
+    public PushThread(MyStack stack) {
+    	this.stack = stack;
+	}
+	@Override
+	public void run() {
+		for(int i=97;i<103;i++){
+			stack.push((char)i);
+		}
+	}
+
+}
+
+```
+
+
+```
+package thread.stack;
+
+public class PopThread extends Thread {
+	private MyStack stack=null;
+    public PopThread(MyStack stack) {
+    	this.stack = stack;
+	}
+	@Override
+	public void run() {
+		for(int i=97;i<103;i++){
+			stack.pop();
+		}
+	}
+}
+
+```
+
+main方法：
+```
+package thread.stack;
+
+public class Client {
+
+	public static void main(String[] args) {
+		MyStack stack = new MyStack();
+		PushThread t1 = new PushThread(stack);
+		PopThread t2 = new PopThread(stack);
+		t1.start();
+		t2.start();		
+	}
+
+}
+
+```
+
+
+
+
+多线程调度与控制1
+=========
+
+★ Java的多线程是抢占式的运行方式。
+--------------------
+
+★ setPriority()
+---------------
+
+这个优先级的设置只是相对调度。。。
+
+
+★ sleep()方法
+-----------
+
+Thread类的sleep()方法对当前线程操作，是静态方法。sleep()的参数指定以毫秒为单位的线程休眠时间。除非因为中断而提早恢复执行，否则线程不会在这段时间之前恢复执行。
+
+
+
+★ interrupt()方法
+---------------
+
+一个线程可以调用另外一个线程的interrupt()方法，这将向暂停的线程发出一个InterruptedException。变相起到唤醒暂停线程的功能。Thread类的方法interrupt()，是一种强制唤醒的技术。
+
+前面3中方法的代码解释：
+
+```
+package thread.schedule.v1;
+
+public class Schedule {
+
+	public static void main(String[] args) {
+		Thread t1 = new MyRunner();
+		Thread t2 = new MyRunner();
+		
+		//采用优先级进行相对调度,相比优先级高的抢占资源的概率要高一些
+		//t1.setPriority(9);
+		//t2.setPriority(3);
+		
+		t1.start();
+		t2.start();
+		
+		try {
+			Thread.sleep(2000);
+			//如果没有被唤醒，则需要10s才能有输出的。现在只需要2s
+			t1.interrupt();//强制唤醒t1线程
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		
+	}
+
+}
+
+```
+
+```
+package thread.schedule.v1;
+
+public class MyRunner extends Thread{
+	private static Object obj=new Object();
+	@Override
+	public void run() {
+		synchronized (obj) {
+			try {
+				Thread.sleep(10000);
+			} catch (InterruptedException e) {
+				System.out.println(this.getName()+"已经被唤醒!");
+			}
+			for (int i = 1; i < 101; i++) {
+				System.out.println(Thread.currentThread().getName() + "--No.--"
+						+ i);
+			}
+		}
+	}
+}
+
+```
+
+★ yield()方法
+-----------
+
+用来使具有相同优先级的线程获得执行的机会。如果具有相同优先级的其它线程是可运行的，yield()将把线程放到可运行池中并使另一个线程运行。如果没有相同优先级的可运行线程，则什么都不做。
+注意，执行一次yield()方法，该线程只是放弃当前这一次机会，然后又会重新和其它线程一起抢占CPU，很可能又比其它线程先抢到。
+
+
+★ join()方法
+----------
+
+调用某线程的该方法，将当前线程与该线程“合并”，即等待该线程结束，再恢复当前线程的运行。它可以实现线程合并的功能，经常用于线程的绝对调度。
+简单的说，就是把线程运行的代码全部搬到运行join()方法的这个地方来！
+这就是绝对调度了。这一个线程没有运行完，是不可运行后面的语句的！
+
+
+```
+package thread.schedule.v2;
+
+public class Schedule {
+
+	public static void main(String[] args) {
+		Thread t1 = new MyRunner("t1");
+		Thread t2 = new MyRunner("t2");
+		t1.setPriority(5);
+		t2.setPriority(5);
+		
+		t1.start();
+		try {
+			t1.join();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println("main......");
+		t2.start();
+	}
+
+}
+
+```
+
+```
+package thread.schedule.v2;
+
+public class MyRunner extends Thread{
+	private static Object obj=new Object();
+	private String threadName=null;
+	public MyRunner(String threadName){
+		this.threadName = threadName;
+	}
+	
+	@Override
+	public void run() {
+		System.out.println(":::::"+threadName);
+		int num=0;
+		while(threadName.equals("t1") && num<50){//放弃50次机会
+			Thread.yield();//不释放对象锁
+			num++;
+		}
+		for (int i = 1; i < 101; i++) {
+				System.out.println(threadName + "--No.--"
+						+ i);
+		}
+	}
+}
+
+```
+
+
+知识小结：
+=====
+
+★ wait()方法
+当前线程进入对象的wait pool。
+
+
+★notify()/notifyAll()方法
+唤醒对象的wait pool中的一个/所有等待线程。
+
+
+★suspend()、resume()和stop()这几个方法现在已经不提倡使用。
+
+
+★创建线程和启动线程并不相同
+--------------
+
+在一个线程对新线程的Thread对象调用start()方法之前，这个线程并没有真正开始执行。Thread对象在其线程真正启动之前就已经存在了，而且其线程退出之后仍然存在。因此，仍可以控制或获取关于已创建的线程的信息，即使线程还没有启动或已经完成了。
+
+
+★结束线程
+-----
+
+线程会以以下三种方式之一结束：
+1）线程到达其run()方法的末尾，推荐这种方法，自然结束。
+2）线程抛出一个未捕获到的Exception或Error。
+3）另一个线程调用一个弃用的stop()方法。
+
+
+★守护程序线程（简称守护线程）
+---------------
+
+我们提到过当Java程序的所有线程都完成时，该程序就退出，但这并不完全正确，因为程序中还隐藏的系统线程。
+随着程序的启动而启动，在运行期间一直捕捉符合它条件的处理，这样的线程就是守护线程。
+
+
+★ synchronized必须锁的是对象，基本数据类型的变量不能当作对象锁。
+
+
+★ 要保证多线程使用的是同一个互斥锁（对象锁），才能进行同步。
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

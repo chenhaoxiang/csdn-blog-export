@@ -1,0 +1,148 @@
+---
+layout: post
+title: "经典算法面试题目-判断一个字符串中的字符是否唯一（1.1）"
+date: 2016-07-19 01:26:54 +0800
+comments: true
+categories:❺ 算法及基础题,----- 经典面试算法
+tags: [面试题,算法,数据结构]
+keyword: 陈浩翔, 谙忆
+description: 题目： 
+Implement an algorithm to determine if a string has all unique characters. What if you can not use additional data structures?
+
+实现一个算法来判断一个字符串中的字符是否唯一(即没有重复).不能使用额外的数据结构。 (即只使用基本的数据结构)
+
+解答： 
+首先，你 
+---
+
+
+题目： 
+Implement an algorithm to determine if a string has all unique characters. What if you can not use additional data structures?
+
+实现一个算法来判断一个字符串中的字符是否唯一(即没有重复).不能使用额外的数据结构。 (即只使用基本的数据结构)
+
+解答： 
+首先，你
+<!-- more -->
+----------
+
+<font color="red" size="6">题目：</font>
+Implement an algorithm to determine if a string has all unique characters. What if you can not use additional data structures?
+
+实现一个算法来判断一个字符串中的字符是否唯一(即没有重复).不能使用额外的数据结构。 (即只使用基本的数据结构)
+
+
+
+
+<font color="red" size="6">解答：</font>
+首先，你可以问面试官，构成字符串的字符集有多大？是ASCII字符，还是只是26个字母？ 还是有更大的字符集，对于不同的情况，我们可能会有不同的解决方案。
+
+如果我们假设字符集是ASCII字符，那么我们可以开一个大小为256的bool数组来表征每个字 符的出现。数组初始化为false，遍历一遍字符串中的字符，当bool数组对应位置的值为真， 表明该字符在之前已经出现过，即可得出该字符串中有重复字符。否则将该位置的bool数组 值置为true。代码如下：
+
+```
+bool isUnique1(string s)
+{
+    bool a[256];
+    memset(a, 0, sizeof(a));
+    int len = s.length();
+    for(int i=0; i < len; ++i)
+    {
+        int v = (int)s[i];
+        if(a[v]) return false;
+        a[v] = true;
+    }
+    return true;
+}
+```
+该算法的时间复杂度为O(n)。我们还可以通过位运算来减少空间的使用量。 用每一位表征相应位置字符的出现。对于ASCII字符，我们需要256位，即一个长度为8的int 数组a即可。这里的关键是要把字符对应的数字，映射到正确的位上去。比如字符’b’对应的 代码是98，那么我们应该将数组中的哪一位置为1呢？用98除以32，得到对应数组a的下标： 3。98对32取模得到相应的位：2。相应代码如下：
+
+```
+bool isUnique2(string s)
+{
+    int a[8];
+    memset(a, 0, sizeof(a));
+    int len = s.length();
+    for(int i=0; i < len; ++i)
+    {
+        int v = (int)s[i];
+        int idx = v/32, shift=v%32;
+
+        if(a[idx] & (1 << shift)) return false;//<<左移不改变原来的数值。移位的结果是：第一个操作数乘以2的幂，指数的值是由第二个数给出的。
+        //右边空出用0填补.在不溢出的情况下,每左移一位相当于乘以2
+        a[idx] |= (1 << shift);
+		//只要没有出现重复的，a[idx]是会从0开始一直加下去的，a[idx] & (1 << shift)一直会是0，从0加到2的31次方，接下来就是a[idx+1]的了。我是差不多这样理解的。
+    }
+    return true;
+}
+```
+
+两个算法的本质其实是一样的，只不过一个用bool单元来表征字符出现，一个用位来表征。
+
+<font color="red" size="6">完整代码如下：</font>
+
+```
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+bool isUnique1(string s)
+{
+    bool a[256];
+    memset(a, 0, sizeof(a));
+    int len = s.length();
+    for(int i=0; i < len; ++i)
+    {
+        int v = (int)s[i];
+        if(a[v]) return false;
+        a[v] = true;
+    }
+    return true;
+}
+
+bool isUnique2(string s)
+{
+    int a[8];
+    memset(a, 0, sizeof(a));
+    int len = s.length();
+    for(int i=0; i < len; ++i)
+    {
+        int v = (int)s[i];
+        int idx = v/32, shift=v%32;
+        if(a[idx] & (1 << shift)) return false;
+        a[idx] |= (1 << shift);
+    }
+    return true;
+}
+int main()
+{
+    string s1 = "i am hawstein.";
+    string s2 = "abcdefghijklmnopqrstuvwxyzABCD1234567890";
+    cout << isUnique1(s1) << " " << isUnique1(s2) << endl;
+    cout << isUnique2(s1) << " " << isUnique2(s2) << endl;
+    return 0;
+}
+```
+
+如果字符集只是a－z(或是A－Z)，那就更好办了，用位运算只需要一个整型数即可。
+
+```
+bool isUnique3(string s)
+{
+    int check = 0;
+    int len = s.length();
+    for(int i=0; i < len; ++i)
+    {
+        int v = (int)(s[i]-'a');
+        if(check & (1 << v)) return false;
+        check |= (1 << v);
+    }
+    return true;
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

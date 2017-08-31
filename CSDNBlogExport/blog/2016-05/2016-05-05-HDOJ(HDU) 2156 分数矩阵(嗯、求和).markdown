@@ -1,0 +1,156 @@
+---
+layout: post
+title: "HDOJ(HDU) 2156 分数矩阵(嗯、求和)"
+date: 2016-05-05 07:08:44 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- HDOJ-C++,----- 模拟/推导/打表
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+我们定义如下矩阵: 
+1/1 1/2 1/3 
+1/2 1/1 1/2 
+1/3 1/2 1/1 
+矩阵对角线上的元素始终是1/1，对角线两边分数的分母逐个递增。 
+请求出这个矩阵的总和。Input 
+每行给定整数N (N<50000)，表示矩阵为 N*N.当N为0时，输入结束。Output 
+输出答案，保留2位小数。Sample Input 
+1 
+2 
+---
+
+
+Problem Description 
+我们定义如下矩阵: 
+1/1 1/2 1/3 
+1/2 1/1 1/2 
+1/3 1/2 1/1 
+矩阵对角线上的元素始终是1/1，对角线两边分数的分母逐个递增。 
+请求出这个矩阵的总和。Input 
+每行给定整数N (N<50000)，表示矩阵为 N*N.当N为0时，输入结束。Output 
+输出答案，保留2位小数。Sample Input 
+1 
+2
+<!-- more -->
+----------
+
+Problem Description
+我们定义如下矩阵:
+1/1 1/2 1/3
+1/2 1/1 1/2
+1/3 1/2 1/1
+矩阵对角线上的元素始终是1/1，对角线两边分数的分母逐个递增。
+请求出这个矩阵的总和。
+
+ 
+
+Input
+每行给定整数N (N<50000)，表示矩阵为 N*N.当N为0时，输入结束。
+ 
+
+Output
+输出答案，保留2位小数。
+ 
+
+Sample Input
+1
+2
+3
+4
+0
+ 
+
+Sample Output
+1.00
+3.00
+5.67
+8.83
+
+
+简单题
+不打表会超时。。。。
+还可以用一个公式做，有规律。
+
+打表：
+```
+import java.util.Scanner;
+
+public class Main{
+	static double db[] = new double[50002];
+	public static void main(String[] args) {
+		dabiao();
+		Scanner sc = new Scanner(System.in);
+		while(sc.hasNext()){
+			int n =sc.nextInt();
+			if(n==0){
+				return;
+			}
+			System.out.printf("%.2f",db[n]);
+			System.out.println();
+		}
+	}
+	private static void dabiao() {
+		db[1]=1;
+		double m =1;
+		for(int i=2;i<db.length;i++){
+			m=m+2.0*1.0/i;
+			db[i]=db[i-1]+m;
+		}
+	}
+}
+
+```
+找规律：
+分析：
+
+```
+初始条件：a[5005]={0,1,3}
+
+1/1  a[1]
+
+1/1 1/2
+1/2 1/1   a[2]
+
+1/1 1/2 | 1/3
+1/2 1/1 | 1/2
+--------|
+1/3 1/2   1/1   a[3]
+
+ ____________
+|1/1  1/2 1/3| 1/4
+      ____________
+|1/2 |1/1 1/2| 1/3|
+|1/3 |1/2 1/1| 1/2|
+|____|_______|    |
+ 1/4 |1/3 1/2  1/1|   a[4]
+     |____________|
+
+```
+递推公式：a[i]=2*a[i-1]-a[i-2]+2.0/i;
+初始条件：a[5005]={0,1,3}
+
+
+```
+#include <stdio.h>
+double a[50005]={0,1,3};
+int main()
+{
+	int n,i;
+	for (i=3;i<=50000;i++)
+		a[i]=2*a[i-1]-a[i-2]+2.0/i;
+	while (scanf("%d",&n)!=EOF&&n)
+		printf("%.2fn",a[n]);
+	return 0;
+}
+ 
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

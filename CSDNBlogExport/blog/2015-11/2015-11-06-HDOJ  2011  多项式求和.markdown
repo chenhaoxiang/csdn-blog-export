@@ -1,0 +1,78 @@
+---
+layout: post
+title: "HDOJ  2011  多项式求和"
+date: 2015-11-06 07:08:52 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: [hdoj]
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+多项式的描述如下： 
+1 - 1/2 + 1/3 - 1/4 + 1/5 - 1/6 + … 
+现在请你求出该多项式的前n项的和。Input 
+输入数据由2行组成，首先是一个正整数m（m<100），表示测试实例的个数，第二行包含m个正整数，对于每一个整数(不妨设为n,n<1000），求该多项式的前n项的和。Output 
+对于每个测试实例n，要求输出多项式前 
+---
+
+
+Problem Description 
+多项式的描述如下： 
+1 - 1/2 + 1/3 - 1/4 + 1/5 - 1/6 + … 
+现在请你求出该多项式的前n项的和。Input 
+输入数据由2行组成，首先是一个正整数m（m<100），表示测试实例的个数，第二行包含m个正整数，对于每一个整数(不妨设为n,n<1000），求该多项式的前n项的和。Output 
+对于每个测试实例n，要求输出多项式前
+<!-- more -->
+----------
+
+Problem Description
+多项式的描述如下：
+1 - 1/2 + 1/3 - 1/4 + 1/5 - 1/6 + ...
+现在请你求出该多项式的前n项的和。
+ 
+
+Input
+输入数据由2行组成，首先是一个正整数m（m<100），表示测试实例的个数，第二行包含m个正整数，对于每一个整数(不妨设为n,n<1000），求该多项式的前n项的和。
+ 
+
+Output
+对于每个测试实例n，要求输出多项式前n项的和。每个测试实例的输出占一行，结果保留2位小数。
+ 
+
+Sample Input
+2
+1 2
+ 
+
+Sample Output
+1.00
+0.50
+
+
+```
+import java.util.Scanner;
+class Main{
+   public static void main(String args[]){
+      Scanner sc = new Scanner(System.in);
+      int n = sc.nextInt();
+      while(n-->0){
+          int m = sc.nextInt();
+          double s = 0;
+          int flag = 1;//利用flag来改变正负号
+          for(int i=1;i<=m;i++){
+              s+=(double)(flag*(1.0/i));
+              //System.err.printf("%.2f",s);
+              flag=-flag;//改变符号
+          }
+          System.err.printf("%.2f",s);
+          System.err.println();
+      }
+   }
+}
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

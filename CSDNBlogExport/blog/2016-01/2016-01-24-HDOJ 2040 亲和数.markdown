@@ -1,0 +1,104 @@
+---
+layout: post
+title: "HDOJ 2040 亲和数"
+date: 2016-01-24 05:21:18 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 公约数公倍数
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description古希腊数学家毕达哥拉斯在自然数研究中发现，220的所有真约数(即不是自身的约数)之和为： 1+2+4+5+10+11+20+22+44+55+110＝284。 而284的所有真约数为1、2、4、71、 142，加起来恰好为220。人们对这样的数感到很惊奇，并称之为亲和数。一般地讲，如果两个数中任何一个数都是另一个数的真约数之和，则这两个数就是亲和数。 你的任务就 
+---
+
+
+Problem Description古希腊数学家毕达哥拉斯在自然数研究中发现，220的所有真约数(即不是自身的约数)之和为： 1+2+4+5+10+11+20+22+44+55+110＝284。 而284的所有真约数为1、2、4、71、 142，加起来恰好为220。人们对这样的数感到很惊奇，并称之为亲和数。一般地讲，如果两个数中任何一个数都是另一个数的真约数之和，则这两个数就是亲和数。 你的任务就
+<!-- more -->
+----------
+
+Problem Description
+
+古希腊数学家毕达哥拉斯在自然数研究中发现，220的所有真约数(即不是自身的约数)之和为： 
+
+1+2+4+5+10+11+20+22+44+55+110＝284。 
+
+而284的所有真约数为1、2、4、71、 142，加起来恰好为220。人们对这样的数感到很惊奇，并称之为亲和数。一般地讲，如果两个数中任何一个数都是另一个数的真约数之和，则这两个数就是亲和数。 
+
+你的任务就编写一个程序，判断给定的两个数是否是亲和数
+ 
+
+Input
+输入数据第一行包含一个数M，接下有M行，每行一个实例,包含两个整数A,B； 其中 0 <= A,B <= 600000 ;
+ 
+
+Output
+对于每个测试实例，如果A和B是亲和数的话输出YES，否则输出NO。
+ 
+
+Sample Input
+2
+220 284
+100 200
+ 
+
+Sample Output
+YES
+NO
+
+
+```
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        
+        int n = sc.nextInt();
+        while(n-->0){
+            int a = sc.nextInt();
+            int b = sc.nextInt();
+            
+            boolean isSaf =Saf(a,b);
+            
+            if(isSaf){
+                System.out.println("YES");
+            }else{
+                System.out.println("NO");
+            }
+        }
+        
+        
+    }
+
+    private static boolean Saf(int a, int b) {
+        int sumA = 1;
+        int sumB = 1;
+        for(int i=2;i<=a/2;i++){
+            if(a%i==0){
+                sumA = sumA+i;
+            }
+        }
+        for(int i=2;i<=b/2;i++){
+            if(b%i==0){
+                sumB = sumB+i;
+            }
+        }
+        
+        if(sumA==b&&sumB==a){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+
+}
+
+```
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

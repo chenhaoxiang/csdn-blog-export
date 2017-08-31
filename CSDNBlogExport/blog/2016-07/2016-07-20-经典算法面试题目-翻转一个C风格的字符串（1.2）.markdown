@@ -1,0 +1,168 @@
+---
+layout: post
+title: "经典算法面试题目-翻转一个C风格的字符串（1.2）"
+date: 2016-07-20 04:21:22 +0800
+comments: true
+categories:❺ 算法及基础题,----- 经典面试算法
+tags: [c语言,面试题,算法]
+keyword: 陈浩翔, 谙忆
+description: 题目：  
+Write code to reverse a C-Style String. (C-String means that “abcd” is represented as five characters, including the null character.)写代码翻转一个C风格的字符串。(C风格的意思是”abcd”需要用5个字符来表示，包含末尾的 结束字符)解答：  
+这道题如果 
+---
+
+
+题目：  
+Write code to reverse a C-Style String. (C-String means that “abcd” is represented as five characters, including the null character.)写代码翻转一个C风格的字符串。(C风格的意思是”abcd”需要用5个字符来表示，包含末尾的 结束字符)解答：  
+这道题如果
+<!-- more -->
+----------
+
+<font color="red" size="6">题目：</font> 
+Write code to reverse a C-Style String. (C-String means that “abcd” is represented as five characters, including the null character.)
+
+写代码翻转一个C风格的字符串。(C风格的意思是”abcd”需要用5个字符来表示，包含末尾的 结束字符)
+
+
+<font color="red" size="6">解答：</font> 
+这道题如果就是要考察你有没有注意到C风格字符串最后的那个结束符，那我觉得还是像书 上写的那样，在代码中有所体现。代码如下：
+
+博主表示对这个第一种方法有点懵逼，有懂的大神麻烦教导一下，O(∩_∩)O谢谢。指针方面，我基本上没怎么学~~~
+```
+void swap(char &a, char &b){
+    a = a^b;
+    b = a^b;
+    a = a^b;
+}
+
+void reverse1(char *s){
+    if(!s) return;
+    char *p = s, *q = s;
+    while(*q) ++q;
+    --q;
+    while(p < q)
+        swap(*p++, *q--);
+}
+```
+否则的话，可以直接获取字符串的长度，然后从两头开始一一交换相应的字符。代码如下：
+
+```
+void swap(char &a, char &b)
+{
+    a = a^b;
+    b = a^b;
+    a = a^b;
+}
+
+void reverse2(char *s)
+{
+    int n = strlen(s);
+    for(int i=0; i < n/2; ++i)
+        swap(s[i], s[n-i-1]);
+}
+```
+
+<font color="red" size="6">完整代码如下：</font> 
+
+```
+#include <iostream>
+#include <cstring>
+using namespace std;
+
+void swap(char &a, char &b){
+    a = a^b;
+    b = a^b;
+    a = a^b;
+}
+
+void reverse2(char *s){
+    int n = strlen(s);
+    for(int i=0; i<n/2; ++i)
+        swap(s[i], s[n-i-1]);
+}
+
+void reverse1(char *s){
+    if(!s) return;
+    char *p = s, *q = s;
+    while(*q) ++q;
+    --q;
+    while(p < q)
+        swap(*p++, *q--);
+}
+
+int main(){
+    char s[] = "1234567890";
+    reverse1(s);
+    cout<<s<<endl;
+    return 0;
+}
+```
+
+我对第一种方法的理解：
+
+```
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+using namespace std;
+
+void swap(char &a, char &b){
+    a = a^b;
+    b = a^b;
+    a = a^b;
+}
+
+void reverse2(char *s){
+    int n = strlen(s);
+    for(int i=0; i<n/2; ++i)
+        swap(s[i], s[n-i-1]);
+}
+
+void reverse1(char *s){
+    if(!s) return;
+    printf("%d\n",s);//s是一个地址
+    char *p = s, *q = s;
+    printf("%d\n",p);
+    printf("%d\n",*p);//*p代表当前地址的一个字符
+    while(*q){//遇到结束符的时候*p的值是0
+        ++q;
+        printf("p=%d*\n",q);
+        printf("*p=%d*\n",*q);
+        //最后一个是字符串的结束符
+    }
+    --q;
+    printf("*%d*\n",q);//此时的q为结束符之前的一个字符
+    //此时q指向结束，p是指向开头
+    while(p < q)//一直交换，直到中间位置
+        swap(*p++, *q--);
+}
+
+int main(){
+    char s[] = "abcdefghi";
+    reverse1(s);
+    cout<<s<<endl;
+    return 0;
+}
+
+```
+![](http://img.blog.csdn.net/20160720164029074)
+
+详细解释下c风格字符串：
+c风格的字符串是用数组存放的，一般要以'\0'结束
+而c++主要以string类代替，更加高效，且不易出错
+
+例如：string str = "123";就是c++的风格；
+			char str[4]="123";就是c风格
+string是c++中的关键字,和int，float等等一样， 在c++中，string 定义的变量可以直接存储字符串。在C语言中是没有这种直接存储字符串的变量的。
+[  ]里面是4，是因为，C风格的字符串，在最后都会默认添加'\0'，所以"123"本质上是1 2 3 '\0'
+它其实是占四个字节。所以如果你只定义3个存储空间的话，那'\0'这个字符串终止标志就回被丢弃，那么以后的应用就回出现问题。举个例子：你用strlen(str)试试查看长度为3时的这个字符串的长度，很可能就会有问题。  '\0'  是c字符串都存在的。
+
+
+
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

@@ -1,0 +1,757 @@
+---
+layout: post
+title: "Java---基于TCP协议的相互即时通讯小程序"
+date: 2016-05-16 08:00:35 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目,----- ----- Java网络编程,----- ③、Java知识点及应用
+tags: [即时通讯,tcp,服务器,源代码,面试题]
+keyword: 陈浩翔, 谙忆
+description: 这是几年前，新浪的一个面试题~要求是3天之内实现~ 
+通过TCP 协议，建立一个服务器端。通过配置服务器端的IP和端口： 
+客户端之间就可以相互通讯~上线了全部在线用户会收到你上线的通知。 
+下线了全部的在线用户会收到你下线的通知！ 
+可以私聊，可以群聊。这是第一个版本~以后有空可以再增加功能~比如传文件啊~等等~设计思想如下：在服务器端 用一个HashMap服务器端源代码：package cn.h 
+---
+
+
+这是几年前，新浪的一个面试题~要求是3天之内实现~ 
+通过TCP 协议，建立一个服务器端。通过配置服务器端的IP和端口： 
+客户端之间就可以相互通讯~上线了全部在线用户会收到你上线的通知。 
+下线了全部的在线用户会收到你下线的通知！ 
+可以私聊，可以群聊。这是第一个版本~以后有空可以再增加功能~比如传文件啊~等等~设计思想如下：在服务器端 用一个HashMap服务器端源代码：package cn.h
+<!-- more -->
+----------
+
+这是几年前，新浪的一个面试题~要求是3天之内实现~
+通过TCP 协议，建立一个服务器端。
+
+通过配置服务器端的IP和端口：
+客户端之间就可以相互通讯~
+
+上线了全部在线用户会收到你上线的通知。
+下线了全部的在线用户会收到你下线的通知！
+可以私聊，可以群聊。
+
+这是第一个版本~以后有空可以再增加功能~比如传文件啊~等等~
+
+设计思想如下：
+=======
+
+在服务器端 用一个HashMap< userName,socket> 维护所有用户相关的信息，从而能够保证和所有的用户进行通讯。
+
+
+客户端的动作：
+（1）连接（登录）：发送userName    服务器的对应动作：1)界面显示，2)通知其他用户关于你登录的信息, 3)把其他在线用户的userName通知当前用户 4)开启一个线程专门为当前线程服务
+
+
+
+（2）退出（注销）:
+
+（3）发送消息
+
+※※发送通讯内容之后，对方如何知道是干什么，通过消息协议来实现：
+
+客户端向服务器发的消息格式设计：
+命令关键字@#接收方@#消息内容@#发送方
+1)连接：userName      ----握手的线程serverSocket专门接收该消息，其它的由服务器新开的与客户进行通讯的socket来接收
+2)退出：exit@#全部@#null@#userName
+3)发送: on @# JList.getSelectedValue() @# tfdMsg.getText() @# tfdUserName.getText()
+
+
+
+服务器向客户端发的消息格式设计：
+命令关键字@#发送方@#消息内容
+登录：
+   1) msg   @#server @# 用户[userName]登录了  (给客户端显示用的)
+   2) cmdAdd@#server @# userName (给客户端维护在线用户列表用的)
+退出：
+   1) msg   @#server @# 用户[userName]退出了  (给客户端显示用的)
+   2) cmdRed@#server @# userName (给客户端维护在线用户列表用的)
+
+发送:
+   msg   @#消息发送者( msgs[3] ) @# 消息内容 (msgs[2])
+
+
+
+服务器端源代码：
+========
+
+```
+package cn.hncu;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Scanner;
+
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
+/**
+ * 服务器
+ * 
+ * @author 陈浩翔
+ * 
+ * @version 1.0 2016-5-13
+ */
+public class ServerForm extends JFrame {
+	private JList<String> list;
+	private JTextArea area;
+	private DefaultListModel<String> lm;
+
+	public ServerForm() {
+		JPanel p = new JPanel(new BorderLayout());
+		// 最右边的用户在线列表
+		lm = new DefaultListModel<String>();
+		list = new JList<String>(lm);
+		JScrollPane js = new JScrollPane(list);
+		Border border = new TitledBorder("在线");
+		js.setBorder(border);
+		Dimension d = new Dimension(100, p.getHeight());
+		js.setPreferredSize(d);// 设置位置
+		p.add(js, BorderLayout.EAST);
+
+		// 通知文本区域
+		area = new JTextArea();
+		//area.setEnabled(false);//不能选中和修改
+		area.setEditable(false);
+		p.add(new JScrollPane(area), BorderLayout.CENTER);
+		this.getContentPane().add(p);
+
+		// 添加菜单项
+		JMenuBar bar = new JMenuBar();// 菜单条
+		this.setJMenuBar(bar);
+		JMenu jm = new JMenu("控制(C)");
+		jm.setMnemonic('C');// 设置助记符---Alt+'C'，显示出来，但不运行
+		bar.add(jm);
+		final JMenuItem jmi1 = new JMenuItem("开启");
+		jmi1.setAccelerator(KeyStroke.getKeyStroke('R', KeyEvent.CTRL_MASK));// 设置快捷键Ctrl+'R'
+		jmi1.setActionCommand("run");
+		jm.add(jmi1);
+
+		JMenuItem jmi2 = new JMenuItem("退出");
+		jmi2.setAccelerator(KeyStroke.getKeyStroke('E', KeyEvent.CTRL_MASK));// 设置快捷键Ctrl+'R'
+		jmi2.setActionCommand("exit");
+		jm.add(jmi2);
+
+		
+		// 监听
+		ActionListener a1 = new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (e.getActionCommand().equals("run")) {
+					startServer();
+					jmi1.setEnabled(false);// 内部方法~访问的只能是final对象
+				} else {
+					System.exit(0);
+				}
+			}
+		};
+
+		jmi1.addActionListener(a1);
+
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		int width = (int) tk.getScreenSize().getWidth();
+		int height = (int) tk.getScreenSize().getHeight();
+		this.setBounds(width / 4, height / 4, width / 2, height / 2);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);// 关闭按钮器作用
+		
+		setVisible(true);
+	}
+
+	private static final int PORT = 9090;
+
+	protected void startServer() {
+		try {
+			ServerSocket server = new ServerSocket(PORT);
+			area.append("启动服务：" + server);
+			new ServerThread(server).start();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	// 用来保存所有在线用户的名字和Socket----池
+	private Map<String, Socket> usersMap = new HashMap<String, Socket>();
+
+	class ServerThread extends Thread {
+		private ServerSocket server;
+
+		public ServerThread(ServerSocket server) {
+			this.server = server;
+		}
+
+		@Override
+		public void run() {
+			try {// 和客户端握手
+				while (true) {
+					Socket socketClient = server.accept();
+					Scanner sc = new Scanner(socketClient.getInputStream());
+					if (sc.hasNext()) {
+						String userName = sc.nextLine();
+						area.append("\r\n用户[ " + userName + " ]登录 " + socketClient);// 在客户端通知
+						lm.addElement(userName);// 添加到用户在线列表
+						
+						new ClientThread(socketClient).start();// 专门为这个客户端服务
+						
+						usersMap.put(userName, socketClient);// 把当前登录的用户加到“在线用户”池中
+
+						msgAll(userName);// 把“当前用户登录的消息即用户名”通知给所有其他已经在线的人
+						msgSelf(socketClient);// 通知当前登录的用户，有关其他在线人的信息
+
+					}
+
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+	}
+
+	class ClientThread extends Thread {
+		private Socket socketClient;
+
+		public ClientThread(Socket socketClient) {
+			this.socketClient = socketClient;
+		}
+
+		@Override
+		public void run() {
+			System.out.println("一个与客户端通讯的线程启动并开始通讯...");
+			try {
+				Scanner sc = new Scanner(socketClient.getInputStream());
+				while (sc.hasNext()) {
+					String msg = sc.nextLine();
+					System.out.println(msg);
+					String msgs[] = msg.split("@#@#");
+					//防黑
+					if(msgs.length!=4){
+						System.out.println("防黑处理...");
+						continue;
+					}
+					
+					if("on".equals(msgs[0])){
+						sendMsgToSb(msgs);
+					}
+					
+					if("exit".equals(msgs[0])){
+						//服务器显示
+						area.append("\r\n用户[ " + msgs[3] + " ]已退出!" + usersMap.get(msgs[3]));
+						
+						//从在线用户池中把该用户删除
+						usersMap.remove(msgs[3]);
+						
+						//服务器的在线列表中把该用户删除
+						lm.removeElement(msgs[3]);
+						
+						//通知其他用户，该用户已经退出
+						sendExitMsgToAll(msgs);
+					}
+					
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		}
+		
+	}
+	
+	
+	//通知其他用户。该用户已经退出
+	private void sendExitMsgToAll(String[] msgs) throws IOException {
+		Iterator<String> userNames = usersMap.keySet().iterator();
+		
+		while(userNames.hasNext()){
+			String userName = userNames.next();
+			Socket s = usersMap.get(userName);
+			PrintWriter pw = new PrintWriter(s.getOutputStream(),true);
+			String str = "msg@#@#server@#@#用户[ "+msgs[3]+" ]已退出！";
+			pw.println(str);
+			pw.flush();
+			
+			str = "cmdRed@#@#server@#@#"+msgs[3];
+			pw.println(str);
+			pw.flush();
+		}
+		
+	}
+	
+	
+	//服务器把客户端的聊天消息转发给相应的其他客户端
+	public void sendMsgToSb(String[] msgs) throws IOException {
+		
+		if("全部".equals(msgs[1])){
+			Iterator<String> userNames = usersMap.keySet().iterator();
+			//遍历每一个在线用户，把聊天消息发给他
+			while(userNames.hasNext()){
+				String userName = userNames.next();
+				Socket s = usersMap.get(userName);
+				PrintWriter pw = new PrintWriter(s.getOutputStream(),true);
+				String str = "msg@#@#"+msgs[3]+"@#@#"+msgs[2];
+				pw.println(str);
+				pw.flush();
+			}
+		}else{
+			Socket s = usersMap.get(msgs[1]);
+			PrintWriter pw = new PrintWriter(s.getOutputStream(),true);
+			String str = "msg@#@#"+msgs[3]+"对你@#@#"+msgs[2];
+			pw.println(str);
+			pw.flush();
+		}
+	}
+	
+	
+
+	/**
+	 * 把“当前用户登录的消息即用户名”通知给所有其他已经在线的人
+	 * 
+	 * @param userName
+	 */
+	// 技术思路:从池中依次把每个socket(代表每个在线用户)取出，向它发送userName
+	public void msgAll(String userName) {
+		Iterator<Socket> it = usersMap.values().iterator();
+		while (it.hasNext()) {
+			Socket s = it.next();
+			try {
+				PrintWriter pw = new PrintWriter(s.getOutputStream(), true);// 加true为自动刷新
+				String msg = "msg@#@#server@#@#用户[ " + userName + " ]已登录!";// 通知客户端显示消息
+				pw.println(msg);
+				pw.flush();
+				msg = "cmdAdd@#@#server@#@#" + userName;// 通知客户端在在线列表添加用户在线。
+				pw.println(msg);
+				pw.flush();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	
+	/**
+	 * 通知当前登录的用户，有关其他在线人的信息
+	 * 
+	 * @param socketClient
+	 */
+	// 把原先已经在线的那些用户的名字发给该登录用户，让他给自己界面中的lm添加相应的用户名
+	public void msgSelf(Socket socketClient) {
+		try {
+			PrintWriter pw = new PrintWriter(socketClient.getOutputStream(),true);
+			Iterator<String> it = usersMap.keySet().iterator();
+			while (it.hasNext()) {
+				String msg = "cmdAdd@#@#server@#@#" + it.next();
+				pw.println(msg);
+				pw.flush();
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void main(String[] args) {
+		JFrame.setDefaultLookAndFeelDecorated(true);// 设置装饰
+		new ServerForm();
+	}
+}
+```
+
+
+
+客户端源代码：
+=======
+
+```
+package cn.hncu;
+
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Scanner;
+
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
+
+/**
+ * 客户端
+ * 
+ * @author 陈浩翔
+ * @version 1.0 2016-5-13
+ */
+public class ClientForm extends JFrame implements ActionListener {
+	private JTextField tfdUserName;
+	private JList<String> list;
+	private DefaultListModel<String> lm;
+	private JTextArea allMsg;
+	private JTextField tfdMsg;
+	private JButton btnCon;
+	private JButton btnExit;
+	private JButton btnSend;
+
+	// private static String HOST="192.168.31.168";
+	private static String HOST = "127.0.0.1";// 自己机子，服务器的ip地址
+	private static int PORT = 9090;// 服务器的端口号
+	private Socket clientSocket;
+	private PrintWriter pw;
+
+	public ClientForm() {
+		
+		super("即时通讯工具1.0");
+		// 菜单条
+		addJMenu();
+
+		// 上面的面板
+		JPanel p = new JPanel();
+		JLabel jlb1 = new JLabel("用户标识:");
+		tfdUserName = new JTextField(10);
+		// tfdUserName.setEnabled(false);//不能选中和修改
+		// dtfdUserName.setEditable(false);//不能修改
+
+		// 链接按钮
+		ImageIcon icon = new ImageIcon("a.png");
+		btnCon = new JButton("", icon);
+		btnCon.setActionCommand("c");
+		btnCon.addActionListener(this);
+
+		// 退出按钮
+		icon = new ImageIcon("b.jpg");
+		btnExit = new JButton("", icon);
+		btnExit.setActionCommand("exit");
+
+		btnExit.addActionListener(this);
+		btnExit.setEnabled(false);
+		p.add(jlb1);
+		p.add(tfdUserName);
+		p.add(btnCon);
+		p.add(btnExit);
+		getContentPane().add(p, BorderLayout.NORTH);
+
+		// 中间的面板
+		JPanel cenP = new JPanel(new BorderLayout());
+		this.getContentPane().add(cenP, BorderLayout.CENTER);
+
+		// 在线列表
+		lm = new DefaultListModel<String>();
+		list = new JList<String>(lm);
+		lm.addElement("全部");
+		list.setSelectedIndex(0);// 设置默认显示
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);// 只能选中一行
+		list.setVisibleRowCount(2);
+		JScrollPane js = new JScrollPane(list);
+		Border border = new TitledBorder("在线");
+		js.setBorder(border);
+		Dimension preferredSize = new Dimension(70, cenP.getHeight());
+		js.setPreferredSize(preferredSize);
+		cenP.add(js, BorderLayout.EAST);
+
+		// 聊天消息框
+		allMsg = new JTextArea();
+		allMsg.setEditable(false);
+		cenP.add(new JScrollPane(allMsg), BorderLayout.CENTER);
+
+		// 消息发送面板
+		JPanel p3 = new JPanel();
+		JLabel jlb2 = new JLabel("消息:");
+		p3.add(jlb2);
+		tfdMsg = new JTextField(20);
+		p3.add(tfdMsg);
+		btnSend = new JButton("发送");
+		btnSend.setEnabled(false);
+		btnSend.setActionCommand("send");
+		btnSend.addActionListener(this);
+		p3.add(btnSend);
+		this.getContentPane().add(p3, BorderLayout.SOUTH);
+
+		// *************************************************
+		// 右上角的X-关闭按钮-添加事件处理
+		addWindowListener(new WindowAdapter() {
+			// 适配器
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if (pw == null) {
+					System.exit(0);
+				}
+				String msg = "exit@#@#全部@#@#null@#@#" + tfdUserName.getText();
+				pw.println(msg);
+				pw.flush();
+				System.exit(0);
+			}
+		});
+
+		setBounds(300, 300, 400, 300);
+		setVisible(true);
+	}
+
+	private void addJMenu() {
+		JMenuBar menuBar = new JMenuBar();
+		this.setJMenuBar(menuBar);
+		
+		JMenu menu = new JMenu("选项");
+		menuBar.add(menu);
+		
+		JMenuItem menuItemSet = new JMenuItem("设置");
+		JMenuItem menuItemHelp = new JMenuItem("帮助");
+		menu.add(menuItemSet);
+		menu.add(menuItemHelp);
+		
+		menuItemSet.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				final JDialog dlg = new JDialog(ClientForm.this);// 弹出一个界面
+				// 不能直接用this
+
+				dlg.setBounds(ClientForm.this.getX()+20, ClientForm.this.getY()+30,
+						350, 150);
+				dlg.setLayout(new FlowLayout());
+				dlg.add(new JLabel("服务器IP和端口:"));
+				
+				final JTextField tfdHost = new JTextField(10);
+				tfdHost.setText(ClientForm.HOST);
+				dlg.add(tfdHost);
+
+				dlg.add(new JLabel(":"));
+
+				final JTextField tfdPort = new JTextField(5);
+				tfdPort.setText(""+ClientForm.PORT);
+				dlg.add(tfdPort);
+
+				JButton btnSet = new JButton("设置");
+				dlg.add(btnSet);
+				btnSet.addActionListener(new ActionListener() {
+
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						String ip = tfdHost.getText();//解析并判断ip是否合法
+						String strs[] = ip.split("\\.");
+						if(strs==null||strs.length!=4){
+							JOptionPane.showMessageDialog(ClientForm.this, "IP类型有误！");
+							return ;
+						}
+						try {
+							for(int i=0;i<4;i++){
+								int num = Integer.parseInt(strs[i]);
+								if(num>255||num<0){
+									JOptionPane.showMessageDialog(ClientForm.this, "IP类型有误！");
+									return ;
+								}
+							}
+						} catch (NumberFormatException e2) {
+							JOptionPane.showMessageDialog(ClientForm.this, "IP类型有误！");
+							return ;
+						}
+						
+						ClientForm.HOST=tfdHost.getText();//先解析并判断ip是否合法
+						
+						try {
+							int port = Integer.parseInt( tfdPort.getText() );
+							if(port<0||port>65535){
+								JOptionPane.showMessageDialog(ClientForm.this, "端口范围有误！");
+								return ;
+							}
+						} catch (NumberFormatException e1) {
+							JOptionPane.showMessageDialog(ClientForm.this, "端口类型有误！");
+							return ;
+						}
+						ClientForm.PORT=Integer.parseInt( tfdPort.getText() );
+						
+						dlg.dispose();//关闭这个界面
+					}
+				});
+				dlg.setVisible(true);//显示出来
+			}
+		});
+		
+		menuItemHelp.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialog dlg = new JDialog(ClientForm.this);
+				
+				dlg.setBounds(ClientForm.this.getX()+30,ClientForm.this.getY()+30, 400, 100);
+				dlg.setLayout(new FlowLayout());
+				dlg.add(new JLabel("版本所有@陈浩翔.2016.5.16 我的主页:http://chenhaoxiang.github.io"));
+				dlg.setVisible(true);
+			}
+		});
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (e.getActionCommand().equals("c")) {
+			if (tfdUserName.getText() == null
+					|| tfdUserName.getText().trim().length() == 0
+					|| "@#@#".equals(tfdUserName.getText())
+					|| "@#".equals(tfdUserName.getText())) {
+				JOptionPane.showMessageDialog(this, "用户名输入有误，请重新输入！");
+				return;
+			}
+
+			connecting();// 连接服务器的动作
+			if (pw == null) {
+				JOptionPane.showMessageDialog(this, "服务器未开启或网络未连接，无法连接！");
+				return;
+			}
+
+			((JButton) (e.getSource())).setEnabled(false);
+			// 获得btnCon按钮--获得源
+			// 相当于btnCon.setEnabled(false);
+			btnExit.setEnabled(true);
+			btnSend.setEnabled(true);
+			tfdUserName.setEditable(false);
+		} else if (e.getActionCommand().equals("send")) {
+			if (tfdMsg.getText() == null
+					|| tfdMsg.getText().trim().length() == 0) {
+				return;
+			}
+			String msg = "on@#@#" + list.getSelectedValue() + "@#@#"
+					+ tfdMsg.getText() + "@#@#" + tfdUserName.getText();
+			pw.println(msg);
+			pw.flush();
+
+			// 将发送消息的文本设为空
+			tfdMsg.setText("");
+		} else if (e.getActionCommand().equals("exit")) {
+			//先把自己在线的菜单清空
+			lm.removeAllElements();
+			
+			sendExitMsg();
+			btnCon.setEnabled(true);
+			btnExit.setEnabled(false);
+			tfdUserName.setEditable(true);
+		}
+
+	}
+
+	// 向服务器发送退出消息
+	private void sendExitMsg() {
+		String msg = "exit@#@#全部@#@#null@#@#" + tfdUserName.getText();
+		System.out.println("退出:" + msg);
+		pw.println(msg);
+		pw.flush();
+	}
+
+	private void connecting() {
+		try {
+			// 先根据用户名防范
+			String userName = tfdUserName.getText();
+			if (userName == null || userName.trim().length() == 0) {
+				JOptionPane.showMessageDialog(this, "连接服务器失败!\r\n用户名有误，请重新输入！");
+				return;
+			}
+
+			clientSocket = new Socket(HOST, PORT);// 跟服务器握手
+			pw = new PrintWriter(clientSocket.getOutputStream(), true);// 加上自动刷新
+			pw.println(userName);// 向服务器报上自己的用户名
+			this.setTitle("用户[ " + userName + " ]上线...");
+
+			new ClientThread().start();// 接受服务器发来的消息---一直开着的
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	class ClientThread extends Thread {
+		@Override
+		public void run() {
+			try {
+				Scanner sc = new Scanner(clientSocket.getInputStream());
+				while (sc.hasNextLine()) {
+					String str = sc.nextLine();
+					String msgs[] = str.split("@#@#");
+					System.out.println(tfdUserName.getText() + ": " + str);
+					if ("msg".equals(msgs[0])) {
+						if ("server".equals(msgs[1])) {// 服务器发送的官方消息
+							str = "[ 通知 ]:" + msgs[2];
+						} else {// 服务器转发的聊天消息
+							str = "[ " + msgs[1] + " ]说: " + msgs[2];
+						}
+						allMsg.append("\r\n" + str);
+					}
+					if ("cmdAdd".equals(msgs[0])) {
+						boolean eq = false;
+						for (int i = 0; i < lm.getSize(); i++) {
+							if (lm.getElementAt(i).equals(msgs[2])) {
+								eq = true;
+							}
+						}
+						if (!eq) {
+							lm.addElement(msgs[2]);// 用户上线--添加
+						}
+					}
+					if ("cmdRed".equals(msgs[0])) {
+						lm.removeElement(msgs[2]);// 用户离线了--移除
+					}
+
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		JFrame.setDefaultLookAndFeelDecorated(true);// 设置装饰
+		new ClientForm();
+	}
+}
+```
+
+
+![](http://img.blog.csdn.net/20160516195940973)
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

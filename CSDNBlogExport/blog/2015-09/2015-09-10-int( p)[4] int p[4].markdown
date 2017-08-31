@@ -1,0 +1,82 @@
+---
+layout: post
+title: "int( p)[4] int p[4]"
+date: 2015-09-10 01:33:52 +0800
+comments: true
+categories:❸ C/C++语言基础,----- C语言指针
+tags: [指针,数组]
+keyword: 陈浩翔, 谙忆
+description: 1、int(*p)[4];------p为指向含4个元素的一维整形数组的指针变量（是指针）
+#include <stdio.h>
+#include <stdlib.h>int main()
+{
+    int a[4]={1,2,3,4};
+    int (*p)[4];
+    p=&a;
+    printf("%d\n",(*p)[3]);
+    printf("%d\n",*p); 
+---
+
+
+1、int(*p)[4];------p为指向含4个元素的一维整形数组的指针变量（是指针）
+#include <stdio.h>
+#include <stdlib.h>int main()
+{
+    int a[4]={1,2,3,4};
+    int (*p)[4];
+    p=&a;
+    printf("%d\n",(*p)[3]);
+    printf("%d\n",*p);
+<!-- more -->
+----------
+
+```
+1、int(*p)[4];------p为指向含4个元素的一维整形数组的指针变量（是指针）
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int a[4]={1,2,3,4};
+    int (*p)[4];
+    p=&a;
+    printf("%d\n",(*p)[3]);
+    printf("%d\n",*p);
+    return 0;
+}
+
+2、int *p[4];-------定义指针数组p，它由4个指向整型数据的指针元素组成（是数组）
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+   int *p[4];
+   int a=6;
+   p[1]=&a;
+   printf("%d\n",*p[1]);
+    return 0;
+}
+int *p[4]是一个指针数组，就是数组里面放的是指针。由于[]比*优先级更高，因此p先与[4]结合，形成p[4]形式，这显然是数组形式，它有4个元素，然后再与p前面的*结合，*表示此数组是指针类型的，每个数组元素(也就是一个指针变量)都可以指向一个整形变量。*p[4]是指针数组，他是数组。数组里面放的是指针，简单的说定义了4个指针，分别是*p[0] *p[1] *p[2] *p[3]，相当于将这四个指针打包到这个数组中 (*p)[4]是数组指针，他是指针并且是一个指向一维数组的指针。因为以行为单位，又称行指针。通俗点讲，后面的[4]说明他的每行有4个元素，[0]代表第一列的下标，[1]代表第二列的下标，一次类推。-------------------------------------------------------------------------------------------------这是一个数组指针，指向对象是这个数组； 示例： 
+static int m[3][4]={0,1,2,3,4,5,6,7,8,9,10,11};
+/* 定义二维数组m并初始化*/ 
+int (*p)[4];
+//数组指针 p是指针，指向一维数组,每个一维数组有4个int元素 
+int i,j; p=m; 
+//p是指针，可以直接指向二维数组 
+printf("--数组指针输出元素--\n");
+ for(i=0;i<3;i++)
+/*输出二维数组中各个元素的数值*/ 
+   { for(j=0;j<4;j++) 
+     { 
+       printf("%3d ",*(*(p+i)+j));
+     } 
+   }
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

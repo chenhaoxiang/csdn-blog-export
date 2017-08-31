@@ -1,0 +1,124 @@
+---
+layout: post
+title: "HDOJ(HDU) 2091 空心三角形"
+date: 2016-04-30 02:01:36 +0800
+comments: true
+categories:❶ ACM,----- HDOJ-JAVA,❺ 算法及基础题,----- 基础题
+tags: []
+keyword: 陈浩翔, 谙忆
+description: Problem Description 
+把一个字符三角形掏空，就能节省材料成本，减轻重量，但关键是为了追求另一种视觉效果。在设计的过程中，需要给出各种花纹的材料和大小尺寸的三角形样板，通过电脑临时做出来，以便看看效果。Input 
+每行包含一个字符和一个整数n(0Sample Output
+ X
+XXX
+　
+      A
+     A A
+    A   A
+   A     A
+  A 
+---
+
+
+Problem Description 
+把一个字符三角形掏空，就能节省材料成本，减轻重量，但关键是为了追求另一种视觉效果。在设计的过程中，需要给出各种花纹的材料和大小尺寸的三角形样板，通过电脑临时做出来，以便看看效果。Input 
+每行包含一个字符和一个整数n(0Sample Output
+ X
+XXX
+　
+      A
+     A A
+    A   A
+   A     A
+  A
+<!-- more -->
+----------
+
+Problem Description
+把一个字符三角形掏空，就能节省材料成本，减轻重量，但关键是为了追求另一种视觉效果。在设计的过程中，需要给出各种花纹的材料和大小尺寸的三角形样板，通过电脑临时做出来，以便看看效果。
+
+ 
+
+Input
+每行包含一个字符和一个整数n(0<n<41)，不同的字符表示不同的花纹，整数n表示等腰三角形的高。显然其底边长为2n-1。如果遇到@字符，则表示所做出来的样板三角形已经够了。
+
+ 
+
+Output
+每个样板三角形之间应空上一行，三角形的中间为空。显然行末没有多余的空格。
+
+ 
+
+Sample Input
+X 2
+A 7
+@
+
+```
+Sample Output
+ X
+XXX
+　
+      A
+     A A
+    A   A
+   A     A
+  A       A
+ A         A
+AAAAAAAAAAAAA
+
+```
+
+
+简单的题目。。。注意，2个输出之间有空行！
+
+
+```
+import java.util.Scanner;
+
+public class Main{
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		boolean isFalg = true;
+		while(sc.hasNext()){
+			String str = sc.next();
+			if("@".equals(str)){
+				break;
+			}
+			int num =sc.nextInt();
+			if(isFalg){
+				isFalg=false;
+			}else{
+				System.out.println();
+			}
+			int n=0;
+			for(int i=0;i<num;i++){
+				for(int k=1;k<=num+i;k++){
+					if(i==num-1){
+						System.out.print(str);
+					}else{
+						if(k==num+i){
+							System.out.print(str);
+						}else if(k==num-n){
+							System.out.print(str);
+						}else{
+							System.out.print(" ");
+						}
+					}
+				}
+				n+=1;
+				System.out.println();
+			}
+		}
+	}
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

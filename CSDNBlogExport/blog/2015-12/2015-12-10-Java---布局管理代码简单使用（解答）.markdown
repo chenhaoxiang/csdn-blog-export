@@ -1,0 +1,163 @@
+---
+layout: post
+title: "Java---布局管理代码简单使用（解答）"
+date: 2015-12-10 02:41:11 +0800
+comments: true
+categories:❷ Java大学之行,----- ①、Java/Web小项目
+tags: [布局,管理]
+keyword: 陈浩翔, 谙忆
+description: 1.流布局管理器： 
+FlowLayout布局管理器中组件的相对位置随窗口大小而变化。 
+ 
+ 
+下面是流布局演示代码：package cn.hncu.MyJFrame1;import java.awt.FlowLayout;import javax.swing.JButton;
+import javax.swing.JFrame;public class FlowLayoutJFrame exte 
+---
+
+
+1.流布局管理器： 
+FlowLayout布局管理器中组件的相对位置随窗口大小而变化。 
+ 
+ 
+下面是流布局演示代码：package cn.hncu.MyJFrame1;import java.awt.FlowLayout;import javax.swing.JButton;
+import javax.swing.JFrame;public class FlowLayoutJFrame exte
+<!-- more -->
+----------
+
+1.流布局管理器：
+FlowLayout布局管理器中组件的相对位置随窗口大小而变化。
+![](http://img.blog.csdn.net/20151210142805371)
+![](http://img.blog.csdn.net/20151210142815253)
+下面是流布局演示代码：
+
+```
+package cn.hncu.MyJFrame1;
+
+import java.awt.FlowLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class FlowLayoutJFrame extends JFrame {
+	public FlowLayoutJFrame(){
+		JButton Jbtn1,Jbtn2,Jbtn3;
+	   this.setBounds(300, 300, 400, 100);
+	   this.setDefaultCloseOperation(EXIT_ON_CLOSE);//使关闭按钮有作用
+	   this.setLayout(new FlowLayout());//组件相应位置随容器大小变化。
+	   
+	   
+	   Jbtn2 = new JButton("bbbbb");
+//	   Jbtn2.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 6));//中间对齐，水平间隔为5，垂直间隔为6
+	   this.add(Jbtn2,"CENTER");
+	   
+	   Jbtn3 = new JButton("ccccc");
+//	   Jbtn3.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 6));//右对齐，水平间隔为5，垂直间隔为6
+	   this.add(Jbtn3,"RIGHT");
+	   
+	   Jbtn1 = new JButton("aaaaa");
+//	   Jbtn1.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 6));//左对齐，水平间隔为5，垂直间隔为6
+	   this.add(Jbtn1,"LEFT");
+	   
+	   this.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		new FlowLayoutJFrame();
+	}
+
+}
+
+```
+
+2.边布局管理器：
+BorderLayout,当容器大小改变时，四边组件的长度或者宽度不变，
+中间组件的长度和宽度都随容器大小而变化。
+![](http://img.blog.csdn.net/20151210143156658)
+![](http://img.blog.csdn.net/20151210143205463)
+
+下面是边布局管理器的演示代码：
+
+```
+package cn.hncu.MyJFrame1;
+
+import java.awt.BorderLayout;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class BorderLayoutJFrame extends JFrame{
+	
+	public BorderLayoutJFrame(){
+		JButton Jbtn[] =new JButton[5];		
+		this.setBounds(300, 300, 400, 300);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(new BorderLayout(5,6));//指定组件之间的间隔,水平间隔为5，垂直间隔为6（像素）
+		String strJbtns = "北东南西中";
+		
+		for(int i=0;i<strJbtns.length();i++){
+			Jbtn[i] = new JButton(""+strJbtns.charAt(i));
+		}
+		
+this.getContentPane().add(Jbtn[0],BorderLayout.NORTH);//北
+		this.getContentPane().add(Jbtn[1],BorderLayout.EAST);//东
+		this.getContentPane().add(Jbtn[2],BorderLayout.SOUTH);//南
+		this.getContentPane().add(Jbtn[3],BorderLayout.WEST);//西
+		this.getContentPane().add(Jbtn[4],BorderLayout.CENTER);//默认为中
+		 //this.add("Center",new JButton("中间"));//也可以
+		this.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new BorderLayoutJFrame();
+	}
+
+}
+```
+3.网格布局管理器：
+GridLayout布局管理器将容器划分为大小相等的若干行乘若干列的网格，
+组件大小随容器大小而变化。
+![](http://img.blog.csdn.net/20151210145021688)
+![](http://img.blog.csdn.net/20151210145029286)
+
+下面为网格布局演示代码：
+
+```
+package cn.hncu.MyJFrame1;
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.Label;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
+public class GridLayoutJFrame extends JFrame{
+	
+	public GridLayoutJFrame(){	
+		this.setBounds(300, 300, 400, 300);
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setLayout(new GridLayout(3,3,10,20));//(行，列，水平间距，垂直间距)；
+		String strJbtns[]  = {"一","二","三","四","五","六","七","八"};
+
+		for(int i=0;i<strJbtns.length;i++){
+			this.add(new JButton(strJbtns[i]));
+		}
+		this.add(new Label(""),2);//以指定位置的方式添加，比未指定位置的方式优先级更高
+		
+		this.setVisible(true);
+	}
+	
+	public static void main(String[] args) {
+		new GridLayoutJFrame();
+	}
+
+}
+
+```
+
+本文章由<a href="http://chenhaoxiang.cn/">[谙忆]</a>编写， 所有权利保留。 
+欢迎转载，分享是进步的源泉。
+<blockquote cite='陈浩翔'>
+<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color="green">http://chenhaoxiang.cn</font></a><br><br>
+本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>
+</blockquote>

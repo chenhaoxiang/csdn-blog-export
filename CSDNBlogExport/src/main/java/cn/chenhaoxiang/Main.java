@@ -48,6 +48,7 @@ public class Main extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				btnNewButton.setEnabled(false);
+				Main.blogs=0;
 				long begin = System.currentTimeMillis();
 				textArea.setText("");
 				String userName = textField.getText();

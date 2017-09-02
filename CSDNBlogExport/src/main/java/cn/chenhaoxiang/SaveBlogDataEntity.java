@@ -53,6 +53,7 @@ public class SaveBlogDataEntity implements PageProcessor {
 				+ blogDataEntity.getTitle() + ".markdown";
 		logger.info(fileName);
 		try {
+			//我自己导出我的博客时加的头部和尾部，你导出自己博客时删除即可
 			String firstStr="---\nlayout: post\ntitle: \""+blogDataEntity.getTitle()+"\"\ndate: "+blogDataEntity.getCreate()+" +0800\ncomments: true\ncategories:"+blogDataEntity.getCategories()+"\ntags: ["+blogDataEntity.getTags()+"]\nkeyword: 陈浩翔, 谙忆\ndescription: "+blogDataEntity.getDescription()+" \n---\n";
 			String description = "\n\n"+blogDataEntity.getDescription()+"\n<!-- more -->\n----------\n\n";
 			String endStr ="\n\n本文章由<a href=\"http://chenhaoxiang.cn/\">[谙忆]</a>编写， 所有权利保留。 \n欢迎转载，分享是进步的源泉。\n<blockquote cite='陈浩翔'>\n<p background-color='#D3D3D3'>转载请注明出处：<a href='http://chenhaoxiang.cn'><font color=\"green\">http://chenhaoxiang.cn</font></a><br><br>\n本文源自<strong>【<a href='http://chenhaoxiang.cn' target='_blank'>人生之旅_谙忆的博客</a>】</strong></p>\n</blockquote>\n";

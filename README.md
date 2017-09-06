@@ -68,7 +68,14 @@ Disclaimer: if the export blog infringement of rights and interests of others, c
 进行版本升级，因为CSDN把一个分页的bug给堵上了，原来的版本不能使用，请下载最新版本2.0  
 现在版本 v2.0    
 感谢CSDN博主<a href="http://blog.csdn.net/u011637069" target='_blank'>[龙腾四海365]</a>提出的Bug   
- 
+
 本次bug修复后，时间会延长一点，因为我在里面把分页的线程写死了，50个线程，有兴趣的可以自己扩展。  
 经过测试，在输入50线程时，668篇博客的爬取时间为92S。  
-![](http://i.imgur.com/XPP3svY.png)
+![](http://i.imgur.com/XPP3svY.png)  
+
+
+2017.9.6：  
+进行版本升级，部分拥有两个id的CSDN用户无法备份博客，已进行修复，请下载最新版本2.1  
+现在版本 v2.1    
+感谢CSDN博主<a href="http://blog.csdn.net/a525715275" target='_blank'>[沐雨浩]</a>提示的Bug   
+

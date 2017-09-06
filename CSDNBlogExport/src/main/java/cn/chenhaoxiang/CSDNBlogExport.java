@@ -20,6 +20,8 @@ public class CSDNBlogExport implements PageProcessor {
 	public static String name = "";// CSDN用户名
 	public static Boolean nameIsOK = false;
 
+	public static String oldName = "";
+
 	private static int lastInt = 0;//总页数
 	private static boolean isOnePage = true;//是否是第一页
 	private static List<String> pageList = null;//某页的链接
@@ -65,7 +67,7 @@ public class CSDNBlogExport implements PageProcessor {
 		if(textArea!=null)
 			textArea.append("开始获取" + name + "的博客文章ID...\n");
 		List<String> urls = page.getHtml().xpath("//span[@class='link_title']").links()
-				.regex(".*/" + name + "/article/details/.*").all();
+				.regex(".*/" + oldName + "/article/details/.*").all();
 		Iterator<String> iterator = urls.iterator();
 		int pageInt = 0;
 		while (iterator.hasNext()) {
@@ -84,16 +86,17 @@ public class CSDNBlogExport implements PageProcessor {
 //		logger.info("获取所有的文章博客ID完成，您一共有" + pageInt + "篇文章...");
 		if(textArea!=null)
 			textArea.append("本次线程获取" + pageInt + "篇文章...共"+Main.blogs+"篇\n");
-		if(name.equals("")) {
+		//if(name.equals("")) {
+		//}
+		// 分页获取文章ID
+		if(isOnePage) {
 			String names = page.getHtml().xpath("//div[@id='blog_userface']").links().regex(".*/my.csdn.net/.*").get();
 			names = names.substring(names.lastIndexOf("/") + 1);
 			if (!names.equals(name)) {
 				name = names;
 			}
 			logger.info("最终名称:" + name);
-		}
-		// 本来是想写成分页获取文章ID的，但是发现只要翻页的页码够大，(也就是大于你的最大页数)，就可以一次性获取你的所有文章ID，就偷懒了。
-		if(isOnePage) {
+
 			List<String> backUrls = page.getHtml().xpath("//div[@id='papelist']").links().all();
 			Iterator<String> iterator2 = backUrls.iterator();
 			while (iterator2.hasNext()) {
@@ -160,6 +163,7 @@ public class CSDNBlogExport implements PageProcessor {
 		lastInt = 0;
 		pageList=new ArrayList<>();
 		name = userName;
+		oldName = userName;
 		logger.info("用户名:"+userName);
 		Spider.create(new CSDNBlogExport())
 				.addUrl("http://blog.csdn.net/" + name )

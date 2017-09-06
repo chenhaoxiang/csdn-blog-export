@@ -24,7 +24,7 @@ public class Main extends JFrame {
 			public void run() {
 				try {
 					Main frame = new Main();
-					frame.setTitle("版本1.0 -chx");
+					frame.setTitle("版本2.1 -chx");
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
